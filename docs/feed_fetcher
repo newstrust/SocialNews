@@ -1,0 +1,121 @@
+How things stand right now
+--------------------------
+The original feed fetcher code in lib/feed_fetcher.rb sat in a loop and 
+fetched and processed feeds one at a time.  For each feed, it fetched it,
+parsed it, and for each story from the feed, it queried apis, fetched
+story content, etc. and then computed an autolist score for it.  Everything
+happened serially which was good enough for starters and kept things simple.
+
+FeedFetcher.fetch_feed fetched a single feed, parsed it, and processed the
+stories as above.  This could be invoked by the feeds controller via a
+background job, or on the command line.
+
+FeedFetcher.autofetch_feeds fetched all auto-fetchable feeds (as marked by
+editors in the db), fetched them using fetch_feed as above, generated a
+fetch log.
+
+The rake task socialnews:feeds:autofetch_all and socialnews:feeds:fetch_and_submit
+managed the feed fetcher.  These tasks submitted the autofetch task to BJ and
+on completion, emailed out the fetch log with details of failures, and what
+stories got queued.  It also ensured that the task kept getting re-submitted
+which effectively meant that the feed fetcher runs periodically for ever.
+
+Problems
+--------
+The problem with this approach is that this approach is not scalable to large
+numbers of feeds.  If we want to handle a few hundred feeds, this will be
+unbearably slow.
+
+We could have potentially modified FeedFetcher.autofetch_feeds to spawn the
+feed fetching to a bunch of threads.  That was what I wanted to initially.  But,
+there is no good publicly available thread pool library / plugin that I could
+find to manage threads without deadlocks, etc.  Additionally, since each thread
+would run with the entire rails environment loaded in, they would hog too much
+memory for too long.  So, I abandoned this approach for the new approach below.
+
+New Feed Fetcher code
+---------------------
+Firstly, I decided to split the feed fetch, parse, and story creation from the
+story autolist processing.  The former process of fetch, parse, and story-init
+could all be done outside of rails for the most part.  Fetch and Parse for sure
+can be done, but story-init is tricky.  I wanted to get all network traffic code
+including fetch of story content and query of apis to fetch metadata done in
+parallel.
+
+FeedParser is a rails-free ruby class that (a) fetches a single feed (b) parses
+it (c) creates story stubs (d) submits the stories to the main rails code via
+a web api call, and (e) interacts with the mysql db directly (rather than use
+ActiveRecord) via the mysql driver to store downloaded metadata into the db.
+To accomplish this, I removed all rails dependences from string helpers, net helpers,
+and meta data fetcher code.
+
+On a 64-bit server, rather than 300 mb, FeedParser runs with about 100MB code.  
+On a 32-bit server, rather than 100-120 mb, it runs with about 25-30 mb code.  
+So, I can potentially fetch 3-5 fetchers in parallel with the same memory footprint.
+
+After it is done fetching/parsing a feed, FeedParser posts the status (with error
+messages, if any) to the web server to record in the db.
+
+To fetch 150 feeds in parallel in 10 processes, we create 10 separate ruby scripts
+where each script fetches 15 feeds serially.  A spawner script initiates the
+parallel fetch by initiating these 10 ruby processes in the background using the
+shell "&" background command.
+
+If EY lets us contact the mysql server over the network, we could simply use
+any number of amazon EC2 instances to run these fetcher scripts and dump the
+data into our production db.  But, for security reasons, it is unlikely that EY
+will let us do this.  But, there is a possibility that we could refactor this
+code even more and run the db-independent code entirely "off-site" on an amazon
+ec2 instance very cheaply.  To be investigated, if necessary, at a later point.
+
+After all feeds are fetched, FeedFetcher.process_fetched_stories runs through all
+the auto fetched stories (using auto fetched story entries), and computes the
+autolist score as before.  Except now, all metadata, etc. has already been fetched
+and it simply runs through all those stories pretty quickly without incurring any
+network latencies.  So for now, we still do this serially all at once.  It runs
+through about 1000 stories in about 10 minutes which is good enough.
+
+Putting the pieces together
+---------------------------
+Given N feeds to fetch in M parallel processes, the rake task
+socialnews:feeds:gen_fetchers generates M separate ruby scripts (fetch_feeds.<i>.rb)
+to fetch N/M feeds in each script.  This rake task also generates a spawner script
+(spawn_feed_fetchers.sh) to spawn the fetchers.  So far, so good.
+
+In the next iteration, when we want to process twitter and facebook news feeds,
+we generate the equivalent of FeedParser for twitter and facebook feeds which
+do all the network-heavy processign and dump the info into the db.  But, for twitter
+and facebook feeds, I dont know if I'll be able to keep the processors resource-light 
+and do it all in ruby, or if I will end up incurring the rails memory overhead.
+To be continued ... 
+
+We could have kept the feed fetcher and story processor completely independent,
+i.e. the feed fetchers could run periodically (either via cron jobs or managed
+via BJ).  Independently, the story processor could run periodically (again either
+via cron jobs or managed via BJ) on its own schedule and process whatever auto
+fetched stories exist.  
+
+That would be a good enough solution .. but for now, I chose to do use a more
+tightly controlled setup, at least in the beginning.  So, I want the feed fetchers
+to run, and after (and only after) they complete, to immediately run the story
+processor code to process all fetched stories.  I do this co-ordination via BJ
+and a bunch of rake tasks as below.
+
+socialnews:feeds:start_parallel_fetch generates the scripts and spawner (via
+socialnews:feeds:gen_fetchers) and then submits the spawner shell script as a
+new BJ task which will get likely picked up right away.  I submit it as a bj
+task rather than invoke it right away so that the rails-heavy rake task completes
+quickly and frees memory.
+
+socialnews:feeds:gen_fetchers generates the scripts and spawner as noted above.
+But, now, the spawner spins around in a loop and polls the server every 2 minutes
+to check if all feeds have been fetched.  If so, it invokes the rake task to
+process fetched stories (socialnews:feeds:process_fetched_stories).
+
+socialnews:feeds:process_fetched_stories processes all fetched stories, and clears
+feed fetch status for all feeds.  In the end, it resubmits the parallel feed
+fetcher rake task (socialnews:feeds:start_parallel_fetch) to BJ to run at a future time. 
+
+So, these 3 rake tasks + the generated spawner shell script + feed fetcher ruby
+scripts periodically fetch feeds in parallel, processed fetched stories, and keep
+themselves running into perpetuity.

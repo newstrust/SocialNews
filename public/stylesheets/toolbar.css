@@ -1,0 +1,2199 @@
+html, body {
+	height: 100%;
+}
+body {
+	padding-top: 40px;
+	overflow-y: hidden;
+}
+#story_frame {
+	height:100%;
+	margin-bottom:40px;
+	
+	padding-top:0;
+	top:0;
+	width:100%;
+	vertical-align: top;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+#story_frame {
+margin-top:-15px;}
+}
+
+
+
+div.toolbar_logo {
+background: transparent url(/images/logos/socialnews-logo_20px.png) no-repeat left top;
+width: 111px;
+height: 20px;
+padding: 8px 0;
+margin-top: 10px;
+display: block;
+}
+
+div.popup_form div.toolbar_logo {
+background: transparent url(/images/logos/socialnews-logo_20px.png) no-repeat left top;
+width: 111px;
+height: 20px;
+padding: 6px 0 0 0;
+margin-top: 10px;
+display: block;}
+
+#story_frame a {
+position: relative;
+z-index: 10 !important;
+}
+
+#nav {
+  margin: 0; /* style creeping in from site! */
+	position: fixed;
+	top: 0;
+	width: 100%;
+	background:  transparent url(/images/ui/toolbar/bg_nav.png) repeat-x center top;
+	padding-bottom: 0px;
+	height: 46px;
+}
+	#nav #bar {
+		width: 1000px;
+		*height: 43px;
+		*left:0px;
+		text-align: left;
+		margin:0 0 0 20px;
+		}
+	  #nav #bar .nav_section {
+	    float: left;
+	    margin-right:10px;
+	  }
+  	#nav #bar div.logo{
+  	border-right:1px solid #cacaca;
+  	height:40px;
+  	padding-left:0px;
+  	padding-right:10px;
+  	*float:left;
+  	*margin-bottom:3px;
+  	margin-right: 0px;
+  	}
+		#nav #bar .story {
+			padding: 5px 10px 3px 0px;
+			line-height: 1.2em;
+			border-left:1px solid #FFFFFF;
+			width:auto;
+			height: 32px;
+			border-right:1px solid #cacaca;
+			padding-left: 10px;	
+			max-width: 650px;		
+		}
+		
+		#nav #bar .story h4 {
+		font-size:1em;
+		font-weight:bold;
+		line-height:1em;
+		padding-top: 8px;
+		}
+		#nav #bar .story h4 a {
+		color: #3f3f3f;
+		}
+		
+		.popup_form #nav #bar .story h4 {
+		font-size: 1.25em;}
+		
+		#nav a.save_link {
+		background:url(/images/ui/icon_star.png) no-repeat left top; 
+		_background:url(/images/ui/icon_star.gif) no-repeat left top;
+		padding-left: 0px;
+		color:#385AC8;
+		font-size: 1em;
+		font-weight: bold;
+		float: left;
+		margin:-2px 2px 0px 0px;
+		}
+		
+		#nav a.save_link:hover {
+		background:url(/images/ui/icon_star.png) no-repeat left bottom;
+		}
+		
+		#nav #bar .story .byline {
+		*font-size:10px;
+		}
+		#nav #bar .tool_bar_rating {
+			color:#666666;
+			float:left;
+			height:40px;
+			line-height:1em;
+			padding:11px 5px 12px;
+			text-align:center;
+			width:73px;
+		}
+		
+		
+		#nav #bar .tool_bar_rating span {
+		color:#ACACAC;
+		float:left;
+		font-size:.92em;
+		font-weight:bold;
+		line-height:1em;
+		padding-bottom:0;
+		text-align:center;
+		text-transform:uppercase;
+		width: 100%;
+}
+		
+		#nav #bar .tool_bar_rating a {
+		color:#385AC8;
+		font-size:.92em;
+		font-weight:bold;
+		
+		}
+		#nav #bar .tool_bar_rating a:hover {
+		text-decoration: underline !important;
+		}
+		#nav #bar .story a {
+		text-decoration: none;
+			
+		}
+		#nav #bar .story a:hover {
+		text-decoration: underline;
+			
+		}
+
+		#nav #bar .story a.source {
+			color: #666;
+			text-transform: uppercase;
+			}
+		
+
+		#nav #bar .form_tabs {
+		  width: 375px;
+			float: right;
+			z-index: 1;
+			}
+	
+	#nav #bar .story_rating {
+	  width: 150px;
+	  height: 40px;
+		}
+
+	#nav #bar .story_rating a.see_all {
+	float:left;
+	background: url(/images/ui/toolbar/btn_reviews.png) no-repeat left top;
+	height:21px;
+	margin-top:11px;
+	width:66px;
+	}
+	
+	#nav #bar .story_rating a.see_all:hover {
+	background: url(/images/ui/toolbar/btn_reviews.png) no-repeat left bottom;
+	}
+  
+	#nav a.toolbar_tab {
+		display: inline-block;
+		height: 25px;
+		padding: 15px 15px 0 15px;
+		font-size: 1.17em;
+		color: #385ac8;
+		text-decoration: none;
+		font-weight: bold;
+		text-transform: uppercase;
+		float: left;
+
+	}
+	
+		#nav #bar div.nav_feedback {
+	font-weight: bold;
+	padding-top: 20px;
+	font-size: .92em;
+	}
+	
+	#nav a.toolbar_tab.secondary:hover {
+
+	}
+	#nav a.toolbar_tab:hover {
+		background-color: #f6f6f6;
+		display: inline-block;
+		height: 25px;
+		
+		font-size: 1.17em;
+		color: #385ac8;
+		text-decoration: none;
+		font-weight: bold;
+		text-transform: uppercase;
+		float: left;
+
+	}
+	#nav a.selected,
+	#nav a.selected:hover {
+		background-color: #f6f6f6;
+		color: #3f3f3f;
+	}
+	
+	  #nav a.toolbar_tab div.status {
+	    margin: -25px 0 0 10px;
+	  }
+	#nav a.close {
+	  float: right;
+	  margin: 12px 20px;
+	  width: 24px;
+	  height: 24px;
+	  text-decoration: none;
+	  background: url(/images/ui/toolbar/nt_toolbar_close.png) no-repeat left top;
+	  _background: url(/images/ui/toolbar/nt_toolbar_close.gif) no-repeat left top;
+	}
+	#nav a.close:hover {
+	  float: right;
+	  margin: 12px 20px;
+	  width: 24px;
+	  height: 24px;
+	  text-decoration: none;
+	  background: url(/images/ui/toolbar/nt_toolbar_close.png) no-repeat left bottom;
+	  _background: url(/images/ui/toolbar/nt_toolbar_close.gif) no-repeat left bottom;
+	}
+	#nav a.toolbar_button {
+	  height: 22px;
+	  font-size: 120%;
+	}
+	
+
+	
+
+	
+
+ 	#nav_info a.toolbar_tab .secondary .info {
+	background:url(/images/ui/tools/nt_icon_edit.png) no-repeat left 19px; 
+	_background:url(/images/ui/tools/nt_icon_edit.gif) no-repeat left 19px; 
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	margin:0px 5px 0px 5px;
+	width: 28px;
+	}
+	 #nav_info a.info.selected {
+	background:url(/images/ui/tools/nt_icon_edit.png) no-repeat left 19px; 
+	_background:url(/images/ui/tools/nt_icon_edit.gif) no-repeat left 19px; 
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	margin:0px 5px 0px 5px;
+	width: 28px;
+	background-color: #f6f6f6;
+	}
+	#nav_info a.info:hover {
+	background:url(/images/ui/tools/nt_icon_edit.png) no-repeat left 19px;
+	_background:url(/images/ui/tools/nt_icon_edit.gif) no-repeat left 19px;  
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	background-color: #f6f6f6;
+	display: inline-block;
+	width: 28px;
+	margin:0px 5px 0px 5px;
+	}
+	#nav_share a.share {
+	background:url(/images/ui/tools/nt_icon_share.png) no-repeat left 19px;
+	_background:url(/images/ui/tools/nt_icon_share.gif) no-repeat left 19px; 
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	margin:0px 5px 0px 5px;
+	width: 41px;
+	}
+	#nav_share a.share.selected {
+	background:url(/images/ui/tools/nt_icon_share.png) no-repeat left 19px;
+	_background:url(/images/ui/tools/nt_icon_share.gif) no-repeat left 19px; 
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	margin:0px 5px 0px 5px;
+	width: 41px;
+	}
+	#nav_share a.share:hover {
+	background:url(/images/ui/tools/nt_icon_share.png) no-repeat left 19px;
+	_background:url(/images/ui/tools/nt_icon_share.gif) no-repeat left 19px;  
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	display: inline-block;
+	width: 41px;
+	margin:0px 5px 0px 5px;
+	background-color: #f6f6f6;
+	}
+
+#popdown_form div.disclosable_content_container {
+  padding: 2px 0;
+  float:left;
+}
+
+#popdown_form div.tw_share_review, #popdown_form div.fb_share_review {
+  clear:both;
+  margin:0;
+  padding:2px;
+  p
+}
+
+#popdown_form #tweet_box * { font-size:10px }
+#popdown_form #tweet_box textarea { height: 3em; }
+#popdown_form #tweet_box textarea.twitter_input_box { height:5em;width:330px;margin-top:0px; }
+
+/* SSS: With disclosable content container floating to left, form fields need a clear:both because
+ * story quote appears after a subtitle disclosable conetnt container */
+#popdown_form .form_field { clear:both; }
+
+/**
+* popdown_form
+*/
+#popdown_form {
+background:none;
+display:block;
+float:right;
+margin-right:20px;
+*margin-right:40px;
+overflow:hidden;
+padding-bottom:20px;
+position:fixed;
+right:0;
+text-align:left;
+top:-350px;
+width:390px;
+*width:410px;
+
+}
+
+div.popup_form  #popdown_form {
+background:none;
+display:block;
+float:left;
+margin-right:0px;
+overflow:hidden;
+padding-bottom:20px;
+right:0;
+text-align:left;
+top:-350px;
+width:375px;
+margin-top: 0px;
+}
+	#popdown_form .shadow {
+	padding-left: 7px;
+	background: url('/images/ui/toolbar/bg_form.png') repeat-y left;
+	margin-left: 5px;
+	*margin-left: 30px;
+	margin-bottom: 2px;
+	}
+		#popdown_form .shadow .form {
+		display: none;
+		margin:0;
+		padding: 10px 10px 1px 10px;
+  		border-top:none;
+  		width: 355px;
+		}
+		
+		#popdown_form .shadow .form div.other_login_option {
+		margin-left:-15px;
+		background-color: #f5f9ff;
+		margin:15px 0 0 -15px;
+		*margin:15px 0 0 0px;
+		padding:10px 10px 10px 15px;
+		width:345px;
+		*width:330px;
+		border-top:2px solid #f3f3f3;
+		border-bottom:2px solid #f3f3f3;}
+		
+		#popdown_form .shadow .form div.review_labels div.question h3 {
+		display:block;
+		float:left;
+		font-size:1.08em;
+		font-weight:normal;
+		padding-bottom:10px;
+		padding-right: 5px;
+		width: 212px;
+		padding-top: 1px;
+
+		}
+		
+		.popup_form #popdown_form .shadow .form div.review_labels div.question h3  {
+		width: 215px;
+		padding-left: 10px;
+		}
+		
+		#popdown_form .shadow .form div.panel h3.review_thanks {
+		display:block;
+		float:left;
+		font-size:1.17em;
+		font-weight:bold;
+		margin-top:5px;
+		padding-bottom:0;
+		width:200px;
+		}
+	
+		
+		#popdown_form .form_header {
+		float:left;
+		padding-top:5px;
+		width:360px;
+		}
+		
+		#popdown_form .shadow #share_form.form {
+		*margin-top:0px;
+		*float:none;
+		*padding-top:0px;
+		*background-color: #f6f6f6;
+		}
+		
+		#popdown_form .shadow #share_form.form .form_header {
+		*margin-top:20px;
+		*background-color: #f6f6f6;
+		}
+		
+		#popdown_form .shadow .form h3 .editorial_gray {
+		float: right;
+		margin-right: 15px;
+		*display:inline;
+		*margin-top:0px;
+		*position:absolute;
+		*right:10px;
+		}
+		#popdown_form .shadow .form p,
+		#popdown_form .shadow .form h2,
+		 {
+			padding: 2px;
+			margin: 2px 0;
+		}
+#popdown_form .section {
+	padding: 0 10px;
+/*				font-weight: bold;*/
+	font-size: 110%;
+	background-color: #eee;
+}
+#popdown_form .longform_window {
+	display:block;
+	float:left;
+	margin-left:-15px;
+	overflow-x:hidden;
+	width:370px;
+  width: 370px;
+  overflow-x: hidden;
+  float: left;
+  display: block;
+  border-bottom: 2px solid #EAEAEA;
+}
+
+
+#popdown_form #log_in_form .longform_window {
+border-bottom: none;}
+
+
+  #popdown_form .longform_window .longform {
+	display:block;
+	float:left;
+	margin-left:0;
+	overflow-x:hidden;
+	padding-left:15px;
+	width:355px;	
+  }
+  
+.popup_form #popdown_form .longform_window {
+	display:block;
+	float:left;
+	margin-left:-30px;
+	overflow-x:hidden;
+	width:395px;
+}
+  .popup_form #popdown_form .longform_window .longform {
+	display:block;
+	float:left;
+	margin-left:-20px;
+	overflow-x:hidden;
+	padding-left:20px;
+	width:375px;  	
+  }
+  
+  .popup_form #popdown_form .longform_window .longform {
+	display:block;
+	float:left;
+	margin-left:0px;
+	overflow-x:hidden;
+	padding-left:20px;
+	width:380px;  	
+  }
+.popup_form #popdown_form .shadow #edit_form.form .button_footer {
+margin-left:-15px;
+}
+
+
+#popdown_form .form select#review_form_version {
+margin-right: 5px;
+margin-top: 8px;
+}
+
+.popup_form  #popdown_form .form select#review_form_version {
+margin-right: 15px;}
+
+
+.popup_form #popdown_form p.notice {
+margin-left: 0px;
+*display: block;
+*width: auto;
+*position:relative;
+*width: 335px;
+*padding:15px;
+padding: 10px;
+}
+
+#popdown_form .form .button_footer .submit_btn {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(/images/ui/btn_signup.png) no-repeat scroll left top;
+border:medium none;
+cursor:pointer;
+display:block;
+float:none;
+height:26px;
+margin:0 0 10px 5px;
+width:70px;
+
+}
+
+#popdown_form .form .button_footer input.save_button{
+  background: url(/images/ui/toolbar/btn_save.png) no-repeat left top;
+  _background: url(/images/ui/toolbar/btn_save.gif) no-repeat left top;
+  width: 51px;
+  height: 26px;
+  border: none;
+  float: left;
+  }
+#popdown_form .form .button_footer input.save_button:hover{
+  background: url(/images/ui/toolbar/btn_save.png) no-repeat left bottom;
+  _background: url(/images/ui/toolbar/btn_save.gif) no-repeat left bottom;
+  width: 51px;
+  height: 26px;
+  border: none;
+  }
+#popdown_form .form .button_footer input.update_button{
+  background: url(/images/ui/toolbar/btn_update.png) no-repeat left top;
+  _background: url(/images/ui/toolbar/btn_update.gif) no-repeat left top;
+  width: 69px;
+  height: 26px;
+  border: none;
+  }
+#popdown_form .form .button_footer input.update_button:hover{
+  background: url(/images/ui/toolbar/btn_update.png) no-repeat left bottom;
+  _background: url(/images/ui/toolbar/btn_update.gif) no-repeat left bottom;
+  width: 69px;
+  height: 26px;
+  border: none;
+  }
+#popdown_form #share_form a.done_button{
+  background: url(/images/ui/toolbar/btn_close.png) no-repeat left top;
+  _background: url(/images/ui/toolbar/btn_close.gif) no-repeat left top;
+  width: 55px;
+  height: 26px;
+  border: none;
+  display: block;
+  }
+#popdown_form #share_form a.done_button:hover{
+  background: url(/images/ui/toolbar/btn_close.png) no-repeat left bottom;
+  _background: url(/images/ui/toolbar/btn_close.gif) no-repeat left bottom;
+  width: 55px;
+  height: 26px;
+  border: none;
+  display: block;
+  }
+  
+ 
+#popdown_form .quality {
+border-bottom: 1px dotted #acacac;
+}
+
+#popdown_form id#share_form {
+*float: left;
+*width: 100%;
+*height: auto;
+*margin-top:-20px;
+}
+
+#popdown_form #share_form .share_links {
+width: 100%;
+float: left;
+margin-bottom: 10px;
+*padding-bottom:20px;
+_padding:0px;
+_margin:0px;}
+
+#popdown_form #share_form .longform {
+margin-top:0px;
+padding-bottom: 10px;
+}
+
+#popdown_form #share_form .longform a {
+font-weight: bold;
+font-size: 1em;
+*padding-bottom: 10px;
+}
+#popdown_form #share_form .longform a.facebook {
+background: url(/images/ui/toolbar/Facebook-48x48.png) no-repeat left top;
+_background: url(/images/ui/toolbar/Facebook-48x48.gif) no-repeat left top;
+width: 24px;
+height: 24px;
+padding-left: 16px;
+}
+#popdown_form #share_form .longform a.delicious {
+background: url(/images/ui/toolbar/delicious-48x48.png) no-repeat left top;
+_background: url(/images/ui/toolbar/delicious-48x48.g) no-repeat left top;
+width: 24px;
+height: 24px;
+padding-left: 16px;
+}
+#popdown_form #share_form .longform a.digg {
+background: url(/images/ui/toolbar/Digg-48x48.png) no-repeat left top;
+_background: url(/images/ui/toolbar/Digg-48x48.gif) no-repeat left top;
+width: 24px;
+height: 24px;
+padding-left: 16px;
+}
+#popdown_form #share_form .longform a.twitter {
+background: url(/images/ui/toolbar/Twitter-48x48.png) no-repeat left top;
+_background: url(/images/ui/toolbar/Twitter-48x48.gif) no-repeat left top;
+width: 24px;
+height: 24px;
+padding-left: 16px;
+}
+
+
+#popdown_form #share_form .longform h4 {
+text-transform: uppercase;
+color: #acacac;
+font-weight: bold;
+margin-bottom: 3px;
+}
+#popdown_form .longform_window a.about_you {
+font-size: .92em;
+font-weight: bold;
+background: url(/images/ui/toolbar/reviewform_about_you_up.png) no-repeat left center;
+margin-left: 0px;
+padding-right: 12px;
+}
+
+#popdown_form .longform_window a.about_you_open {
+font-size: .92em;
+font-weight: bold;
+background: url(/images/ui/toolbar/reviewform_about_you_down.png) no-repeat left center;
+padding-right: 12px;
+margin-left: 0px;
+}
+
+#more_story_relations .story_relation {
+border-bottom: 1px dotted #acacac;
+padding-bottom: 5px;
+margin-bottom: 5px;
+}
+
+#more_story_relations a {
+font-size: .92em;
+font-weight: bold;}
+
+
+
+/**
+* Misc. typography styles
+*/
+a.button {
+	text-decoration: none;
+	font-size: 150%;
+	padding: 0.3em;
+	width: 100px;
+	background-color: #fff;
+	border: 1px solid #eee;
+}
+a.expander {
+	text-decoration: none;
+}
+
+.inline_form {
+	background-color: #ffe;
+	border: 1px solid #eed;
+	padding: 8px;
+	margin-bottom: 1em;
+}
+
+	#edit_form span.option {
+		
+		padding: 3px;
+	}
+	
+#edit_form h3 {
+margin:5px 0px 0px 0px;
+padding:0px 0px 0px 12px;
+line-height: 1.17em;
+height: 15px;
+font-size: 1.2em;
+font-weight: bold;
+background:url(/images/ui/tools/nt_icon_edit.png) no-repeat left top; 
+_background:url(/images/ui/tools/nt_icon_edit.gif) no-repeat left top;
+float: left;	
+}
+
+#popdown_form .shadow #edit_form.form {
+margin-left:5px;
+padding-left:15px;
+width: 345px;
+}
+#popdown_form .shadow #edit_form.form .form_header {
+width: 355px;
+margin: -3px 0px 0px -15px
+}
+
+#popdown_form .shadow #edit_form.form .longform_window {
+margin-bottom: 10px;
+width: 370px;
+padding-left: 0px;
+margin-left: -25px;
+}
+
+.popup_form #popdown_form .shadow #edit_form.form .longform_window {
+width: 380px;
+padding-left: 0px;
+margin-bottom: 10px;
+}
+
+#popdown_form .shadow #edit_form.form .button_footer {
+padding-left: 0px;
+margin-left: -10px;
+}
+
+#popdown_form .shadow #log_in_form.form .longform_window {
+margin-left: 0px;
+}
+
+#popdown_form .shadow #sign_up_form.form .longform_window {
+margin-left: 0px;
+width: 355px;
+}
+
+#popdown_form .shadow #sign_up_form.form .form_header {
+width: 250px;
+}
+
+
+
+#story_actions_form h3,
+#edit_thanks_form h3 {
+margin:5px 0px 0px 0px;
+padding:0px 0px 0px 0px;
+line-height: 1.17em;
+font-size: 1.2em;
+font-weight: bold;
+float: none;	
+}
+
+	#story_actions_form h3.thanks,#story_actions_form h3.review_thanks,
+	#edit_thanks_form h3.thanks {
+	margin:5px 0px 0px 0px;
+	padding:25px 0px 0px 0px;
+	line-height: 1.17em;
+	font-size: 1.2em;
+	font-weight: bold;
+	float: left;	
+	}
+
+	#edit_thanks_form a.review {
+	background: url(/images/ui/toolbar/btn_reviewthisstory.png) no-repeat left top;
+	width:112px;
+	height: 24px;
+	display: block;
+	margin:0px 0px 5px 0px;
+	}
+	
+	#edit_thanks_form a.review:hover {
+	background: url(/images/ui/toolbar/btn_reviewthisstory.png) no-repeat left bottom;
+	}
+	
+	#edit_thanks_form p.published, #story_actions_form p.published {
+	font-size: 1.17em;
+	margin-bottom: 0px;
+	}
+	
+	#edit_thanks_form p.published a, #story_actions_form p.published a {
+	color:#385AC8;
+	font-size:1em;
+	font-weight:bold;
+	padding-left:17px;
+	}
+
+	#story_actions_form p.published a.edit {
+	background:transparent url(/images/ui/toolbar/btn_editthistoryinfo.png) no-repeat scroll left top;
+	height: 25px;
+	display: block;
+	width:158px;
+	margin-bottom: 5px;
+	padding: 0px;
+  }
+  
+  	#story_actions_form p.published a.edit:hover {
+	background:transparent url(/images/ui/toolbar/btn_editthistoryinfo.png) no-repeat scroll left bottom;
+	height: 25px;
+	
+  }
+
+
+	#edit_thanks_form p.published a.share, #story_actions_form p.published a.share {
+  background:transparent url(/images/ui/tools/nt_icon_share.png) no-repeat scroll left top;
+  _background:transparent url(/images/ui/tools/nt_icon_share.gif) no-repeat scroll left top;
+	} 
+
+/********new tabs********/
+
+  .form_tabs {
+	background-color:#F3F3F3;
+	float:left;
+	height:40px;
+	margin-bottom:10px;
+	margin-left:5px;
+	*margin-left:30px;
+	padding-right:20px;
+	position:relative;
+	width:390px;
+	z-index:1;
+	border-bottom: 1px solid #CACACA;
+	}
+	
+	  .story_rating {
+	  width: 100px;
+	  height: 43px;
+	}
+  
+	 a.toolbar_tab {
+		display: inline-block;
+		height: 27px;
+		padding: 13px 15px 0 15px;
+		font-size: 1.17em;
+		color: #385ac8;
+		text-decoration: none;
+		font-weight: bold;
+		float: left;
+		border-right: 1px solid #CACACA;
+		border-bottom:1px solid #CACACA;
+		margin-left: 1px;
+		*letter-spacing:-.05em;
+		
+		}
+		
+	div.popup_form  #popdown_form a.toolbar_tab {
+	padding-top: 10px;
+	*padding-top: 12px;}
+		
+		a.toolbar_tab.review_link {
+		border-left: 1px solid #CACACA;
+		background: #f3f3f3 url(/images/ui/toolbar/btn_review_notext.png) no-repeat 7px 10px;
+		color: #3f3f3f;
+		}
+		
+		div.popup_form a.toolbar_tab.review_link {
+		border-left: 1px solid #CACACA;
+		background: #f3f3f3 url(/images/ui/toolbar/btn_review_notext.png) no-repeat 7px 8px;
+		color: #3f3f3f;
+		}
+		
+		div.popup_form a.toolbar_tab.review_link.selected {
+		border-left: 1px solid #CACACA;
+		background: #ffffff url(/images/ui/toolbar/btn_review_notext.png) no-repeat 7px 8px;
+		color: #3f3f3f;
+		}
+		
+		a.toolbar_tab.review_link:hover {
+		background: #ffffff url(/images/ui/toolbar/btn_review_notext.png) no-repeat 7px -44px;
+		}
+		
+		div.popup_form a.toolbar_tab.review_link:hover {
+		background: #ffffff url(/images/ui/toolbar/btn_review_notext.png) no-repeat 7px -46px;
+		}
+		
+		a.toolbar_tab.review_link.selected {
+		background: none;
+		background-color:  #ffffff;
+		}
+		
+		a.toolbar_tab.review_link.selected:hover {
+		background: none;
+		background-color:  #ffffff;
+		}
+	
+	 a.toolbar_tab.secondary:hover {
+	}
+	.review_tab_fade { background-color: #fae65c; }
+	
+	 a.toolbar_tab:hover {
+		background-color: #ffffff;
+		display: inline-block;
+		font-size: 1.17em;
+		color: #3f3f3f;
+		text-decoration: none;
+		font-weight: bold;
+		float: left;
+
+	}
+	
+	a.selected,a.selected:hover {
+		background-color: #ffffff;
+		color: #3f3f3f;
+		border-bottom: none;
+		height: 28px;
+		}
+	
+	a.toolbar_tab div.status {
+		margin: -25px 0 0 10px;
+		}
+	  
+	 a.close {
+		float: right;
+		margin: 9px 5px 0px 0px;
+		*margin: 9px 10px 0px 0px;
+		width: 24px;
+		height: 24px;
+		text-decoration: none;
+		background: url(/images/ui/toolbar/nt_toolbar_close.png) no-repeat left top;
+		_background: url(/images/ui/toolbar/nt_toolbar_close.gif) no-repeat left top;
+		}
+		
+	 a.close:hover {
+		background: url(/images/ui/toolbar/nt_toolbar_close.png) no-repeat left bottom;
+		}
+
+	 a.close_panel {
+		float: right;
+		margin: 9px 10px 0px 0px;
+		width: 16px;
+		height: 16px;
+		text-decoration: none;
+		background: url(/images/ui/btn_close_popup_small.png) no-repeat left top;
+		}
+		
+	 a.close_panel:hover {
+		background: url(/images/ui/btn_close_popup_small.png) no-repeat left bottom;
+		}
+		
+	 a.toolbar_button {
+		height: 22px;
+		font-size: 120%;
+		}
+		
+	div.form_tabs div.share_page_tools,
+	div.popup_form div.share_page_tools {
+	display:block;
+	float:left;
+	height:27px;
+	padding:0px 0px 0 10px;
+	margin-top: 9px;
+	width:162px;
+	margin-right: -2px;
+	*width:162px;
+	}
+	div.popup_form div.share_page_tools {
+	padding:4px 0 0 0;
+	width:370px;
+	margin-right: 0px;
+	}
+	
+	div.popup_form #nav div.share_page_tools {
+	width: 145px;
+	}
+	
+	div.popup_form div.nav_section div.share_page_tools {
+	margin-top: 0px;
+	}
+
+	 a.save_link {
+		background:url(/images/ui/icon_star.png) no-repeat left top; 
+		_background:url(/images/ui/icon_star.gif) no-repeat left top;
+		padding-left: 17px;
+		color:#385AC8;
+		font-size: 1em;
+		font-weight: bold;
+		float: left;
+		margin:17px 10px 0px 15px;
+		}
+	
+	a.save_link.on {
+		background:url(/images/ui/icon_star.png) no-repeat left bottom; 
+		_background:url(/images/ui/icon_star.gif) no-repeat left bottom;
+		padding-left: 17px;
+		color:#385AC8;
+		font-size: 1em;
+		font-weight: bold;
+		float: left;
+		margin:17px 5px 0px 15px;
+		}
+	
+ 	_edit a.toolbar_tab .secondary .edit {
+	background:url(/images/ui/tools/nt_icon_edit.png) no-repeat left 19px; 
+	_background:url(/images/ui/tools/nt_icon_edit.gif) no-repeat left 19px; 
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	margin:0px 5px 0px 5px;
+	width: 28px;
+	}
+
+	 _edit a.edit.selected {
+	background:url(/images/ui/tools/nt_icon_edit.png) no-repeat left 19px; 
+	_background:url(/images/ui/tools/nt_icon_edit.gif) no-repeat left 19px; 
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	margin:0px 5px 0px 5px;
+	width: 28px;
+	background-color: #f6f6f6;
+	}
+	_edit a.edit:hover {
+	background:url(/images/ui/tools/nt_icon_edit.png) no-repeat left 19px;
+	_background:url(/images/ui/tools/nt_icon_edit.gif) no-repeat left 19px;  
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	background-color: #f6f6f6;
+	display: inline-block;
+	width: 28px;
+	margin:0px 5px 0px 5px;
+	}
+	_share a.share {
+	background:url(/images/ui/tools/nt_icon_share.png) no-repeat left 19px;
+	_background:url(/images/ui/tools/nt_icon_share.gif) no-repeat left 19px; 
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	margin:0px 5px 0px 5px;
+	width: 41px;
+	}
+	_share a.share.selected {
+	background:url(/images/ui/tools/nt_icon_share.png) no-repeat left 19px;
+	_background:url(/images/ui/tools/nt_icon_share.gif) no-repeat left 19px; 
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	margin:0px 5px 0px 5px;
+	width: 41px;
+	}
+	_share a.share:hover {
+	background:url(/images/ui/tools/nt_icon_share.png) no-repeat left 19px;
+	_background:url(/images/ui/tools/nt_icon_share.gif) no-repeat left 19px;  
+	padding-left: 17px;
+	color:#385AC8;
+	font-size: 1.17em;
+	font-weight: bold;
+	float: left;
+	display: inline-block;
+	width: 41px;
+	margin:0px 5px 0px 5px;
+	background-color: #f6f6f6;
+	}
+
+#dupe_reviews_form .error_message { font-weight:bold; color; blue; }
+
+.close_button {
+	font-weight:bold;
+	font-size:1em;
+	background: url(/images/ui/toolbar/reviewform_about_you_up.png) no-repeat right center;
+	display:block;
+	float:left;
+	font-size:1em;
+	font-weight:bold;
+	height:20px;
+	line-height:12px;
+	margin-top:0;
+	padding-left:5px;
+	padding-right:12px;
+	padding-top:7px;
+}
+
+/*******Popup********/
+div.popup_form #nav {
+  margin: 0 0 0 0px; /* style creeping in from site! */
+  padding:0;
+  position:static;
+  height:auto;
+  width: 370px;
+  text-align: left;
+  background-image: none;
+  background-color: #ffffff;
+}
+
+.popup_form #nav {
+  background-image: none;
+}
+  .popup_form #nav #bar {
+    background-image: none;
+    background-color: transparent;
+    min-width:auto;
+    position:static;
+    width: 375px;
+    height: auto;
+    *padding-left: 0px;
+    background-color: #ffffff;
+  }
+    .popup_form #nav #bar .nav_section {
+      float: none;
+      margin-right: 0;
+      border-right: none;
+      width: 375px;
+      height: auto;
+      padding-left: 0px;
+      padding-top: 0px;
+      
+    }
+    
+    .popup_form #nav #bar .nav_section.logo {
+    *width:275px;}
+    
+    .popup_form #nav #bar .logo {
+      padding: 0;
+    }
+    .popup_form #nav #bar .tool_bar_rating {
+      padding: 5px 0;
+      height: auto;
+    }
+    
+    .popup_form #nav #bar div.nav_feedback {
+      padding: 5px 0;
+      height: auto;
+	}
+    .popup_form #nav #bar .form_tabs {
+      float: none;
+      clear: both;
+    }
+.popup_form #popdown_form {
+clear:both;
+float:none;
+margin-left:0px;
+padding-left:20px;
+position:static;
+right:auto;
+top:auto;
+width:380px;
+background: none repeat scroll 0 0 #FFFFFF !important;
+}
+  .popup_form #popdown_form .shadow {
+	background-image:none;
+	clear:both;
+	float:none;
+	height:auto;
+	margin:0 0 0 -20px;
+	padding:0 0 0 20px;
+  }
+
+  .popup_form .form_tabs {
+    clear:both;
+	float:none;
+	height:37px;
+	*height:39px;
+	margin:0 0 0 -20px;
+	padding:0 0 0 20px;
+	width:375px;
+	z-index:1;
+	*z-index:-1;
+	border-bottom: 2px solid #EAEAEA;
+	border-top: 2px solid #EAEAEA;
+	position: inherit;
+	*position:static;
+	}
+	
+	.popup_form div.panel {
+	padding-top: 0px;
+	position: relative;
+	}
+
+		.popup_form #popdown_form .shadow .form {
+        margin:0;
+        position: relative;
+		}
+
+		.popup_form #popdown_form .shadow .form div.panel h3 {
+		  width: 200px;
+		  padding-top: 5px;
+		  padding-bottom: 0px;
+		  
+		}
+		
+		.popup_form #popdown_form .not_loggedin_notice {
+		position: relative;
+		z-index: 99;}
+		
+		.popup_form #popdown_form .shadow .form div.panel h3.thanks {
+		padding-bottom: 5px;}
+
+		.popup_form #popdown_form .shadow #review_form h3 { }
+		.popup_form #popdown_form .shadow #edit_form h3   { 
+		margin-top:8px;
+		padding-top:0;
+		width:200px; 
+		}
+
+		.popup_form #popdown_form .shadow .form h3 .editorial_gray {
+		  float: right;
+		  margin: 0;
+		  _margin: 0 10px 0 0;
+      }
+
+     .popup_form #popdown_form .longform_window {
+		  clear:both;
+		  margin-top:5px;
+	  }
+
+		.popup_form  #popdown_form  .rating_input .question label {
+		padding-left: 0px;
+		}
+		
+		.popup_form  #popdown_form .rating_input .input {
+		float:right;
+		margin-right: 5px;
+		}
+		
+		.popup_form  #popdown_form  .subquestion {
+		padding-left: 25px;}
+		
+		.popup_form #popdown_form .form_header {
+		margin:0px;
+		padding:0;
+		width:370px;
+		margin-left: -5px;
+		*margin-top:10px;
+    }
+    
+    .popup_form #popdown_form .rating_input {
+    padding-right: 20px;}
+		
+		.popup_form	#popdown_form .form_header h3 {
+		_width:75%;
+		_margin-top:0px;
+		}
+		.popup_form	#popdown_form .form_header select {
+		}
+
+		.popup_form	#popdown_form .form_header p {
+			_clear:both;
+		}
+		
+		.popup_form .rating_input .input .rating_labels {
+		_margin-bottom: 0px;
+		_height: 10px;
+		}
+		
+		.popup_form.trustometer .medium .bar *{
+					_margin-top:-4px !important;
+				}
+					
+		.popup_form .trustometer .bar {
+				_margin:4px 2px 0px 3px;
+				_height:9px;
+				_overflow:hidden;
+				_float:left;
+				_top:0px;
+			}
+		
+input#story_url {
+float:left;
+margin-left:0;
+margin-top:0;
+width:232px;
+}
+
+.popup_form #nav #bar .story_rating {
+	  width: 375x;
+	  height: 38px;
+	  padding-top: 3px;
+}
+
+.popup_form #nav #bar a.see_all {
+float:left;
+font-size:11px;
+font-weight:bold;
+margin: 5px 0 0 5px;
+padding-left: 10px;
+}
+
+/* We want the notice about framebuster & ie6 on the popup form in smaller text */
+.popup .popup_form { margin-top: 5px;background-color: #ffffff; margin-left: -20px;*overflow-x:hidden;}
+.popup .popup_form p { margin: 3px; padding:0; clear:both;}
+.popup .popup_form .flash_notice,
+.popup .popup_form .flash_error,
+.popup .popup_form .flash_warning { font-size:1em; text-transform:none; padding: 5px; margin: 5px 0 0 20px; }
+.popup .popup_form a.close { position:relative; top:10px; right:10px; height:24px; margin:0; padding:0; }
+.popup .popup_form a.close:hover { height:auto;}
+.popup .popup_form a.toolbar_tab { height: 27px;border-bottom: none;  }
+.popup .popup_form .close_button { display: none; }
+.popup .popup_form #popdown_form #share_form .share_links { float:none; }
+.popup .popup_form a.toolbar_tab.selected {height: 29px;}
+
+
+/* NEW REVIEW FORM CODE */
+
+div.panel {
+padding-top: 20px;
+*padding-top: 0px;
+*margin-top:-10px;
+}
+
+div.panel div.review_question {
+float: left;
+width: 200px;
+padding-top: 5px;
+}
+
+div.panel .error, div.panel .notice, div.panel .success {
+width:315px;
+}
+
+#popdown_form .shadow .form div.panel div.review_question h3 {
+font-size: 1.14em;
+font-weight: bold;
+padding-bottom: 0px;
+padding-top: 0px;
+}
+
+#popdown_form .shadow .form div.panel h3 {
+font-size: 1.14em;
+font-weight: bold;
+padding-bottom: 0px;
+padding-top: 5px;
+}
+
+div.panel div.review_labels {
+display:block;
+float:left;
+margin-left: -15px;
+}
+
+.popup_form #popdown_form .shadow .form div.panel div.review_labels {
+display:block;
+float:left;
+padding-left: 10px;
+}
+
+div.panel div.review_labels div.row{
+margin: 0 0 5px 35px;
+display: block;
+height: 32px;
+}
+
+div.panel div.review_labels div.row a.positive {
+text-align: center;
+background: url(/images/ui/toolbar/btn_labels.png) no-repeat left top;
+width: 140px;
+height: 25px;
+display: block;
+float: left;
+font-weight: bold;
+color: #1fa346;
+padding-top: 7px;
+cursor: pointer;
+}
+
+div.panel div.review_labels div.row a.negative {
+text-align: center;
+background: url(/images/ui/toolbar/btn_labels.png) no-repeat right top;
+width: 140px;
+height: 25px;
+display: block;
+float: left;
+font-weight: bold;
+color: #d36064;
+padding-top: 7px;
+cursor: pointer;
+}
+
+div.panel div.review_labels div.row a.positive:hover {
+/*background: url(/images/ui/toolbar/btn_labels.png) no-repeat left -34px;
+color: #ffffff;*/
+text-decoration: underline;
+cursor: pointer;
+}
+
+div.panel div.review_labels div.row a.negative:hover {
+/*background: url(/images/ui/toolbar/btn_labels.png) no-repeat right -34px;
+color: #ffffff;*/
+text-decoration: underline;
+cursor: pointer;
+}
+
+div.panel div.review_labels div.row a.positive.selected {
+background: url(/images/ui/toolbar/btn_labels.png) no-repeat left -34px;
+color: #ffffff;
+text-decoration: none;
+cursor: pointer;
+}
+
+div.panel div.review_labels div.row a.negative.selected {
+background: url(/images/ui/toolbar/btn_labels.png) no-repeat right -34px;
+color: #ffffff;
+text-decoration: none;
+cursor: pointer;
+}
+
+div.panel div.review_labels div.row a.positive.selected:hover {
+text-decoration: underline;
+}
+
+div.panel div.review_labels div.row a.negative.selected:hover {
+text-decoration: underline;
+
+}
+
+div.review_labels div.row a.help img, div.review_labels div.row img.help  {
+background:url("/images/ui/toolbar/icon_help_xlarge.png") no-repeat scroll left top transparent;
+height:16px;
+margin-left:2px;
+margin-top:8px;
+width:15px;
+cursor: pointer;
+}
+
+div.review_labels div.row a.help img:hover, div.review_labels div.row img.help:hover {
+background:url("/images/ui/toolbar/icon_help_xlarge.png") no-repeat scroll left bottom transparent;
+}
+
+div.review_labels a.help img, div.review_labels img.help  {
+background:url("/images/ui/toolbar/icon_help_xlarge.png") no-repeat scroll left top transparent;
+height:16px;
+margin-left:2px;
+margin-top:3px;
+width:15px;
+cursor: pointer;
+}
+
+div.review_labels a.help img, div.review_labels img.help:hover {
+background:url("/images/ui/toolbar/icon_help_xlarge.png") no-repeat scroll left bottom transparent;
+}
+
+div.panel div.expand {
+border-top:2px solid #EAEAEA;
+display:block;
+float:left;
+margin:0px 0 0 -15px;
+padding:10px 10px 0px 15px;
+width:345px;
+overflow-x: hidden;
+}
+
+.popup_form #popdown_form .shadow .form div.panel div.expand {
+border-top:2px solid #EAEAEA;
+display:block;
+float:left;
+margin:0 0 0 -30px;
+padding:10px 10px 0 32px;
+width:365px;
+}
+
+#popdown_form .shadow .form div.panel div.expand h3 {
+font-weight: normal;
+font-size: 1.08em;
+display: block;
+float: left;
+padding-top: 4px;
+}
+
+div.panel div.review_labels div.question {
+border-top:2px solid #EAEAEA;
+display:block;
+float:left;
+margin:10px 0 0 0px;
+padding:10px 10px 0 15px;
+width:345px;
+}
+
+.popup_form #popdown_form .shadow .form div.panel div.review_labels div.question {
+border-top:2px solid #EAEAEA;
+display:block;
+float:left;
+margin:0px 0 0 -20px;
+padding:10px 10px 0 20px;
+width:375px;
+*width:380px;
+}
+
+div.panel div.review_labels #review_label_trust.question  {
+margin-top: 0px;
+}
+
+div.panel div.review_labels div.question a.help {
+float: left;
+padding-top: 3px;
+}
+
+div.panel div.question a.positive{
+text-align: center;
+background: url(/images/ui/toolbar/btn_yes.png) no-repeat left top;
+width: 45px;
+height: 28px;
+display: block;
+float: left;
+font-weight: bold;
+color: #1fa346;
+padding-top: 5px;
+cursor: pointer;
+margin-top: -4px;
+}
+
+div.panel div.question a.negative{
+text-align: center;
+background: url(/images/ui/toolbar/btn_no.png) no-repeat right top;
+width: 39px;
+height: 28px;
+display: block;
+float: left;
+font-weight: bold;
+color: #d36064;
+padding-top: 5px;
+cursor: pointer;
+margin-top: -4px;
+}
+
+div.panel div.question a.positive:hover {
+text-decoration: underline;
+cursor: pointer;
+}
+
+div.panel div.question a.negative:hover {
+text-decoration: underline;
+cursor: pointer;
+}
+
+div.panel div.question a.positive.selected {
+background: url(/images/ui/toolbar/btn_yes.png) no-repeat left -32px;
+color: #ffffff;
+text-decoration: none;
+cursor: pointer;
+}
+
+div.panel div.question a.negative.selected {
+background: url(/images/ui/toolbar/btn_no.png) no-repeat left -34px;
+color: #ffffff;
+text-decoration: none;
+cursor: pointer;
+}
+
+div.panel div.question a.positive.selected:hover {
+text-decoration: underline;
+}
+
+div.panel div.question a.negative.selected:hover {
+text-decoration: underline;
+}
+
+div.panel div.expand div.expand_your_review {
+display: block;
+float: none;
+padding-bottom: 10px;
+}
+
+div.panel div.expand div.expand_your_review a.expand,
+div.panel a#show_basic_review_form,
+#info_form div.more_info a.more {
+font-weight: bold;
+font-size: 1.14em;
+background: url(/images/ui/toolbar/arrow_expand.png) no-repeat left 5px;
+height: 1.14em;
+padding-left: 10px;
+}
+
+div.panel div.expand div.expand_your_review a.expand.selected,
+div.panel a#show_basic_review_form.selected,
+#info_form div.more_info a.more.selected {
+background: url(/images/ui/toolbar/arrow_expand.png) no-repeat left -17px;
+color: #385AC8;
+}
+
+#info_form div.more_info {
+border-top:2px solid #F2F2F2;
+clear:both;
+margin-left:-15px;
+margin-top:15px;
+padding-left:15px;
+padding-top:10px;
+width:355px;
+}
+
+/*****expanded tabs*******/
+
+div.panel div.expand .new_tabs {
+float:left;
+width:345px;
+margin-left: -5px;
+}
+
+div.panel div.expand .new_tabs ul.tabs li a {
+font-size: .92em;
+padding: 10px 10px 5px 8px;
+*width:35%;
+*padding: 10px 10px 5px 8px;
+}
+
+div.panel div.expand .new_tabs ul.tabs li a.comment_tab {
+*width: 70px;
+}
+
+div.panel div.expand .new_tabs ul.tabs li span.left {
+*margin-right: 0px;
+*padding-right: 5px;}
+
+div.panel div.expand .new_tabs ul.tabs li span.right {
+display:block;
+float:right;
+height:auto;
+padding:5px 5px 5px 0px;
+white-space:nowrap;
+*text-align: center;
+} 
+
+div.panel div.expand .panes .panes_wrapper {
+background:url("/images/ui/toolbar/bg_box_shadow_rounded.png") repeat-y scroll left top transparent;
+margin-left:-1px;
+*margin-left:-2px;
+margin-top:-1px;
+*margin-top:-2px;
+width:346px;
+}
+
+div.panel div.expand .panes .panes_bottom_left {
+background:url("/images/ui/toolbar/bg_box_shadow_rounded_bottom.png") no-repeat scroll left bottom #FFFFFF;
+float:left;
+height:13px;
+width:346px;
+}
+
+div.panel div.new_form_msg {
+clear: both;
+padding-top: 1px;
+margin: 0pt 20px 0px 0px;
+}
+
+div.panel div.new_form_msg p.notice {
+-webkit-border-radius: 5px;
+-moz-border-radius:5px;
+border-radius: 5px;
+background-color:#D5E3FA;
+border:medium none;
+color:#3F3F3F;
+float:left;
+font-weight:bold;
+margin-top:10px;
+padding:5px 10px;
+width:315px;
+}
+
+#popdown_form .form div.panel .button_footer {
+border-top:none;
+display: block;
+float: left;
+margin-top: 10px;
+width: 100%;
+}
+
+div.popup_form #popdown_form .form div.panel .button_footer{
+margin-left: -15px;
+}
+
+#popdown_form #sign_up_form div.panel .button_footer {
+float: left;}
+
+#popdown_form .form div.panel .button_footer .help {
+float:left;
+font-weight:bold;
+margin-top:7px;
+padding-left:5px;
+}
+
+#popdown_form .form div.panel .button_footer a.close_button,
+#info_form a.close_button,
+#edit_form a.close_button,
+#story_actions_form a.close_button,
+#edit_thanks_form a.close_button{
+background:none;
+display:block;
+float:right;
+font-size:11px;
+font-weight:bold;
+height:12px;
+line-height:12px;
+margin-top:0;
+padding-left:5px;
+padding-right:15px;
+*margin-right:10px;
+padding-top:7px;
+color: #ACACAC;
+text-align:right;
+width:345px;
+*width:335px;
+}
+
+
+#popdown_form #review_labels_form_version {
+float: right;
+margin-right: 25px;
+}
+
+
+a.disclosure_link {
+background:url("/images/ui/toolbar/reviewform_about_you_down.png") no-repeat scroll left center transparent;
+font-size:1em;
+font-weight:bold;
+padding-left:12px;
+margin-left: 7px;
+}
+
+a.about_you {
+background:url("/images/ui/toolbar/reviewform_about_you_up.png") no-repeat scroll left center transparent;
+font-size:1em;
+font-weight:bold;
+padding-left:12px;
+margin-left: 7px;
+}
+
+#info_form h3 {
+margin:10px 0px 0px 0px;
+padding:0px 0px 0px 21px;
+line-height: 1.17em;
+height: 20px;
+font-size: 1.2em;
+font-weight: bold;
+background:url(/images/ui/toolbar/icon_story_info.png) no-repeat left top; 
+float: left;	
+}
+#info_form .title {
+font-size:1.33em;
+font-weight:bold;
+line-height: 1em;
+}
+
+#info_form .byline {
+padding-top: 10px;
+height: auto;
+}
+
+#info_form .excerpt {
+padding-top: 5px;
+}
+
+#info_form .posted_by {
+ font-size: 11px;
+ color: #adadad;
+ font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;
+ font-weight: normal;
+ padding-top: 5px;
+}
+
+#info_form .date_type {
+ font-size: .92em;
+ color: #adadad;
+ font-weight: bold;
+ padding-top:5px;
+}
+
+#info_form .row1 {
+*margin-top: 10px;
+}
+
+#info_form .row2 {
+margin-top: 10px;
+padding-top:2px;
+display: block;
+font-weight: bold;
+}
+
+
+
+#info_form .show_more_info {
+color:#ACACAC;
+font-size:1em;
+font-weight:normal;
+padding-top:10px;
+}
+#info_form a.edit_story {
+  background: url(/images/ui/toolbar/btn_editthisreview.png) no-repeat left top;
+  width: 74px;
+  height: 20px;
+  margin-right:5px;
+  border: none;
+  float: right;
+  margin-top: 8px;
+  }
+
+#info_form a.edit_story:hover {
+  background: url(/images/ui/toolbar/btn_editthisreview.png) no-repeat left bottom;
+  }
+
+/*********Review Thanks styles*************/
+
+#edit_thanks_form .review_todo,
+#story_actions_form .review_todo{
+/*margin-left:-15px;
+margin-top:15px;
+padding-left:15px;
+padding-right:15px;
+padding-top:15px;
+border-top:2px solid #f3f3f3;*/
+-webkit-border-radius: 5px;
+-moz-border-radius:5px;
+border-radius: 5px;
+background-color:#D5E3FA;
+float:left;
+margin-top:10px;
+padding:5px 10px;
+width:315px;
+}
+
+
+
+#edit_thanks_form p.notice {
+background-color: #fffbc4;
+border: 1px solid #acacac;
+-webkit-border-radius: 5px;
+-moz-border-radius:5px;
+border-radius: 5px;
+font-size: .92em;
+color:#3f3f3f;
+font-weight: bold;
+text-align: left;
+margin-right: 15px;
+margin-left: 0px;
+float: left;
+}
+
+#edit_form p.error {
+ margin-left: -10px;
+ width: 315px;
+ *width: 315px;
+}
+
+#edit_form p.notice {
+margin-left: -15px;
+background-color: #fffbc4;
+border: 1px solid #acacac;
+-webkit-border-radius: 5px;
+-moz-border-radius:5px;
+border-radius: 5px;
+font-size: .92em;
+color:#3f3f3f;
+font-weight: bold;
+text-align: left;
+margin-right: 15px;
+*margin:0px 15px 0px -30px;
+*float:left;
+*padding:15px;
+}
+
+.popup .popup_form #edit_thanks_form p.notice, .popup .popup_form #edit_form p.notice {
+padding: 10px;
+*padding:15px;
+}
+
+#story_actions_form p.published a.outbound,
+#edit_thanks_form p.published a.outbound{
+background: url(/images/ui/toolbar/btn_seeallreviews.png) no-repeat left top;
+width: 128px;
+height: 25px;
+display: block;
+margin-bottom: 5px;
+}
+
+#story_actions_form p.published a.outbound:hover,
+#edit_thanks_form p.published a.outbound:hover{
+background: url(/images/ui/toolbar/btn_seeallreviews.png) no-repeat left bottom;
+}
+
+#story_actions_form p.published a.outbound_nt,
+#edit_thanks_form p.published a.outbound_nt{
+background: url(/images/ui/toolbar/btn_viewmorestories.png) no-repeat left top;
+width: 147px;
+height: 25px;
+display: block;
+margin-bottom: 5px;
+}
+
+#story_actions_form p.published a.outbound_nt:hover,
+#edit_thanks_form p.published a.outbound_nt:hover{
+background: url(/images/ui/toolbar/btn_viewmorestories.png) no-repeat left bottom;
+}
+
+#story_actions_form .share_tools,
+#edit_thanks_form .share_tools{
+margin-left:-15px;
+padding-left:15px;
+padding-right:15px;
+padding-top:5px;
+width: 340px;
+float: left;
+}
+
+#story_actions_form .share_tools h3, #edit_thanks_form .share_tools h3 {
+padding-bottom: 5px;
+}
+
+#edit_thanks_form.form div.panel .share_tools h3 {
+padding-bottom: 5px;
+}
+
+#story_actions_form.form div.panel .share_tools h3 {
+padding-bottom: 5px;
+}
+
+div.popup_form #story_actions_form .share_tools div.share_page_tools, #edit_thanks_form .share_tools div.share_page_tools {
+margin-top: 0px;
+padding-top: 0px;
+}
+
+div.popup_form div.popup_form {}
+
+#story_actions_form .review_todo .content,
+#edit_thanks_form .review_todo .content{
+padding-left: 0px;
+padding-bottom: 0px;
+}
+
+#story_actions_form .review_todo a.close_button,
+#edit_thanks_form .review_todo a.close_button{
+padding-right: 0px;
+}
+#edit_thanks_form .edit_error {
+color:#b50b05;
+margin:5px 10px 6px 0px;
+width: 80%;
+}
+
+.edit_form_selector {
+float: right;
+width: 120px;
+margin-bottom:0px;
+}
+
+#edit_form .edit_form_selector {
+*margin-right: 10px;
+}
+
+#edit_form a.close_panel {
+*margin-right: 0px;
+}
+
+.popup_form #popdown_form .edit_form_selector {
+margin-right: 10px;
+}
+
+.edit_form_selector select#review_form_version, .edit_form_selector select#member_preferred_edit_form_version {
+margin-bottom: 0px;
+}
+
+.review_question p {
+margin-bottom: 10px;
+font-size: .92em;
+}
+
+.not_loggedin_notice p.notice {
+background-color: #fffbc4;
+border: 1px solid #acacac;
+-webkit-border-radius: 5px;
+-moz-border-radius:5px;
+border-radius: 5px;
+font-size: 1.14em;
+color:#3f3f3f;
+font-weight: bold;
+text-align: left;
+display:block;
+float:left;
+margin-right: 0px;
+width: 315px;
+*padding:10px !important;
+
+}
+
+.not_loggedin_overlay {
+background-color:#ffffff;
+display:block;
+float:left;
+height:320px;
+left:7px;
+opacity:0.7;
+position:absolute;
+top:133px;
+width:369px;
+z-index:98;
+margin-left: 1px;
+filter:alpha(opacity='70'); 
+*top:120px;
+*left:33px;
+*height:300px;
+/*
+-webkit-border-bottom-left-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;
+-moz-border-radius-bottomleft: 5px;
+-moz-border-radius-bottomright: 5px;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+*/
+}
+
+.popup_form #popdown_form .form .not_loggedin_overlay {
+background-color:#FFFFFF;
+display:block;
+float:left;
+height:300px;
+*height:310px;
+left:0;
+margin-left:-20px;
+margin-top:-55px;
+opacity:0.7;
+padding:0;
+position:absolute;
+width:395px;
+z-index:98;
+*filter:alpha(opacity='70'); 
+}
+
+p.notice a {
+color:#385AC8;
+}
+
+a.toolbar_login,
+div.popup_form a.toolbar_login {
+float:right;
+font-size:0.92em;
+font-weight:normal;
+color:#6388c0;
+margin-top:16px;
+padding-right:8px;
+*padding-right:12px;
+}
+div.popup_form a.toolbar_login {
+font-weight:bold;
+margin-top:4px;
+padding-right:10px;
+*padding-right:23px;
+*width:40px;
+}
+
+#story_actions_form h3.from_here, #edit_thanks_form h3.from_here {
+font-size:1.08em;
+margin-bottom:10px;
+margin-top:0;
+}
+
+#review_form div.share {
+  clear:both;
+  margin-bottom: 15px;
+  float: left;
+  *padding-bottom:15px;
+}
+
+#review_form div.share label {
+  float:left;
+}
+
+#review_form div.share .warning {
+  clear: both;
+  color: #f00;
+}
+
+#review_form div.share span.share_option {
+float:left;
+margin-top: 4px;
+margin-left: 5px;
+}
+
+#review_form a#facebook_button,
+review_form a#facebook_button.selected {
+  background:url("/images/ui/tools/icon_facebook_hover.png") no-repeat scroll left top transparent;
+  padding: 0px 5px 5px 18px;
+  font-weight:bold;
+  color:#385AC8;
+  text-decoration: none;
+}
+
+#review_form a#twitter_button,
+#review_form a#twitter_button.selected {
+  background:url("/images/ui/tools/icon_twitter_hover.png") no-repeat scroll left top transparent;
+  padding: 0px 5px 0px 18px;
+  font-weight:bold;
+  color:#385AC8;
+  text-decoration: none
+}
+
+
+div.my_overall_rating {border-top:2px solid #EAEAEA;padding-top:10px;padding-left:15px;font-size:1.17em;padding-bottom: 10px;margin-left:-15px;*padding-top:5px;}
+
+.popup_form #popdown_form .shadow .form div.my_overall_rating {
+border-top:2px solid #EAEAEA;
+font-size:1.17em;
+margin-left:-20px;
+padding-bottom:10px;
+padding-left:25px;
+padding-top:10px;
+width:380px;
+}
+
+input#disclosure_switch {
+margin-top:4px;
+*margin-top:5px;
+}
+
+input#post_on_facebook {
+width: 13px;
+margin-right: 0px;
+margin-top: 4px;
+*margin-top: 0px;
+margin-left: 5px;}
+
+input#post_on_twitter {
+margin-left:0;
+margin-right:5px;
+margin-top:0;
+*margin-top:-4px;
+width:13px;
+}
+
+
+div.captcha_toolbarform {
+display:block;
+float:left;
+margin:0;
+padding:0;
+position:inherit;
+}
+
+textarea.twitter_input_box {
+width: 345px;
+float: left;
+display: block;
+margin-top: 0px;
+padding-top: 0px;
+}
+
+#popdown_form .recaptcha_input_area {
+position: static!important;
+}
+#popdown_form .recaptchatable #recaptcha_response_field {
+position: static!important;
+*margin:-20px 0 0 -20px !important;
+}
+
+div.popup_form .tooltip {
+	*position:absolute !important;
+	*top:-300px !important;
+  *left:0 !important;
+}

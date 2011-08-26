@@ -1,0 +1,47 @@
+=timed_fragment_cache (without dogpile)
+
+  git clone git@github.com:weibel/timed_fragment_cache.git
+  in your vendors/plugin directory
+
+or
+
+  script/plugin install git@github.com:weibel/timed_fragment_cache.git
+
+In your controller
+
+  when_fragment_expired 'some_posts', 1.hour.from_now do
+    @posts = Post.find( :all )
+  end
+
+In your view
+
+  <%- cache 'some_posts' do -%>
+    <%- @posts.each do |post| -%>
+      <%= @post.title %>
+    <%- end -%>
+  <%- end -%>
+
+Or
+
+  <%- cache 'some_posts', 20.seconds.from_now do -%>
+    <%- @posts.each do |post| -%>
+      <%= @post.title %>
+    <%- end -%>
+  <%- end -%>
+
+Prevent cache dogpiling by using
+
+  <%- cache_without_dogpile 'some_posts', 20.seconds.from_now do -%>
+    <%- @posts.each do |post| -%>
+      <%= @post.title %>
+    <%- end -%>
+  <%- end -%>
+
+Read about cache dogpiling here
+http://hype-free.blogspot.com/2008/05/avoiding-dogpile-effect.html
+
+Kasper Weibel
+weibel@gmail.com
+
+Khalid Shaikh
+khalid.j.shaikh@gmail.com

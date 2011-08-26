@@ -1,0 +1,28 @@
+# bj priorities, task periods, expected execution times
+# The newsletter_dispatcher doesn't have a task period because the newsletter tasks are submitted to execute at fixed times.
+#
+
+bj:
+  priorities:
+    feed_fetcher        : 50
+    ratings_processor   : 75
+    bulk_emails         : 80
+    newsletter_dispatch : 100
+  task_periods:
+    feed_fetcher        : 120
+    ratings_processor   : 10
+  approx_execution_times :
+    feed_fetcher        : 45
+    ratings_processor   : 2
+    newsletter_dispatch : 25
+  newsletter_dispatch_times :
+    mynews :
+      hour : 3   # 3 am pt
+      min  : 0
+    daily  :
+      hour : 13  # 1 pm pt
+      min  : 0
+    weekly :
+      day  : 3   # wednesday
+      hour : 13  # 1 pm pt
+      min  : 0

@@ -1,0 +1,84 @@
+HOW YOU CAN SUPPORT <%=app_name.upcase%>
+If you like what you see, there are many ways you can support our
+non-profit service. Here are some ideas to get you started.
+
+* REVIEW OFTEN 
+The more you review stories on our site, the smarter we get as a
+community. Simply click "Review" next to a story title, anywhere on our
+site. Try to answer as many questions as you can, to make your ratings
+count more. For the latest stories, start on our home page, in the 'For
+Review' section: <%=home_url%>
+
+* FOCUS ON THE JOURNALISM
+Here at <%=app_name%>, we try to rate stories based on the quality of the
+journalism, not whether we agree with the views presented in these
+stories. If you haven't already, check our Reviewer FAQ for guidelines
+on how to review stories on our site:
+<%= faq_url(:path => "reviewer") %>
+
+* FILL IN YOUR PROFILE
+Please take a moment to update your member profile, so that other
+members can find out more about you. Be sure to add a picture if you
+haven't already. The more you share about yourself, the higher your
+member level, and the more your ratings count:
+<%= my_account_members_url(:anchor => "profile") %>
+
+* POST A STORY
+If you've come across a good story lately, please share it with us.
+Simply click on 'Post' anywhere on our site - or use our Bookmarklet
+to quickly post stories from any web page:
+<%= page_url(:section => "tools", :path => "bookmarklet") %>
+
+* INVITE A FRIEND
+Please invite your friends, family, or co-workers to join <%=app_name%>.
+Simply click on 'Invite' at the bottom of any page to send them a
+personal invitation:
+<%= invite_members_url %>
+
+* TELL US WHAT YOU THINK
+We'd love to hear your comments and suggestions about our site. Please
+post your recommendations on our feedback page:
+<%= site_feedback_url %>
+
+__________________________________________
+
+ABOUT <%=app_name.upcase%>
+
+<%=app_name%> helps people find good journalism online. Our free website
+features a daily feed of quality news and opinion from independent and
+mainstream sources, based on ratings from our reviewers:
+<%= home_url %>
+
+We rate the news based on quality, not just popularity. Our web review
+tools enable our members to evaluate fairness, evidence, sourcing and
+other core journalistic principles. <%=app_name%> is non-profit,
+non-partisan and encourages both news literacy and civic engagement.
+
+Our mission is to to help citizens make more informed decisions about
+our democracy.
+
+It's a great way to get "news you can trust" all in one place. To find
+out more, check our About page: <%= page_url(:section => "about") %>
+
+__________________________________________
+
+<% @time = @newsletter.dispatch_time -%>
+We're sending you this <%=@newsletter.freq.humanize%> newsletter because you signed up as a
+<%=app_name%> member. This feed goes out every <%- eastern = @time.in_time_zone('Eastern Time (US & Canada)') -%><%= @newsletter.is_daily? ? "day" : @time.strftime("%A")%> at about <%=@time.strftime("%I%p %Z").gsub(/^0/, '')%> (<%=eastern.strftime("%I%p %Z").gsub(/^0/, '')%>).
+
+To change your email settings, visit our Email Feeds page:
+<%= email_settings_url(@newsletter.freq) %>
+
+To IMMEDIATELY unsubscribe from our <%=@newsletter.freq.humanize%> news feed, click here:
+[UNSUBSCRIBE_URL]
+
+<%=app_name%> treats your contact information as private and confidential.
+We will not share it with anyone without your permission. See our full
+privacy policy:
+<%= page_url(:section => "about", :path => "privacy") %>
+
+(if clicking a web address in this message does not work, simply copy
+and paste it into your browser's address bar)
+
+Copyright (c) 2011, <%=app_name%> - All Rights Reserved.
+

@@ -1,0 +1,29 @@
+featured_topic:
+  id: 1
+  name: featured_topic
+  value: barack_obama
+  last_edited_by_id: 1
+
+featured_story:
+  id: 2
+  name: featured_story
+  value: 25054
+  last_edited_by_id: 1
+
+featured_review_1:
+  id: 3
+  name: featured_review_1
+  value: 70128
+  last_edited_by_id: 1
+
+featured_review_2:
+  id: 4
+  name: featured_review_2
+  value: 70131
+  last_edited_by_id: 1
+
+featured_partner:
+  id: 5
+  name: featured_partner
+  value: pbs
+  last_edited_by_id: 1

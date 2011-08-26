@@ -1,0 +1,12 @@
+<%- eba = EditorialBlockAssignment.find_block_assignment(@local_site, @editorial_block.id, params[:page_type], params[:page_id]) -%>
+<%- eba = EditorialBlockAssignment.new if eba.nil? -%>
+<%- espaces = (params[:page_id].blank? ? EditorialSpace.on_homepage(@local_site).find(:all) : EditorialSpace.on_non_homepage(@local_site, params[:page_type], params[:page_id]).find(:all)) -%>
+
+<%= hidden_field_tag :page_type, params[:page_type] %>
+<%= hidden_field_tag :page_id, params[:page_id] %>
+<%= form_field f, :attr => :slug %>
+<%= form_field f, :attr => :body, :type => "text_area", :class => "big_box" if !@editorial_block.is_prebaked? %>
+<%- fields_for "editorial_block_assignment", eba do |eba_f| -%>
+  <%= eba_f.hidden_field("editorial_block_id", :value => @editorial_block.id) %>
+  <%= form_field eba_f, :attr => :editorial_space_id, :name => "Editorial Space", :type => "dropdown", :sel_opts => [["Select One:",""]] + espaces.collect{|es| [es.name, es.id]} %>
+<%- end -%>

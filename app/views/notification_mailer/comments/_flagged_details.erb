@@ -1,0 +1,16 @@
+Offending Content: 
+  Flag Count: <%= h @record.flags_count %>
+  Permalink: <%=  permalink %>
+  Body: <%= @record.body_plain %>
+
+Offending Member:
+  Name: <%= @record.flags.last.owner.display_name %>
+  ID: <%= @record.flags.last.owner.id %>
+  Profile: <%= member_url(@record.flags.last.owner) %>
+  Total Flags Received: <%= @record.flags.last.owner.flaggings_count %>
+
+Reporting Member:
+  Name: <%= h @record.flags.last.member.display_name %>
+  ID: <%= @record.flags.last.member.id %>
+  Profile: <%= member_url(@record.flags.last.member) %>
+  Total Flags Given: <%= @record.flags.last.member.flags_count %>

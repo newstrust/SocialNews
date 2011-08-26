@@ -1,0 +1,32 @@
+<% @max_line_len = SocialNewsConfig["newsletter"]["max_line_length"] -%>
+<% @newsletter.main_sections.each do |listing_type| -%>
+
+<%= (listing_type == "most_recent") ? "MOST RECENT" : "MOST TRUSTED" %>
+
+<% desc = "Here are" + ((listing_type == "most_recent") ? " today's top stories" : " this week's top-rated stories") + ", based on ratings from members like you" -%>
+<%= StringHelpers.linewrap_text(desc, @max_line_len) %>
+<% [Story::NEWS, Story::OPINION].each do |story_type| -%>
+<% stype = story_type.upcase -%>
+<% listing_url = url_for({:controller => :stories, :action => :index, :listing_type => listing_type, :story_type => story_type, :only_path => false}) -%>
+<% ltype = listing_type.titlecase.upcase -%>
+<% footer = (listing_type == "most_recent") ? "More Recent #{story_type.capitalize}" : "More Trusted #{story_type.capitalize}" -%>
+<% heading = landing_page_subsection_title(listing_type, story_type, 7).gsub(/<.*?>/, "") -%>
+
+<%= heading %>
+<%= (1..heading.length).collect {|n| "_"} * "" %>
+<% [Source::MSM, Source::IND].each do |source_ownership| -%>
+<% so = Source::OWNERSHIP[source_ownership] + " Media" -%>
+<%#-- Now output stuff --%>
+
+<%= so.upcase %>
+<%= (1..so.length).collect {|n| "_"} * "" %>
+<%= render :partial => "newsletter/text/listing", :locals => {
+      :stories => @newsletter.stories(listing_type, story_type, source_ownership),
+      :link_params => @link_params} -%>
+<% end -%>
+
+<%= footer + ": " + listing_url %>
+__________________________________________
+
+<% end -%>
+<% end -%>

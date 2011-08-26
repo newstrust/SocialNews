@@ -1,0 +1,30 @@
+<div id="<%= id %>" class="right_column_box span-8">
+	<div class="top"></div>
+	<div class="wrapper">
+		<% if header %>
+			<div class="header"><div>
+				<%= disclaimer %>
+				<% if tabs %>
+				  <div class="tabs">
+				    <%= tabs.map{|tab| link_to_function(tab, "", :class => tab == tabs.first ? "sel" : "")}.join(" | ") %>
+				    <%= "| " + deactivated_links.collect{|dl| content_tag(:span, dl, :class => "deactivated_gray")}.join(" | ") unless deactivated_links.empty? %>
+				  </div>
+				<% end %>
+				<h3 class="bottom"><%= header %></h3>
+			</div></div>
+		<% else %>
+			<div class="top"></div>
+		<% end %>
+		<div class="content clearfix">
+			<%= content %>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<% unless tabs.empty? %>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('div#<%= id %>').tabbed_content(null, '.tabs a', '.tabbedContent');
+		});
+	</script>
+<% end %>

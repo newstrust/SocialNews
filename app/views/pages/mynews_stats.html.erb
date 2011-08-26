@@ -1,0 +1,66 @@
+<%- unless logged_in? && current_member.has_role_or_above?(:sysop) -%>
+<script language="JavaScript">
+<!-- 
+{
+location.href = '/';
+}
+// -->
+</script>
+<%- else -%>
+<% @title = "MyNews Stats" -%>
+<%- per_page = (params[:nopaging] == "true" ? 1000000 : 50) -%>
+<% mynews_users = Member.paginate(:page => params[:page] || 1, :per_page => per_page, :joins => "join followed_items on followed_items.follower_id=members.id", :group => "members.id", :order => "members.name") -%>
+<%= will_paginate(mynews_users) -%> <br style="clear:both"/>
+	<table>
+	<tr><td><strong>Name</strong></td><td style="text-align:center"><strong>Email</strong></td><td style="text-align:center"><strong>fb news</strong></td><td style="text-align:center"><strong>t news</strong></td><td style="text-align:center"><strong>Public</strong></td><td style="text-align:center"><strong>Topics</strong></td><td style="text-align:center"><strong>Sources</strong></td><td style="text-align:center"><strong>Members</strong></td><td style="text-align:center"><strong>Feeds</strong></td><td style="text-align:center"><strong>Total Follows</strong></td>
+  <td><strong>MN posts</strong></td>
+  <td><strong>MN reviews</strong></td>
+  <td><strong>MN likes</strong></td>
+  <td><strong>Last Visit</strong></td>
+  <td><strong># Visits</strong></td>
+  <td><strong>Last 'Guest' Visit</strong></td>
+  <td><strong># 'Guest' Visits</strong></td>
+  </tr>
+  <%#-- SSS: Just run a single group by query for all members without loading the followed items themselves! --%>
+  <% res = FollowedItem.connection.execute("select follower_id, followable_type, count(*) as n from followed_items group by follower_id, followable_type") -%>
+  <% fi_stats = {}; res.each_hash { |row| m_id = row["follower_id"].to_i; fi_stats[m_id] ||= {}; fi_stats[m_id][row["followable_type"]] = row["n"] } -%>
+
+  <%#-- SSS: Just run a single group by query for all members without loading the activity entries themselves! --%>
+  <% res = ActivityEntry.connection.execute("select member_id, activity_type, count(*) as n from activity_entries where referrer_code in ('mn','nlm', 'mn_rss') group by member_id, activity_type") -%>
+  <% ae_stats = {}; res.each_hash { |row| m_id = row["member_id"].to_i; ae_stats[m_id] ||= {}; ae_stats[m_id][row["activity_type"]] = row["n"] } -%>
+
+  <%- mynews_users.each do |member|-%>
+  	<tr><td>
+		<%= link_to member.name, mynews_url(member) %></td>
+		<%- if member.followed_items.blank? -%>
+			<td colspan="5">No Follows</td>
+		<%- else -%>
+			<td style="text-align:center"><%= true_color(member.has_newsletter_subscription?(Newsletter::MYNEWS)) %></td>
+			<td style="text-align:center"><%= true_color(member.follows_fb_newsfeed?) %></td>
+			<td style="text-align:center"><%= true_color(member.follows_twitter_newsfeed?) %></td>
+			<td style="text-align:center"><%= member.public_mynews %></td>
+   
+      <%#-- followed item stats --%>
+      <% sum = 0 -%>
+      <% fi_stat = fi_stats[member.id] || {} -%>
+      <% ["Tag", "Source", "Member", "Feed"].each do |ft| -%>
+			  <td style="text-align:center"><%=fi_stat[ft]%></td>
+        <% sum += (fi_stat[ft] || "0").to_i %>
+      <% end -%>
+			<td style="text-align:center"><%= sum %></td>
+
+      <%#-- activity entry stats (mynews posts, reviews, likes) --%>
+      <% ae_stat = ae_stats[member.id] || {} -%>
+      <% ["Story", "Review", "Save"].each do |ft| -%>
+			  <td style="text-align:center"><%=ae_stat[ft]%></td>
+      <% end -%>
+
+      <%#-- last visit, # visits stats --%>
+			<%- Member::MYNEWS_STATS_FIELDS.each do |stat| -%>
+      <td style="text-align:center"><%= member.send(stat) %></td>
+      <%- end -%>
+		<%- end -%>
+		</tr>
+  <%-end -%>
+	</table>
+<%- end -%>

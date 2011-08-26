@@ -1,0 +1,11 @@
+<div class="carousel_share_tools" style="clear:both;">
+  <span>Share this on</span>
+  <div class="row2"><div class="icons">
+    <span class="small_icons">
+      <%= tweet_page(curr_url) + email_page(curr_url, :class => "email_icon") + addthis_page(curr_url) %>
+    </span>
+    <span class="facebook_share">
+      <%= fb_like_iframe(curr_url, :layout => "button_count") %>
+    </span>
+  </div></div>
+</div>

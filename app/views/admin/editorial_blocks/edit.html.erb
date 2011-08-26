@@ -1,0 +1,8 @@
+<h1>Editing editorial block</h1>
+
+<%= h(error_messages_for(:editorial_block)) %>
+
+<% form_for :editorial_block, @editorial_block, :url => admin_editorial_block_path(@editorial_block), :html => { :method => :put} do |f| %>
+	<%= render :partial => "form", :locals => {:f => f} %>
+  <p> <%= submit_tag 'Update' %> <%= cancel_tag page_layout_path %> </p>
+<% end %>

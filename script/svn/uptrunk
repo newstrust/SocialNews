@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/svn'
+require File.dirname(__FILE__) + '/args'
+
+options = OptParse.parse(ARGV)
+options.path ||= '.'
+
+if svn = Collectivex::Svn.new( '../'+ File.basename(File.expand_path('.')) , false, options)
+  if options.debug
+    svn.uptrunk
+  else   
+    svn.upmerge
+  end
+end

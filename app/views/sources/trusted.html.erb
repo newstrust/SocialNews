@@ -1,0 +1,57 @@
+<%- cm = current_member -%>
+<%- member_id = 'null' -%>
+
+<%#-- Display the popup from the perspective of the group --%>
+<%- if params[:group_id] -%>
+  <%- g = Group.find(params[:group_id]); m = g && g.is_social_group? ? g.sg_attrs.mynews_dummy_member : nil -%>
+  <%- if g && m && cm.has_host_privilege?(g, :staff, @local_site) -%>
+    <%- cm = m; member_id = m.id -%>
+  <%- end -%>
+<%- end -%>
+
+<%#-- Post-load cached HTML patchup! --%>
+<script type="text/javascript">
+var can_follow  = <%= can_follow?(cm) ? 'true' : 'false' %>;
+var followed_sources = <%= cm.followed_sources.map(&:id).to_json %>;
+$(document).ready(function() {
+  if (can_follow) {
+    $('.follow_button').show();
+    $.each(followed_sources, function(i, src_id) {
+      var src_link = $('#src_' + src_id);
+      if (src_link.length > 0) {
+        var title    = src_link.attr("title");
+        src_link.attr("class", "unfollow_button");
+        src_link.attr("title", title.replace(/Follow/, "Unfollow"));
+      }
+    });
+  }
+});
+</script>
+
+<%- cache @cached_fragment_name do -%>
+  <%- content_for(:page_scripts) do -%>
+    <%= javascript_include_tag 'follows' %>
+  <%- end -%>
+
+  <%- @title = "Trusted Sources" -%>
+  <%= content_tag(:h2, @title) unless params[:popup] %>
+
+  <p>
+  <p style="margin-bottom:0">Here are our most <%= help_link("trusted sources","how_we_pick_sources","") %>. To follow a source, click on its <span class="follow_button"><img src="/images/ui/spacer.gif" width="15"></span> button. To unfollow it, click the <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button.</p>
+  <%- Source.each_source_medium do |key, medium| -%>
+    <div class="top_sources" style="width: 265px; margin: 0 10px 2px 20px; line-height: 1.8em; float: left">
+      <div class="category_sub_head" style="font-weight:bold;margin:0 0 10px 0;"><%= link_to medium["name"], list_sources_url(:medium => key), :target => "_blank" %></div>
+      <%- Source.top_rated_by_medium(key).sort{|x, y| x["name"] <=> y["name"]}.each do |source| -%>
+      <div class="top_sources_list_popup">
+        <%= link_to_source(source, {:target => "_blank"}) %>
+        <%- js_opts = follow_item_js_opts('source', source, nil, params[:popup]) -%>
+        <%#-- SSS: Important use double quotes below because the js_code above will come with single quotes.  Using single quotes will break it! --%>
+        <%- och = params[:popup] ? "popup_parent_toggle_follow(this, $(this).parent(), #{member_id}, #{js_opts})" : "toggle_follow(this, #{js_opts})" -%>
+        <%#-- SSS: Since this is cached html, by default, always hide everything & patch up followed sources on a per-member basis in JS --%>
+        <a id="src_<%=source.id%>" style='display:none;' class="follow_button" href="#" onclick="return <%=och%>" title="Follow <%=source.name%>"></a>
+      </div>
+      <%- end -%>
+    </div>
+  <%- end -%>
+  <br clear="all"/>
+<%- end -%>

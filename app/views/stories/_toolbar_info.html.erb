@@ -1,0 +1,16 @@
+	<h3>Story Info</h3>
+  <%= link_to_function "", "show_popdown_form()", :class => "close_panel", :title => "Minimize the Info panel" if !params[:popup] %>
+	<%- if logged_in? && current_member.has_story_edit_privileges?(@story) -%>
+	  <a href="#" class="edit_story" onclick="show_popdown_form('edit'); return false"></a>
+  <%- end -%>
+
+	<div style="clear:both;padding-right:15px;padding-top:20px;">
+	
+	<% story_hf = {:story_date => true, :pending_quote => true, :submitted_by => false, :rating => false, :review_it => true, :edit_it => false, :reviews => true, :fb_share => true, :tw_share => true, :email => true, :share => true, :edit_it => true, :no_rating => true, :type => true, :title_link => true} -%>
+  <% story_sf = {:my_news_info => false, :starred => false, :gray_trustometer => true, :days_ago => true, :num_reviews => true, :toolbar_dateline => true, :toolbar_more_info => true} -%>
+
+  <%= render :partial => "stories/story", :story => @story, :locals  => { :hide_flags => story_hf, :show_flags => story_sf, :no_li_wrapper => true } %>
+
+	</div>
+ 	<%= close_this_panel(:title => "Minimize the Info panel") %>
+  <div class="clearfix"></div>

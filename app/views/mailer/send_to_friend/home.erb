@@ -1,0 +1,10 @@
+<%= @body + "\n\n" unless @body.blank? -%>
+
+__________________________________________
+
+<%=app_name%> - Home Page
+
+Check out this page at:
+<%= @page %>
+
+<%= render :partial => 'mailer/send_to_friend/footer' %>

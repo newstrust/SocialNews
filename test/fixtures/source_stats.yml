@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  source_id: 1
+  local_site_id: 1
+  rating: 1.5
+  review_rating: 1.5
+  authorships_count: 1
+  source_reviews_count: 1
+  story_reviews_count: 1
+  reviewed_stories_count: 1
+
+two:
+  source_id: 1
+  local_site_id: 1
+  rating: 1.5
+  review_rating: 1.5
+  authorships_count: 1
+  source_reviews_count: 1
+  story_reviews_count: 1
+  reviewed_stories_count: 1

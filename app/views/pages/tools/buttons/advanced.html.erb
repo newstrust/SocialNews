@@ -1,0 +1,138 @@
+<%- @title = "Buttons For Your Site - Advanced Scripts" -%>
+<%- aslug = app_slug -%>
+
+<style type="text/css">
+<!--
+.head {font-family: Arial, Helvetica, sans-serif;
+color: #333333;
+font-size: 18px;
+font-style: normal;
+font-weight: bold;
+vertical-align: middle;}
+.style1 {font-size: 13px}
+
+table#page_table h2, table#page_table h3 { margin: 25px 0px 5px 0px; }
+table#buttons { width : 100%; }
+table#buttons td { padding: 5px 15px; }
+table#buttons td img { cursor: pointer; }
+#button_js_code_1, #button_js_code_2, #button_js_code_3 { margin: 20px 0px; font-size: 10px; padding: 5px; width: 100%; border: 1px solid black; background: #f7f7f7; overflow: none; }
+
+p { margin-bottom:12px;}
+
+#examples {
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+	border-collapse: collapse;
+	background-color: #f7f7f7;
+}
+#examples th, #examples td {
+	border-width: 1px;
+	padding: 4px;
+	border-style: solid;
+	border-color: black;
+}
+
+-->
+</style>
+<script type="text/javascript" language="JavaScript"><!--
+function updateButtonScript(imgUrl)
+{
+	var code;
+
+	var baseUrl = "<%= home_url %>";
+
+		// Update the complex code
+	code  = "&lt;script type='text/javascript'&gt;\n";
+	code += "<%=aslug%>_icon = '" + imgUrl + "';\n";
+	code += "<%=aslug%>_publication_name = 'Other';\n";
+	code += "<%=aslug%>_unlisted_publication_name = 'Writer Reader Blog';\n";
+	code += "<%=aslug%>_source_ownership = 'ind';\n";
+	code += "<%=aslug%>_story_type = 'Blog Post';\n";
+	code += "<%=aslug%>_story_date = '<%= Time.now.strftime('%Y-%m-%d') %>';\n";
+	code += "<%=aslug%>_story_authors = 'John Writer, Julia Reader';\n";
+	code += "<%=aslug%>_story_subject = 'Politics';\n";
+	code += "<%=aslug%>_story_topic = 'U.S. White House';\n";
+	code += "<%=aslug%>_story_subject_2 = 'Sci/Tech';\n";
+	code += "<%=aslug%>_story_topic_2 = 'Environment';\n";
+	code += "&lt;/script&gt;\n";
+	code += "&lt;script src=\"" + baseUrl + "js/submit_story.js\" type=\"text/javascript\"&gt;&lt;/script&gt;";
+	document.getElementById('button_js_code_3').innerHTML = code;
+}
+
+function selectCode(txtArea)
+{
+	txtArea.select();
+	txtArea.focus();
+}
+//--></script>
+
+<table width="600" border="0" id="page_table" >
+  <tr>
+    <td width="540" valign="top" class="style1"> <h1 class="head">Buttons - Advanced Scripts</h1></td>
+    <td width="20"><img src="/images/ui/spacer.gif" width="10" height="1"></td>
+    <td align="center" valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+	 <p>If you have good technical skills, you might want to consider using some of the more advanced scripts below. Use this code if you want to pass additional parameters to the <%=app_name%> story posting script. <br>
+          
+    <h3 style="margin-bottom:0px;">Copy and paste the code below onto your site:</h3>
+	After copying this code, replace the temporary values with your own.
+	
+    <textarea onclick="selectCode(this)" id="button_js_code_3" readonly rows="14" cols="80">&lt;script type='text/javascript'&gt;
+<%=aslug%>_icon = '<%= home_url %>images/<%=app_slug%>.gif';
+<%=aslug%>_publication_name = 'Other';
+<%=aslug%>_unlisted_publication_name = 'Writer Reader Blog';
+<%=aslug%>_source_ownership = 'ind';
+<%=aslug%>_story_type = 'Blog Post';
+<%=aslug%>_story_date = '<%= Time.now.strftime('%Y-%m-%d') %>';
+<%=aslug%>_story_authors = 'John Writer, Julia Reader';
+<%=aslug%>_story_subject = 'Politics';
+<%=aslug%>_story_topic = 'U.S. White House';
+<%=aslug%>_story_subject_2 = 'Sci/Tech';
+<%=aslug%>_story_topic_2 = 'Environment';
+&lt;/script&gt;
+&lt;script src="<%= home_url %>js/submit_story.js" type="text/javascript"&gt;&lt;/script&gt;</textarea>
+
+	 <p>The above script assumes that you are adding our buttons to your blog. You will want to change the name of the blog in the unlisted_publication_name line.</p>
+	 <p><strong>Note: If you have a very high volume site, please <%= mail_to email_addr("partners"), "email us", :subject => "#{app_name} Partner Services", :encode => "javascript" %> for a custom script.</strong></p>
+<p>Some points to remember:</p>
+<ul>
+	<li>Only use items found in the pull-down menus on the story post form for these fields: <%=aslug%>_publication_name, <%=aslug%>_story_type, <%=aslug%>_story_subject(s) and <%=aslug%>_story_topic(s).</li>
+	<li>Separate multiple author names with commas.</li>
+	<li>Use subject/topic pairs that go together on the post form's menus (select a subject, and check the topic menu for available topics).</li>
+	<li>You can use up to 5 subject/topic pairs (again, selected from the post form's menus).</li>
+	<li>If your publication is not listed in the <%=app_name%> database, then use "Other" for the <%=aslug%>_publication_name and enter your publication name in the <%=aslug%>_unlisted_publication_name field.</li>
+	<li>If you filled in <%=aslug%>_unlisted_publication_name, also set <%=aslug%>_source_ownership to either ind (Independent Media) or msm (Mainstream Media)
+</ul>
+
+<p>Here is the complete set of available parameters:</p>
+  <table id="examples">
+	<tr><td valign="top" width="10%"><strong><%=aslug%>_story_url</strong></td><td valign="top">the story URL is normally automatically filled in. Only use this field if you need to override the URL of the actual story.</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_story_title</strong></td><td valign="top">the story title is normally automatically filled in using the &lt;Title&gt; of the web page. Only use this field if you need to override the title of the web page.</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_story_type</strong></td><td valign="top">type of story (e.g., News Report, Breaking News, Opinion...) <%= link_to "Click here", "/tools/buttons/story_types", :class => "popup_link" %> for a complete list of <%=app_name%> story types.</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_story_date</strong></td><td valign="top">the story's publication date in this format: YYYY-MM-DD (for example, <%= Time.now.strftime('%Y-%m-%d') %> for today's date)</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_story_authors</strong></td><td valign="top">writer/author/blogger of the story</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_publication_name</strong></td><td valign="top">name of the publication if it's in the <%=app_name%> database, otherwise set to "Other". <%= link_to "Click here", "/tools/buttons/pub_names", :class => "popup_link" %> for a complete list of publications in the <%=app_name%> database.</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_unlisted_publication_name</strong></td><td valign="top">fill this in if the publication is not in the <%=app_name%> database (and also set <%=aslug%>_publication_name to "Other")</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_source_ownership</strong></td><td valign="top">fill this in if the publication is not in the <%=app_name%> database (set to ind for Independent Media or msm for Mainstream Media)</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_story_subject</strong></td><td valign="top">primary subject of the story (e.g., World, U.S., Politics...) <%= link_to "Click here", h('/topics/all?' + {:popup => "true", :no_follows => "true"}.to_query), :class => "popup_link" %> for a complete list of <%=app_name%> subjects and topics.</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_story_topic</strong></td><td valign="top">primary topic of the story (e.g., U.S. Congress, Energy, Environment...) <%= link_to "Click here", h('/topics/all?' + {:popup => "true", :no_follows => "true"}.to_query), :class => "popup_link" %> for a complete list of <%=app_name%> subjects and topics.</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_story_subject_2 through <%=aslug%>_story_subject_5</strong></td><td valign="top">other story subjects that might apply to your story</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_story_topic_2 through <%=aslug%>_story_topic_5</strong></td><td valign="top">other story topics that might apply to your story</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_story_quote</strong></td><td valign="top">provide a short excerpt of the story. It can be the first 2-3 paragraphs. If it's too long, we'll automatically truncate to fit.</td></tr>
+	<tr><td valign="top"><strong><%=aslug%>_referred_by</strong></td><td valign="top">your domain, so we can give credit to your site. For example, domain.com.</td></tr>
+  </table>
+	 <br/>
+	<p>You're welcome to customize these scripts as needed. We will soon add more guidelines here on how to customize our button scripts. For now, click on the links above for platform-specific installation tips.</p>
+
+    Please <a href="mailto:<%=email_addr("help")%>">email us</a> if you have any questions about <%=app_name%> buttons, badges or bookmarklets.<br> <br>
+    Thanks for your support of <%=app_name%>!<br>
+    <br>
+    The <%=app_name%> Team <br>      
+    </span></td>
+ 
+    <td width="20"><img src="/images/ui/spacer.gif" alt="" width="1" height="%% spacer_below_head %%"></td>
+  </tr>
+</table>

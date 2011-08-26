@@ -1,0 +1,17 @@
+<%- available_freqs = ([Newsletter::DAILY, Newsletter::WEEKLY] - Newsletter::DISABLED_NEWSLETTERS) -%>
+<h3>Manage your national email subscriptions below:</h3>
+
+<%= check_box_tag "member[newsletter][#{Newsletter::MYNEWS}]", true, @member.has_newsletter_subscription?(Newsletter::MYNEWS) %>
+<%= label_tag("member[newsletter][#{Newsletter::MYNEWS}]", "#{mynews_colors()} Daily Email", :style => "display: inline; font-weight:bold") %><br>
+A personal news selection from your <%= link_to mynews_colors(), mynews_url(current_member) %> page.<br />
+Sent every day at about <%= Newsletter.delivery_time(Newsletter::MYNEWS) %>.</span><br>
+<br>
+
+<%- available_freqs.each do |freq| -%>
+  <%- humanized_freq = Newsletter.humanized_freq(freq) -%>
+  <%= check_box_tag "member[newsletter][#{freq}]", true, @member.has_newsletter_subscription?(freq) %>
+  <%= label_tag("member[newsletter][#{freq}]", humanized_freq, :style => "display: inline; font-weight:bold") %><br>
+  A <%=humanized_freq.downcase%> selection of news and opinions from our most trusted sources.
+  Includes Most Recent and Most Trusted stories. 
+  <%= Newsletter.humanized_dispatch_time(freq) %>. <br>
+<%- end -%>

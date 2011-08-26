@@ -1,0 +1,35 @@
+Hi <%= first_name(@to) %>,
+
+Check out the new <%=@num_reviews > 1 ? "reviews" : "review"%> for <%=@num_stories > 1 ? "stories" : "a story"%> you reviewed, posted or starred
+earlier on <%=app_name%>.
+<%- @story_hash.keys.each do |story_id| -%>
+<%- story = Story.find(story_id) -%>
+
+==========================================================================
+
+"<%= story.title %>"
+<%= strip_tags link_to_sources(story.sources) -%>
+<%= " - by #{story.journalist_names}" unless story.journalist_names.blank? %>
+<%= "#{story.story_date.strftime('%b. %e, %Y')}" unless story.story_date.blank? -%>
+<%= " (#{humanize_token(story, :story_type)})" if story.story_type %>
+
+<%- latest_reviews = @story_hash[story.id] -%>
+Here <%=latest_reviews.length > 1 ? "are the latest reviews" : "is the latest review"%> for this story:
+<%- latest_reviews.each do |review| -%>
+<%-reviewer = review.member -%>
+---------------------------------------------------------
+<%= reviewer.name %>'s review:
+
+<%= "\"#{strip_tags(StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(review.comment,300,400,true),72))}\"\n\n" unless review.comment.blank? -%>
+<%= "Comment:\n\"#{strip_tags(StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(review.personal_comment,300,400,true),72))}\"\n\n" unless review.personal_comment.blank? -%>
+<%= first_name(reviewer) %>'s Rating: <%= sprintf("%.1f", review.rating || 0.0) %> (out of 5)
+<%- end -%>
+---------------------------------------------------------------------
+
+<%= "This story is now rated on #{app_name}.\n\n" if (story.reviews_count == SocialNewsConfig["min_reviews_for_story_rating"]) -%>
+<%=app_name%> Rating: <%= story.hide_rating ? "not enough reviews" : "#{sprintf("%.1f", story.rating || 0.0)} avg. from #{pluralize(story.reviews_count, "review")}" %>
+All reviews for this story: <%= story_url(story, :only_path => false) %>
+<%- end -%>
+==========================================================================
+
+<%= render :partial => 'footer' %>

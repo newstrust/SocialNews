@@ -1,0 +1,6 @@
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'twitter' %>
+<% end %>
+<% @title = "Review" %>
+
+<%= render :partial => 'review_form' %>

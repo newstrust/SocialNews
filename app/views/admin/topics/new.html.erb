@@ -1,0 +1,15 @@
+<h1 class="use16columns inner_left">New Topic</h1>
+
+<%= error_messages_for :topic %>
+
+<div class="use10columns inner_left">
+  <% form_for :topic, :url => admin_topics_path, :html => { :multipart => true } do |f| -%>
+  <div class="fieldset" style="font-size:14px;font-weight:bold">
+    <%=check_box_tag(@local_site ? "clone_to_national" : "clone_to_local_sites", "1", false) %>
+    <%= f.label :clone, @local_site ? "Clone topic on national site?" : "Clone topic on all local sites?"%>
+    <span style="font-weight:normal;font-size:12px">(Image and comment settings will not be cloned)</span>
+  </div>
+  <%= render :partial => 'form' , :locals => { :f => f }%>
+  <p><%= submit_tag 'Create' %> <%= cancel_tag "/admin/topics" %></p>
+  <% end -%>
+</div>

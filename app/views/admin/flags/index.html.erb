@@ -1,0 +1,11 @@
+<!-- flags/index -->
+<%- current = (params[:sort_by] == 'like' ? "like" : "flag") -%>
+<dl class="inline_list">
+  <dt>Filter Comments:
+  <strong><%= Comment.reasons.collect { |f| link_to f.id2name.capitalize, admin_flags_path(:sort_by => f), :style => (f.id2name==current ? "color:#676767" : "")  }.join(" | ") -%></strong>
+</dl>
+<br/>
+
+<%= render :partial => "admin/flags/flagged_comments", :locals => { :flagged_comments => @flags, :current => current } %>
+
+<%= will_paginate(@flags)%>

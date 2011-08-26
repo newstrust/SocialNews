@@ -1,0 +1,25 @@
+<div class="fieldset">
+  <h2> Site wide </h2>
+  <%= form_field(f, :attr => "is_active?", :type => "checkbox", :name => "Make this site public") %>
+  <%= form_field(f, :attr => "name") %>
+  <%= form_field(f, :attr => "slug") %>
+  <%= form_field(f, :attr => "subdomain") %>
+  <%= form_field(f, :attr => "constraint_type", :type => "hidden", :value => "Tag") %>
+  <%= form_field(f, :attr => "constraining_tag", :name => "Constraining tag for this local site") %>
+  <%= form_field(f, :attr => "invitation_code", :hint => "String to use to match against member's invitation codes to fetch site members") %>
+</div>
+
+<div class="fieldset">
+  <h2> Homepage </h2>
+  <%= form_field(f, :attr => "subject_slugs", :hint => "Comma separated subject slugs - homepage subject listings are determined by this setting") %>
+</div>
+
+<div class="fieldset">
+  <h2> Homepage, landing pages, and newsletters </h2>
+  <%= form_field(f, :attr => "max_stories_per_source", :hint => "Maximum stories per source for home-page, subject-page, high-volume topic listings, and newsletter") %>
+</div>
+
+<div class="fieldset">
+  <h2> Admin area </h2>
+  <%= form_field(f, :attr => "navbar_background_css", :name => "Background CSS for Admin Navbar", :hint => "This will be a color (Ex: '#484') or a url (Ex: 'url(/images/ui/nav/nt_nav_bg_green.png) repeat-x left top')") %>
+</div>

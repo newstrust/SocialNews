@@ -1,0 +1,32 @@
+<%# ALL jQuery plugins and global JS files must be specified here! %>
+<%# In production, they'll all be lumped into one cached file: jquery_includes.js. In development, they'll remain separate. %>
+<% jquery_includes = %w(
+  jquery.min.js
+  jquery-ui.min.js
+  jrails.js
+  jquery.autocomplete.js
+  jquery.bgiframe.min.js
+  jquery.domec.min.js
+  jquery.tools.min.js
+  jquery.tabbed_content.js
+  jquery.rating_input.js
+  jquery.batch_autocomplete.js
+  jquery.story_lookup.js
+  jquery.truncator.js
+  jquery.query.js
+  jquery.color.js
+  jquery.fetch_metadata.js) %>
+<%= javascript_include_tag jquery_includes.map{|file| "jquery/#{file}"}, :cache => "jquery_includes" %>
+<%= javascript_include_tag "application", "popup", "post", :cache => "all" %>
+
+<!-- Give jquery access to the auth token -->
+<%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? and !visitor_is_bot? %>
+
+<script type="text/javascript" charset="utf-8">
+	// for popup.js
+  var expand_window = <%= params[:expand].to_json %>;
+
+  // for different areas of the site that depend on member state
+  var member_is_logged_in = <%= (logged_in?).to_json %>;
+  var member_is_editor = <%= (logged_in? and current_member.has_role_or_above?(:host)).to_json %>;
+</script>

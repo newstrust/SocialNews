@@ -1,0 +1,81 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+tr1:
+  topic_id: 10
+  related_topic_id: 10
+  context: subject
+
+tr2:
+  topic_id: 11
+  related_topic_id: 11
+  context: subject
+
+tr3:
+  topic_id: 12
+  related_topic_id: 12
+  context: subject
+
+tr4:
+  topic_id: 13
+  related_topic_id: 13
+  context: subject
+
+# environment --> us
+tr5:
+  topic_id : 1
+  related_topic_id : 12
+  context: subject
+
+# environment --> world
+tr6:
+  topic_id : 1
+  related_topic_id : 13
+  context: subject
+
+# election_reform --> politics
+tr7:
+  topic_id : 2
+  related_topic_id : 11
+  context: subject
+
+# election_reform --> us
+tr8:
+  topic_id : 2
+  related_topic_id : 12
+  context: subject
+
+# john_mccain --> politics
+tr9:
+  topic_id : 3
+  related_topic_id : 11
+  context: subject
+
+# john_mccain --> us
+tr10:
+  topic_id : 3
+  related_topic_id : 12
+  context: subject
+
+# human_rights --> world
+tr11:
+  topic_id : 14
+  related_topic_id : 13
+  context: subject
+
+# presidential_election --> politics
+tr12:
+  topic_id : 15
+  related_topic_id : 11
+  context: subject
+
+# presidential_election --> us
+tr13:
+  topic_id : 15
+  related_topic_id : 12
+  context: subject
+
+# us_economy --> us
+tr14:
+  topic_id : 16
+  related_topic_id : 12
+  context: subject

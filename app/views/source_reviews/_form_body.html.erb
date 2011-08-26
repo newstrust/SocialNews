@@ -1,0 +1,88 @@
+<%= f.hidden_field :source_id, :value => source_review.source_id %>
+<%= f.hidden_field :member_id, :value => source_review.member_id %>
+
+<%- m = source_review.member -%>
+<div class="form_field">
+  <%- if current_member.has_role_or_above?(:admin) && m != current_member -%>
+  <div style="clear:both;margin:10px 0" class="warning">
+    Dont bother editing anything else besides the status field for this <i><%=source_review.source.name%></i> source review
+    by <i><%=source_review.member.name%></i>.  All non-status edits will be discarded.  This info is shown FYI.
+  </div>
+  <%- end -%>
+
+  <p class="error" style="display:none;">Errors here!</p>
+
+  <h3> Rate It</h3>
+  <div class="question">
+    <span>Do you <strong>trust</strong> this publication? </span> 
+    <%= help_icon 'trust_source', 'reviewer' %>
+  
+
+  <div class="rating source_review_input">
+    <%= rating_input :review => source_review, 
+                     :param_array_prefix => "source_review[rating_attributes]", 
+                     :criterion_key => "trust"%>
+  </div>
+</div>
+  <h3> Add a note </h3>
+  <span class="subquestion">
+    What are this source's strengths and weaknesses?
+    <%= help_icon 'trust_source', 'reviewer' %>
+  </span>
+
+  <%= f.text_area :note %>
+
+  <div class="expertise" id="expertise_topics">
+    <h3> Expertise </h3>
+    <span class="subquestion">
+      Which topics is this source an expert on?
+      <span class="editorial_gray"> (Click on all that apply) </span>
+    </span>
+
+    <%#-- Div for adding hidden form inputs --%>
+    <div id="hidden_form_inputs">
+    </div>
+
+    <%#-- Initial list of topics & subjects presented for selection --%>
+    <div class="expertise_list">
+      <%- subjects = LocalSite.primary_site_subjects(@local_site)[0..5] -%>
+      <%- topic_ids = AggregateStatistic.find_statistic(source_review.source, "top_topics", @local_site ? @local_site.id : nil).map(&:first)-subjects.map(&:id) -%>
+      <%#-- always include local site constraint topic -%>
+      <%- lst = @local_site ? [Topic.tagged_topic(@local_site.constraint, @local_site)] : [] -%>
+      <%#-- find one topic at a time to preserve ordering --%>
+      <%- topics = (lst + topic_ids[0..10].collect {|i| Topic.find(i)} + selected_topics - subjects).uniq -%>
+      <%= subjects.collect { |t| link_to(t.name, "#", :id => "topic_#{t.id}") } * ", " -%>
+      <%= (" | " + topics.collect   { |t| link_to(t.name, "#", :id => "topic_#{t.id}") } * ", ") if !topics.blank? -%>
+    </div>
+
+    <%#-- More topics auto-complete --%>
+    <div id="more_topics">
+      Add <strong>more</strong> topics:
+      <input id="more_topics_autocomplete" type="text">
+    </div>
+  </div>
+</div>
+
+<%- if current_member.has_role_or_above?(:admin) -%>
+  <div class="form_field leftalign status" style="padding-bottom: 1em;">
+    <%= f.label :status, "Status " + help_icon('submit_story_status', 'host') %>
+    <%= f.select :status, pull_down_menu("review_status") %>
+  </div>
+  <br style="clear:both;" />
+<%- end -%>
+
+<%- if !current_member.has_role_or_above?(:admin) && m != current_member -%>
+  <div style="clear:both;" class="warning">
+    This is a review of <i><%=source_review.source.name%></i> by <i><%=source_review.member.name%></i>.
+    Since you are not the author of this review, you will not be able to update it.
+  </div>
+<%- else -%>
+  <div class="button_footer">
+    <div class="processing_form_msg" style="display:none;">Saving ...</div>
+    <span class="submit">
+      <%= submit_tag "", :class => "save_button", :onclick => "deactivateSubmit(this)" %>
+      <%= link_to "How to review &raquo;", "#" %> |
+      <%= link_to_function "Close this panel", "return false", :id => "cancel_button" %>
+    </span>
+  </div>
+<%- end -%>

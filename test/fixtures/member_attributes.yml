@@ -1,0 +1,18 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+heavysixer_favorite_links:
+  id: 1
+  name: 'favorite_links'
+  member_id: 12
+  value: |+
+    <a href="http://www.google.com">Google</a>
+    <a href="http://www.yahoo.com">Yahoo</a>
+    <a href="http://www.locusfoc.us">Locus Focus</a>
+
+legacy_member_about: {id: 2, name: about, member_id: 11, value: I am a long-winded but exceptionally reliable fellow. I am a long-winded but exceptionally reliable fellow. I am a long-winded but exceptionally reliable fellow. I am a long-winded but exceptionally reliable fellow. I am a long-winded but exceptionally reliable fellow. I am a long-winded but exceptionally reliable fellow. I am a long-winded but exceptionally reliable fellow. I am a long-winded but exceptionally reliable fellow. I am a long-winded but exceptionally reliable fellow.}
+legacy_member_age_group: {id: 3, name: age_group, member_id: 11, value: age_65_or_over}
+legacy_member_job_title: {id: 4, name: job_title, member_id: 11, value: Tax Collector}
+legacy_member_company: {id: 5, name: company, member_id: 11, value: The Man}
+legacy_member_expertise: {id: 6, name: expertise, member_id: 11, value: mercantilism}
+legacy_member_interests: {id: 7, name: interests, member_id: 11, value: empire}
+legacy_member_languages: {id: 8, name: languages, member_id: 11, value: russian}

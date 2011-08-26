@@ -1,0 +1,34 @@
+one:
+  id: 1
+  story_id: 1
+  source_id: 1
+
+two:
+  id: 2
+  story_id: 2
+  source_id: 1
+
+three:
+  id: 3
+  story_id: 3
+  source_id: 1
+
+a4:
+  id: 4
+  story_id: 4
+  source_id: 3
+
+a5:
+  id: 5
+  story_id: 5
+  source_id: 3
+
+a6:
+  id: 6
+  story_id: 6
+  source_id: 2
+
+a7:
+  id: 7
+  story_id: 7
+  source_id: 2

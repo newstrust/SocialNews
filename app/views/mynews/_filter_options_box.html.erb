@@ -1,0 +1,26 @@
+<div class="filter_options_box clearfix">
+	<div class="top"></div>
+	<div class="wrapper">
+		<h3><span class="button"><span class="more"></span><%= link_to_function "Settings", "" %></span> <%= help_icon('adjust_settings', 'mynews') %></h3>
+		  <%- if @my_page -%> <%# -- SSS: For now, this filtering bar is only supported for the visitor's mynews page %>
+        <div id="story_type_src_ownership_filters" class="quick_filters css_dropdown_wrapper">
+        <ul class="css_dropdown">
+          <li class="css_dropdowni title"><a href="#"><span>Show: <span id="curr_sel">All</span></span></a>
+            <ul class="css_dropdownm">
+              <% opts = [['story_type', 'All'], ['story_type', 'News'], ['story_type', 'Opinion'], ['source_ownership', 'Mainstream'], ['source_ownership', 'Independent']] -%>
+              <% opts.each do |c| -%> 
+              <li class="css_dropdowni"><a class="css_dropdowni" href="#" onclick="apply_stype_filter(this, <%="#{@member.id}, \'#{c[0]}\', \'#{c[1].downcase}\'"%>); return false"><%=c[1]%></a></li>
+              <% end -%>
+            </ul>
+          </li>
+        </ul>
+		    </div>
+
+        <div class="quick_filters"> <%= link_to_function "Starred", "toggle_starred(this)", :id => "star_toggle", :class => "starred" %> </div>
+      <% end -%>
+	</div>
+	<div id="filter_options" class="hide">
+		<%= content %>
+	</div>
+
+</div>

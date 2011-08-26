@@ -1,0 +1,18 @@
+<div class="<%= heading_class %> clearfix">
+	<div class="ratingLabel" style="padding-bottom:3px;white-space: nowrap"><%= rating_name %><%= help_icon %>
+	</div>
+  <% if hide_trustometer_message %>
+		<span style="no-rating">(<%= hide_trustometer_message %>)</span>
+  <% elsif rating_value %>
+    <div class="rating">
+      <% unless integer_rating %>
+        <%= trustometer_img(rating_value, trustometer_img_options, {:style => "float: right"}) %>
+      <% else %>
+        <%= number_format(rating_value) %>
+      <% end %>
+      <% if note %>
+        <div class="editorial_gray" style="margin: 4px 0 0 0; clear: both"><%= note %></div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

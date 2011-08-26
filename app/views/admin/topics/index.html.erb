@@ -1,0 +1,57 @@
+<div class="use16columns">
+  <div class="use16columns inner_left inner_right">    
+    <div class="use10columns inner_right">
+      <%= will_paginate(@topics) %>
+    </div>
+    
+    <div class="use6columns inner_right">
+      <label for="autocomplete">Search:</label>
+      
+      <input id="autocomplete" type="text" class="ac_input" autocomplete="off" />
+      <div class="explanation" style="margin:-10px 0 0 55px;">(Search for whole words only)</div>
+
+      <script type="text/javascript" charset="utf-8">
+        REDIRECT_PATH = '<%= admin_topics_path %>';
+        SEARCH_PATH = '<%= search_admin_topics_path(:format => :js) %>';
+      </script>
+      
+      
+      <%- content_for(:page_scripts) do -%>
+        <%= javascript_include_tag 'admin/sources'%>
+      <%- end -%>
+    </div>
+  </div>
+  
+  <div class="use8columns inner_right">
+    <table cellpadding="0" cellspacing="0">
+      <caption>Topics</caption>
+
+      <thead style="font-size:18px">
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      
+      <tbody style="font-size:14px">
+        <%- @topics.each do |topic| -%>
+        <tr>
+          <td><%= link_to topic.name, admin_topic_path(topic) %><%= "*" if topic.topic_volume <=30 %> </td>
+          <td><%= edit_button(edit_admin_topic_path(topic)) %> &nbsp;&nbsp;&nbsp;
+              <%= delete_button(admin_topic_path(topic)) if current_member.has_role_or_above?(:admin) %> &nbsp;&nbsp;&nbsp;
+              <%= link_to "Edit Page Layout", layout_admin_topic_path(topic) %>
+              </td>
+        </tr>
+        <%- end -%>
+        <%= %{<tr>
+                <td colspan='2'>No Topics Yet.</td>
+              </tr>
+        } if @topics.empty? %>
+      </tbody>
+    </table>
+    <p><%= link_to "Create Topic", new_admin_topic_path if current_member.has_role_or_above?(:admin) %></p>
+    <br />
+	  <div class="explanation">* Topics that will appear in the Widgets pull-down menu</div>
+  </div>
+  
+</div>

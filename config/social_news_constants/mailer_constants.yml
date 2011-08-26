@@ -1,0 +1,39 @@
+# Email id where alerts about potential rails problems are sent 
+admin_alert_recipient: "testing@socialnews.com"
+
+# Max # of bulk email recipients when email will be sent synchronously.  If count exceeds this, the email will be sent in a background task.
+max_recipients_for_synchronous_email_dispatch : 25
+
+# Email id to send alerts about posts to the feedback page
+comments_alert_recipient: "comments@socialnews.com"
+
+# Rake errors email id
+rake_errors_alert_recipient: "dev@socialnews.com"
+
+# Feed fetcher log recipient
+fflog_recipient: "fflog@socialnews.com"
+
+# Site Activity log receipient
+activity_log_recipient: "posts@socialnews.com"
+
+email_addrs:
+  bot           : "Do Not Reply <bot@socialnews.com>"
+  community     : "community@socialnews.com"
+  comments      : "comments@socialnews.com"
+  edits         : "edits@socialnews.com"
+  editors       : "editors@socialnews.com"
+  feedback      : "feedback@socialnews.com"
+  group_base    : "group@socialnews.com"  # used in app/models/social_group_attributes.rb to set up email ids for groups
+  help          : "help@socialnews.com"
+  hosts         : "hosts@socialnews.com"
+  info          : "info@socialnews.com"
+  invites       : "invites@socialnews.com"
+  news          : "news@socialnews.com"
+  partners      : "partners@socialnews.com"
+  press         : "press@socialnews.com"
+  registrations : "registrations@socialnews.com"
+  signup        : "signup@socialnews.com"
+  sources       : "sources@socialnews.com"
+  staff         : "staff@socialnews.com"
+  suggestions   : "suggestions@socialnews.com"
+  support       : "support@socialnews.com"

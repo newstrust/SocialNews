@@ -1,0 +1,33 @@
+= The Acts As Taggable Extended
+The aptly named 'acts_as_taggable_extended' plugin extends the
+acts_as_taggable gem originally created by DH2.
+
+= Why YAAATP?
+DH2 who created the "Official" ActsAsTaggable (AAT) plugin
+deprecated it and is no longer supporting or recommending it for 
+use in Rails projects going forward. However, much of AAT worked
+fine and over the years has been extended or improved in a variety
+of ways. 
+
+This extension originally just sat on top of the existing AAT plugin
+and automatically extended the plugin during runtime. However, now
+that DH2 deprecated AAT I've decided to roll the existing source into
+the extension's code base thereby making it independent from the
+original AAT code.
+
+== Installation
+
+gem install acts_as_taggable_extended
+
+Be sure to include the plugin in your 'config/environment.rb' file:
+
+require_gem 'acts_as_taggable_extended'
+
+== Usage Instructions
+
+
+== TODO
+1. Extend the generator to take a param of models that are to become taggable
+2. Extend the migration to take the taggable models and add the tag_aggregate field.
+3. Extend the spec tests to incorporate fixtures provided for testing the
+tags using the taggable models.

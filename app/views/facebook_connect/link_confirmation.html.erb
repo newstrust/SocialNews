@@ -1,0 +1,51 @@
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'fbc' %>
+<%- end -%>
+
+<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div>
+	<div class="wrapper">
+		<div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+<div style="float:left; margin-right:20px;width:50px">
+<fb:profile-pic uid="<%=facebook_session.user.uid%>" facebook-logo="true"> </fb:profile-pic><br />
+<img src="/images/ui/spacer.gif" width="50" height="1">
+</div>
+
+<div style="float:left; width:500px;">
+<h2> Hello <%=@member.name%>! </h2>
+<% popup_suffix = params[:popup] ? "?popup=true" : "" -%>
+<% url_prefix = @invitation ? "/partners/#{@partner.to_param}/#{@invitation.to_param}" : "" -%>
+<% form_for @member, :url => "#{url_prefix}#{fb_link_member_path}#{popup_suffix}", :html => {:class => "entry_form", :autocomplete => "off"} do |f| -%>
+  <p> Do you want to link your Facebook account with your <%="#{@member.email} #{app_name}"%> account? </p>
+
+  <div class="form_field leftalign" style="font-size:85%">
+    <%= check_box_tag "import_fb_photo", "1", @member.image.nil? ? true : false, :class => "check", :style => "float:left" %>
+    <%= label_tag "import_fb_photo", "Import my photo from Facebook", :style => "font-weight:normal;width:100%;width:370px;float:left" %><br />
+    <%= '<div class="body_black_small">(this will replace your existing profile picture)</div>' if !@member.image.nil? %>
+  </div>
+
+  <div class="form_field leftalign" style="font-size:85%;margin:2px;padding:2px">
+    <%= check_box_tag "autofollow_friends", "1", false, :class => "check", :style => "float:left" %>
+    <%= label_tag "autofollow_friends", "Follow my Facebook friends when they sign up on #{app_name}", :style => "font-weight:normal;width:370px; ;float:left" %><br style="clear:both;" />  
+  </div>
+
+  <%#-- Ask for extended permissions if the member wants to follow their facebook user stream --%>
+  <% if @follow_user_stream -%>
+    <%= render :partial => "extended_permission_request", :locals => {:ep => "read_stream", :prompt => "Allow #{app_name} to extract news links from my Facebook newsfeed", :clarification => "We dont store anything else from your stream in our database"} %>
+    <%= render :partial => "extended_permission_request", :locals => {:ep => "offline_access", :prompt => "Provide #{app_name} offline access to my Facebook newsfeed (used to fetch news links from your Facebook newsfeed even when you are offline)"} %>
+    <div class="form_field leftalign" style="font-size:85%;margin:2px;padding:2px">
+      <%= check_box_tag "follow_user_stream", "1", true, :class => "check", :style => "float:left" %>
+      <%= label_tag "follow_user_stream", "Add my Facebook newsfeed to MyNews", :style => "font-weight:normal;width:370px; ;float:left" %><br style="clear:both;" />  
+    </div>
+  <% end -%>
+
+  <div style="float:left; margin:15px 10px 10px 0"><%= submit_button "Link" %></div>
+  <div style="float:left; margin:15px 10px 10px 10px"><%= cancel_button "Cancel", my_account_members_url %></div>
+<% end %>
+</div>
+
+<div style="clear:both;margin-bottom:20px;"></div>
+      </div>
+    </div>
+	<div class="bottom"></div>
+</div>

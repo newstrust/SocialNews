@@ -1,0 +1,5 @@
+Here is the listing of stories order by activity score: <br/><br/>
+<% @stories.each do |s| -%>
+<%= link_to(s.title, story_path(s, :ref => @url_tracking_key)) %>, <%= s.primary_source.name %>, <br/>
+<%= s.sort_date %>, (SCORE: <%= s.activity_score %>) <br/><br/>
+<% end -%>

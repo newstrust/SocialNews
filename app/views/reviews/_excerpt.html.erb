@@ -1,0 +1,18 @@
+<div style="border-top: 1px solid #ccc; padding-top: 0.5em; margin-bottom: 0.5em">
+	<% if show_reviewer %>
+		<div style="padding-bottom: 0.3em">
+			<%= link_to excerpt.review.member.display_name, excerpt.review.member %> shared this quote:
+			(<%= link_to "See Full Review", review_url(@story, excerpt.review), :style => "font-weight: normal" %>)
+		<% if !excerpt.review.is_public? %>
+			<span class="error">(hidden)</span>
+		<% end %>
+
+		</div>
+	<% end %>
+	<div style="margin: 0.5em 2em; padding: 1em 1em 0.5em 1em; border-left: 2px solid #ccc; background-color: #f5f5f5">
+		<%= excerpt.body.blank? ? "<i>(comment refers to full article)</i>" : h(excerpt.body) %>
+	</div>
+	<div>
+		<%= h excerpt.comment %>
+	</div>
+</div>

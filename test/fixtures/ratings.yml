@@ -1,0 +1,29 @@
+one_style_rating:
+  ratable_id: 1
+  ratable_type: Review
+  criterion: style
+  value: 4
+
+two_information_rating:
+  ratable_id: 1
+  ratable_type: Review
+  criterion: information
+  value: 2
+
+three_context_rating:
+  ratable_id: 1
+  ratable_type: Review
+  criterion: context
+  value: 5
+
+thoughtful_rating:
+  ratable_id: 4
+  ratable_type: Review
+  criterion: context
+  value: 5
+
+pissy_rating:
+  ratable_id: 5
+  ratable_type: Review
+  criterion: context
+  value: 1

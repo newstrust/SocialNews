@@ -1,0 +1,121 @@
+<html>
+<head>
+<title><%="#{@newsletter.humanized_name} #{app_name}"%> Feed - HTML Email</title>
+
+<style type="text/css">
+
+body { margin: 0 30px; }
+body, table { font-family: Arial, Helvetica, sans-serif; font-size: 12px; }
+img { border: 0; }
+a { font-weight: bold; text-decoration: none; color: #385AC8; }
+a:active, a:hover { color: #385AC8; text-decoration: underline; }
+.sectionbottomspacer { padding-bottom:20px; }
+.sub_head { font-size: 14px; font-weight: bold; }
+.subhead_small { font-size: 12px; font-weight: bold; color: #000000; }
+.subhead_small_plain { font-size: 12px; font-weight: normal; color: #000000; }
+a.subhead_small_plain:link,
+a.subhead_small_plain:visited,
+a.subhead_small_plain:active,
+a.subhead_small_plain:hover { font-weight: normal; }
+.body_black { font-size: 12px; color: #000000; }
+.body_black_small { font-size: 11px; color: #000000; font-weight: normal; }
+a.body_black_small:link,
+a.body_black_small:visited,
+a.body_black_small:active,
+a.body_black_small:hover { font-size: 11px; font-weight: normal; }
+.body_gray { font-size: 12px; color: #333333; }
+.editorial { font-size: 10px; }
+.editorial_gray { font-size: 10px; color: #acacac; }
+div.top_rule { padding: 0; margin: 1px 0em 3px 0em; border-bottom: 1px solid #bababa; font-size: 1px; }
+div.level1_header { padding: 0; margin: 5px 0; font-size: 16px; }
+div.level1_header a { color: #385AC8; }
+div.level1_header span.label { font-size: 14px; color: #33c; }
+div.level2_header { padding: 0; margin: 5px 0; font-size: 14px;color:#3f3f3f; }
+div.level2_header a { color: #3f3f3f; }
+div.level2_header span.label { font-size: 14px; color: #33c; }
+div.level3_header { padding: 5px 0; margin: 5px 0; font-size: 11px;font-weight: bold;text-transform: uppercase; }
+div.level3_header a { color: #999999; }
+div.level3_header span.label { font-size: 14px; color: #33c; }
+div.separator { margin: 10px 0; border-bottom : 1px solid #bababa; }
+div.story_title {font-family:Georgia,Times,serif;font-size: 13px;}
+.subhead_small_gray { font-size: 12px; color: #333333; font-weight: normal; line-height: 120% }
+.story_quote { font-size: 12px; color: #333333; font-weight: normal; line-height: 110% }
+a.rate_it, a.rated_it { font-size: 11px; color: #3A9800; }
+.pubname { color: #666666; font-weight: bold; font-size: 11px;text-transform: uppercase; }
+.pubname a:link { color: #666666; font-size: 11px; }
+.pubname a:visited { color: #666666; font-size: 11px; }
+.author {color: #666666;font-size: 11px;text-transform: uppercase;font-weight: bold;}
+.date {color:#adadad;}
+.type {color:#adadad;}
+span.via {color:#adadad;}
+ul.stories { list-style-type: none; margin: 0; padding: 0; }
+ul.stories li { width: 650px; line-height: 1.4em; margin-bottom: 1em; clear: left; }
+ul.stories li div.storyInfo { width: 487px; margin-right: 15px; float: left; }
+ul.stories li div.storyRating { width: 148px; text-align: right; float: left; }
+.formHeader { font-weight: bold; color: #494949; margin-left: 5px; }
+div.trustometer { background: url(<%=home_url%>images/trustometer/trustometer_bg_medium.png) no-repeat left top; _background: url(<%=home_url%>images/trustometer/trustometer_bg_medium.gif) no-repeat left top;width: 73px; height: 20px; float: right;}
+div.trustometer:hover { background: url(<%=home_url%>images/trustometer/trustometer_bg_medium.png) no-repeat left bottom; _background: url(<%=home_url%>images/trustometer/trustometer_bg_medium.gif) no-repeat left bottom;width: 73px; height: 20px; float: right;}
+div.trustometer a { font-weight: bold; color: #3A9800; }
+a.rating    { font-size: 0.9em; margin: 0 0.5em;}
+a.rating:hover {text-decoration: none;}
+a.no_rating { text-align: center; font-size: 0.9em; margin: 0.15em 0.5em; color:#666666; }
+span.byline {color: #acacac;font-weight: bold;font-size: 11px;}
+</style>
+
+<% spacer_url = home_url + "images/ui/spacer.gif" %>
+
+</head>
+<body bgcolor="#FFFFFF">
+<table width="650" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td>
+<table width="650" border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="3"><img src="<%=spacer_url%>" alt="" width="1" height="5"></td></tr>
+<tr valign="bottom">
+<td class="subhead_small" valign="bottom" width="300">
+<a href="<%=home_url%>"><img src="<%=home_url%><%=LocalSite.newsletter_site_logo(@newsletter.associated_local_site)%>" border="0"/><span class="formHeader"><%=@newsletter.humanized_name(true)%> News<%="letter" if @newsletter.is_weekly?%></span>
+<br>
+</a>
+</td>
+<td colspan="2" align="right" valign="bottom" class="subhead_small">
+<%= link_to "<span class='formHeader'>#{Time.now.strftime('%A, %B %d, %Y')}</span>", home_url %>
+</td>
+</tr>
+</table>
+<div class="top_rule">&nbsp;</div>
+</td>
+</tr>
+<tr><td><img src="<%=spacer_url%>" alt="" width="1" height="16"></td></tr>
+<tr>
+<td class="subhead_small_plain">
+
+<%= process_email_template(@newsletter.html_header, @recipient, @newsletter.freq) %>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<table id="Column_A" width="100%" border="0" cellspacing="0" cellpadding="0">
+
+<tr valign="top"> <td colspan="3"> <div class="separator">&nbsp;</div> </td> </tr>
+
+<%= @story_body %>
+
+<tr><td class="body_black" style="padding-bottom:10px;" colspan="3">Please take a moment to review one of the stories above.</td></tr>
+<tr><td class="body_black" style="padding-bottom:10px;" colspan="3">For the latest updates, check our <a href="<%=home_url%>">home page</a>.</td></tr>
+<tr><td class="body_black" style="padding-bottom:10px;" colspan="3">For a full story listing, check <a href="<%=home_url%>stories/most_recent">All Stories</a>.</td></tr>
+<tr><td class="body_black" colspan="3">For help tips, check our <a href="<%=home_url%>help/faq">FAQ</a>.</td></tr>
+
+<tr valign="top"> <td colspan="3"> <div class="separator">&nbsp;</div> </td> </tr>
+
+<tr><td> 
+<%= process_email_template(@newsletter.html_footer, @recipient, @newsletter.freq) %>
+</td></tr>
+
+<tr><td>&nbsp;</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>

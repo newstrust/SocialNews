@@ -1,0 +1,267 @@
+<%- @title = "Edit Story Info" -%>
+
+<%- content_for(:page_scripts) do -%>
+	<%= javascript_include_tag 'story_edit' %>
+<%- end -%>
+
+<div class="story_listing_detail edit span-16">
+  <span class="edit_story">Edit Story Info</span>
+ 
+  <%= render :partial => 'header', :locals => {:story => @story, :show_story_links => false, :edit_form => true} %>
+
+  <div class="explanation">
+  Please check all summary fields below for accuracy. Edit carefully, as any changes you make will be featured
+  first in <%=app_name%> reports.
+  Please fill in all <strong>required fields</strong> below.
+  Click <a href="#bottom">Submit</a> when you
+  are done. For edit tips, click on any<%= help_icon("", "host") %>. For more help, check our <%= help_link "FAQ", "", "host" %>
+  - or <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.
+  </div>
+ 
+  <%= error_messages_for 'story', :header_message => nil, :message => nil %>
+ 
+  <% form_for @story, :html => {:class => "edit_story", :multipart => true} do |f| -%>
+  	<!-- Tabbed box -->
+  	<% main_column_tabbed_box_array = ["Summary"] -%>
+  	<% main_column_tabbed_box_array << "Editorial" if current_member.has_role_or_above?(:host) -%>
+  	<% main_column_tabbed_box_array << "Multimedia" if current_member.has_role_or_above?(:host) -%>
+  	<% main_column_tabbed_box_array << "Stats" -%>
+  	<% main_column_tabbed_box_array << "More Info" -%>
+  	<% main_column_tabbed_box :tabs => main_column_tabbed_box_array do -%>
+  		<!-- Summary tab -->
+  		<% main_column_tab :anchor_class => "summary", :first_tab => true do -%>
+  			<div class="popup_form" style="width: 360px;">
+          <%= f.hidden_field(:advanced_edit_form, :value => true) %>
+          <%= render :partial => 'submit_form', :locals => {:f => f, :edit_form => true} %>
+
+          <%# Alternate URLs -%>
+          <div>
+          	<%= f.label :urls_attributes, "Alternate URLs", :style => "font-weight: normal" %>
+          	<%= @story.urls.collect{|su| render(:partial => 'story_url_input', :locals => {:story_url => su})} %>
+          	<div id="more_story_urls">
+          		<%= render(:partial => 'story_url_input', :locals => {:story_url => StoryUrl.new}) if @story.urls.empty? %>
+          	</div>
+          	<%= link_to_function("Add another story URL") do |page|
+          				page.insert_html(:bottom, :more_story_urls, :partial => 'story_url_input', :locals => {:story_url => StoryUrl.new})
+          			end %>
+          </div>
+        </div>
+  		<% end -%>
+		
+  		<!-- Editorial tab -->
+  		<%- if current_member.has_role_or_above?(:host) -%>
+  			<% main_column_tab :anchor_class => "editorial" do %>
+  				<div class="form_field leftalign" style="padding-bottom: 1em;">
+  					<%= f.label :status, "Status " + help_icon('submit_story_status', 'host'), :style=>"width: 120px" %>
+  					<%= f.select :status, pull_down_menu("story_status") %>
+  				</div>
+	
+  				<% if logged_in? and current_member.has_role_or_above?(:host) -%> <%#-- leave code in - may want to change this back to 'editor' -%>	
+  					<div class="form_field leftalign" style="padding-bottom: 2em;">
+  						<%= f.label :edit_lock, "Edit Lock " + help_icon('story_edit_lock', 'host'),
+  							:style=>"width: 120px; font-weight: normal" %>
+  						<%= f.check_box("edit_lock", {:class => "check"}, true, false) %>
+  						<span class="explanation">Check box to prevent story from being edited by members</span>
+  					</div>
+	
+  				<% end %>
+	
+  				<div class="form_field story_submit" style="padding-bottom: 1em;">
+  					<%= f.label :edit_notes, "Notes  " + help_icon('story_edit_notes', 'host') + " " +
+  							content_tag('span', 'Add any editorial notes at the end of this shared notepad, with your initials.', :class => 'explanation'),
+  							:style=>"font-weight: normal" %>
+  					<%= f.text_area :edit_notes, :size => '70x5', :style => "font-size: 11px;width:500px" %>
+  				</div>
+	
+  				<div class="remove_border" style="padding-top: 5px; padding-bottom: 0.5em">
+  					<% submitted_by = show_submitted_by(@story, {:for_newsletter => false, :prefix=> ""}, :target => "_blank") %>
+  					<%= profile_line_direct :humanized_key => "Posted by", 
+  						:value => "#{submitted_by} <span class='editorial_gray'> - #{format_date(@story.created_at, '')}</span>" %>
+  				</div>
+	
+  				<div class="remove_border" style="padding-bottom: 0.5em">
+  					<% if @story.edited_by_member %>
+  						<% edited_by_link = link_to_member(@story.edited_by_member, :target => "_blank") %>
+  						<% edited_by_link += '<span class="editorial_gray"> - ' +  format_date(@story.last_edited_at, "") + '</span>' %>
+  						<%= profile_line_direct :humanized_key => "Edited by", 
+  							:value => edited_by_link %>
+  					<% end %>
+  				</div>
+	
+		
+  				<hr/>
+			
+  				<h3 style="padding-top: 1em; padding-bottom: 1em; font-size: 1.3em">Reviews</h3>
+  				<table style="width: 540px">
+  						<tr>
+  							<td><strong>Name</strong></td>
+  							<td style="padding-left:20px;"><strong>Level</strong></td>
+  							<td style="padding-left:10px;"><strong>Rating</strong></td>
+  							<td style="padding-left:10px;"><strong>Status</strong></td>
+  							<td style="padding-left:10px;"><strong>Date</strong></td>
+  						</tr>
+  					<% @story.reviews.each do |review| -%>
+  						<tr>
+  							<% fields_for 'story[review_attributes][]', review do |rf| %>
+  								<td valign="top"><%= rf.label :status, review.member ? link_to_member(review.member, :target => "_blank") : "Guest Reviewer" %></td>
+  								<td valign="top" nowrap style="width:100px">
+  									<%= trustometer_img(review.member.rating, :shape => :bullet, :size => :small) if review.member %>
+  									<%= content_tag('span', format_rating(review.member.rating) , :class => 'explanation') if review.member %>
+  									</td>
+  								<td valign="top">
+  									<% if review.rating -%>
+  										<% trustometer_img_options = !review.include_rating? ? {:color => :gray} :
+  												(logged_in? and review.member == current_member) ? {:color => :green} : {} -%>
+  										<%= link_to trustometer_img(review.rating, trustometer_img_options), review_url(@story, review), 
+  												:style => "display: block; float: left; margin-right: 3px; height: 10px; margin-top: 3px", :target => "_blank" %>
+  									<% else -%>
+  										<%= link_to "(no rating)", review_url(@story, review), :class => "explanation", :target => "_blank" %>
+  									<% end -%>
+  								</td>
+  								<td valign="top"><%= rf.select :status, pull_down_menu("review_status") %></td>
+  								<td valign="top"><small><%= review.created_at.strftime('%m/%d/%Y') if review.created_at %></small></td>
+  							<% end -%>
+  						</tr>
+  					<% end -%>
+  				</table>
+  				<div class="explanation" style="margin-top:5px"><%= link_to "Check All Reviews", story_url(@story), :target => "_blank" %> (to see any of the reviews above, click on its Trust-O-Meter)</div>
+
+  				<% if logged_in? and current_member.has_role_or_above?(:admin) and !@story.story_relations.blank? -%>
+            <h3 style="padding-top: 1.5em; padding-bottom: 0.5em; font-size: 1.3em">Related Links</h3>
+            <% @story.story_relations.each do |sr| -%>
+              <div class="related_story">
+              <%= link_to sr.related_story.title, sr.related_story %> (Added by <%=Member.find(sr.member_id).name%>) <br/>
+  						<% fields_for 'story[story_relations_attributes][]', sr do |srf| %>
+                <%= srf.hidden_field(:related_story_id, :index => nil) %>
+                <%= srf.hidden_field(:id, :index => nil) %>
+                <%= srf.hidden_field(:should_destroy, :index => nil, :value => "false") %>
+  					    <div>Status: <%= srf.select(:status, ["list", "hide"], {}, {:index => nil})%></div>
+  					    <div>URL: <%= srf.text_field(:url, :index => nil)%></div>
+              <% end -%>
+              </div>
+            <% end -%>
+          <% end -%>
+  			<% end -%>
+  		<% end -%>
+
+  		<!-- Multimedia tab -->
+  		<%- if current_member.has_role_or_above?(:host) -%>
+  		  <% main_column_tab :anchor_class => "multimedia" do -%>
+          <!-- Story photo -->
+          <h2> Story Photo </h2>
+          <%- if @story.image -%>
+            <div>
+              <%= image_tag @story.image.public_filename(:column) %>
+              <%= delete_button(destroy_image_story_path(@story)) %>
+            </div>
+          <%- end -%>
+
+          <% fields_for :image, @story.image do |imgf| -%>
+            <div>
+              <p><%= imgf.label :uploaded_data, "Picture" %><br/><%= imgf.file_field :uploaded_data %></p>
+              <p><%= imgf.label :credit, "Credit" %><br/><%= imgf.text_field :credit %></p>
+              <p><%= imgf.label :credit_url, "Credit URL" %><br/><%= imgf.text_field :credit_url %></p>
+            </div>
+          <% end -%>
+
+          <hr style="margin:20px 0; height:3px;" />
+
+          <!-- Story video -->
+          <h2> Story Video </h2>
+          <p>The width of the video cannot exceed 320 pixels (e.g.: 320w x 240h). You can usually adjust the height as needed.</p>
+          <%- if @story.video -%>
+            <div>
+              <%= @story.video.embed_code %>
+              <%= delete_button(destroy_video_story_path(@story)) %>
+            </div>
+          <%- end -%>
+
+          <% fields_for :video, @story.video do |imgf| -%>
+            <div>
+              <p><%= imgf.label :embed_code, "Video Embed Code" %><br/><%= imgf.text_area :embed_code %></p>
+            </div>
+          <%- end -%>
+        <%- end -%>
+  		<% end -%>
+
+  		<!-- Stats tab -->
+  		<% main_column_tab :anchor_class => "stats" do -%>
+  			<% Story.stat_count_attributes.each do |stat_attribute| -%>
+  				<div class="form_field leftalign">
+  					<%= f.label stat_attribute, "#{stat_attribute.humanize} " + help_icon(stat_attribute, 'report'), :style=>"width: 160px; font-weight: normal" %>
+  					<%= f.select stat_attribute, pull_down_menu("story_stat_count"), :include_blank => 'Select One:' %>
+  				</div>
+  				<br style="clear: none"/>
+  			<% end -%>
+			
+  			<% Story.stat_word_count_attributes.each do |stat_attribute| -%>
+  				<div class="form_field leftalign">
+  					<%= f.label stat_attribute, "#{stat_attribute.humanize} " + help_icon(stat_attribute, 'report'), :style=>"width: 160px; font-weight: normal" %>
+  					<%= f.select stat_attribute, pull_down_menu("story_stat_word_count"), :include_blank => 'Select One:' %>
+  				</div>
+  				<br style="clear: none"/>
+  			<% end -%>
+			
+  			<br/>
+  		<% end -%>
+
+  		<!-- More Info tab -->
+  		<% main_column_tab :anchor_class => "other" do -%>
+  				<div class="form_field leftalign">
+  					<%= f.label :country, "Country " + help_icon('story_location', 'host'), :style=>"width: 120px; font-weight: normal" %>
+  					<%= f.select :country, pull_down_menu("countries"), :include_blank => 'Select a Country:' %>
+  				</div>
+  				<br/>
+		
+  				<div class="form_field leftalign">
+  					<%= f.label :state, "State " + help_icon('story_location', 'host'), :style=>"width: 120px; font-weight: normal" %>
+  					<%= f.select :state, pull_down_menu("states"), :include_blank => 'Select a State:' %>
+  				</div>
+  				<br/>
+		
+  				<div class="form_field leftalign">
+  					<%= f.label :location, "Location " + help_icon('story_location', 'host')+ " " +
+  						content_tag('span', '<br>City or other location', :class => 'explanation'),
+  						:style=>"width: 120px; font-weight: normal" %>
+  					<%= f.text_field :location, :size => 32 %>
+  				</div>
+  				<br/>
+		
+  				<div class="form_field leftalign">
+  					<%= f.label :scope, "Scope " + help_icon('story_scope', 'host'), :style=>"width: 120px; font-weight: normal" %>
+  					<%= f.select :scope, pull_down_menu("story_scope"), :include_blank => 'Select One:' %>
+  				</div>
+  				<br/>
+		
+  				<div class="form_field leftalign">
+  					<%= f.label :online_access, "Online Access " + help_icon('story_online_access', 'host'), :style=>"width: 120px; font-weight: normal" %>
+  					<%= f.select :online_access, pull_down_menu("story_online_access"), :include_blank => 'Select One:' %>
+  				</div>
+  				<br/>
+		
+  				<div class="form_field">
+  					<%= f.label :full_text, "Story Archive " + help_icon('story_archive', 'host') + " " +
+  						content_tag('span', 'Copy and paste the full story text, for archival purposes (optional)', :class => 'explanation'),
+  						:style => "font-weight: normal" %>
+  					<%= f.text_area :full_text, :size => '70x5', :style => "font-size: 11px;width:500px" %>
+  				</div>
+  				<br/>
+		
+  		<% end %>
+	
+  	<div class="edit_buttons">
+  		<%= submit_button "Submit", nil, :class => "submit" %>
+  		<%= cancel_button "Cancel", @story, :class => "cancel" %>
+  	</div>
+  	<% end -%>
+
+  	<a name="bottom" id="bottom"></a>
+
+  	<br/>
+  <% end -%>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  // stub function. must shadily define here because submit_form (a.k.a. Toolbar Edit form) depends on it.
+  function limit_form_height() {}
+</script>

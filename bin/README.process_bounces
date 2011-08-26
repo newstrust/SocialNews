@@ -1,0 +1,19 @@
+------ FILE: bounce_keywords -------
+disabled
+does not exist
+unavailable
+rejected
+FULL
+t have a
+------
+
+On my laptop
+------------
+1. grep -f bounce_keywords bounces.csv | cut -f1 -d"," | sed 's/"//g;' | sort | uniq > /tmp/bounce.ids
+2. scp /tmp/bounce.ids deploy@ec2-204-236-156-145.us-west-1.compute.amazonaws.com:/tmp/
+
+On the slave
+------------
+0. script/console
+1. str = File.open("/tmp/bounce.ids3").each_line.collect { |l| m = Member.find_by_email(l.strip); m ? m.id : nil }.compact * ','; ""
+2. Member.connection.execute("delete from newsletter_subscriptions where member_id in (#{str})")

@@ -1,0 +1,9 @@
+<%- this_freq = Newsletter::MYNEWS -%>
+<%- humanized_freq = mynews_colors -%>
+<%- @title = "#{humanized_freq} Daily Email" -%>
+<%- subscribed = @member.has_newsletter_subscription?(this_freq) -%>
+<%- header = subscribed ? "Manage your MyNews email subscription below:" :
+                          "Subscribe to a daily email feed of stories in your #{link_to humanized_freq, mynews_url(current_member)} page" -%>
+<%- description = "A personal news selection from your #{link_to humanized_freq, mynews_url(current_member)} page.<br />" -%>
+
+<%= render :partial => "members/manage_subscription", :locals => {:this_freq => this_freq, :humanized_freq => humanized_freq, :header => header, :description => description} -%>

@@ -1,0 +1,337 @@
+<%- @no_bots = true -%>
+<%- is_group_mynews = !@group.nil? -%>
+<%- is_welcome_page = @no_follows_yet && @my_page -%>
+<%- is_anothers_empty_page = @no_follows_yet && !@my_page -%>
+<%- more_popup_params = is_group_mynews ? "?group_id=#{@group.id}" : "" -%>
+<%- @title = "MyNews - " + @member.name -%>
+<%- if @my_page -%>
+  <%- my_prefix = "My " -%>
+  <%- member_name = "my" -%>
+<%- else -%>
+  <%- my_prefix = "" -%>
+  <%- first_name = first_name(@member) -%>
+  <%- member_name = first_name(@member) + "'s" -%>
+<%- end -%>
+
+<script type="text/javascript" charset="utf-8">
+  _my_page = <%=@my_page ? true : false %>;
+  $(document).ready(function() {
+      $.ajax({
+          type: "POST",
+          url: '<%=mynews_last_visit_at_path(@member)%>',
+          data: 'time='+new Date()
+      });
+  });
+</script>
+
+<%- #@extended_perms = "read_stream,offline_access" if @member.fbc_follows_newsfeed? -%>
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'mynews_topic_taxonomy.json' %>
+  <%= javascript_include_tag 'source_taxonomy.json' %>
+  <%= javascript_include_tag 'feed_taxonomy.json' %>
+  <%= javascript_include_tag 'fbc' %>
+  <%= javascript_include_tag 'twitter' %>
+  <%= javascript_include_tag 'mynews' %>
+  <%= javascript_include_tag 'follows' %>
+  <%= javascript_include_tag 'jquery/jquery.follows_autocomplete' %>
+<%- end -%>
+
+<%- if is_welcome_page -%>
+<script type="text/javascript">
+$(document).ready(function() {
+  var wg = $('div#mynews_welcome_graphic');
+  if (wg) wg.height($('div.mynews_rightcolumn').height() + $('div#footer').height() + 200);
+});
+</script>
+<div id="mynews_welcome_graphic"></div>
+<%- end -%>
+
+<div class="mynews story_listing_detail span-16">
+  <%- if !is_group_mynews && @member.profile_status == "hide" -%>
+    <div class="story clearfix" style="line-height:1.5em;">
+      <span class="quiet small">(MyNews page hidden - 
+      <%= mail_to email_addr("help"), "Email us for more info", :subject => "Hidden MyNews page - #{@member.name}", :encode => "javascript" %>)</span>
+    </div>
+  <%- end -%>
+
+<%- if is_welcome_page -%>
+  <div class="welcome_graphic">
+    <div style="margin-top:20px">
+      <%= image_tag "/images/ui/mynews/welcome_graphic.png" %>
+    </div>
+    <div style="margin-top:-40px;color:#666;font-size:90%;width:300px"><p><strong>What is MyNews?</strong></p>
+      <p>MyNews is a personal news filter that gathers the news you care about, all in one place. This free service from <%=app_name%> lets you create your own news page by following your favorite topics, sources, friends and feeds &mdash; including people you follow on Facebook and Twitter.</p>
+      <p>Your personal MyNews page is updated continuously with stories recommended by your community, on issues that matter to you. It's a great way to keep up with the news.</p>
+      <p>MyNews is in public beta, with more features coming soon. If you like MyNews, please invite your friends and spread the word in your community.</p>
+      
+      <p style="margin-top:15px"><strong>How do I set up MyNews?</strong></p>
+      <p>To set up your personal MyNews page, first add your favorite topics, sources, members or feeds in the right sidebar &mdash; then adjust your settings. Your news page will update automatically to show stories that match your interests.</p>
+      <p>For help tips, check our <%= help_link("FAQ","about_mynews","mynews") %>. We welcome your <%= mail_to email_addr("feedback"), "feedback", :subject => "#{app_name} MyNews Feedback", :encode => "javascript" %> about this new service.</p>
+    </div>
+  </div>
+<%- end -%>
+
+  <div class="member_profile story_listing_reviews flat span-16 mynews"<%= 'id="main_mynews_column" style="display:none;"' if is_welcome_page%>>
+    <div class="top"></div>
+    <div class="wrapper span-16">
+      <%#-- SSS: Frustrating css design wherein classes render images for the background and ignore text.  Makes it very hard to
+            modify text and to reuse classes! Talk to Caleb/David about minimizing use of this technique. --%>
+      <%- if is_group_mynews -%>
+      <h3 style="font-size:16px; margin: 10px 15px; font-weight:bold;">
+        Edit Feeds for <%= @group.name%> Group
+        (<%= link_to "View Group", group_path(@group) %>, <%= link_to "Edit Group", edit_admin_group_path(@group) %>)
+      </h3>
+      <%- else -%>
+      <div class="header mynews">
+        <h3>MyNews</h3>
+        <div style="float:left;padding-left:100px">
+          <h2><span style="color:#999999;font-weight:normal"> for </span><%= link_to_member(@member, :style => "color:#385ac8;")%></h2>
+        </div>
+        <%= follow_item("member",@member) unless @my_page %>
+        <span class="mynews_toplinks"><%= link_to "My Network", mynetwork_member_url(@member), :title => "Visit #{member_name.titleize} Network Page", "rel" => "nofollow" %>
+          <%= link_to_member @member, :link_text => "My Profile", :title => "Visit #{member_name.titleize} Profile Page" %>
+          <%= link_to "Get Widget", "/widgets?url=/members/#{@member.friendly_id}/mynews", :title => "Get #{member_name.titleize} MyNews Widget and add it to your site" %>
+          <%=link_to "", manage_subscription_path(:freq => Newsletter::MYNEWS), :class => "email_mynews", :alt => "Manage your MyNews email subscription", :title => "Manage your MyNews email subscription" %>
+          <%- if is_public_mynews?(@member) && @member.is_visible? -%>
+            <a href="<%=mynews_rss_url(@member, :xml)%>" alt="<%= member_name.capitalize %> MyNews RSS feed" title="<%= member_name.capitalize %> MyNews RSS feed" class="rss">
+          <%- elsif session_member_is_owner?(@member) -%>
+            <a href="#" onclick='alert("No RSS feed is available because your MyNews page is restricted to <%=app_name%> members only. To make your page public and authorize an RSS feed based on your activity, please click on \"Settings\", then \"Show this page to Everyone\".");return;' alt="RSS feed not enabled" title="RSS feed not enabled" class="rss"></a>
+          <%- end -%>
+          <a href="#" onclick="return addthis_open(this, '', location.href, document.title); return false;" onmouseout="addthis_close()" target="_blank" class="share" title="Add this bookmark and share"></a><span style="float:right;margin-top:2px;border:none;margin-right:-5px;"><%= help_icon('about_mynews', 'mynews') %></span></span>
+      </div>      
+      <%- end -%>
+
+      <%- if @my_page -%>
+        <%- filter_options_box do -%>
+           <div class="content">
+            <div class="mynews_prompt">Show stories that match these settings:</div>
+            <%- form_for @member, :url => is_group_mynews ? update_group_mynews_settings_admin_group_path(@group) : mynews_update_settings_path, :html => { :method => :post, :style => "margin: 0;" } do |f| -%>
+              <%- @mynews_dropdown_settings_fields.each_with_index do |k,i| -%>
+                <%- right = (i % 2) == 1 -%>
+                <%- setting = k[0].to_s -%>
+                <%- fields_for "mynews_settings", @mynews_opts do |opt| -%>
+                   <div class="section<%= " right" if right %>"><span class="items"><%=k[1]%></span><span style="float:right"><%= opt.select(setting, pull_down_menu(setting, "mynews"), {}, {:style => "width:130px"}) %></span></div>
+                <%- end -%>
+              <%- end -%>
+              <div class="mynews_prompt" style="clear:both">More Settings:</div>
+              <div class="section"><span class="items">Show this page to <%= help_icon("mynews_privacy", "mynews") %></span>
+                <span style="float:right"><%= f.select :public_mynews, pull_down_menu("member_privacy") %></span>
+              </div>
+              <%- @mynews_checkbox_settings_fields.each_with_index do |k,i| -%>
+                <%- right = (i % 2) == 1 -%>
+                <%- setting = k[0].to_s -%>
+                <%- fields_for "mynews_settings", @mynews_opts do |opt| -%>
+                   <div class="section<%= " right" if right %>"><span class="items"><%=opt.check_box(setting)%><%=opt.label(setting,k[1])%></span></div>
+                <%- end -%>
+              <%- end -%>
+              <div class="section" style="width:450px;margin-bottom:5px;"><span class="items">
+                <%= f.check_box(:mynews_newsletter, {}, true, false) %>
+                <%= f.label(:mynews_newsletter, "Get MyNews by email " + content_tag(:span, "Sent every day at 6 AM ET (3 AM PT)", :class => "editorial_gray") + help_icon("member_mynews_newsletter", "member")) %></span></div>
+               <br/>
+              <div class="edit_buttons update" style="clear:both; margin-top:10px;margin-bottom:0;_padding-top:10px;_position:relative;">
+                <%= submit_button "Save", nil, :class => 'save' %> <span class="button"><a href="#" onclick="; return false;">Cancel</a></span><br/>
+              </div>
+            <%- end -%>
+          </div>
+        <%- end -%>
+      <%- end -%>
+      <%- unless is_anothers_empty_page -%> 
+        <%= render :partial => "mynews/show_info_toggle" %>
+      <%- end -%>
+
+      <div style="float:left;">
+        <div class="article">
+          <ul id="mynews_listing">
+          <%- if @no_follows_yet -%> 
+            <li style="height:220px;font-weight:bold;font-size:25px;"><%= image_tag("/images/ui/mynews/not_filled_in.png", :style => "float:right") %><%= first_name %> hasn't added any items to follow yet.</li>
+          <%- else -%>
+            <%= render :partial => '/mynews/mynews_stories' %>
+          <%- end -%>
+          </ul>
+        </div>
+      </div>
+
+      <%- unless is_anothers_empty_page -%> 
+        <%= render :partial => "shared/more_stories_button", :locals => {:member_id => @member.id, :link_class => "more_mynews"} %>
+      <%- end -%> 
+    </div>
+     <div class="bottom"></div>
+  </div>
+</div>
+
+<div class="span-8 last mynews mynews_rightcolumn">
+  <%- if !is_group_mynews && @my_page && !is_welcome_page -%>
+    <%= select_mynews_badge(@member) %>
+  <%- end -%>
+  <%- right_column_box :header => my_prefix + "Topics #{help_icon('add_topics', 'mynews')}" do -%>
+    <%- if @my_page -%>
+     <%- buf = "" ; subj_count = 0 -%>
+      <%- @subject_list.each do |s| -%>
+        <%- if @followed_items[:topics].include?(s) -%>
+          <%- on_off= "_on"; subj_count =+ 1 -%>
+        <%- else -%>
+          <%- on_off= "_off" -%>
+        <%- end -%>
+        <%- buf += "<a href=\"#\" onclick=\"return mynews_page_toggle_follow(this, #{@member.id}, 'topic', '#{s.id}')\" class=\"subj_#{s.slug}#{on_off}\"></a>" -%>
+      <%- end -%>
+      <%- if subj_count == 0 -%>
+        <span class="mynews_prompt">Follow subjects that interest you</span>
+      <%- else -%>
+        <span class="mynews_prompt">You are following these subjects:</span>
+      <%- end -%>
+      <%= help_icon('add_topics', 'mynews') %>
+      <div style="margin-top:4px;margin-bottom:60px;*margin-bottom:30px;clear:all;">
+        <%= buf %>
+       </div>
+      <div class="input" style="border-top:2px solid #f6f6f6;padding-top:5px">
+        <%- followed_topics = @followed_items[:topics] - @subject_list -%>
+        <%- unless followed_topics.empty? -%>
+          <span class="mynews_prompt">You are following these topics:</span>
+        <%- end -%>
+       <%=render :partial => "/mynews/follows_autocomplete",
+                 :locals  => { :div_id => "my_tags",
+                               :follow_type => "topic", 
+                               :nonempty_prompt => "Add another topic",
+                               :empty_prompt => "Add other topics that interest you",
+                               :featured_link => "/topics/featured#{more_popup_params}",
+                               :featured_class => "follow_topics",
+                               :followed_items => followed_topics.collect { |t| {:icon => t.favicon, :name => t.name, :id => t.id, :url => topic_path(t)} },
+                               :taxonomy => "topic_taxonomy",
+                               :help_link => "add_topics",
+                               :query_url => "null",
+                               :listing_refresh_fn => "function() { refresh_mynews_listing(#{@member.id}) }",
+                               :follow_filter_fn => "function(t, i) { apply_follow_filter(#{@member.id}, t, i) }" } %>
+      </div>
+     <%- else -%>
+      <strong><%= first_name %> is following these subjects:</strong><br />
+      <div style="margin-top:4px;margin-bottom:60px;clear:all;">
+      <%- @subject_list.each do |s| -%>
+        <span class="subj_<%=s.slug%><%=@followed_items[:topics].include?(s) ? "_on" : "_off"%>"></span>
+      <%- end -%>
+      </div>
+      <%- unless @followed_items[:topics].empty? -%>
+        <div style="margin-bottom:10px;border-top:2px solid #f6f6f6;padding-top:5px"><strong><%= first_name %> is following these topics:</strong></div>
+        <%- (@followed_items[:topics] - @subject_list).each do |t| -%> 
+        <div class="follow_public"><span class='favicon18' style='background-image:url(<%=t.favicon%>);'></span><%=link_to(h(t.name), t, :title => "View #{h(t.name)}'s page")%><%= follow_item("topic",t) %></div> 
+        <%- end -%>
+      <%- else -%>
+        <strong><%= first_name %> is not following any topics yet.</strong>
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+
+  <%- right_column_box :header => my_prefix + "Sources #{help_icon('add_sources', 'mynews')}" do -%>
+    <%- if @my_page -%>
+       <%- unless @followed_items[:sources].empty? -%>
+        <span class="mynews_prompt">You are following these sources:</span>
+      <%- end -%>
+      <div class="input">
+       <%=render :partial => "/mynews/follows_autocomplete",
+                 :locals  => { :div_id => "my_sources",
+                               :follow_type => "source", 
+                               :nonempty_prompt => "Add another source",
+                               :empty_prompt => "Add other sources that interest you",
+                               :featured_link => "/sources/trusted#{more_popup_params}",
+                               :featured_class => "follow_sources",
+                               :followed_items => @followed_items[:sources].collect { |s| {:icon => s.favicon, :name => s.name, :id => s.id, :url => source_path(s)} },
+                               :taxonomy => "source_taxonomy",
+                               :help_link => "add_sources",
+                               :query_url => "null",
+                               :listing_refresh_fn => "function() { refresh_mynews_listing(#{@member.id}) }",
+                               :follow_filter_fn => "function(t, i) { apply_follow_filter(#{@member.id}, t, i) }" } %>
+      </div>
+    <%- else -%>
+      <%- unless @followed_items[:sources].empty? -%>
+        <strong><%= first_name %> is following these sources:</strong><br /><br />
+        <% @followed_items[:sources].each do |s| %><div class="follow_public"><%=link_to_source(s, :title => "View #{h(s.name)}'s page")%><%= follow_item("source",s) %></div><% end %>
+      <%- else -%>
+        <strong><%= first_name %> is not following any sources yet.</strong>
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+
+  <%- right_column_box :header => my_prefix + "Network #{help_icon('add_members', 'mynews')}" do -%>
+    <%- if @my_page -%>
+       <%- unless @followed_items[:members].empty? -%>
+        <span class="mynews_prompt">You are following these members:</span>
+      <%- end -%>
+      <div class="input">
+       <%=render :partial => "/mynews/follows_autocomplete",
+                 :locals  => { :div_id => "my_members",
+                               :follow_type => "member", 
+                               :nonempty_prompt => "Add another member",
+                               :empty_prompt => "Add other people you trust",
+                               :featured_link => "/members/trusted#{more_popup_params}",
+                               :featured_class => "follow_members",
+                               :followed_items => @followed_items[:members].collect { |m| 
+                                 { :icon => m.favicon,
+                                   :name => m.name,
+                                   :id => m.id,
+                                   :url => member_path(m),
+                                   :visible_profile => m.full_profile_visible_to_visitor?(current_member),
+                                   :fb_flag => fbc_session_user_friends_with?(m),
+                                   :twitter_flag => is_twitter_follower?(@member, m),
+                                   :mutual_follow_flag => @member.mutual_follower?(m) }
+                               },
+                               :taxonomy => "null",
+                               :help_link => "add_members",
+                               :query_url => "'#{search_members_path(:format => :js, :mynews => true)}'",
+                               :listing_refresh_fn => "function() { refresh_mynews_listing(#{@member.id}) }",
+                               :follow_filter_fn => "function(t, i) { apply_follow_filter(#{@member.id}, t, i) }" } %>
+      </div>
+      <div style="margin-top:8px">
+        <%= link_to "See what your network is doing&nbsp;&raquo;", mynetwork_member_url(@member) %>
+     </div>
+     <%- else -%>
+      <%- unless @followed_items[:members].empty? -%>
+        <strong><%= first_name %>'s Network:</strong><br/><br/>
+        <%- @followed_items[:members].each do |m| -%> 
+        <div class="follow_public"><span class='favicon18' style='background-image:url(<%=m.favicon%>)'></span><%=link_to_member(m, :title => "View #{h(m.name)}'s profile")%><%= follow_item("member",m) unless m == current_member %></div>
+        <%- end -%>
+      <%- else -%>
+        <strong>No members in <%=first_name%>'s network yet.</strong>
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+
+  <%- right_column_box :header => my_prefix + "Feeds #{help_icon('add_feeds', 'mynews')}" do -%>
+    <%- if @my_page -%>
+       <%- unless @followed_items[:feeds].empty? -%>
+        <span class="mynews_prompt">You are following these feeds:</span>
+      <%- end -%>
+      <div class="input">
+       <%=render :partial => "/mynews/follows_autocomplete",
+                 :locals  => { :div_id => "my_feeds",
+                               :follow_type => "feed", 
+                               :nonempty_prompt => "Add another feed",
+                               :empty_prompt => "Add other smart feeds that interest you",
+                               :featured_link => "/feeds/all#{more_popup_params}",
+                               :featured_class => "follow_feeds",
+                               :followed_items => @followed_items[:feeds].collect { |f| 
+                                 {:icon => f.favicon, :name => f.name + (f.subtitle.blank? ? "" : " - " + f.subtitle), :id => f.id, :url => feed_path(f)}
+                               },
+                               :taxonomy => "feed_taxonomy",
+                               :help_link => "add_feeds",
+                               :query_url => "null",
+                               :listing_refresh_fn => "function() { refresh_mynews_listing(#{@member.id}) }",
+                               :follow_filter_fn => "function(t, i) { apply_follow_filter(#{@member.id}, t, i) }" } %>
+      </div>
+      <%= help_link("What are Smart Feeds?","smart_feeds","", :class => "explanation") %><%= help_icon("smart_feeds","") %>
+    <%- else -%>
+      <%- unless @followed_items[:feeds].empty? -%>
+        <%- @followed_items[:feeds].collect do |f| -%>
+          <%- link_options = {}; link_options[:title] = "View #{h(f.name)}'s page" -%>
+        <div class="follow_public"><span class='favicon' style='background-image:url(<%=f.favicon%>)'></span><%=f.is_private? ? f.name : link_to_feed(f, link_options, :mynews_truncate => true )%><%= follow_item("feed",f) if !f.is_private? %></div>
+        <%- end -%>
+      <%- else -%>
+        <strong><%= first_name %> is not following any feeds yet.</strong>
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+  
+  <%- unless @my_page && @member.followed_items.count < 5 -%>
+    <div style="margin-bottom:10px">
+      <%= link_to(image_tag("/images/ntbadges/mynews_donate.png"),"/donate") %>
+    </div>
+  <%- end %>
+</div>

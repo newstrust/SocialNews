@@ -1,0 +1,3 @@
+A comment on the subject "<%= @record.commentable.name %>" was flagged:
+
+<%= render :partial => 'notification_mailer/comments/flagged_details', :locals => { :permalink => "#{comment_permalink_for(@record)}" } %>

@@ -1,0 +1,36 @@
+paypal_on_item_3:
+  id: 1
+  taggable_id: 3
+  tag_id: 4
+  <%= file_name.singularize %>_id: 1
+  taggable_type:
+red_cross_on_item_2:
+  id: 2
+  taggable_id: 2
+  tag_id: 3
+  <%= file_name.singularize %>_id: 1 
+  taggable_type:
+whales_on_item_1:
+  id: 3
+  taggable_id: 1
+  tag_id: 1
+  <%= file_name.singularize %>_id: 1  
+  taggable_type:
+whales_on_item_2:
+  id: 4
+  taggable_id: 2
+  tag_id: 1
+  <%= file_name.singularize %>_id: 1  
+  taggable_type:
+draft_on_item_3:
+  id: 5
+  taggable_id: 3
+  tag_id: 5
+  <%= file_name.singularize %>_id: 1 
+  taggable_type:
+hiv_aids_on_item_2:
+  id: 6
+  taggable_id: 2
+  tag_id: 6
+  <%= file_name.singularize %>_id: 1  
+  taggable_type:

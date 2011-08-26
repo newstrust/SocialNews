@@ -1,0 +1,8 @@
+  <div class="other_login_option">
+  <div class="question">
+    <strong>Got Facebook?</strong> Sign Up or Log In with your Facebook account. <%= help_icon("facebook", "") %>
+  </div>
+  <div style="padding-top: 5px">
+    <%= fb_login_button("window.location = \"/fb_connect/activate_from_toolbar/#{@story.id}\";")%>
+  </div>
+  </div>

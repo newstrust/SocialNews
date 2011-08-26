@@ -1,0 +1,39 @@
+<div class="fieldset">
+  <h2>Basic Attributes</h2>
+  <%- [:name, :slug, :domain, :url, :section, :editorial_priority].each do |attr| -%>
+    <%= form_field(f, :attr => attr) %>
+  <%- end -%>
+
+  <%- [:ownership, :status].each do |attr| -%>
+    <%= form_field(f, :attr => attr, :type => "dropdown", :sel_opts => pull_down_menu("source_#{attr}"), :include_blank => "Select One:") -%>
+  <%- end -%>
+</div>
+
+<div class="fieldset">
+  <h2> Comments </h2>
+
+  <%= form_field(f, :attr => :allow_comments, :name => "Allow comments for this source?", :type => "checkbox") %>
+  <div style="clear:both;">
+    <%= render :partial => '/shared/textile_support' %>
+  </div>
+  <%= form_field(f, :attr => :discussion_description, :type => "text_area", :name => "Comment Description", :hint => "Add any editorial description needed to set the appropriate context for the comment thread.") %>
+</div>
+
+<div class="fieldset">
+  <h2>Source Logo</h2>
+
+  <div class="form_field">
+    <%= f.check_box "source_logo_status", {}, "list", "hide" %>
+    <%= f.label :source_logo_status, "Show Source Logo " + help_icon('source_logo_status', 'host') %>
+  </div>
+  
+  <% fields_for :image, @source.image do |imgf| %>
+    <%- if @source.image -%>
+      <%= image_tag @source.image.public_filename(:column) %>
+    <%- else -%>
+      No logo yet, please upload one
+    <%- end -%><br/>
+    <%= form_field(imgf, :attr => :uploaded_data, :name => "Logo:", :type => "file", :hint => "should be no larger than 235x66, but it will automatically be resized to a max of 235x235") %>
+    <br style="clear:both;" />
+  <% end %>
+</div>

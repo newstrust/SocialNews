@@ -1,0 +1,15 @@
+<div class="metareview <%= cycle('odd', '') %>">
+  <div>
+    <%= link_to(trustometer_img(meta_review.rating, :shape => :bullet, :size => :small, :color => :green,
+          :rating_accuracy => 1, :rating_title => " out of 5 rating - click to see review"), review_url(meta_review.review.story, meta_review.review_id)) %>
+  	<% if given %>
+  		to <%= link_to_member(meta_review.review.member) %>
+  	<% else %>
+  		from <%= link_to_member(meta_review.member) %>
+  	<% end %>
+  	| <span class="date"><%= meta_review.created_at.strftime('%m/%d/%Y') if meta_review.created_at %></span>
+  </div>
+  <div class="title">
+    for <span class="story"><%= link_to meta_review.review.story.title, meta_review.review.story %></span>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<%#-- Pass along the id of the last network activity entry --%>
+<script type='text/javascript'> last_activity_entry_id=<%=activities.blank? ? -1 : activities.last.id%> </script>
+
+<%- unless activities.empty? -%>
+  <%= render :partial => "members/network_activity", 
+             :locals  => { :group => group,
+                           :activities => activities,
+                           :activity_hash => activity_hash,
+                           :hide_follows => true } -%>
+
+  <%#--- We need this placeholder li as an insertion point for new activity entries -- but, dont render it each time we fetch new activity entries ---%>
+  <% if params[:last_activity_entry_id].blank? -%> <li style="display:none;" id="activity_paging_placeholder"></li> <% end -%>
+<%- else -%>
+  <li> <h3> There are no more activity entries to show you! </h3> </li>
+<%- end -%>

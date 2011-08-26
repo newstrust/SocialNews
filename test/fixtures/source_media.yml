@@ -1,0 +1,37 @@
+legacy_source_medium:
+  id: 1
+  source_id: 1
+  medium: newspaper
+  main: true
+
+source_2_medium:
+  id: 2
+  source_id: 2
+  medium: newspaper
+  main: true
+
+source_3_medium_1:
+  id: 3
+  source_id: 3
+  medium: newspaper
+  main: true
+
+source_3_medium_2:
+  id: 4
+  source_id: 3
+  medium: online
+  main: false
+
+source_4_medium:
+  id: 5
+  source_id: 4
+  medium: tv
+  main: true
+
+source_5_medium:
+  id: 6
+  source_id: 5
+  medium: tv
+  main: true
+
+

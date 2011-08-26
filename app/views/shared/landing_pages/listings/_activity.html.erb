@@ -1,0 +1,25 @@
+<%#-- SSS: Assumes this is being rendered on a group landing page!! %>
+
+<script type='text/javascript'> 
+group_id = <%=group.id%>; 
+</script>
+
+<%#-- SSS: Hack! Creating identical DOM as the mynetwork page --%>
+<%#-- Instead CSS should be fixed --%>
+<div class="flat mynetwork">
+  <div class="wrapper">
+
+  <div class="article">
+    <ul id="network_listing">
+      <%= render :partial => "shared/landing_pages/listings/activity_listing_entries",
+                 :locals  => { :group => group,
+                               :activities => activities,
+                               :activity_hash => activity_hash } -%>
+    </ul>
+  </div>
+
+  <%#-- More activities!  More, more more!  Feed me, feed me! --%>
+  <%= render :partial => "shared/more_stories_button", :locals => {:link_id => "more_link", :link_text => "More Activity", :link_class => "more_activity"} %>
+
+  </div>
+</div>

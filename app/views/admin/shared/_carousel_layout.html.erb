@@ -1,0 +1,94 @@
+<%-#------- Settings determining available slide object types & fields for each of them -----------%>
+<%- object_types = ActiveSupport::OrderedHash.new
+    object_types[:report] = [[:label, :text_field], [:title, :text_field], [:link, :text_field], [:byline, :text_field], [:blurb, :text_area], [:photo_url, :text_field], [:photo_caption, :text_field], [:call_to_action, :text_field]]
+    object_types[:story]  = [[:label, :text_field], [:story_id, :text_field], [:topic, :text_field], [:call_to_action, :text_field]]
+    object_types[:html]   = [[:html , :text_area]] -%>
+
+<div class="fieldset carousel">
+  <h2> Carousel </h2>
+
+  <%-#----------- SLIDES -----------%>
+  <%- @carousel_slides.keys.sort.each_with_index do |name, i| -%>
+    <%- slide = @carousel_slides[name] -%>
+    <%- scope_name = "settings[carousel][#{name}]" -%>
+    <div class="slide" id="<%=name%>"<%=' style="clear:both"' if i%2 == 0%>>
+      <h3> SLIDE <%=('A'[0]+i).chr %> </h3>
+      <div> 
+        <%= label_tag("#{scope_name}[active?]", "Active?") %>
+        <%= check_box_tag("#{scope_name}[active?]", "1", slide["active?"], :class => "cbox") %>
+      </div>
+
+      <div class="slide_content" style="display:none;">
+        <%-#--- Radio buttons for picking slide module --%>
+        <div class="radio">
+          <%- object_types.keys.each do |t| -%>
+            <%= radio_button_tag("#{scope_name}[type]", t, slide["type"] == t.to_s) %> 
+            <%= label_tag("#{scope_name}[type]", t.to_s.humanize) %>
+          <%- end -%>
+          &nbsp;
+        </div>
+
+        <%-#--- Pull-down for ordering --%>
+        <div class="ranking">
+          <%= label_tag("#{scope_name}[rank]", "Rank") %>
+          <%= select_tag("#{scope_name}[rank]", options_for_select((1..@carousel_slides.length), slide["rank"].to_i)) %>
+        </div>
+
+        <%-#--- Output form for each module type (JS will manipulate display) --%>
+        <%- object_types.keys.each do |t| -%>
+          <%- scope_name = "settings[carousel][#{name}][#{t}]" -%>
+          <%- t_hash = slide[t.to_s] || {} -%>
+          <div class="object slide_<%=t%>" style="display:none;">
+          <%- object_types[t].each do |row| -%>
+            <%- arg = row[0].to_s; ftype = row[1] -%>
+            <%- fields_for scope_name do |f| -%>
+              <%= f.label(:value, row[2] || arg.split("_").map(&:capitalize).join(' ')) %>
+              <%- if ftype == :check_box -%>
+                <%= check_box_tag("#{scope_name}[#{arg}]", "1", t_hash[arg]) %>
+              <%- else -%>
+                <%= f.send(ftype, arg, :size => "45x8", :value => t_hash[arg]) %>
+              <%- end -%>
+            <%- end -%>
+            <br style="clear:both" />
+          <%- end -%>
+          </div>
+        <%- end -%>
+      </div>
+    </div>
+  <%- end -%>
+
+  <%-#----------- HELP: sample html template -----------%>
+  <div style="clear:both;margin-top: 30px;">
+    <a href="#" style="font-weight:bold; font-size:14px;" onclick="$(this).siblings('div').toggle(); return false">HELP: Sample HTML template</a>
+    <div style="display:none; padding:10px; background:#fafafa">
+      <a href="#" style="float:right;font-weight:bold;font-size:14px;" onclick="$(this).parent().hide(); return false">Close this panel</a><br/><br/><br/>
+  &lt;!--This is the Div that wraps the entire carousel item!--&gt;<br/>
+  &lt;div class="featured_story topic"&gt;<br/>
+  <br/>
+  &lt;!--This is the Div that contains the image & thumbnail!--&gt;<br/>
+  &lt;div class="featured_image"&gt;<br/>
+  &lt;img src="path/to/image" alt=""&gt;<br/>
+  &lt;div class="photo_caption"&gt;Photo Caption &lt;/div&gt;<br/>
+  &lt;/div&gt;<br/>
+  &lt;!--END Div that contains the image & thumbnail!--&gt;<br/>
+  <br/>
+  &lt;!--This is the label, title, copy and read more!--&gt;<br/>
+  &lt;div class="article image"&gt;<br/>
+  &lt;!--TOP LABEL!--&gt;<br/>
+  &lt;label&gt;Label&lt;/label&gt;<br/>
+  &lt;!--ARTICLE TITLE!--&gt;<br/>
+  &lt;h3&gt; &lt;a class="external" href="http://articletitlelink.html"&gt;Article Title&lt;/a&gt;&lt;/h3&gt;<br/>
+  &lt;!--BYLINE!--&gt;<br/>
+  &lt;div class="byline"&gt;By line &lt;/div&gt;<br/>
+  &lt;!--EXCERPT!--&gt;<br/>
+  &lt;div class="excerpt"&gt; Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla elit magna, congue nec feugiat eu, lobortis quis augue. Donec viverra mi vitae enim vestibulum consectetur. In rhoncus feugiat enim consectetur ultrices. Cras dignissim commodo enim a interdum. Suspendisse faucibus scelerisque eros, vel convallis orci vestibulum quis. &lt;/div&gt;<br/>
+  &lt;!--READ MORE LINK (MAKE SURE IT HAS THE CLASS "read_more"!--&gt;<br/>
+  &lt;a class="read_more" href="http://articletitlelink.html"&gt;Read More »&lt;/a&gt;<br/>
+  &lt;/div&gt;<br/>
+  &lt;!--END the label, title, copy and read more!--&gt;<br/>
+  <br/>
+  &lt;/div&gt;<br/>
+  &lt;!--This ENDS the Div that wraps the entire carousel item!--&gt;<br/>
+    </div>
+  </div>
+</div>

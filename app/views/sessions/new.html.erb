@@ -1,0 +1,27 @@
+<% @title = "Log In" %>
+<% @fb_no_auto_reload = true %>
+<% @auto_login = session[:fb_activated] || false %>
+
+<script type="text/javascript"> hide_fixup_notice = false </script>
+
+<div class="span-16 white_box">
+<div class="top"></div> 
+<div class="wrapper">
+<div class="interior_content">
+<%= content_tag(:h2, @title) unless params[:popup] %>
+
+<div class="popup_form">
+<% if @auto_login -%>
+  <div style="font-size:16px">
+  We are logging you in via Facebook Connect.  If you are still on this page after 5 seconds,
+  <%=link_to "please click here", "#{fb_activate_path}#{params[:popup] ? '?popup=true' : ''}" %>
+  </div>
+<% else -%>
+  <%= render :partial => "sessions/new" %>
+<% end -%>
+ 
+</div>
+</div>
+</div>
+<div class="bottom"></div>
+</div>

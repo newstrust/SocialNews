@@ -1,0 +1,585 @@
+/***************************************************
+ * Reset Browser's Internal Stylesheets, which normalizes the display between a variety of browsers.
+ ***************************************************/
+body {
+	margin: 10px;
+}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,select,textarea,p,blockquote,th,td { 
+  margin: 0;
+  padding: 0;
+}
+
+fieldset,img { 
+  border: 0;
+}
+
+address,caption,cite,code,dfn,th,var {
+  font-style: normal;
+  font-weight: normal;
+}
+
+ol,ul {
+  list-style: none;
+}
+
+caption,th {
+  text-align: left;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-size: 100%;
+  display:block;
+  font-weight: normal;
+}
+
+q:before,q:after {
+  content: '';
+}
+
+abbr,acronym { 
+  border: 0;
+}
+
+div {
+  vertical-align: top;
+}
+
+/***************************************************
+ * Layout constructed to support a grid consisting of
+ * 16 columns with a width of 64px
+ * 16px gutters
+ *
+ * font size is 10.0px
+ * line-height is 16.0px;
+ * Generated using the Typography System Plugin by Mark Daggett
+ * http://www.locusfoc.us
+ ***************************************************/
+
+body {
+  padding: 0;
+	font-size: 12px;
+  font-size: 80%;
+  line-height:1.6; /* 16px */
+  font-family: "Helvetica Neue", arial, helvetica, sans-serif;
+}
+ 
+html>body {
+   font-size: 12px;
+}
+
+p, ol, ul, dl, blockquote, label {
+  font-size: 1.2em;       /* 12px */
+  line-height:1.33333333333333;        /* 16px */
+  margin:0 0 0.2em 0;        /* 16px */
+}
+
+h6 {
+  font-size: 1.2em;               /* 12px */
+  line-height: 1.33333333333333;
+  margin: 0.2em 0 0 0;
+  font-weight: bolder;
+}
+
+h5, th {
+  font-size: 1.4em;              /* 14px */
+  line-height: 1.14285714285714;
+  margin: 0.2em 0 0 0;
+  font-weight: bold;
+}
+
+h4 {
+  font-size: 1.6em;               /* 16px */
+  line-height: 1.0;
+  margin: 1.0em 0 0 0;
+  padding: 0.2em 0.2em 0;       /* 16px */
+  font-weight: bold;    
+}
+
+h3, caption {
+  font-size: 1.8em;
+  line-height: 1.77777777777778;
+  margin: 0.2em 0 0 0;
+  padding: 0 0 0.2em 0;
+}                                 
+
+h2, .tabular_data caption {
+  font-size: 2.1em;
+  line-height: 1.52380952380952;
+  padding: 0.2em 0;
+}                                
+                                 
+h1 {                             
+  font-size: 2.4em;
+  line-height: 1.33333333333333;
+  margin: 0 0 0.2em 0;
+  padding:0;
+}                                
+                                 
+h1.title {                       
+  font-size: 3.6em;
+  line-height: 1.33333333333333;
+  margin: 0 0 0.2em 0;
+  padding: 0;
+}
+
+/***************************************************
+ * Forms
+ ***************************************************/
+input, textarea, select {
+  line-height: 1.14285714285714;
+  padding: 0.477611940298507em;
+  margin: 0 0 1.14285714285714em 0;
+  border: 0.1em solid #d6d3cb;
+  color: #000;
+  background: #fff;
+}
+
+/*
+  Checkboxes and inputs do not accept padding or border, therefore we need
+  to assign a style which will ensure maintain the same height as other inputs.
+*/
+.checkbox, .radio {
+  height: 3.35em;;
+}
+
+select { 
+  padding: 0.400010000250006em 0.400010000250006em;
+}
+option {
+  margin:0;
+}
+
+textarea {
+  height: 16.0em;
+}
+
+input:hover, textarea:hover {
+  border: 0.1em solid #999;
+}
+
+input:focus {
+  border: 0.1em solid #b7ac98;
+}
+
+textarea:focus {
+  border: 0.1em solid #d6d3cb;
+  background-color: #fff;
+}
+
+/***************************************************
+ * Lists
+ ***************************************************/ 
+ol li {
+  list-style: decimal;
+  list-style-position: inside;
+}
+ 
+dt {
+  margin-top: 1.33333333333333em;
+  font-weight: bolder;
+}
+
+ul.inline_list li, dl.inline_list dt, dl.inline_list dd {
+  list-style:none;
+  display:block;
+  float:left;
+}
+
+ul.inline_list li a, dl.inline_list dt a, dl.inline_list dd a, dl.inline_list dt {
+  display:block;
+  border: 0.1em solid #d6d3cb;
+  text-decoration:none;
+  padding: 0.25em 0.75em;
+  margin: 0 0.25em;
+}
+dl.inline_list dt {
+  border: 0.1em solid #fff;
+}
+
+ul.admin_navbar {
+  margin     : 10px 0 0 0;
+  padding    : 10px 3px;
+  background : #666;
+  color      : #666;
+  font-size  : 13px;
+}
+
+ul.admin_navbar li {
+  border-right : 1px solid white;
+}
+
+ul.admin_navbar li.last {
+  border : none;
+}
+
+ul.admin_navbar li a {
+  display  : inline;
+  border   : none;
+  padding  : 0.25em 0.14em;
+  font-weight: bold;
+  color    : white;
+}
+
+ul.admin_navbar li a:hover {
+  background: white;
+  color: #666;
+}
+
+/***************************************************
+ * Tables
+ ***************************************************/
+table {
+  margin:0;
+  line-height: 1.0;
+}
+
+th, td {
+  font-size: 0.8em; /* crikey what's with the 30pt font?! */
+  line-height: 1.33333333333333;
+  padding: 0.666666666666667em;
+  margin: 0;
+}
+
+/***************************************************
+ * Graphic Design
+ ***************************************************/
+span.amp { 
+ font-family: "Goudy Old Style", "Palatino", "Book Antiqua", serif; 
+ font-style: italic; 
+ line-height:0.80040020010005;
+}
+
+/***************************************************
+ * Layout Columns
+ ***************************************************/
+ #wrap {
+   width: 1024px;
+   margin: 0 auto;
+ }
+
+ .divider {
+   margin-bottom: 3.0em;
+ }
+.use1column, .use2columns, .use3columns, .use4columns, .use5columns, .use6columns, .use7columns, .use8columns, .use9columns, .use10columns, .use11columns, .use12columns, .use13columns, .use14columns, .use15columns, .use16columns {
+   overflow: hidden;
+   float: left;
+   margin-left: 8px;
+   margin-right: 8px;
+ }
+ .use1column { width: 48px; }
+ .use2columns { width: 112px; }
+ .use3columns { width: 176px; }
+ .use4columns { width: 240px; }
+ .use5columns { width: 304px; }
+ .use6columns { width: 368px; }
+ .use7columns { width: 432px; }
+ .use8columns { width: 496px; }
+ .use9columns { width: 560px; }
+ .use10columns { width: 624px; }
+ .use11columns { width: 688px; }
+ .use12columns { width: 752px; }
+ .use13columns { width: 816px; }
+ .use14columns { width: 880px; }
+ .use15columns { width: 944px; }
+ .use16columns { width: 1008px; }
+ 
+ /* use this class when nesting columns */
+ .inner_left { margin-left: 0; }
+ .inner_right { margin-right: 0; }
+ 
+ br { clear: both; }
+
+/***************************************************
+* Add your custom CSS below this line.
+***************************************************/
+.preview_source, .image_form {
+  border : 1px solid #333;
+  white-space : pre;
+  padding:1.0em;
+}
+
+.admin_nav {
+  margin-bottom:2.0em;
+}
+
+p.note, span.note {
+  width: 250px;
+  font-size:1.0em;
+  padding:0.25em;
+  text-align:center;
+  margin:1.0em 0.5em;
+  border:1px solid #efefef;
+  display:block;
+  background-color: #ffffcc;
+}
+span.note {
+  width:auto;
+  margin:auto;
+  background-color: #ffffee;
+  font-size:0.8em;
+  padding: 0.25em 1.0em;
+  display:inline;
+  line-height:2.0;
+  text-align:left;
+}
+
+/**
+* LARGE TEXT classes
+*/
+
+.tools_home,
+.tools_home a:link,
+.tools_home a:active,
+.tools_home a:hover,
+.tools_home a:visited {
+  font-size: 15px;
+  font-weight: bold;
+  vertical-align: 12%;
+  text-decoration: none;
+  color: #666;
+}
+
+/**
+* SMALL TEXT classes
+* many of these are used only in the strange 'ratings_member.tpl'
+*/
+.editorial_gray {
+  font-size: 10px;
+  color: #333333;
+}
+.note {
+  font-size: 0.9em;
+  color: #333333;
+  font-weight:normal;
+  padding-right: 10px;
+}
+small,
+.small_note,
+.explanation,
+.body_black_small {
+  font-size: 0.9em;
+  color: #666;
+	font-weight: normal;
+}
+.explanation {
+	font-size: 0.85em;
+}
+.caption {
+  font-size: 10px;
+  color: #333333;
+  font-weight:normal;
+}
+
+
+
+/***************************************************
+ *  Pagination Classes
+ ***************************************************/
+
+.pagination {
+}
+
+.pagination .ellipses, .pagination .gap {
+  display: block;
+  float: left;
+  padding: 0 0.5em 0 0.5em;
+}
+
+.pagination a, .pagination .current, .disabled {
+  display: block;
+  padding: 0 0.5em;
+  margin: 0 0.2em 0 0.2em;
+  float:left;
+  border: 1px solid #e5dfd1 !important;
+}
+.disabled {
+  border: 1px solid #efefef !important;
+}
+.pagination .current {
+  background-color: #efefef;
+}
+
+.pagination a:hover {
+  background-color:#ccc !important;
+  color: #fff !important; 
+}
+
+/*
+  Rails Specific Styles
+*/
+.flash_notice, .flash_error, .flash_warning {
+  border: 1px solid #ebdfb0;
+  background-color: #fff4c8;
+  color: #000;
+  font-size: 1.6em;
+  text-align: center;
+  margin-top: 1.3em;
+  padding: 0.5em;
+}
+
+.flash_error {
+  border: 1px solid #ebb0b0;
+  background-color: #ffc8c8;  
+}
+
+.flash_notice {
+  border: 1px solid #b0ebb0;
+  background-color: #c8ffcb;
+}
+
+.flash_notice a, .flash_error a, .flash_warning a {
+  color: #01a163;
+  border: none !important;
+}
+
+/**
+* FOOTER
+*/
+
+div.footer
+{
+  text-align: center;
+  clear: both;
+  font-size: 10px;
+  line-height: 1.5em;
+  color: #666;
+}
+
+#invite_form textarea {
+  width:610px;
+}
+#invite_form h3 {
+  border: 1px solid transparent;
+  border-bottom: 3px solid #000;
+  margin-bottom:1.0em;
+}
+/* 
+  Textile Explainations
+*/
+
+#textile_support {
+  width: 350px;
+  border: 1px solid #eaeaea;
+  background-color: #ffffcc;
+  margin: 0.5em 0;
+  padding:0.4em;
+}
+
+#textile_support_open td {
+  border: 1px solid #ffffcc;
+  border-top: 1px solid #333;
+  margin-top:0.5em;
+  padding-top:0.5em;
+}
+
+#textile_support h4 {
+  padding:0;
+  margin:0;
+}
+#textile_support_open .heading {
+  background-color: #eeeeaa;
+  text-align:center;
+  font-weight: bolder;
+}
+
+#textile_support_open .no_border {
+  border:none;
+}
+
+#textile_support_closed, #textile_support_open {
+  display: none;
+}
+
+#textile_support .open {
+  display: block;
+}
+
+
+/*
+  jquery Autocomplete
+*/
+#member_options {
+  border: 0.1em solid #E9C845;
+  background-color: #ffE674;
+  padding: 1.0em;
+  margin-bottom:0.7em;
+}
+#member_name {
+  margin:0;
+}
+
+.ac_input {
+}
+.ac_results {
+  padding: 0px;
+  border: 1px solid WindowFrame;
+  background-color: Window;
+  overflow: hidden;
+}
+
+.ac_results ul {
+  width: 100%;
+  list-style-position: outside;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ac_results iframe {
+  display:none;/*sorry for IE5*/
+  display/**/:block;/*sorry for IE5*/
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:-1;
+  filter:mask();
+  width:3000px;
+  height:3000px;
+}
+
+.ac_results li {
+  margin: 0px;
+  padding: 2px 5px;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  font: menu;
+  font-size: 12px;
+  overflow: hidden;
+}
+.ac_results strong {
+  background-color: #FEE900;
+  color:#000;
+}
+.ac_loading {
+  background : url('/images/ui/indicator.gif') right center no-repeat;
+}
+.ac_over {
+  background-color: Highlight;
+  color: HighlightText;
+}
+
+
+/**
+* etc
+*/
+
+hr {
+	border: none;
+	height: 1px;
+	background-color: #ccc;
+}
+
+/* --- SSS: Form edits --- */
+div.clear_both            { clear: both; }
+div.fieldset              { margin: 0; padding: 5px; background: #eee; border: 1px solid #999; margin-bottom: 10px;}
+div.form_field            { clear: both; }
+div.form_field label      { float: left; width: 175px; }
+div.form_field span       { font-size: 14px; font-weight: normal; width: 100%; }
+div.form_field input#image_uploaded_data  { float:left; width: 300px; }
+div.form_field textarea   { height:60px; width: 250px; }
+div.big_box    textarea   { width: 700px; height: 400px; }
+div.form_field div.hint   { clear:both; font-size: 11px; color: #666; margin: 10px 0 0 0;}
+div.form_field div.hint .incomplete  { color:red; font-size:11px; }
+div.buttons { clear:both; width: 100%; padding: 25px 30%;}
+div.buttons input { background: #cfc; margin: 0 10px; font-size: 14px; font-weight: bold;}

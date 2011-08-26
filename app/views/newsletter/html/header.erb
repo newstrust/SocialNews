@@ -1,0 +1,10 @@
+Hello [MEMBER.FIRST_NAME],<br>
+<br>
+<% featured_topic_url = @topic.class == Topic ? topic_url(@topic, @link_params) : subject_url(@topic, @link_params) %>
+This week's featured topic is the <%= link_to @topic.name, featured_topic_url, :title => @topic.name + " Topic Page" %>.
+The rejection by Congress of a $700 billion bailout on Monday is having a dramatic impact on stock markets at home and abroad.
+Help us find quality  journalism that explains the political causes and effects of this crisis, 
+and review our recommended stories on the <%= link_to @topic.name, featured_topic_url, :title => @topic.name + " Topic Page" %>.<br>
+<br>
+
+Be sure to check our selection of top rated news and opinions below - and visit <%= link_to app_name, home_url(@link_params) %> for live updates.

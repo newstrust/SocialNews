@@ -1,0 +1,67 @@
+<%- humanized_freq ||= Newsletter.humanized_freq(this_freq) -%>
+<%- header ||= "Manage your #{this_freq} email subscription below:" %>
+<%- description ||= "A #{this_freq} selection of news and opinions from our most trusted sources.<br> Includes Most Recent and Most Trusted stories." -%>
+<%- @title ||= humanized_freq -%>
+
+<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div>
+	<div class="wrapper">
+		<div class="interior_content" style="font-size:1.14em;line-height:1.25em;">
+      <h2><%=@title%></h2>
+      <p><%= header %></p>
+
+      <p>
+
+      <% form_for @member, :url => manage_subscription_path(:freq => this_freq), :html => {:class => "edit_subscription"} do |f| %>
+        <%- if this_freq == Newsletter::BULK -%>
+          <%= f.check_box("bulk_email", {}, true, false) %>
+          <%= f.label(:bulk_email, humanized_freq, :style => "display: inline; font-weight:bold") %><br>
+        <%- else -%>
+          <%= check_box_tag "member[newsletter][#{this_freq}]", true, @member.has_newsletter_subscription?(this_freq) %>
+          <%= label_tag("member[newsletter][#{this_freq}]", humanized_freq, :style => "display: inline; font-weight:bold") %><br>
+        <%- end -%>
+
+        <p>
+          <%= description %><br/>
+          <%= Newsletter.humanized_dispatch_time(this_freq) %>.
+        </p>
+
+        <p>To subscribe to our <%=humanized_freq%>, simply check the box above and click "Save".</p>
+        <p>To unsubscribe, uncheck the box and click "Save".</p>
+        <ul>
+        <%- if this_freq != Newsletter::MYNEWS -%>
+          <li><%=link_to "Manage your #{mynews_colors} Daily Email subscription here", manage_subscription_path(:freq => Newsletter::MYNEWS)%></li>
+        <%- end -%>
+        <%- (Newsletter::VALID_NEWSLETTER_TYPES + [Newsletter::BULK] -[Newsletter::MYNEWS, this_freq]).each do |freq| -%>
+          <li><%=link_to "Manage your #{Newsletter.humanized_freq(freq)} subscription here", manage_subscription_path(:freq => freq)%></li>
+        <%- end -%>
+        </ul>
+        <p>
+          <strong>Email Format</strong><br>
+          I prefer to receive email newsletters as:<br>
+          <%= f.radio_button("newsletter_format", "html")%>
+          <%= f.label(:newsletter_format_html, "HTML", :style => "display: inline;") %> &nbsp; &nbsp; &nbsp;
+          <%= f.radio_button("newsletter_format", "text")%>
+          <%= f.label(:newsletter_format_text, "Plain Text", :style => "display: inline;") %>
+        </p>
+        <p>
+        <div class="buttons" style="padding-top:0px;">
+          <%= submit_button "Save" %>
+        </div>
+      <% end -%>
+
+      <div style="clear:both">
+        <p>
+          More email newsletters will be available as our service develops. 
+          New email newsletters will be announced in our weekly newsletter and on our home page. 
+          Thanks for your interest in <%=app_name%>.
+        </p>
+      </div>
+
+      <p>
+        If have any questions about our email newsletters, please email us at
+      <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} Privacy Policy", :encode => "javascript" %>. 
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>

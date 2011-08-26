@@ -1,0 +1,21 @@
+production:
+  consumer_key: "key"
+  consumer_secret: "secret"
+  callback_url: "http://socialnews.com/twitter/activate"
+
+staging:
+  consumer_key: "key"
+  consumer_secret: "secret"
+  callback_url: "http://staging.socialnews.com/twitter/activate"
+
+# Cannot really test this code on a laptop!
+development:
+  consumer_key: "key"
+  consumer_secret: "secret"
+  callback_url: "http://staging.socialnews.com/twitter/activate"
+
+# Cannot really test this code on a laptop!
+test:
+  consumer_key: "key"
+  consumer_secret: "secret"
+  callback_url: "http://staging.socialnews.com/twitter/activate"

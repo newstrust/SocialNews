@@ -1,0 +1,10 @@
+<%- @title = "Story Types" -%>
+
+<%= content_tag(:h2, @title) unless params[:popup] %>
+
+<br/>
+<p>Here's the current list of <%=app_name%> story types, to be filled into the <b><%=app_slug%>_story_type</b> field.</p>
+
+<blockquote>
+<%= display_constants_list("story_story_type") %>
+</blockquote

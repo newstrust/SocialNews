@@ -1,0 +1,14 @@
+<% @data_array.keys.each do |c| %>
+<div style="float:left;width:500px;height:300px">
+  <h4> For <%=c%></h4>
+  <div style="font-size:14px">Avg rating value: <%=@avgs[c][1]%>; number of rating values: <%=@avgs[c][0]%></div>
+  <div id="distribution_<%=c%>" style="float:left;width:500px;height:250px"></div>
+</div>
+<% end -%>
+
+<script type="text/javascript" src="/js/jquery/jquery.flot.pack.js"> </script>
+<script type="text/javascript">
+<% @data_array.each do |k, h| %>
+  $.plot($("#distribution_<%=k%>"), [{data: <%=h.to_json%>, bars: {show: true, barWidth:0.5, fill: true } }], {xaxis: {min:0.5, max:5.5}})
+<% end -%>
+</script>

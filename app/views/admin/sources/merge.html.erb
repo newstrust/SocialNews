@@ -1,0 +1,9 @@
+<div style="font-size:14px; margin: 20px 0">
+<strong>Keep:</strong> <br/>
+<%= link_to @keep.name, admin_source_path(@keep) %> &nbsp; Status: <span style="font-weight:bold;color:#a00"> <%=@keep.status.humanize%> </span> <br/> <br/>
+
+<strong>Deleted:</strong> <br/>
+<% @hide.each do |h| -%>
+<strong>ID:</strong> <%=h.id%>; <strong>NAME:</strong> <%=h.name%> </span> <br/>
+<% end -%>
+</div>

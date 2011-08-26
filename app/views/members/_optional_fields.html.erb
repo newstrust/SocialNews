@@ -1,0 +1,32 @@
+<% optional_fields.each do |field| 
+  concat("<div>")
+  case field
+    when :home_page :
+      concat(f.label(:home_page, "My Web Page:"))
+      concat(f.text_field(:home_page)))
+
+    when :company :
+      concat(f.label(:company, "My Organization:"))
+      concat(f.text_field(:company))
+          
+    when :how_heard_about_us :
+      concat(f.label(:how_heard_about_us, "How did you hear about #{app_name}:"))
+      concat(f.text_field(:how_heard_about_us))
+   
+    when :news_experience :
+      concat(f.label(:news, "News:"))
+      concat(f.select(:news_experience, pull_down_menu("member_news_experience"), { :include_blank => "Select One:", }))
+      
+    when :internet_experience :
+      concat(f.label(:internet, "Internet:"))
+      concat(f.select(:internet_experience, pull_down_menu("member_internet_experience"), { :include_blank => "Select One:" }))
+      
+    when :politics :
+      concat(f.label(:politics, "Politics:"))
+      concat(f.select(:politics, pull_down_menu("member_politics"), { :include_blank => "Select One:" }))
+  end
+  concat("</div>")
+end if local_variables.include?('optional_fields') -%>
+<%-#REMOVED: when :referred_by :
+   #   concat(f.label(:referred_by, "Referred By:"))
+   #   concat(f.text_field(:referred_by))

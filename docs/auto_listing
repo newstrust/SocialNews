@@ -1,0 +1,41 @@
+Story Recommendation Metrics
+
+Right now, the basis for recommending stories are:
+
+(1) editors' popularity: (feed bias/desirability/rating -- how much editors want stories from the feeds the story belongs to)
+(2) feed popularity: how many feeds a story shows up in
+(3) api popularity: how many apis the story shows up in
+(4) digg popularity
+(5) twitter popularity
+
+I have weights assigned for these factors and combine them into a score and use that for queuing a story.  There are a few other filtering considerations, but can be ignored for the purposes of this discussion.
+
+Of the 5 popularity metrics, the first two can be controlled by NT, and the last 3 are outside of NT's control which seems like a good balance.
+
+Quantity vs Quality
+
+There are basically two conflicting requirements here:  quality and quantity.  If you want quality, the weights for the various popularity metrics have to be pulled down.  If you want quantity, the weights have to be pulled up.
+
+False Positives (stories queued but not listing-worthy)
+
+Right now, the problem is that (3) - (5) are not entirely reliable indicators of what make a story listing-worthy.   For now, I have gone with the assumption that if a story shows up in many apis (this is a little bit of a stretch since there are only 4 apis used right now, but let's gloss over that for a bit), or it is dugg or tweeted a lot, it at least merits consideration by editors.  This can introduce false positives, and I do some weeding of twitter urls, but for now, nothing more to fix beyond that.
+
+False Negatives (stories not queued but listing-worthy)
+
+The problem here is more with false negatives, i.e. a story that doesn't show up in apis or diggs or tweets doesn't necessarily meant that it shouldn't be considered.  The way to fix that is by controlling popularity metrics (1) and (2):  rely on aggregator feeds (human or machine) and tweak ratings of individual feeds. 
+
+I am going to focus attention on this problem next. 
+
+Increasing feed ratings
+
+Increasing rating of individual feeds is one way to increase quantity, but that can introduce problems of overwhelming editors with too much noise.  If we want to go down this route, we should then build UI/admin features that makes it easy to sift through the stories.   Looking at 50 stories at a time in the mass edit interface is not necessarily a pleasant thing.  But, if this is working for you editors, that is great.
+
+This is something to discuss in the call (do we want to just go with volume, and then build management features?).  Or maybe, these features would be useful anyway .. independent of how we increase volume.
+
+Here are some possibilities.  In addition to the undifferentiated list of queued stories, here are other possibilties:
+
+* Create story lists based on what caused the story to be queued (a) digg/twitter (b) apis (c) feed rating (d) feed popularity.
+* Create story lists based on topic/subject tags for queued stories
+* Create story lists based on feed (all, or only queued).
+
+So, there will be a page that provides these summaries and view/edit links for all these listings.  So, you can find all these links in one place and you can choose how you want to view/edit stories.

@@ -1,0 +1,23 @@
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'follows' %>
+<%- end -%>
+<%# cache @cached_fragment_name do -%>
+<% @title = "Featured Topics" -%>
+
+<div style="background-color:#fff">
+<p style="margin-top:8px;margin-bottom:10px">
+  Here are our featured topics, selected by our editors because of their popularity and relevance. To follow a topic, click on its <span class="follow_button"><img src="/images/ui/spacer.gif" width="15"></span> button. To unfollow it, click the <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button. <%= link_to("See All Topics &raquo;", "/topics/all", :class => "popup_link") %>
+</p>
+<%- topics_shown = [] -%>
+<% @subjects.each do |subject| -%>
+  <div style="width: 235px; padding: 0 0 15px 15px;">
+    <div class="category_sub_head subhead" style="margin:0"><%= subject.name %></div>
+    <%= render :partial => 'subjects/featured_topics_list', :locals => {:subject => subject, :topics_shown => topics_shown } %>
+  </div>
+<% end -%>
+  <div style="width: 235px; padding: 0 0 15px 15px;">
+    <div class="category_sub_head subhead" style="margin:0">More Topics</div>
+    <%= render :partial => 'subjects/featured_topics_list', :locals => {:topiclist => @other_subjects, :topics_shown => [] } %>
+  </div>
+</div>
+<%# end -%>

@@ -1,0 +1,25 @@
+<div class="panel">
+  <%= link_to_function "", "show_popdown_form()", :class => "close_panel", :title => "Minimize this panel" if !params[:popup] %>
+	<h3 class="thanks">Thanks for your edits!</h3>
+  <p class="notice hide"></p>
+	
+  <div class="review_todo">
+  <h3 class="from_here">From here you can:</h3>
+		<p>
+		  <a href="#" class="review" onclick="show_popdown_form('review'); return false"></a>
+		</p>
+		<p class="published" style="clear:both">
+		  <%= link_to "", @story, :class => "outbound" %>
+		</p>
+		<p class="published">
+		  <%= link_to "", "/", :class => "outbound_nt outbound" %>
+		</p>
+  </div>
+
+  <div class="share_tools">
+		<h3>Share this story:</h3>
+		<%= share_icons_page(@story, :class => "share_page_tools text", :page_type => "story", :fb_like_layout => "button_count", :fb_like_width => "80", :fb_like_height => "21", :fb_share_type => "icon_link", :twitter_link_text => "Tweet", :email_link_text => "Email", :addthis_link_text => "More", :toolbar => true) %>
+	</div>
+	<%= close_this_panel() %>
+  <div class="clearfix"></div>
+</div>

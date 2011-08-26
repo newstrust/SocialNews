@@ -1,0 +1,15 @@
+<%- opts = { :with_photo => true, :logged_in => logged_in?, :home_page_name_list => false, :local_site => @local_site } -%>
+
+<div class="member_photos">
+<%- Member.find_recent_reviewers(24, opts).each do |member| # NOTE: for formatting to work, do not add any indentation on the next line of code -%>
+<%= link_to image_tag(member.image.public_filename(:thumb), :size => "40x40", :alt => member.name, :title => member.name), member -%>
+<%- end -%>
+</div>
+
+<%- opts[:with_photo] = false %>
+<div style="margin-bottom:8px"><br>
+  <div style="font-size: 9px; color: #999;"><strong>MORE RECENT REVIEWERS:</strong></div>
+  <%= Member.find_recent_reviewers(12, opts).collect { |member| link_to_member(member) }.join(" | ") %>
+</div>
+
+<%= link_to "See all recent reviewers &raquo;", "/members/" %>

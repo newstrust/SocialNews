@@ -1,0 +1,68 @@
+-------------------------------------------------------------------------------------
+GENERAL
+-------------------------------------------------------------------------------------
+BUGS
+----
+* Whenever topic relationships are modified, all story taggings would
+  have to be updated automatically as well.
+
+* Sigh! why aren't member ratings initialized to zero?
+  Make sure default initial value for member ratings is zero.
+
+* In app/views/mailer/send_to_friend/story.erb, we have a bug for
+  source pages on local sites!  This will use national site rating.
+
+* when taxonomies are updated, they only update on the master rather
+  than update on all servers (till the next day when the update task
+  runs on both servers).
+
+* the story page that displays reviews and ratings should only show count
+  of public reviews.
+
+TODO: testing
+-------------
+. auto subject tagging
+. bad homepage topic params (should fail)
+. srcs with high editorial priority should let stories through to listing, even if the src is 'untrusted'
+  - on regular listings
+  - as well as on source page listings for that source
+. topics sidebar on feed pages should be rendered
+. tests with expectations for local sites
+. when tweet box is checked, review submit should not break
+. when tweet box is checked, tweet it should work
+. tests for posting limits on members
+. verify that the client ip is correctly passed through (after we migrated over to rails 2.3)
+. feed fetcher tests
+. newsletter controller tests
+
+-------------------------------------------------------------------------------------
+RATINGS MODULE
+-------------------------------------------------------------------------------------
+BUGS
+----
+* individual component rating for stories is buggy.  It uses standard average of
+  all ratings from reviews, rather than weighted average across members.  The overall
+  story rating is correct and is a member-level weighted average.
+
+* 'overall rating' for sources includes story ratings from all stories, not just
+  site specific stories.
+
+* group ratings for stories doesn't use group ratings for sources which are yet
+  to be properly set up.
+
+TODO
+----
+* confidence rating for a story is not necessarily the right metric -- it needs to
+  be rethought and recomputed.  This in turn will affect ratings for sources, etc.
+
+* Strictly speaking, whenever you change your source review rating (either within
+  a review, or on the source page or the rate your sources page), we would have
+  to update ratings for all your reviews for that source (and then all their
+  associated stories).  We have never been doing this so far, but presumably
+  these kinds of changes are not very common.  This is not such a big deal since
+  source review ratings only contributes 5% to the overall review rating (so,
+  even a 4-point change in source review rating will lead to a 0.2 rating change
+  for the review, and for a rated story, a max 0.07 rating change).
+
+* rating recomputation for sources is excessive.  In general, is it possible to make
+  recomputation of ratings (stories, sources) somewhat incremental?

@@ -1,0 +1,63 @@
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function(){
+
+    assignFlags(NT.comment_options.flag_url, '.forReviewComments');
+
+    // Hide the "show/hide local comment trigger for any review with no comments"
+    $(".reviews .toggleCommentsContainer[comments_count=0]").hide();
+
+    $('.toggleAllComments').bind('click.forReviewComments', function(event){
+      event.preventDefault();
+      var tgt = $(event.target);
+      if (/Show/i.test(tgt.text())) {
+          method = 'show';
+          tgt.text(tgt.text().replace(/Show/i, 'Hide'));
+      } else {
+          method = 'hide';
+          tgt.text(tgt.text().replace(/Hide/i, 'Show'));
+      }
+      $('.toggleReviewComments').each(function(index,element){
+        if(method === 'show'){
+          $(element).text($(element).text().replace(/Show/i, 'Hide'));
+        }
+        if(method === 'hide') {
+          $(element).text($(element).text().replace(/Hide/i, 'Show'));
+        }
+        toggleReviewCommentFooter($(element).attr('review'));
+      });
+      $('.reviewComments .comment')[method]();
+    });
+
+    $('.addReviewComment').bind('click.forReviewComments', addReviewComment);
+
+    $('.submitReviewComment').bind('click.forReviewComments', function(event){
+      submitReviewCommentForm(event, $(event.target).attr('review'));
+    });
+
+    $('.cancelReviewComment').bind('click.forReviewComments', function(event){
+      cancelReviewCommentForm(event, $(event.target).attr('review'));
+    });
+
+    $(".comment_edit").bind('click.forComments', function(event) { edit_comment_handler(event, $(this)) });
+
+    $('*').unbind('click.toggleReviewComments');
+    $('.toggleReviewComments').bind('click.toggleReviewComments', toggleReviewComments);
+
+    // SSS: Always show the last comment of every review
+    // 1. In the non-permalink case, this is exactly what we want
+    // 2. In the permalink case, this is a hack for a bug for the 1-comment only scenario
+    //    When there is more than 1 comment, since we are anyway displaying all comments, showing the first one initially won't hurt.
+    //    When there is just 1 comment, the display of this first comment means the permalink will correctly show.  The permalink code
+    //    is buggy and doesn't properly reveal the comments block when there is just one.  See comment in public/js/comments.js about
+    //    getPermalink being called twice!
+    $(".reviews .last_comment").show();
+
+    // If the url is requesting a specific comment via a permalink, show / highlight it
+    var index = document.location.href.indexOf("#p");
+    if (index >= 0) {
+      var comment_id = document.location.href.substring(index).indexOf("-");
+      comment_id = document.location.href.substring(index).substring(comment_id).split('-')[1];
+      getPermalink(comment_id);
+    }
+  });
+</script>

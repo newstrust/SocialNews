@@ -1,0 +1,12 @@
+<%-# Login button -%>
+<%- if !logged_in? -%>
+  <%= link_to_function "Login", "show_popdown_form('log_in')", :id => "nav_login", :title => "Login to #{app_name}", :class=> 'toolbar_login' %>
+<%- else -%>
+  <%- ret_url = CGI.escape(request.url) -%>
+  <%- if fb_connected_and_linked -%>
+    <%#-- Facebook cannot issue a "DELETE" http request after logging you out of facebook.  Hence a "regular" GET url for deleting the session --%>
+    <%= link_to "Logout", fb_logout_url + "?return_to=#{ret_url}", :title => "Log Out from #{app_name} and Facebook", :class=> 'toolbar_login' %>
+  <%- else -%>
+    <%= link_to "Logout", sessions_path + "?return_to=#{ret_url}", :method => :delete, :title => "Log Out from #{app_name}", :class=> 'toolbar_login' %>
+  <%- end -%>
+<%- end -%>

@@ -1,0 +1,19 @@
+Hi <%= first_name(@reviewer) %>,
+
+<%=app_name%> member <%= @rater.display_name %> rated your review:
+
+"<%= @story.title %>"
+<%= strip_tags link_to_sources(@story.sources) -%>
+<%= " - by #{@story.journalist_names}" unless @story.journalist_names.blank? %>
+<%= "#{@story.story_date.strftime('%b. %e, %Y')}" unless @story.story_date.blank? -%>
+<%= " (#{humanize_token(@story, :story_type)})" if @story.story_type %>
+
+<%= first_name(@rater) %> gave your review a <%= @rating.to_i %> out of 5
+
+Visit your review at:
+<%= review_url(@story, @review, :only_path => false) %>
+
+Visit <%= first_name(@rater) %>'s profile here:
+<%= member_url(@rater.to_param) %>
+
+<%= render :partial => 'footer' %>

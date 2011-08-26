@@ -1,0 +1,141 @@
+State is a 3-tuple [M, S, U] where:
+
+- M is visitor status: g (guest) or m (member)
+- S is story status: p (pending) or l (listed)
+- U is current page visitor is on: N (NT site), r (toolbar review), e (toolbar edit), s (toolbar signup), l (toolbar login), t (toolbar thanks)
+
+NOTES:
+
+. For a state where some entry is a _, this implies that we don't care what the value is, and don't need to know.
+. For a state where some entry is a X, this implies that we care what the value is, and we preserve that entry into the next state.
+  This is just a shortcut to combine identical actions / transitions.
+  So, if a story was in pending status, it will remain in pending status.
+. For a state that is preceded by a *, that implies that the toolbar is reloaded with that state.
+. I haven't distinguished between facebook connect and regular nt signups.
+. Server Actions aren't exhaustive (I might do more things in the backend, but the more prominent actions are highlighted).
+. I haven't bothered to add states and transitions for the share tab, and like action since they are fairly independent of everything else.  But, I can add a couple rows for the share tab just like I've added a catchall row when you click on a site link.
+
++--------------+----------------------+--------------+----------------------------------+--------------------------------------+
+|   State      | Visitor Action       | Next State   |            Messaging             |          Server Actions              |
++--------------+----------------------+--------------+----------------------------------+--------------------------------------+
+| [g, _, N]    | Post *new* url       | [g, _, r]    | Sign up / login .... blah ....   | 1. Add story to db in pending state  |
+|              |                      |              |                                  | 2. Attribute story to guest reviewer |
+| [g, _, N]    | Post url of existing | [g, _, r]    | Sign up / login .... blah ....   |          ---                         |
+|              | story (list/queue/   |              |                                  |                                      |
+|              | pending status)      |              |                                  |                                      |
+| [g, _, N]    | Review story         | [g, _, r]    | Sign up / login .... blah ....   |          ---                         |
+| [g, _, r]    | Click on login link  | [g, _, l(r)] |          ---                     |          ---                         |
+| [g, _, r]    | Click on signup link | [g, _, s(r)] |          ---                     |          ---                         |
+| [g, _, r]    | Click on Edit tab    | [g, _, e]    | Sign up / login to edit info     |          ---                         |
+|              |                      |              | -- EDIT FORM NOT SHOWN --        |                                      |
+| [g, _, r]    | Save review          | [g, _, t]    | Thanks for your review.          | 1. Save guest review                 |
+|              |                      |              | Sign up / login to retain review |                                      |
+| [g, _, e]    | Click on login       | [g, _, l(e)] |          ---                     |          ---                         |
+| [g, _, e]    | Click on signup      | [g, _, s(e)] |          ---                     |          ---                         |
+| [g, _, e]    | Click on review tab  | [g, _, r]    | Sign up / login .... blah ....   |          ---                         |
+| [g, _, t]    | Click on login       | [g, _, l(t)] |          ---                     |          ---                         |
+| [g, _, t]    | Click on signup      | [g, _, s(t)] |          ---                     |          ---                         |
+| [g, _, l(r)] | Login                | *[m, X, r]   |          ---                     | 1. Login member                      |
+|              |                      |              |                                  | 2. Force toolbar reload              |
+| [g, _, s(r)] | Signup               | *[m, X, r]   |          ---                     | 1. Signup member                     |
+|              |                      |              |                                  | 2. Force toolbar reload              |
+| [g, _, l(e)] | Login                | *[m, X, e]   |          ---                     | 1. Login member                      |
+|              |                      |              |                                  | 2. Force toolbar reload              |
+| [g, _, s(e)] | Signup               | *[m, X, e]   |          ---                     | 1. Signup member                     |
+|              |                      |              |                                  | 2. Force toolbar reload              |
+| [g, _, l(t)] | Login                | *[m, _, ?]   |          ---                     | 1. Login member                      |
+|              |                      |              |                                  | 2. Force toolbar reload              |
+|              |                      |              |                                  | 3. Process guest reviews / submits   |
+| [g, _, s(t)] | Signup               | *[m, _, ?]   |          ---                     | 1. Signup member                     |
+|              |                      |              |                                  | 2. Force toolbar reload              |
+|              |                      |              |                                  | 3. Process guest reviews / submits   |
+| [m, _, N]    | Post *new* url       | [m, p, e]    | You are the first one to review  | 1. Add story to db in pending state  |
+|              |                      |              | this story.  yada yada yada      |                                      |
+| [m, _, N]    | Post url of existing | [m, p/l, e]  | You are the first one to review  |          ---                         |
+|              | story which hasn't   |              | this story.  yada yada yada      |                                      |
+|              | been reviewed/edited |              |                                  |                                      |
+| [m, _, N]    | Post url of existing | [m, l, r]    |          ---                     |          ---                         |
+|              | story which has been |              |                                  |                                      |
+|              | been reviewed/edited |              |                                  |                                      |
+| [m, p, e]    | Save story info      | *[m, l, t]   | Thanks for your edits.           | 1. Update story info                 |
+|              |                      |              |                                  | 2. List story                        |
+|              |                      |              |                                  | 3. Force toolbar reload              |
+| [m, l, e]    | Save story info      | *[m, l, t]   | Thanks for your edits.           | 1. Update story info                 |
+|              |                      |              |                                  | 2. Force toolbar reload              |
+| [m, X, r]    | Save review          | [m, X, t]    | Thanks for your review.          | 1. Save review                       |
+|              |                      |              |                                  | 2. Pending stories remain pending    |
+| [m, X, t]    | Edit                 | [m, X, e]    |          ---                     |          ---                         |
+| [m, X, t]    | Review               | [m, X, r]    |          ---                     |          ---                         |
+| [X, _, _]    | Any NT link          | [X, _, N]    |          ---                     |          ---                         |
+|              |                      |              | -- TOOLBAR CLOSES --             |                                      |
++--------------+----------------------+--------------+----------------------------------+--------------------------------------+
+
+Solution:
+---------
+1. Specify FSM in a DSL.
+2. Process FSM DSL to generate a ruby and js data structures.
+3. JS & Ruby code use the data structure to figure out what to do.
+4. Visitor action is encoded into <a href=""> links (for JS, when all action is in the front end), 
+   and by controllers (when there is a request to the server)
+
+For now, 1. and 2. are done manually (since hopefully this will be a 1-time thing)
+
+Distinct states of the FSM
+-------------------------------------------
+State             Integer ID   Symbolic ID
+-------------------------------------------
+[g, _, N]             1          g__N
+[g, _, r]             2          g__r
+[g, _, e]             3          g__e
+[g, _, t]             4          g__t
+[g, _, l(r)]          5          g__lr
+[g, _, s(r)]          6          g__sr
+[g, _, l(e)]          7          g__le
+[g, _, s(e)]          8          g__se
+[g, _, l(t)]          9          g__lt
+[g, _, s(t)]         10          g__st
+[m, _, N]            11          m__N
+[m, p, e]            12          m_p_e
+[m, l, e]            13          m_l_e
+[m, X, r]            14          m_X_r
+[m, X, t]            15          m_X_t
+[X, _, _]            16          X____
+-------------------------------------------
+
+Distinct visitor actions
+------------------------------------------------------------
+Action                         Integer ID   Symbolic ID
+------------------------------------------------------------
+Post new url                       1        post_new
+Post url of unvetted story         2        post_unvetted
+Post url of vetted story           3        post_vetted
+Click on review link               4        review_click
+Click on login link                5        login_click
+Click on signup link               6        signup_click
+Click on edit tab                  7        edit_tab
+Click on review tab                8        review_tab
+Save review                        9        save_review
+Save edits                        10        save_edit
+Login                             11        login
+Signup                            12        signup
+
+Transition Matrix
+-----------------
+{ "g__N"  => { "post_new"      => [ "g__r",  "Signup / login before/after reviewing" ]
+               "post_vetted"   => [ "g__r",  "Signup / login before/after reviewing" ]
+               "post_unvetted" => [ "g__r",  "Signup / login before/after reviewing" ]
+               "review_click"  => [ "g__r",  "Signup / login before/after reviewing" ] },
+  "g__r"  => { "click_login"   => [ "g__lr", ""],
+               "click_signup"  => [ "g__sr", ""],
+               "click_edit"    => [ "g__e",  "Signup / login to edit story info"],
+               "click_review"  => [ "g__r",  "Signup / login before/after reviewing" ],
+               "save_review"   => [ "g__t",  "Thanks for your review.  Signup / login to retain review" ] }, 
+  "g__e"  => { "click_login"   => [ "g__le", ""],
+               "click_signup"  => [ "g__se", ""],
+               "click_edit"    => [ "g__e",  "Signup / login to edit story info"],
+               "click_review"  => [ "g__r",  "Signup / login before/after reviewing" ] },
+  "g__lr" => { "click_review"  => [ "g__r",  "Signup / login before/after reviewing" ],
+               "click_edit"    => [ "g__e",  "Signup / login to edit story info"],
+               "login"         => [ "m_X_r", ""],
+               "signup"        => [ "m_X_r", ""] },
+...

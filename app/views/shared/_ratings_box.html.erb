@@ -1,0 +1,42 @@
+<div class="component_ratings clearfix" id="<%= id %>">
+  <% show_more_button = false %>
+  <% rating_column_count = 0 %>
+  <% ["quality", "popularity"].each do |criterion_type| %>
+  	<% head_rating = processable.processed_rating(criterion_type) %>
+  	<% unless head_rating.nil? %>
+  		<div class="<%= criterion_type %>_column">
+  			<%= ratings_box_line :rating_name => criterion_type.titlecase,
+  				:rating_value => head_rating,
+  				:heading_class => "subHeadRating",
+  				:trustometer_img_options => trustometer_img_options %>
+        <%#-- SSS: If you think "position:relative;" is not needed, stop, wait, halt!
+              Don't hurt IE6's feelings.  If you remove it, IE6 will be so hurt that
+              it will display all the trustometers that you want hidden.  Make peace, not war! --%>
+  			<div class="itemized_holster" style="overflow:hidden;position:relative;">
+  			  <div class="itemized">
+  			    <% Rating.each_criterion_by_type(criterion_type) do |criterion_key, criterion, form_level| %>
+      				<% rating = use_processed_ratings ?
+      					processable.processed_rating(criterion_key) :
+      					(processable.component_rating(criterion_key) || processable.processed_rating(criterion_key)) %>
+      				<% unless rating.nil? %>
+      					<%= ratings_box_line :rating_name => criterion["name"],
+      						:rating_value => rating,
+      						:trustometer_img_options => trustometer_img_options.merge(:size => :small) %>
+      					<% rating_column_count += 1 %>
+      				<% end %>
+      			<% end %>
+      			<% show_more_button ||= (rating_column_count > 3) %>
+  			  </div>
+  			</div>
+  		</div>
+  	<% end %>
+  <% end %>
+</div>
+<% if show_more_button %>
+  <span class="right_column_more clearfix">
+    <%= link_to_function "More", "slide_ratings_box($(this), $('\##{id} .itemized_holster'))" %>
+  </span>
+  <script type="text/javascript" charset="utf-8">
+    $('#<%= id %> .itemized_holster').show().height(RATINGS_BOX_MINIMIZED_HEIGHT);
+  </script>
+<% end %>

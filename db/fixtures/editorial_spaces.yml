@@ -1,0 +1,5 @@
+about_us:
+  id: 1
+  name: About Us
+  context: right_column
+  position: 1

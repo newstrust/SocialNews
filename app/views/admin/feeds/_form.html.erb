@@ -1,0 +1,34 @@
+<style>
+textarea { height: auto; width: auto; }
+</style>
+<div> <strong><%= f.check_box("auto_fetch", {}, true, false) %> Auto-Fetch </strong></div>
+<div><label for="url"><b>Feed URL:</b> (One of feed url or home page is required)</label></div> <%= f.text_area :url, :cols => 80, :rows => 2 %>
+<div><label for="home_page"><b>Home Page:</b> (One of feed url or home page is required)</label></div>
+<div class="note">Home Page that should be listed in the public feed page for this feed.  For example, on Twitter feed pages, this link might direct visitors to the original Twitter feed.</div>
+<%= f.text_field :home_page, :size => 50 %>
+<div><label for="name"><b>Name:</b> (not required)</label></div><%= f.text_field :name, :size => 50 %>
+<div><label for="subtitle"><b>Subtitle:</b> (not required)</label></div><%= f.text_field :subtitle, :size => 50 %>
+<div><label for="description"><b>Description:</b> (not required)</label></div>
+<%= f.hidden_field :imported_desc, :value => @feed.imported_desc %>
+(<strong>Imported Description: </strong><%=@feed.imported_desc.blank? ? "-- NONE --" : @feed.imported_desc%>)<br/>
+<%= f.text_area :description, :size => '80x2' %>
+<div><label for="feed_type"><b>Feed Type:</b> (not required)</label></div><%= f.text_field :feed_type, :size => 50 %>
+<div><label for="feed_group"><b>Feed Group:</b> (not required)</label></div><%= f.text_field :feed_group, :size => 50 %>
+<div><label for="member_profile_id"><b>Member Profile:</b> (not required)</label></div>
+<div class="note"> Enter the member's id OR the member's name (this has to match the member name in the database) </div>
+<%= f.text_field :member_profile_id, :size => 50 %>
+<div><label for="source_profile_id"><b>Source Profile:</b> (not required)</label></div>
+<div class="note"> Enter the source id OR the source name (this has to match the source name in the database) </div>
+<%= f.text_field :source_profile_id, :size => 50 %>
+<div><label for="default_topics"><b>Default Topics:</b> (Enter one or more topic slugs separated by a comma -- not required)</label></div><%= f.text_area :default_topics, :rows => 2, :cols => 80 %>
+<div><label for="default_stype"><b>Default Story Type:</b> (news or opinion -- not required)</label></div><%= f.text_field :default_stype, :size => 10 %>
+<div><label for="feed_level"><b>Feed Level:</b> (not required)</label></div>
+<div class="note">
+NOTE: Enter a value between -100 and 100 -- a value outside this range will be truncated to fit this range. <br/>
+This number is effectively the autolisting bias for this feed. <br/>
+- A value of 100 means the stories from this feed will ALWAYS be auto-listed.  In practice, the bar for autolisting is much lower.  With the current autolisting formula, if you assign a score over 40, a high percentage of stories from this feed will get auto-listed!  So, be judicious in assigning high weights. <br/> 
+- A value of 0 means other factors will influence whether stories from this feed will be auto-listed. <br/>
+- A negative value implies low trust value in this feed and requires other factors to have higher weights than normal. <br/>
+</div>
+<%= f.text_field :feed_level, :size => 10 %>
+<div><label for="edit_notes"><b>Editorial Notes:</b> (not required)</label></div><%= f.text_area :edit_notes, :size => '80x2' %>

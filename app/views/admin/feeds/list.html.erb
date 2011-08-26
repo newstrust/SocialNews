@@ -1,0 +1,12 @@
+<% @title = "Pending stories for #{@feed.name} from the last 24 hours" %>
+
+<% @stories.each do |s| %>
+<div style="margin:10px 5px">
+<%=link_to s.title, story_url(s) %>
+<%="- #{link_to(s.primary_source.name, s.primary_source)}" if s.primary_source %>
+<%="- #{s.story_date}" if s.story_date %>
+<%="- #{s.journalist_names}" if !s.journalist_names.blank? %>
+(<%= s.story_type %>)<br/>
+<%= StringHelpers.truncate_on_word_boundary(s.excerpt, 0, 180) if s.excerpt %>
+</div>
+<% end %>

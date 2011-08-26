@@ -1,0 +1,45 @@
+<div class="span-18">
+	<div class="main_column_box_new">
+	  <h2 class="medium_name"><%= h @medium_name %> Sources</h2>
+    <p>
+    <%- if @local_site -%>
+    Here are all the <%=@local_site.name%> sources in this category, listed alphabetically. 
+    To see all <%=@local_site.name%> sources, visit the <%= link_to "Sources", sources_path %> page.
+    <%=link_to "Rate these sources all on the same page", rate_by_medium_sources_path(:medium => params[:medium])%>
+    <%- else -%>
+    Here are all the sources which were reviewed in this category this year, listed alphabetically by category, and updated 24/7. 
+    To see the top rated publications in this category, check our <%= link_to "Trusted Sources", sources_path %> page.
+    <%- end -%>
+    </p>
+	
+		<table class="listing" cellspacing="0">
+			<tr class="head_row">
+				<th>Name</th>
+<%#--
+  # SSS: No longer displaying this since we dont have stats for this on local sites
+				<th align="center">Stories</th>
+--%>
+				<th align="center">Story Reviews</th>
+				<th align="center">Rating</th>
+			</tr>
+			<%- @sources.each_with_index do |source, si| -%>
+        <%- rating_stats = @local_site ? source.source_stats.find_by_local_site_id(@local_site.id) : source -%>
+				<tr <% if !(si%2).zero? %> class="odd" <% end %>>
+					<td><%= link_to source.name, source %></td>
+<%#--
+  # SSS: No longer displaying this since we dont have stats for this on local sites
+					<td align="center"><= number_format(rating_stats.public_stories_count(365)) ></td>
+--%>
+					<td align="center"><%= number_format(rating_stats.story_reviews_count) %></td>
+					<td>
+						<%- if source.hide_rating(@local_site) -%>
+							<span class="editorial_gray">(no rating)</span>
+						<%- else -%>
+							<%= link_to(trustometer_img(source.rating), source_path(source)) %>
+						<%- end -%>
+					</td>
+				</tr>
+			<%- end -%>
+		</table>
+	</div>
+</div>

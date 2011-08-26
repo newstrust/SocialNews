@@ -1,0 +1,387 @@
+This file lists out the steps involved in setting up this app and deploying it.
+It also lists out guides to other documents that you can refer to for details about
+specific aspects of this app.
+
+This app has been developed to run on Ruby on Rails, v 2.3.11.
+
+Development History
+-------------------
+The original code was developed on Rails 1 and migrated to Rails 2.1 which is the
+version that is currently live on http://newstrust.net.  The open source version is
+based on a version that has been migrated to run on Rails 2.3.11.  The migration
+to Rails 2.3 does not take advantage of all the enhanced capabilities of Rails 2.3
+(ex: nested models).
+
+###################################
+A. Setting up and deploying the app
+###################################
+
+Steps 0 and 1 have to be completed before you can even run the app in development
+mode.  In step 0, you will be installing all the gems you need.  As part of step 1,
+you will be setting up your database.
+
+You can ignore steps 2 and 3 if you wanted to, but as part of this step, you will
+be initializing the main site subjects, initial topics, creating member roles,
+members, and any other seed data that you might find useful to start.
+
+0. Gems
+-------
+* The app depends on the following gems which have to be installed.
+      aws-s3 0.6.2     <--- if you use aws for image storage
+      right_aws 2.1.0  <--- if you use aws for image storage
+      bj 1.0.1
+      crack 0.1.8
+      feed-normalizer 1.5.2
+      hashie 0.1.8
+      highline 1.4.0
+      hoe 2.3.3
+      hpricot 0.8.4
+      httparty 0.5.2
+      image_science 1.2.1
+      json 1.2.0
+      libxml-ruby 2.0.6
+      newrelic_rpm 2.14.1 <--- if you enable newrelic performance monitoring
+      nokogiri 1.4.4
+      rails 2.3.11
+      rake 0.9.0
+      RedCloth 4.2.2
+      rspec 1.2.9
+      ruby-debug 0.10.4
+      RubyInline 3.9.0
+      SystemTimer 1.2.3
+      twitter 0.9.12
+      twitter_oauth 0.4.3
+      unicode 0.4.0
+      will_paginate 2.3.15
+      xml-simple 1.0.15
+      ZenTest 4.3.0
+
+1. Initializing the db
+----------------------
+* Copy config/sample.database.yml to config/database.yml and update it
+  - Make sure you have encoding: utf8 set in database.yml for all your dbs.
+
+* rake db:migrate bombs on observers.  So, to initialize your db, do the following:
+  - Comment line 76 (config.active_record.observers = ..) in config/environment.rb
+  - run rake db:create
+  - run rake db:migrate
+  - Uncomment line 76 above
+
+2. Initializing the taxonomy
+----------------------------
+* Subjects are currently hard-coded in the following 2 places:
+  - config/social_news_constants/topic_constants.yml
+  - the navbar (app/views/layouts/navbar_links.html.erb)
+
+* The navbar subject links depend on the subjects being defined in 
+  config/social_news_constants/topic_constants.yml 
+
+* To create/update subjects, you have to do the following 3 things:
+  - update config/social_new_constants/topic_constants.yml
+  - update navbar links (app/views/layouts/navbar_links.html.erb)
+  - create database rows for subjects defined in the above file 
+    This step can be automatically done as part of the initializing the db step below.
+
+3. Seed data
+------------
+* Edit db/seeds.rb and update it to add any initial data (members, roles, sources, subjects, topics, etc.)
+  - The seed data includes an administrator and editor account.  The editor account is visible to
+    everyone and we encourage you to change the name of this account to a real person.
+
+* Run rake db:seed
+
+* With the code repository, we are also providing an initial set of sources and topics for
+  seeding your database.  This also includes images and favicons (in the case of sources).
+  You can edit these files as necessary.  But, you have to ensure that the changes are
+  consistent.  The seeding script ignores inconsistent data, but that means some
+  of the seeded sources/topics might have incomplete data.
+
+  Examples:
+  - If you modify the name of a topic in db/seed_data/topics/basic.csv, make sure
+    you update the topic name in db/seed_data/topics/taxonomy.csv
+
+  - If you modify the path of an image file in db/seed_data/topics/basic.csv, make sure
+    you fix the corresponding file path in db/images/topics/... or add a new image if
+    necessary.
+
+NOTE: If you make any mistakes you cannot back out of, you can fix the scripts (seeds.rb, for example)
+drop the database and repeat the steps above.  Once you have the scripts finalized, you will then be
+able to run these steps on a production setup to initialize your production database.
+
+4. Initializing BackgroundJob
+-----------------------------
+* Run rake socialnews:bj:start (defined in lib/tasks/bj.rake)
+  - This initializes newsletter dispatch, submits the auto-feed fetcher, and initializes the rating tasks
+  - In a non-production environment, the auto-feed fetcher task will never run.  To change this,
+    edit lib/tasks/feeds.rake
+  - In a non-production environment, newsletters are also not delivered because of the mail blocker
+    settings in config/environments/*.rb except to those to whom mail is not blocked.  To change these
+    settings edit the mail blocker config in config/environments/*.rb
+
+###################################
+B. Updating other parts of the app
+###################################
+
+There are various pieces of the system that could use updating.  You could updated the app
+name, set up SMTP email delivery options (required only for production and staging environments),
+image storage options (filesystem or Amazon S3 or something else), google analytics, about pages,
+FAQs, stylesheets
+
+1. App name: SocialNews
+-----------------------
+* We have replaced all references to NewsTrust with SocialNews, and domain to "socialnews.com"
+  - Please fix domain names and app names in config/environments/*.rb
+  - Please look at constants in config/social_news_constants/* and appropriately fix them.
+    * Fix values in config/social_news_constants/app_constants.yml
+    * Ex: all email ids in config/social_news_constants/mailer_constants.yml need fixing.
+
+  - Outside this, please do a find-replace of SocialNews and socialnews.com with something that
+    you want.  There are some places where these values have been hardcoded
+    * Look at spec/spec_helper.rb which has a hardcoded domain "socialnews.com"
+    * javascript files in public/javascripts/*, stylesheets
+    * Look at scripts/external/site_monitor.rb
+
+IMPORTANT: Wherever the name SocialNews refers to the open source version of the codebase, please
+retain the name "SocialNews" there.
+Ex: Footer link in app/views/layouts/application.html.erb
+
+2. Basic App settings (SMTP, ReCAPTCHA, etc)
+--------------------------------------------
+* Update settings in config/environments/*:
+  - Some examples:
+    * Set up access to your SMTP server including any user id and password
+    * Right now, all email delivery is blocked in non-production environments.  But, you can
+      create an exception list of recipients to whom email goes out (useful for testing).  
+      So, edit these settings in config/environments/*
+
+* You have to create a recaptcha key for your account at: https://www.google.com/recaptcha/admin/create
+  - The keys that are currently in the repository is a global key that is configured to work
+    on any domain, and hence may not be the best key to use for spam control.  But, this works
+    good till you are ready to set up your own domain to host this codebase.
+
+3. Image storage options
+------------------------
+* If you want to use the local file system for storing images, you have to update
+  the constant ATTACHMENT_FU_OPTIONS in config/enviroments/*.rb.  For example,
+  config/environments/development.rb uses the local filesystem at public/ for
+  storing images.
+* If you want to use Amazon S3 (default if ATTACHMENT_FU_OPTIONS is the empty hash),
+  you have to create an account on Amazon S3 account, create the appropriate storage
+  buckets and then update the credentials in config/amazon_s3.yml.
+
+4. Google analytics
+-------------------
+* Edit app/views/layouts/_ga.html.erb and add GA code (2 places: lines 6 & 10)
+
+5. Other sundry files to fix
+----------------------------
+* Error pages
+  - Edit public/422.html and public/500.html
+
+* Badges
+  - Edit app/views/sidebar_widgets/_group_signup_badge.html.erb
+  - Add urls of any images (badges) you want to display on the group page
+
+* About pages need update
+  - about.html.erb
+  - about/about_us.html.erb
+
+6. FAQ:
+-------
+* Please go through FAQ and update it as necessary.
+* Please either remove sections that have 'To be filled out' or fill them out.
+
+7. Stylesheets
+--------------
+* You may need to update the stylesheets extensively.
+* You may also need to find replacement graphics in many cases.
+  - Ex: you will need to create logos and update the paths in config/social_news_constants/app_constants.yml
+
+8. Active Staff IDs
+-------------------
+* After you have created staff accounts, update the constant 'ACTIVE_STAFF_IDS' in app/models/member.id
+  But, enter only those staff account ids whose name you don't want appearing on the site for story
+  posting credits.  It is okay to leave it empty ([]).  This is a policy/management decision.
+
+9. Recaptcha
+-------------
+* Recaptcha is currently used on the member registration form and you can update the configuration in
+  app/views/members/_new_members_form.html.erb
+
+10. Links to the main NT site
+-----------------------------
+* Guides links in the navbar and footer point to http://newstrust.net/guides.  If you dont want this, please
+  remove them or point them to another page where you have suitable localized guides.
+  Look in app/views/layouts/_navbar_links.html.erb and app/views/layouts/_footer_links.html.erb
+
+* Also look in app/views/pages/guides/how-to-review.html.erb. The content of this page has been removed and
+  replaced with a link to this guide on NewsTrust.net.  If you dont want this, please add different content
+  here.  Note that the FAQs currently point to this review guide.
+
+####################
+C. Social networking
+####################
+
+Facebook and Twitter has been integrated into the app.  You will have to create your
+own FB and Twitter apps on these platforms and update the credentials.  Read more below.
+
+1. Facebook
+-----------
+* Facebook integration is disabled by default.  To enable it, you have to create
+  an app on facebook and update code as below.  In addition, you have set the enabled
+  flag in config/socialnews_constants/fbc_settings.yml
+* You will have to create an app on Facebook and fill in those app credentials in
+  config/facebooker.yml.
+* You may also have to upgrade the Facebook authentication mechanism in use to work
+  with OAuth.  I think FB will disable the current authentication mechanism sometime
+  end of September.  This fix may be as simple as upgrading the Facebooker plugin
+  and adjusting the codebase to work with it.
+* If you have a fanpage and/or facebook account for the app, update that appropriately
+
+2. Twitter
+----------
+* You will have to create apps on Twitter and fill in those app credentials in 
+  config/twitter.yml
+* If you have a twitter account for the app, enter the twitter id in 
+  config/social_news_constants/app_constants.yml
+
+##############################
+D. Production deployment steps
+##############################
+
+* For deploying to Engineyard, note that there are references to socialnews in deploy/*.rb 
+  files as well.  Update these files as necessary.
+
+* On Engineyard, your application setup needs to have the following Unix packages:
+      app-accessibility/sphinx2 
+      dev-util/lockrun 
+      media-libs/freeimage 
+  The app depends on the following gems
+      aws-s3 0.6.2     <--- if you use aws for image storage
+      right_aws 2.1.0  <--- if you use aws for image storage
+      bj 1.0.1
+      crack 0.1.8
+      feed-normalizer 1.5.2
+      hashie 0.1.8
+      highline 1.4.0
+      hoe 2.3.3
+      hpricot 0.8.4
+      httparty 0.5.2
+      image_science 1.2.1
+      json 1.2.0
+      libxml-ruby 2.0.6
+      newrelic_rpm 2.14.1 <--- if you enable newrelic performance monitoring
+      nokogiri 1.4.4
+      rails 2.3.11
+      rake 0.9.0
+      RedCloth 4.2.2
+      rspec 1.2.9
+      ruby-debug 0.10.4
+      RubyInline 3.9.0
+      SystemTimer 1.2.3
+      twitter 0.9.12
+      twitter_oauth 0.4.3
+      unicode 0.4.0
+      will_paginate 2.3.15
+      xml-simple 1.0.15
+      ZenTest 4.3.0
+
+* After fresh code is deployed on the server, you have to run the post_deploy rake task that in turn
+  runs a bunch of other rake tasks to initialize the app (generating taxonomy files, decay scripts,
+  starting the thinking sphinx daemon and indexing content).  Usually, this would be tied with whatever
+  deploy process you have on the servers you are going to deploy the code.
+
+* On the very first deploy to the production servers, run rake socialnews:bj:start.  On subsequent
+  deploys, you wouldn't have to do this anymore (except if bj crashes for whatever reason).
+
+* In addition, you also have to install the appropriate crontab files on the servers, make sure
+  ThinkingSphinx daemon is running (for search) and is properly indexed.  This step is not required
+  for deploying on EngineYard since the deploy scripts are already in place for doing this.
+  For deploying on other servers, depending on the deployment process, you may have to write
+  Chef recipes, capistrano tasks or something else that you use.
+
+* There is a site monitor script in scripts/external/site_monitor.rb.  You could wun this on a cheap
+  vps server or somewhere that you can run it.  This script pings the webapp regularly and alerts you
+  if the server is unresponsive.  It also pings a background job status url on the webapp that alerts
+  you if a BJ task has not run for a long time.  This alerts you either to a BJ crash or a task that
+  is running too long or has got stuck.  Feel free to add additional monitoring urls to this script.
+
+###########################################
+E. Other documentation / useful information
+###########################################
+
+Rspec tests
+-----------
+Rspec tests in spec/* are the best way to find documentation about expected behavior of various
+parts of this app.  The behavioral tests are not extensive and dont cover all the functionality
+of the app, but there exist a sufficient number of them to give you a good sense of how things
+are supposed to work.
+
+Right now, there are 4 spec failures which are not "real" failures but more some mismatch between
+rspec, rails 2.3, fixtures and their interaction.  Post migration to Rails 2.3 we haven't had a
+chance to fix these last failures yet.
+
+Various doc files in this directory
+-----------------------------------
+* rating.pseudocode 
+  --> pseudocode describing how story/review/member ratings are calculated 
+
+* story.listings
+  --> notes about story listings
+
+* story_volume.setting
+  --> how story_volume setting is used in the code which can guide how this field
+      should be set for topics and subjects
+
+* listing.settings
+  --> some documentation about settings in config/socialnews_constants/* that influence
+      story and source listings
+
+* story.posting
+  --> notes about who can post stories and how validation level is used and the
+      rationale for the same
+
+* model.notes
+  --> information about some of the application models that might be useful
+
+* groups.behavior
+  --> notes about how group story listings are affected when a member is added/removed from
+      the group
+
+* local_sites
+  --> notes about how to create a new local site
+
+* feed_fetcher 
+  --> description of how the feed fetcher code works and the associated
+      rake tasks and their interactions.
+
+* auto_listing 
+  --> original notes about metrics and considerations for how stories fetched by the
+      feed fetcher get assigned an auto-listing score.  Code is the final and most 
+      reliable guide for what is corrently implemented but this doc gives a good
+      first cut at the reasoning behind the implementation.
+
+* mynews.score.computation
+  --> original notes about how mynews story ranking works.  Code is the final and
+      reliable guide for what is currently implemented but this doc gives a good
+      first cut at the reasoning behind the implementation.
+
+Notes for possible improvements, new features, bug fixes, todos
+---------------------------------------------------------------
+* TODO
+  --> List of todos, possible improvements, known bugs
+
+* toolbar.fsm.states
+  --> this was an attempt to document how we wanted the toolbar to behave and this
+      fairly reasonably models how the toolbar currently works.  We have since removed
+      ability for guests to post/review stories, so this document is a little out of
+      date but it should be a good starting point for understanding the actions of
+      the toolbar if you only look at the [m, *, *] states.
+
+* rating.incremental.computation: 
+  --> Formulae for how story ratings can be incrementally updated rather than
+      computing from scratch (as is done currently)
+
+* API.spec.txt 
+  --> some thinking about how an API for this app could be developed
+      and considerations thereof.  Nothing here is implemented.

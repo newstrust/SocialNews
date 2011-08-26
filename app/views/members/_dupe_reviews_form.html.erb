@@ -1,0 +1,21 @@
+<p class="notice hide"></p>
+
+<% if !dupes.blank? -%>
+<% html_opts = {:target => "_blank"} -%>
+<% form_tag update_dupe_reviews_members_url do -%>
+  <ul>
+  <% dupes.each do |d| -%>
+    <li> 
+    <% orig = d[0] -%>
+    <% dupes = d[1..d.length] -%>
+    For story <b><%=orig.story.title%></b>, found two reviews.  Select the one you want to keep. <br/>
+    <%= radio_button_tag "keep[#{orig.story.id}]", "#{orig.id}", true %> <%=link_to("Original Review", review_url(orig.story, orig), html_opts)%>
+    <% dupes.each do |dupe| -%>
+       <br/><%= radio_button_tag "keep[#{orig.story.id}]", "#{dupe.id}" %> <%=link_to("New Review", review_url(dupe.story, dupe), html_opts)%>
+    <% end -%>
+    </li>
+  <% end -%>
+  </ul>
+  <%= submit_tag %>
+<% end -%>
+<% end -%>

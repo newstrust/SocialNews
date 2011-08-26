@@ -1,0 +1,5 @@
+<%- @title = "Review of #{@source_review.source.name} by #{@source_review.member.name}" -%>
+
+<ul>
+<%= render :partial => "sources/source_review", :locals => {:source_review => @source_review} %>
+</ul>

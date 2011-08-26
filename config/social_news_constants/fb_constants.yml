@@ -1,0 +1,4 @@
+fbc:
+  enabled: 0
+  max_quote_length: 300
+  max_comment_length: 500

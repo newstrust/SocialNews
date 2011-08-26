@@ -1,0 +1,23 @@
+<%= @body + "\n\n" unless @body.blank? -%>
+Check out this story review on <%=app_name%>:
+
+__________________________________________
+
+<%= @record.story.title %>
+<%= strip_tags link_to_sources(@record.story.sources) -%>
+<%= " - by #{@record.story.journalist_names}" unless @record.story.journalist_names.blank? %>
+<%= "#{@record.story.story_date.strftime('%b. %e, %Y')}" unless @record.story.story_date.blank? -%>
+<%= " (#{humanize_token(@record.story, :story_type)})" if @record.story.story_type %>
+
+Here's <%= @record.member.display_name %>'s review for that story:
+
+<%= "\"#{strip_tags StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(@record.comment,300,400,true),72)}\"\n\n" unless @record.comment.blank? -%>
+<%= "#{first_name(@record.member)}'s Personal Comment:\n\"#{strip_tags StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(@record.personal_comment,300,400,true),72)}\"\n\n" unless @record.personal_comment.blank? -%>
+<%= first_name(@record.member) %>'s Rating: <%= sprintf("%.1f", @record.rating || 0.0) %> avg. from <%= plural(@record.num_answers, "answer") %>
+
+<%=app_name%> Rating: <%= @record.story.hide_rating ? "not enough reviews" : "#{sprintf("%.1f", @record.story.rating || 0.0)} avg. from #{pluralize(@record.story.reviews_count, "review")}" %>
+
+Check this story review at:
+<%= @page.gsub(/\?.*/, '') %>
+
+<%= render :partial => 'mailer/send_to_friend/footer' %>

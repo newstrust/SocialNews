@@ -1,0 +1,2 @@
+#*/15 * * * * /home/subbu/socialnews/site/rails/trunk/lib/tasks/refresh_page_caches.sh
+#*/1 * * * * /home/subbu/socialnews/site/rails/trunk/script/bj run --forever --rails_env=development --rails_root=/home/subbu/socialnews/site/rails/trunk  --log=/home/subbu/socialnews/site/rails/trunk/log/backgroundjob.log

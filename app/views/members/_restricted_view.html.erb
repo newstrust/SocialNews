@@ -1,0 +1,38 @@
+<%- show_content = @member.rating >=2 || @member.validation_level >=2 || (logged_in? and current_member.has_role_or_above?(:host)) -%>
+<div class="story_listing_detail span-16">
+  <div class="story clearfix" style="line-height:1.5em;">
+		<%- if @member.image and show_content -%>
+      <%- mphoto_size = (!@member.about.blank? && s(@member.about).length >= 600) ? "large" : "medium" -%>
+	    <%= link_to(image_tag(@member.image.public_filename(mphoto_size)), @member.image.public_filename, :class => "overview_image") %>
+    <%- end -%>
+    <h2 class="bottom helvetica"><%= h @member.display_name %>
+  </div>
+
+  <strong><%= display_member_status(@member) %></strong>
+  <span class="body_black_small">(since <%= @member.created_at.strftime('%B %Y') %>)</span><br/>
+  <%= list_member_groups(@member, :group_list => "host,newshound,editor,partners,advisors,staff,directors,donors", :badges => true) %>
+  <%= help_icon("member_profile_roles", "member") %><br style="clear:left" />
+
+  <%- my_page = false -%>
+  <%- if logged_in? && current_member == @member %>
+    <%- my_page = true -%>
+  <%- end -%>
+
+  <div id="about_me" style="margin-top:10px;">
+    <p>
+    <%- if show_content -%>
+      <%= h @member.visible_attribute('about') %>
+    <%- else -%>
+      <%- if my_page -%>
+        Additional profile information will be displayed once you have been validated by our staff. Until then, this page will not be visible by search engines.
+      <%- else -%>
+        Additional profile information will be displayed once this member has been validated by our staff.
+      <%- end -%>
+    <%- end -%>
+    </p>
+  </div>
+  <script type="text/javascript" charset="utf-8">
+    $('#about_me').truncate({max_length: 900});
+  </script>
+</div>
+</div>

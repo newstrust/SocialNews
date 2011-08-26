@@ -1,0 +1,20 @@
+<% @additional_css_includes = ["admin/landing_page_layout" ] -%>
+
+<h1 style="text-align:center"><%=@local_site ? "#{@local_site.name} (#{@local_site.home_page})" : "National Site (#{LocalSite.national_site})"%> Home Page Layout</h1>
+
+<% if @local_site %>
+<h3><%= link_to "Edit #{@local_site.name} Local Site Settings", edit_admin_local_site_path(@local_site) %></h3>
+<h3><%= link_to "Preview #{@local_site.name} Home Page", @local_site.home_page, :target => "_blank" %></h3>
+<% end %>
+
+<div id="lp_layout">
+<% form_tag(:action => 'update', :method => 'put') do |f| -%>
+  <%= render :partial => "admin/shared/home_page_layout", :locals => {:f => f } %>
+<% end -%>
+
+<hr style="height:3px"/><br/>
+
+<%= render :partial => "admin/shared/editorial_blocks" %>
+
+</div> <%#-- class="hp_layout" -%>
+<br/><br/>

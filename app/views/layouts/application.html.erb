@@ -1,0 +1,176 @@
+<%- @no_third_party_content ||= false -%>
+<%- @og_meta_tags ||= {} -%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<%#-- Namespace required for Facebook Connect --%>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+  <head>
+    <%- @title ||= "Your Guide to Good Journalism" -%>
+    <%- @title = "#{@title} - #{app_name}" if @title !~ /#{SocialNewsConfig["app"]["slug"]}/i -%>
+    <%- @title = "#{@title} #{@local_site.name}" if @local_site && @title !~ /#{@local_site.name}/i -%>
+    <title><%= @title%></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="title" content="<%=@title%>" />
+    <meta name="keywords" content="<%= "#{@meta_keywords + ', ' unless @meta_keywords.blank?}#{SocialNewsConfig["meta_tags"]}" %>" />
+    <meta name="description" content="<%= "#{@meta_description + ' ' unless @meta_description.blank?}#{SocialNewsConfig["meta_description"]}" %>" />
+<%- @og_meta_tags.each do |key, value| -%>
+  <%- if value -%>
+    <meta property="<%=key%>" content="<%=value%>" />
+  <%- end -%>
+<%- end -%>
+    <%- if @no_bots %><meta name="ROBOTS" content="NOARCHIVE,NOINDEX"><% end -%>
+    <%- if @rss_autodiscovery_links -%>
+      <%- @rss_autodiscovery_links.each do |rss_stuff| -%>
+        <%= auto_discovery_link_tag :rss, rss_stuff[:link], :title=> rss_stuff[:title] %>
+      <%- end -%>
+    <%- end -%>
+
+    <%= render :partial => 'shared/css_includes' %>
+    <%= render :partial => 'shared/jquery_includes' %>
+    <%= render :partial => 'shared/story_listing_js_includes' %>
+    <script type="text/javascript" charset="utf-8"> 
+      var member_id = <%=logged_in? ? current_member.id : 0 %>
+      var NT = {
+        sort_options: {},
+        comment_options: {
+          flag_url   : "<%= flags_url(:format => :json) %>",
+          create_url : "<%= discussions_comments_url(:format => :json) %>",
+          reply_url  : "<%= discussions_comments_url(:format => :json) %>",
+          sort_url   : "<%= sort_discussions_comments_url(:format => :json) %>"
+        }
+      };
+    </script>
+
+    <%= yield :page_scripts -%>
+    <%= @inline_js || "" %>
+  </head>
+
+  <body>
+    <div id="wrap"<%=" class='#{@local_site.slug}'" if @local_site%>>
+      <div id="main" class="container clearfix">
+        <div id="nav">
+          <div class="topbar">
+            <div class="logo">
+              <%= link_to(image_tag(SocialNewsConfig["app"]["logo_path"], :alt => app_name, :size => "195x38", :style => "filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(...);float:left"), home_path) %>
+              <%- if @local_site -%>
+              	<a href="/"><span class="local_logo"></span></a>
+              <%- end -%>
+              <span class="your_guide"><a href="/">Your guide to good journalism</a></span>
+            </div>
+            <%= render :partial => 'shared/user_links' %>
+          </div>
+
+          <%#-- Load primary & secondary navbar links --%>
+          <%= render :partial => layout_partial(@local_site, "navbar_links") %>
+        
+          <div id="navbar">
+            <div class="links">
+              <%- @primary_navbar_links.each do |tab| -%>
+              	<%- title = tab[:title] ? tab[:title] : tab[:name] -%>
+                <%= "<div class=\"#{tab[:class]}\" title=\"#{title}\">" + link_to(tab[:name], tab[:route], tab[:opts]) %></div>
+              <%- end -%>
+            </div>
+            <div class="search">
+              <%- form_tag search_path, :method => :get do -%>
+                <input name="q" maxlength="250" type="text" class="search_box">
+                <%= submit_tag "" %>
+              <%- end -%>
+            </div>
+            <%- if !visitor_is_bot? -%> <%#-- SSS: Hide post form for bots! --%>
+            <div class="post_story">
+              <%= link_to_function "", "$('\#post_story').toggle(); $(this).toggleClass('on').blur();" %>
+            </div>
+            <%- end -%>
+          </div>
+
+          <div id="secondary_nav" class="span-24">
+          	<ul>
+              <%- @secondary_navbar_links.each do |tab| -%>
+                <li><%=link_to(tab[:name], tab[:route], tab[:opts])%></li>
+              <%- end -%>
+              <%- if !@local_site -%>
+                <%- ls = LocalSite.first_site -%>
+                <%- if ls -%>
+	          		<li class="section_break"><a href="<%=ls.home_page%>" title="<%="#{ls.name} #{app_name}"%>"><%=ls.name%></a></li>
+                <%- end -%>
+	          	<%- end -%>
+          		<li class="section_break"><a href="/help">Help</a></li>
+          		<%- if logged_in? && current_member.has_role_or_above?(:admin)  -%>
+								<li class="section_break"><%= link_to "Admin", admin_home_path %></li> <%#- always send to /admin/home %>
+							<%- end -%>
+          	</ul>
+          </div>
+    		</div>
+
+<%#-- SSS: Hide all ajax forms from bots -- they fill up the logs with errors! ! --%>
+<%- if !visitor_is_bot? -%>
+    		<div id="post_story"<%='class="hide"' if @show_post_panel.blank?%>>
+    		  <%- form_remote_tag :url => stories_path(:format => :js),
+    		    :success => "post_story_response(request)",
+    		    :failure => "post_story_response(request, true)",
+    		    :datatype => :json do %>
+    		    <%= hidden_field_tag :save, true %>
+    		    <%= label_tag :url, "URL:", :style => "float: left" %>
+    		    <%= text_field_tag :url, nil, :class => "url" %>
+    		    <div class="status"><div class="post"></div></div>
+    		  <%- end -%>
+    		</div>
+    	  <div class="flash_error hide"></div>
+<%- end -%>
+
+        <%- if render_flash %> <%= render_flash %> <% end %>
+
+        <div style="clear:both;margin:0;padding:0;border:0">
+        <%= yield %>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer" class="container">
+    	<div class="top span-24"></div>
+    	<div class="content span-24">
+      <div class="blocks">
+      	<div class="span-10 overview append-1">
+      		<h3 class="quiet"><%=app_name%> helps people find good journalism online. We rate the news based on quality, not just popularity.</h3>
+      		<h4 class="quiet"><%= link_to "Sign up", signup_path("") %> now to review some stories. <%= link_to "Read more", page_path(:section => "about") %> about our nonprofit news network &raquo;</h4>
+      	</div>
+
+        <%#-- Load footer navigation links --%>
+        <%= render :partial => layout_partial(@local_site, "footer_links") %>
+      </div>
+      </div>
+		  <div class="bottom span-24"></div>	
+      <div class="span-24 last" style="text-align: center; margin-top: 10px; color: #666666; font-size: .92em">
+      	&copy; <%= Time.now.year %> <%=app_name%>. All rights reserved. |
+      	<%= link_to "Privacy Policy", page_path(:section => "about", :path => "privacy") %> |
+     	  <%= link_to "Terms of Service", tos_path %><br/>
+        <%= link_to "SocialNews Software © 2005-2011, NewsTrust Communications", "http://blog.newstrust.net/2011/08/open-source.html" %>
+      </div>
+		</div>
+
+    <%#-- Render hidden email & tweet forms that will be used to respond to the email & twitter icons -%>
+    <%- if !@no_third_party_content && @has_story_listings -%>
+      <%= render :partial => "shared/tools_icon_forms" %>
+    <%- end -%>
+
+    <%#-- Update last_active_at -%>
+	  <%- if current_member -%>
+	  <script type="text/javascript" charset="utf-8">
+	    $(document).ready(function() {
+	      $.ajax({
+	        type: "POST",
+	        url: '<%=last_active_at_member_path(current_member, :format => "js")%>',
+	        data: 'time='+new Date()
+	      });
+	    });
+	  </script>
+	  <%- end -%>
+
+    <%= render :partial => "layouts/ga" if !@no_third_party_content %> <%#-- Google Analytics (but only if we dont want 3rd party content) --%>
+
+  	<%#-- Facebook Connect --%>
+  	<%= fb_connect_javascript_tag %>
+    <%- @fb_no_auto_reload ||= nil -%>
+    <%- @auto_login ||= false -%>
+  	<%= init_fb_connect_FIXED_UP(@fb_no_auto_reload, @auto_login) %>
+  </body>
+</html>

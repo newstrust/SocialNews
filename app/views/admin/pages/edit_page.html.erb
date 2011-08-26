@@ -1,0 +1,8 @@
+<h1> Please edit this template for the <%=page_name(params[:page])%> Overview page (/<%=relative_page_path(params[:page])%>) </h1>
+<%= render :partial => 'shared/textile_support' , :locals => { :html_ok => true } %>
+
+<% form_tag admin_update_page_path(:page => params[:page]) do %>
+<%= text_area_tag :template_content, @page_template, :rows => 40, :cols => 80 %>
+<br/>
+<%= submit_tag %>
+<% end -%>

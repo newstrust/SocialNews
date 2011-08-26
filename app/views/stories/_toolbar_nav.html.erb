@@ -1,0 +1,49 @@
+<div id="nav">
+	<%-# The Toolbar itself & tabs -%>
+	<div id="bar">
+    <%= render :partial => "toolbar_login_button" if params[:popup] -%>
+		<div class="nav_section logo">
+			<a href="/"<%= popup_check(:add_class => true)%>><div class="toolbar_logo"></div></a>
+		</div>
+
+		<div class="nav_section story">
+		  <h4 class="bottom"><%= link_to_star(@story, :ref => params[:ref]) if logged_in? %><%= truncate_on_word_boundary(@story.title, :max_chars => params[:popup] ? 46 : 54) %></h4>
+		</div>
+		<%- if false # params[:popup] # commenting this out in case we want to add it back again -%>
+		  <div class="nav_section byline">
+		    <%= link_to_sources(@story.sources) %>
+		  </div>
+		<%- end -%>
+		<div class="nav_section story_rating">
+			<div class="tool_bar_rating" style="padding-left: 0">
+				<%- if @story.reviews_count > 0 -%>
+				  <%= link_to(trustometer_img(@story.rating, {:size => :medium}.merge(@story.hide_rating ? {:color => "gray"} : {}), :style => "margin: 0px 5px 0 0px; float:left;"), @story, :class => "outbound") %>
+			  <%- else -%>
+    	    <div class="trustometer">
+    	      <div class="no_rating"> NO RATING </div>
+    	    </div>
+    	  <%- end -%>
+			</div>
+		  <%= link_to("", @story, :class => "see_all outbound", :style => "_text-decoration: none;float:left;", :title => "See all reviews for this story") %>
+		  <%= render :partial => "toolbar_share_tools" if params[:popup] %>
+		</div>
+
+	</div>
+</div>
+
+<%-# Pop-down Forms -%>
+<div id="popdown_form" style="top:-2px !important;">
+  <div class="form_tabs">
+    <% if !params[:popup] -%>
+      <%= link_to_function "", "close_toolbar()", :class => "close", :title => "Remove the #{app_name} toolbar" %>
+      <%= render :partial => "toolbar_login_button" -%>
+    <% end -%>
+    <%= link_to_function "Review", "show_popdown_form('review')", :id => "nav_review", :class => "toolbar_tab review_link#{" review_tab_fade" if params[:go].nil? && params[:popup].nil?}", :title => "Open/Close Review form" %>
+   
+    <%= link_to_function "Info", "show_popdown_form('info')", :id => "nav_info", :class => "toolbar_tab secondary info info_link", :title => "This story's information" %>
+    <%= render :partial => "toolbar_share_tools" if !params[:popup] %>
+  </div>
+  <div class="shadow">
+    <%= render :partial => "toolbar_forms" %>
+  </div>
+</div>

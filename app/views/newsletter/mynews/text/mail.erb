@@ -1,0 +1,46 @@
+MyNews for <%=@recipient.name%>
+
+Here is your personal news feed for today, from <%=app_name%>.
+To change your settings, go to your own MyNews page:
+<%=mynews_url(@recipient)%>
+
+<%=@newsletter.text_header %>
+__________________________________________
+
+<%=@story_body-%>
+__________________________________________
+
+Please take a moment to review one of the stories above.
+For the latest updates check our home page (<%=home_url%>).
+For a fully story listing check <%=home_url%>stories/most_recent
+For help tips, check our FAQ (<%=home_url%>help/faq).
+__________________________________________
+
+ABOUT THIS EMAIL
+
+We're sending you this email because you signed up as a <%=app_name%>
+member, customized your MyNews page, and chose to receive a daily email
+of your MyNews listing.
+
+To change your email settings, visit our Email Feeds page:
+<%=email_settings_url(:freq => Newsletter::MYNEWS)%>
+
+To adjust your MyNews settings, visit your MyNews page:
+<%= mynews_url(@recipient) %>
+
+<%=app_name%> treats your contact information as private and confidential.
+We will not share it with anyone without your permission. See our full
+privacy policy:
+<%= page_url(:section => "about", :path => "privacy") %>
+
+To IMMEDIATELY unsubscribe from your MyNews news feed, click here:
+<%= newsletter_unsubscribe_url(:freq => Newsletter::MYNEWS, :key => @recipient.newsletter_unsubscribe_key(self)) %>
+
+(if clicking a web address in this message does not work, simply copy
+and paste it into your browser's address bar)
+
+Copyright (c) 2008-2010, <%=app_name%> - All Rights Reserved.
+
+__________________________________________
+
+<%= @newsletter.text_footer %>

@@ -1,0 +1,8 @@
+<h1>New editorial space for <%=@local_site ? @local_site.name : ""%> <%=@editorial_space.page_name%></h1>
+
+<%= error_messages_for :editorial_space %>
+
+<% form_for :editorial_space, :url => admin_editorial_spaces_path do |f| %>
+	<%= render :partial => "form", :locals => {:f => f} %>
+  <p> <%= submit_tag "Create" %> <%= cancel_tag page_layout_path(@editorial_space.page_opts) %> </p>
+<% end %>

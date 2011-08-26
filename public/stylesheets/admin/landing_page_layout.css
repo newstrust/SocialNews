@@ -1,0 +1,29 @@
+div#lp_layout div.fieldset { float: left; width: 100%; }
+div#lp_layout label { display: block; font-weight: bold; font-size: 13px; }
+div#lp_layout input { width: 200px; }
+div#lp_layout textarea { width: auto; height: auto; }
+div#lp_layout div.note { font-size: 16px; font-weight: bold; margin: 10px 0; color: #a00; }
+div#lp_layout div.col1 { float: left; width: 600px; margin: 0 5px 0 0; padding: 0 5px 0 0; }
+div#lp_layout div.col2 { float: left; width: 375px; margin: 0 0 0 5px; padding: 0 0 0 5px; }
+div#lp_layout h2 { text-transform: uppercase; text-align: center; font-weight: bold; font-size: 1.5em; margin-bottom: 10px; }
+div#lp_layout div.create_new_link { font-size:15px; font-weight: bold; margin: 10px 0; }
+div#lp_layout div.carousel { width: 995px; }
+div#lp_layout div.carousel div.slide { float: left; width: 480px; padding: 5px 0 5px 10px; margin-top:10px; }
+div#lp_layout div.carousel div.slide h3 { text-align: left; font-weight:bold; text-decoration:underline; }
+div#lp_layout div.carousel label, div.staging label, div.grid label, div.news_comparison label { float: left; width: 130px; clear: both; }
+div#lp_layout div.carousel div.radio * { float: left; width: auto; clear: none; margin-right: 5px; }
+div#lp_layout div.carousel div.radio label { float: left; width: auto; clear: none; margin-right: 25px; }
+div#lp_layout div.carousel div.ranking select { width: 50px; }
+div#lp_layout div.carousel div.object label { width: 120px; margin-right: 10px; }
+div#lp_layout div.carousel div.slide_content { background: #fafafa; margin: 5px 10px; padding: 10px; width: 400px; }
+div#lp_layout div.right_column label { float: left; width: 200px; clear: both; }
+div#lp_layout div.staging input, div.grid input, div.news_comparison input, div.right_column label { margin-left: 0;}
+div#lp_layout div.news_comparison, div.sidebar_boxes, div.right_column label { float: left; margin: 0 0 10px 0px; }
+div#lp_layout div.news_comparison select { width: 90px; }
+div#news_comparison_setting_topic_listing label { width: 100px; }
+div#lp_layout div.grid { clear: both; }
+div#lp_layout div.grid h3 { text-decoration:underline;font-size:1.33em;font-weight:bold; }
+div#lp_layout div.grid div.cell { float: left; padding: 2px; margin: 2px; width: 190px; background:#fafafa; }
+div#lp_layout div.grid div.cell label { width: 100% }
+div#lp_layout div.grid div.cell input { width: 175px }
+div#lp_layout div.grid div.cell select { width: auto; }

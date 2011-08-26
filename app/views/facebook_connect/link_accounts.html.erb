@@ -1,0 +1,54 @@
+<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div>
+	<div class="wrapper">
+		<div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+<% if !facebook_session %>
+<b> Have you logged out of Facebook?  Please log into Facebook and try again! </b>
+<% else -%>
+<div style="float:left; margin-right:20px;">
+<fb:profile-pic uid="<%=facebook_session.user.uid%>" facebook-logo="true"> </fb:profile-pic>
+</div>
+
+<div style="float:left; margin-top: 20px;">
+<h2> Welcome <%=@member.name%>! </h2>
+</div>
+
+<div class="popup_form" style="clear:both; margin-top: 10px; padding:15px; border:1px solid #ccc">
+
+<p>
+Please log into your <%=app_name%> account, and we'll link it to your Facebook account.
+</p>
+
+<% popup_suffix = params[:popup] ? "?popup=true" : "" -%>
+<% url_prefix = @invitation ? "/partners/#{@partner.to_param}/#{@invitation.to_param}" : "" -%>
+<% form_for @member, :url => "#{url_prefix}#{fb_login_and_link_path}#{popup_suffix}", :html => {:class => "entry_form", :autocomplete => "off"} do |f| -%>
+<div class="form_field leftalign">
+  <%= f.label :email, "Email Address " + help_icon("why_email_address") %>
+  <%= f.text_field :email, :size => 24 %>
+</div>
+  
+<div class="form_field leftalign">
+  <%= f.label :password, "Password" %>
+  <%= f.password_field :password %>
+</div>
+
+<div class="form_field" style="font-size:85%">
+  <%= check_box_tag "autofollow_friends", "1", false, :class => "check", :style => "float:left" %>
+  <%= label_tag "autofollow_friends", "Follow my Facebook friends when they sign up on #{app_name}", :style => "font-weight:normal;width:320px; ;float:left" %><br style="clear:both;" />  
+  <%= check_box_tag "import_fb_photo", "1", false, :class => "check", :style => "float:left" %> 
+  <%= label_tag "import_fb_photo", "Import my photo from Facebook", :style => "font-weight:normal;width:320px;float:left" %><br />
+</div>
+
+<div style="margin:30px 0 0 100px">
+  <%= submit_button "Link" %>
+  <div style="clear:both;margin-top:10px;font-size:.9em"> <%= link_to 'Forgot Your Password?', forgot_password_sessions_path(params.slice(:popup)) %></div>
+</div>
+
+<% end %>
+</div>
+<% end -%>
+
+      </div>
+    </div>
+	<div class="bottom"></div>
+</div>

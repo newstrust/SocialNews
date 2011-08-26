@@ -1,0 +1,20 @@
+<%- no_buttons ||= false  %>
+<div class="comment <%= local_variables.include?('cycle_class') ? cycle_class : 'even' %>" id="comment_<%= comment.id %>">
+  <%= h("<h3>#{link_to(comment.title, admin_comment_path(comment))}</h3>") if comment.title %>
+  <h5><%= h(link_to(comment.member.display_name, member_path(comment.member))) %> &mdash; <%= h(date_as_words(comment.created_at)) %></h5>
+  <div class="comment_body">
+    <%= h(comment.body) %>
+    <%= h("<p>In response to #{link_to 'comment', admin_comment_path(comment.parent)} by #{comment.parent.member.display_name}.</p>") if comment.parent %>
+  </div>
+  <ul class="inline_list">
+    <%- if comment.can_be_edited_by?(current_member) && !no_buttons -%>
+      <%- if comment.hidden? -%>
+        <li><%= h(link_to('Restore', undelete_admin_comment_path(comment))) %></li>
+      <%- else -%>
+        <li><%= h(link_to('Remove', confirm_delete_admin_comment_path(comment))) %></li>
+      <%- end -%>
+      <li><%= h(link_to('Cancel', "/admin/comments")) %></li>
+    <%- end -%>
+  </ul>
+  <br />
+</div>

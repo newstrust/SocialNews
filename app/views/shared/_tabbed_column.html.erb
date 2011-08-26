@@ -1,0 +1,34 @@
+<div class="new_tabs span-16">
+  <!-- the tabs --> 
+  <ul class="tabs span-16"> 
+    <%- tabs.each do |tab| -%>
+      <li><a id="tab_<%=tab[:type]%>" href="#<%=tab[:type]%>"><span class="left"></span><span class="right<%=" #{tab[:class]}"%>"><%=tab[:name]%></span></a></li> 
+    <%- end -%>
+  </ul> 
+
+  <!-- tab "panes" --> 
+  <div class="panes span-16">
+    <div class="panes_wrapper">
+    <%- tabs.each do |tab| -%>
+      <div class="pane" id="listing_<%=tab[:type]%>">
+        <%= tab[:content] %>
+      </div> 
+    <%- end -%>
+      </div>
+      <div class="panes_bottom"></div>
+  </div>
+
+  <script type="text/javascript">
+  var tab_switch_callbacks = {
+  <%- tabs.each do |tab| -%>
+    <%=tab[:type]%>: <%=tab[:switch_callback] || "null" %>,
+  <%- end %>
+    none: null /* to deal with trailing comma */
+  };
+
+  $(function() {
+    // setup ul.tabs to work as tabs for each div directly under div.panes
+    $("ul.tabs").tabs("div.panes > div.panes_wrapper > div.pane", { onClick: function(e, i) { switch_tab(this, e, i) } })
+  });
+  </script>
+</div>

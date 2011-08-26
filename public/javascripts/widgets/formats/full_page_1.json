@@ -1,0 +1,72 @@
+var _NTW_widget_defaults = {
+    /* This structure provides settings for the widget content */
+  content : {
+    tracking_code : 'fpwid',
+    num_stories : 10,
+    header      : true,
+	    /* Hack! We don't want the top logo */
+    site_logo   : 'images/ui/spacer.gif',
+    footer      : true,
+    show_stars  : true,
+    stars_dir   : 'large/',
+    gray_stars_dir   : 'large/',
+    title_max_length : 100,
+    quote_max_length : 180,
+    date_format      : 'M d, y'
+  },
+    /* This structure describes the base css settings for the entire widget */
+  base_css: {
+    link_target  : '_top',
+    link_style   : 'text-decoration:none',
+    link_hover_style : 'text-decoration:underline; color:#1a4',
+    base_style   : 'background:white;font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;font-size:12px;line-height:14px;',
+    header_style : 'margin:0 5px 5px 5px; padding-bottom: 5px; border-bottom:1px solid #aaa;font-size:12px;',
+    story_style  : 'clear:both;margin:4px 5px;',
+    footer_style : 'clear:both;margin:5px 5px 0 5px; padding: 5px 0; font-size:11px;font-weight: bold;',
+    stars_img_style : 'border:none;float:none;margin:6px 0 2px 2px;vertical-align:text-bottom'
+  },
+    /* 
+     * This structures describes:
+     * (a) which story elements will be displayed
+     * (b) the order in which they will be displayed (in the order they appear)
+     * (c) how every individual story element will be laid out
+     */
+  story_format : [
+    {
+      element  : 'div_dom_tree',
+      style    : 'float:left;vertical-align:top;width:455px;padding-bottom:10px;font-size:11px;color:#aaa',
+      children : [
+        { element : 'title', dom : [{ elt: 'a', style: 'text-decoration:none;font-size:14px;line-height:16px;font-weight:bold;font-family: Georgia, Times, serif;'}], suffix: '\n'},
+        { element : 'source', dom : [{ elt: 'span', style: 'font-size:11px;margin-bottom:3px;text-transform:uppercase;color:#666'}, { elt: 'a', style: 'text-decoration:none;color:#666;font-weight:bold'}] },
+        { element : 'authors', prefix  : ' - by ', dom : [{ elt: 'span', style: 'font-size:11px;margin-bottom:3px;text-transform: uppercase;color:#666;font-weight:bold'}] },
+        { element : 'date', prefix  : ' - ' },
+        { element : 'story_type', prefix: ' (', suffix : ')' },
+        { element : 'quote',  dom: [{ elt: 'div', style: 'font-size:12px;color:#333'}] }
+      ]
+    },
+    {
+      element  : 'div_dom_tree',
+      style    : 'width:115px;margin-left:470px;text-align:center;font-size:11px;',
+      children : [
+        { element : 'rating', dom : [{ elt: 'a', style: 'vertical-align:bottom;font-size:13px;line-height:20px;text-align:bottom;text-decoration:none;color:#399800;font-weight:bold;background:url(/images/trustometer/trustometer_bg_large.png) no-repeat left top;margin:3px 3px -2px 10px;width:88px;height:23px;display:block;padding:0px;' }] },
+        { element : 'see_reviews', dom : [{elt: 'div', style: 'padding-top:3px'}, { elt: 'a', text: 'See Reviews &raquo;', style: 'text-decoration:none;font-weight:bold;'}] },
+        { element : 'review_it', dom : [{ elt: 'a', style: 'text-decoration:none;color:#080;font-weight:bold;'}] }
+      ]
+    }
+  ],
+    /* This structure describes the header format */
+  header_format: [
+    { element : 'listing_topic', dom: [{ elt: 'div', style: 'font-size:16px;font-weight:bold;'}] },
+    { element : 'Here are top rated news and opinions reviewed by ', prefix: '\n' },
+    { element : '', dom: [{ elt: 'a', text: 'SocialNews.com', style:'font-weight:bold;text-decoration:none'}]},
+    { element : ', a social news network devoted to good journalism. We rate the news based on quality, not just popularity.', suffix : '\n' },
+    { element : 'listing_type', prefix : '\n', dom : [{ elt: 'a', style: 'text-decoration:none;font-size:16px;font-weight:bold'}] },
+    { element : 'listing_topic', prefix : ' : ', dom : [{ elt: 'a', style: 'text-decoration:none;font-size:14px;color:#777;font-weight:bold'}] }
+  ],
+    /* This structure describes the footer format */
+  footer_format: [
+     { element : 'more_stories', suffix: ' ' },
+     { element : 'help', prefix : ' ', dom: [{ elt: 'a', style: 'font-weight:bold;text-decoration:none; color:#777'}]},
+     { element : 'submit_story', prefix : '\n' }
+  ]
+};

@@ -1,0 +1,22 @@
+<h1 class="use16columns inner_left">Edit Invitation "<%= @invitation.name %>"</h1>
+
+<%= error_messages_for :invitation %>
+<div style="clear:both; font-size:14px; font-weight:bold;">
+  <%= link_to "Preview Invitation", admin_partner_invitation_path(@partner,@invitation) %>
+</div>
+
+<div id="invite_form" class="use12columns inner_left">
+  <% form_for :invitation, :url => admin_partner_invitation_path(@partner,@invitation), :html => { :method => :put } do |f| -%>
+    <div class="buttons">
+      <%= submit_tag 'Update' %>
+      <%= cancel_tag "/admin/partners/#{@partner.to_param}/" %>
+    </div>
+
+    <%= render :partial => 'form' , :locals => { :f => f }%>
+
+    <div class="buttons">
+      <%= submit_tag 'Update' %>
+      <%= cancel_tag "/admin/partners/#{@partner.to_param}/" %>
+    </div>
+  <% end -%>
+</div>

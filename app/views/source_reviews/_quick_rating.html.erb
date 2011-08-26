@@ -1,0 +1,13 @@
+<div class="rating quick_source_review_input">
+  <%- new_review = source_review.new_record? -%>
+  <%- remote_form_for :source_review, :url => new_review ? source_reviews_path(:format => :js) : source_review_path(source_review, :format => :js),
+    :before => "var $ajax_form_holster = $(this).parents('.quick_source_review_input'); $ajax_form_holster.pulse(true)",
+    :complete => "$ajax_form_holster.pulse(false)",
+    :html => {:method => new_review ? :post : :put} do |f| %>
+    <%= f.hidden_field :source_id, :value => source_review.source_id %>
+    <%= f.hidden_field :member_id, :value => source_review.member_id %>
+    <%= rating_input :review => source_review, :param_array_prefix => "source_review[rating_attributes]",
+      :criterion_key => "trust",
+      :style => "float:right" %>
+  <%- end %>
+</div>

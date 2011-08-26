@@ -1,0 +1,100 @@
+--- !ruby/object:Gem::Specification 
+name: chardet
+version: !ruby/object:Gem::Version 
+  hash: 59
+  prerelease: false
+  segments: 
+  - 0
+  - 9
+  - 0
+  version: 0.9.0
+platform: ruby
+authors: []
+
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2011-05-05 00:00:00 -05:00
+default_executable: 
+dependencies: []
+
+description: 
+email: 
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- lib
+- lib/GB2312Prober.rb
+- lib/EUCTWProber.rb
+- lib/JISFreq.rb
+- lib/CodingStateMachine.rb
+- lib/LangHungarianModel.rb
+- lib/JapaneseContextAnalysis.rb
+- lib/LangCyrillicModel.rb
+- lib/EUCJPProber.rb
+- lib/UTF8Prober.rb
+- lib/SJISProber.rb
+- lib/UniversalDetector.rb
+- lib/ESCSM.rb
+- lib/LangHebrewModel.rb
+- lib/Big5Freq.rb
+- lib/CharDistributionAnalysis.rb
+- lib/CharSetProber.rb
+- lib/SBCSGroupProber.rb
+- lib/EUCTWFreq.rb
+- lib/LangGreekModel.rb
+- lib/LangThaiModel.rb
+- lib/MultiByteCharSetProber.rb
+- lib/MBCSSM.rb
+- lib/CharSetGroupProber.rb
+- lib/SingleByteCharSetProber.rb
+- lib/Latin1Prober.rb
+- lib/GB2312Freq.rb
+- lib/EscCharSetProber.rb
+- lib/Big5Prober.rb
+- lib/MBCSGroupProber.rb
+- lib/EUCKRProber.rb
+- lib/EUCKRFreq.rb
+- lib/HebrewProber.rb
+- lib/LangBulgarianModel.rb
+has_rdoc: true
+homepage: 
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.3.7
+signing_key: 
+specification_version: 3
+summary: 
+test_files: []
+

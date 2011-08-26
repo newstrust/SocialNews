@@ -1,0 +1,72 @@
+red_cross_on_item_1:
+  id: 2
+  taggable_id: 1
+  tag_id: 6
+  context: tag
+  member_id: 12
+  taggable_type: Story
+whales_on_item_1:
+  id: 3
+  taggable_id: 1
+  tag_id: 4
+  member_id: 11
+  context: tag  
+  taggable_type: Story
+s2_on_t11:
+  id: 5
+  taggable_id: 2
+  tag_id: 11
+  taggable_type: Story
+s3_on_t1:
+  id: 6
+  taggable_id: 3
+  tag_id: 1
+  taggable_type: Story
+s4_on_t3:
+  id: 7
+  taggable_id: 4
+  tag_id: 3
+  taggable_type: Story
+s4_on_t11:
+  id: 8
+  taggable_id: 4
+  tag_id: 11
+  taggable_type: Story
+s4_on_t12:
+  id: 9
+  taggable_id: 4
+  tag_id: 12
+  taggable_type: Story
+s5_on_t16:
+  id: 10
+  taggable_id: 5
+  tag_id: 16
+  taggable_type: Story
+s5_on_t12:
+  id: 11
+  taggable_id: 5
+  tag_id: 12
+  taggable_type: Story
+s6_on_t13:
+  id: 12
+  taggable_id: 6
+  tag_id: 13
+  taggable_type: Story
+s6_on_t14:
+  id: 13
+  taggable_id: 6
+  tag_id: 14
+  taggable_type: Story
+
+s3_on_t1_auto_s12:
+  id: 50
+  taggable_id: 3
+  tag_id: 12
+  taggable_type: Story
+  member_id: 3
+s3_on_t1_auto_s13:
+  id: 51
+  taggable_id: 3
+  tag_id: 13
+  taggable_type: Story
+  member_id: 3

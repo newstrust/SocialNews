@@ -1,0 +1,107 @@
+# Story constants
+#
+
+story_story_type:
+ - news:                    {name: News, category: news, group: news}
+ - news_report:             {name: News Report, category: news, group: news}
+ - news_analysis:           {name: News Analysis, category: news, group: news}
+ - special_report:          {name: Special Report, category: news, group: news}
+ - breaking_news:           {name: Breaking News, category: news, group: news}
+ - investigative_report:    {name: Investigative Report, category: news, group: news}
+ - fact_check:              {name: Fact Check, category: news, group: news}
+ - poll:                    {name: Poll, category: news, group: news}
+ - research:                {name: Research, category: news, group: news}
+ - opinion:                 {name: Opinion, category: opinion, group: opinion}
+ - editorial:               {name: Editorial, category: opinion, group: opinion}
+ - interview:               {name: Interview, category: opinion, group: opinion}
+ - review:                  {name: Review, category: opinion, group: opinion}
+ - speech:                  {name: Speech, category: opinion, group: opinion}
+ - comment:                 {name: Comment, category: opinion, group: opinion}
+ - advertisement:           {name: Advertisement, category: opinion, group: other}
+ - advocacy:                {name: Advocacy, category: opinion, group: other}
+ - cartoon:                 {name: Cartoon, category: opinion, group: other}
+ - comedy_news:             {name: Comedy News, category: opinion, group: other}
+ - dramatization:           {name: Dramatization, category: opinion, group: other}
+ - entertainment:           {name: Entertainment, category: opinion, group: other}
+ - press_release:           {name: Press Release, category: opinion, group: other}
+ - statement:               {name: Statement, category: opinion, group: other}
+ - other:                   {name: Other, category: news, group: other}
+ - not_sure:                {name: Not sure, category: news, group: other}
+
+story_editorial_priority:
+ - 1:  {name: Very Low}
+ - 2:  {name: Low}
+ - 3:  {name: Medium}
+ - 4:  {name: High}
+ - 5:  {name: Very High}
+ - 0:  {name: Not Sure, group: other}
+
+story_status:
+  - pending:  {name: Pending, passive_name: Pending}
+  - hide:     {name: Hide, passive_name: Hidden}
+  - list:     {name: List, passive_name: Listed}
+  - feature:  {name: Feature, passive_name: Featured}
+  - queue:    {name: Queue, passive_name: Queued}
+
+story_online_access:
+  - full_access: {name: Full online access}
+  - limited_access: {name: Limited online access}
+  - free_subscription: {name: Free subscription required}
+  - paid_subscription: {name: Paid subscription required}
+  - display_archive: {name: Display story archive}
+  - no_access: {name: No online access}
+
+story_content_type:
+  - article: {name: Article, group: text}
+  - blog_post: {name: Blog Post, group: text}
+  - comic: {name: Comic, group: image}
+  - graphic: {name: Graphic, group: image}
+  - photo: {name: Photo, group: image}
+  - audio_streaming: {name: Audio - streaming, group: audio}
+  - audio_download: {name: Audio - download, group: audio}
+  - podcast: {name: Podcast, group: audio}
+  - video_streaming: {name: Video, group: video}
+  - video_download: {name: Video - download, group: video}
+  - animation: {name: Animation, group: video}
+  - multimedia: {name: Multimedia, group: multimedia}
+  - interactive: {name: Interactive, group: multimedia}
+
+story_scope:
+  - international: {name: International}
+  - national: {name: National}
+  - regional: {name: Regional}
+  - state: {name: State}
+  - local: {name: Local}
+  - not_applicable: {name: Not applicable, group: other}
+
+story_stat_count:
+  - "0": {name: 0}
+  - "1": {name: 1}
+  - "2": {name: 2}
+  - "3": {name: 3}
+  - "4": {name: 4}
+  - "5": {name: 5}
+  - "6": {name: 6}
+  - "7": {name: 7}
+  - "8": {name: 8}
+  - "9": {name: 9}
+  - "10": {name: 10+}
+  - "n/a": {name: Not applicable, group: other}
+
+story_stat_word_count:
+  - "0": {name: 0}
+  - "1": {name: 1}
+  - "2": {name: 2}
+  - "3": {name: 3}
+  - "4": {name: 4}
+  - "5": {name: 5}
+  - "6": {name: 6}
+  - "7": {name: 7-9}
+  - "12": {name: 10-14}
+  - "17": {name: 15-19}
+  - "25": {name: 20-29}
+  - "40": {name: 30-49}
+  - "62": {name: 50-74}
+  - "87": {name: 75-99}
+  - "100": {name: 100+}
+  - "n/a": {name: Not applicable, group: other}

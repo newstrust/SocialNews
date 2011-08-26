@@ -1,0 +1,29 @@
+<%- @title="Mass edit queued stories from the last #{pluralize(params[:timespan] || 1, "day")}" -%>
+
+<%- if logged_in? and current_member.has_role_or_above?(:editor) # only editors and above should have access to the queued stories -%>
+<ul>
+	<li> <%=link_to "Feeds index page", admin_feeds_path %> </li>
+<%#--	<li> <=link_to "Summary of auto-fetched feeds (last 24 hours)", autofetch_summary_admin_stories_path > </li> --%>
+</ul>
+<%- end -%>
+
+<h1><%=@title%></h1>
+<span style="color:#a00;font-weight:bold;">(Add ?timespan=N to the url if you want queued stories from the last N days)</span>
+
+<br/>
+
+<%- if @stories.blank? -%>
+<span style="font-size:18px">
+Sorry!  There are no queued stories within the last <%=pluralize(params[:timespan] || 1, "day")%>.  Try increasing the timespan!
+</span>
+<%- else -%>
+
+<br/><%= will_paginate(@stories) %> <br/> <br/>
+
+<%- form_for "admin/stories", :method => :post, :url => mass_update_queued_stories_admin_stories_url, :html => {:class => "stories"} do |f| -%>
+<%= render :partial => "/admin/stories/mass_edit_stories_form", :locals => { :stories => @stories } %>
+<%- end -%>
+
+<br/><%= will_paginate(@stories) %> <br/> <br/>
+
+<%- end -%>

@@ -1,0 +1,18 @@
+      <%#-- info toggle --%>
+      <div class="info_toggle_wrapper">
+        <div id="info_toggle" class="quick_filters show_hide_info">
+          <%- show = @mynews_opts.show_details -%>
+          <%- link_txt = "<span class='info_icon'></span>#{show ? 'Hide' : 'Show'} info" -%>
+          
+          <%= link_to_function link_txt, "toggle_all_story_info(#{current_member == @member}, '#{@member.id}')", :class => "#{show ? 'hide' : 'show'}_story_info" %>
+        </div>
+        <div class="quick_filters sort_filters css_dropdown_wrapper">
+        <ul class="css_dropdown">
+          <li class="css_dropdowni title"><a href="#"><span>Sort by: <span id="curr_sel">Relevance</span></span></a>
+            <ul class="css_dropdownm">
+              <%=['Relevance', 'Matches', 'Rating', 'Date'].collect { |c| "<li class=\"css_dropdowni\"><a class=\"css_dropdowni\" href=\"#\" onclick=\"sort_listing(this, '#{c}'); return false\">#{c}</a></li>" }%>
+            </ul>
+          </li>
+        </ul>
+        </div>
+      </div>

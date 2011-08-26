@@ -1,0 +1,15 @@
+<% if @num_smart_feed_stories >= 5 -%>
+  <% right_column_box :header => "Today's Feeds", :disclaimer_link => 'NEW' do -%>
+    <h3><strong><%=link_to name + " Feeds", todays_topic_feeds_feeds_path(slug)%></strong></h3>
+    Here are popular stories on this topic from our <%= link_to "smart feeds", feeds_path %> on Twitter and around the web.
+    <% if logged_in? && current_member.has_role_or_above?(:editor) -%>
+    Please check story info and fill in any missing fields.
+    <% end -%>
+    <br/>
+    <div style="margin:-15px 0 -10px -3px">
+    <script src="/javascripts/widgets/formats/smart_feeds.json" type="text/javascript"></script>
+    <script src="<%=todays_topic_feeds_feeds_path(slug)%>.json" type="text/javascript"></script>
+    <script src="/javascripts/render_widget.js" type="text/javascript"></script>
+    </div>
+  <% end -%>
+<% end -%>

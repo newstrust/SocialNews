@@ -1,0 +1,28 @@
+<div id="send_to_friend_form">
+  <div id="heading"></div>
+  <div id="title"></div>
+  <div class="wrapper">
+    <div id="collapse_all" style="margin:2px 0 10px 0;cursor:pointer;font-weight;bold;text-align:center;display:none;">Click here to close!</div>
+    <div id="error_results"></div>
+    <div id="notice_results"></div>
+    <div id="warning_results"></div>
+    <div id="form_results"></div>
+    <div id="form_container">
+      <div class="row">
+        <p class="label">To:</p>
+        <%= text_area'message', 'to', :value => '' %>
+      </div>
+    	<br/>
+      <p class="note">Separate email addresses with commas.<br>25 recipients max.</p>
+
+      <div class="row">
+        <p class="label">Note:</p>
+        <%= text_area 'message', 'body' %>
+      </div>
+      <div class="row">
+      	<%= submit_tag "", :id =>'send_to_friend_form_submit' %>
+        <%= link_to_function "Cancel", "close_email_dialog()" %>
+      </div>
+    </div>
+  </div>
+</div>

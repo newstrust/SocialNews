@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+		 <%# If we have a page-title set, use it, else use a default title! %>
+    <title><%= @title || app_name %></title>
+    <%= stylesheet_link_tag :all, :media => "all" %>
+    <%= render :partial => 'shared/jquery_includes' %>
+    <%= yield :page_scripts -%>
+		<%#-- Add RSS auto-discovery links --%>
+    <% if @rss_autodiscovery_links -%>
+			<% @rss_autodiscovery_links.each do |rss_stuff| -%>
+	    	<%= auto_discovery_link_tag :rss, rss_stuff[:link], :title=> rss_stuff[:title] %>
+	    <% end -%>
+    <% end -%>
+  </head>
+
+  <body <%if @body_onload %>onLoad="<%=@body_onload%>"<%end%>>
+    <div class="nav">
+      <div class="topbar">
+        <div class="logo">
+          <a href="/"><img src="<%=SocialNewsConfig["app"]["logo_path"]%>" alt="<%=app_name%>" width="195" height="38"/></a>
+        </div>
+        <div class="userlinks">
+          <% if logged_in? %>
+            Hello, <%= link_to current_member.name, current_member, :class => "username" %> |
+            <%= link_to "My Account", my_account_members_url %> |
+            <%= link_to "Log Out", sessions_path, :method => :delete %> |
+            <a href="/help">Help</a><br/>
+            <div style="font-size: 10px; font-weight: normal; color: #666">
+              Not <%= current_member.name %>?
+              <a href="#" class="username">Click here.</a>
+            </div>
+          <% else %>
+            <div style="margin-top: 12px; margin-bottom: 4px">
+              <%= link_to "Sign Up", new_member_path %> |
+              <%= link_to "Log In", {:controller=>:sessions, :action=>:new} %> |
+              <a href="/help">Help</a><br/>
+            </div>
+          <% end %>
+        </div>
+        <br clear="left"/><br/> <!-- important for layout! -->
+      </div>
+       <ul class="tabbar">
+				<% tabs = [
+						{:name => "Home", :route => home_url},
+						{:name => "World", :route => subject_url("world")},
+						{:name => "U.S.", :route => subject_url("us")},
+						{:name => "Politics", :route => subject_url("politics")},
+						{:name => "Business", :route => subject_url("business")},
+						{:name => "Sci/Tech", :route => subject_url("scitech")},
+						{:name => "Media", :route => subject_url("media")},
+						{:name => "Health", :route => subject_url("health")},
+						{:name => "All Topics", :route => topics_url}] %>
+				<% tabs.each do |tab| -%>
+					<li <% if tab==tabs.last %>class="lastTab"<% end %>><%= link_to "<span class='lbar'><span class='rbar'><span class='text'>#{tab[:name]}</span></span></span>",
+					 	tab[:route],
+						:class => (current_page?(tab[:route]) ? "sel" : "") %></li>
+				<% end -%>
+       </ul>
+      
+       <ul class="linkbar">
+         <li class="firstTab"><a href="/about"><span class="lbar">About</span></a></li>
+         <li><a href="<%=SocialNewsConfig["app"]["blog_url"]%>"><span class="lbar">Blog</span></a></li>
+         <li><a href="/sources"><span class="lbar">Sources</span></a></li>
+         <li><a href="/members"><span class="lbar">Members</span></a></li>
+         <li><a href="/about/tools.htm"><span class="lbar">Tools</span></a></li>
+         <li><%= link_to "<span class='lbar'>Submit</span>", submit_story_url %></li>
+         <li><a href="/about/invite.htm"><span class="lbar">Invite</span></a></li>
+         <li><a href="/donate"><span class="lbar">Donate</span></a></li>
+         <li><a href="/help"><span class="lbar">Help</span></a></li>
+       </ul>
+    </div>
+    <h1>Welcome Pledgie Users!</h1>
+    <p style="color: green"><%= render_flash %></p>
+    
+    <%= yield %>
+    
+    <div class="footer">
+      <div style="font-size: 11px;">
+        <a href="/about">About</a> |
+        <a href="<%=SocialNewsConfig["app"]["blog_url"]%>">Blog</a> |
+        <a href="/sources">Sources</a> |
+        <a href="/members">Members</a> |
+        <a href="/about/tools.htm">Tools</a> |
+        <a href="#" onclick="return false">Submit</a> |
+        <a href="/about/invite.htm">Invite</a> |
+        <a href="/donate">Donate</a> |
+        <a href="/help">Help</a> |
+        <a href="/welcome.htm">Get Started</a>
+      </div>
+      
+      <a href="/about/site_feedback">Feedback</a> |
+      <a href="/about/press.htm">Press</a> |
+      <a href="/partners/index.htm">Partners</a> |
+      <a href="/about/jobs.htm">Jobs</a> | 
+      <a href="/discussions">Comments</a> | 
+      <a href="/rss">RSS</a> | 
+      <a href="/widgets">Widgets</a> | 
+      <a href="/buttons/buttons.htm">Buttons</a> | 
+      <a href="/buttons/bookmarklet.htm">Bookmarklets</a> | 
+      <a href="/about/privacy.htm">Privacy Policy</a> | 
+      <a href="/about/terms.htm">Terms of Service</a>
+      <br/>
+      
+      &copy; <%="#{Time.now.year} #{app_name}"%>. Some rights reserved.
+    </div>
+    
+		<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		<script type="text/javascript">
+		var pageTracker = _gat._getTracker("UA-1098617-1");
+		pageTracker._trackPageview();
+		</script>
+  </body>
+</html>

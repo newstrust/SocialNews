@@ -1,0 +1,12 @@
+<%- link_class ||= nil %>
+<%- link_id ||= "more_news_#{member_id}" %>
+<%- link_text ||= "More News" %>
+<%- hide_pagination ||= false %>
+
+      <div class="paging more_button">
+        <div style="padding: 6px 0 0 10px;float: left;">
+          <ul class="pagination"<%=" style='display:none'" if hide_pagination%>>
+            <span><a href="#" id="<%=link_id%>" class="more_link<%=" #{link_class}" if link_class%>"><%=link_text%></a></span>
+          </ul>
+        </div>
+      </div>

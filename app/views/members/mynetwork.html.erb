@@ -1,0 +1,153 @@
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'follows' %>
+  <%= javascript_include_tag 'jquery/jquery.follows_autocomplete' %>
+  <%= javascript_include_tag 'mynetwork' %>
+  <%= javascript_include_tag 'fbc' %>
+  <%= javascript_include_tag 'twitter' %>
+<%- end -%>
+<% @no_bots = true -%>
+
+<% @title = "My Network - " + @member.name -%>
+<%- if logged_in? and current_member == @member -%>
+  <%- member_name = "my" -%>
+<%- else -%>
+  <%- first_name = first_name(@member) -%>
+  <%- member_name = first_name(@member) + "'s" -%>
+<%- end -%>
+
+<div class="story_listing_detail span-16">
+  <div class="story clearfix" style="line-height:1.5em;">
+    <h2 class="bottom helvetica">
+      <%= link_to_member(@member, :style => "color:#385ac8;" )%>'s Network <%= help_icon('about_mynetwork', 'mynews') %>
+    <% if @member.profile_status == "hide" -%>
+      
+      <span class="quiet small">(network page hidden - 
+      <%= mail_to email_addr("help"), "Email us for more info", :subject => "Hidden My Network Page - #{@member.name}", :encode => "javascript" %>)</span>
+    <% end -%>
+    </h2>
+    
+    <div id="mynews about_me" style="margin-top:10px;">
+    <%- if @my_page -%>
+      <p>You are following a <%= help_link("network","about_mynetwork","mynews") %> of <strong><%= plural(@followed_members.length,"person") %></strong>.
+    <%- else -%>
+      <%- if @followed_members.empty? -%>
+        <p><%= first_name %> is not yet following any members.
+      <%- else -%>
+        <p><%= first_name %> is following a <%= help_link("network","about_mynetwork","mynews") %> of <strong><%= plural(@followed_members.length,"person") %></strong>.
+      <%- end -%>
+    <%- end -%>
+      We welcome your <%= mail_to email_addr("feedback"), "feedback", :subject => "#{app_name} MyNews Feedback", :encode => "javascript" %>.
+      </p>
+    </div>
+      <% tools_box :page_type => :member_profile do %>
+        <%- if can_follow? -%>
+          <%- unless @my_page -%>
+            <% if current_member.followed_members.include?(@member) %>
+              <a href="#" class="unfollow_member" onclick="return toggle_follow(this, {type: 'member', id: <%=@member.id%>})"></a>
+            <%- else -%>
+              <a href="#" class="follow_member" onclick="return toggle_follow(this, {type: 'member', id: <%=@member.id%>})"></a>
+            <% end %>
+          <% end %>
+        <% end %>
+        <%- divider = "" -%>
+		    <div style="float:left;margin-top:4px;margin-right:4px;display:inline;">
+          <% if is_visible_mynews?(@member) %>
+            <%= link_to "", mynews_url(@member), :title => "Visit " + member_name + " MyNews page", :class => "mynews" %>
+            <%- divider = " | " -%>
+          <% end %>
+          <%= divider + link_to_member(@member, :link_text => "Profile", :class => "profile") %><%- divider = " | " -%>
+          <%= divider %>
+        </div>
+      <%- end -%>
+  </div>
+
+  <div class="member_profile story_listing_reviews flat span-16 mynetwork">
+    <div class="wrapper span-16 topic_source_listing_tabs" style="padding-top:0">
+
+    <!-- Tabbed box -->
+    <%- followed_str = @followed_members.empty? ? "" : "<span class=\"followers\">(#{@followed_members.length})</span>" -%>
+    <%- followers_str = @followers.empty? ? "" : "<span class=\"followers\">(#{@followers.length})</span>" -%>
+    <% main_column_tabbed_box :tabs => ["Network Activity", "Following" + followed_str, "Followers" + followers_str],
+                              :callback => "function(tab) { switch_activity_tab(#{@member.id}, tab) }",
+                              :tab_classes => ["network", "followed_members", "followers"] do %>
+
+      <!-- Network Activity tab -->
+      <% main_column_tab :anchor_class => "network", :first_tab => true do %>
+        <div style="float:left; margin-left:-15px;">
+
+          <div class="article">
+            <ul id="network_listing">
+              <%= render :partial => "network_activity", :locals => {:activities => @network_activity_entries, :activity_hash => @network_activity_hash, :my_page => @my_page, :followed_members => @followed_members } %>
+            </ul>
+          </div>
+
+          <%#-- SSS: This wont work because we purge hidden entries from the existing list --%>
+          <%#-- hide_pagination = @network_activity_entries.length < SiteConstants::NUM_ACTIVITY_ENTRIES_PER_FETCH ---%>
+          <%- hide_pagination = false %>
+          <%= render :partial => "shared/more_stories_button", :locals => {:link_id => "more_activity_#{@member.id}", :link_text => "More Activity", :link_class => "more_activity", :hide_pagination => hide_pagination} %>
+
+        </div>
+      <% end %>
+
+      <!-- Following tab -->
+      <% main_column_tab :anchor_class => "followed_members" do %>
+        <div style="float:left;margin-left:-15px;">
+          <div class="article">
+            <ul id="followed_members_listing">
+              <%= render :partial => "followed_members_activity" %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+            
+      <!-- Followers tab -->
+      <% main_column_tab :anchor_class => "followers" do %>
+        <div style="float:left;margin-left:-15px;">
+          <div class="article">
+            <ul id="followers_listing">
+              <%= render :partial => "followers_activity" %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+            
+    <% end %>
+
+    </div>
+    
+  </div>
+</div>
+
+<%- if @my_page -%>
+  <div class="span-8 mynews last mynews_rightcolumn"><%#- add 'last' into class at left to move this back to the upper right -%>
+    <% right_column_box :header => "Expand Your Network #{help_icon('add_members_mynetwork', 'mynews')}" do %>
+       <%- unless @followed_members.empty? -%>
+        <span class="mynews_prompt">You are following these members:</span>
+      <%- end -%>
+      <div class="input">
+       <%=render :partial => "/mynews/follows_autocomplete",
+                 :locals  => { :div_id => "my_members",
+                               :follow_type => "member", 
+                               :nonempty_prompt => "Add another member",
+                               :empty_prompt => "Add other people you trust",
+                               :featured_link => "/members/trusted",
+                               :featured_class => "follow_members",
+                               :followed_items => @followed_members.collect { |m| 
+                                 { :icon => m.favicon, 
+                                   :name => m.name, 
+                                   :id => m.id, 
+                                   :url => member_path(m),
+                                   :visible_profile => m.full_profile_visible_to_visitor?(current_member),
+                                   :fb_flag => fbc_session_user_friends_with?(m),
+                                   :twitter_flag => is_twitter_follower?(@member, m),
+                                   :mutual_follow_flag => @member.mutual_follower?(m) }
+                               },
+                               :taxonomy => "null",
+                               :help_link => "add_members_mynetwork",
+                               :query_url => "'#{search_members_path(:format => :js, :mynews => true)}'",
+                               :listing_refresh_fn => "function() { refresh_network_listings(#{@member.id}) }",
+                               :follow_filter_fn => "function(t, m) { filter_activity_by_member(#{@member.id}, t, m) }" } %>
+      </div>
+    <% end -%>
+  </div>
+<% end -%>

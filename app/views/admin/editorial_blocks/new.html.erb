@@ -1,0 +1,8 @@
+<h1>New editorial_block</h1>
+
+<%= error_messages_for :editorial_block %>
+
+<% form_for :editorial_block, :url => admin_editorial_blocks_path do |f| %>
+	<%= render :partial => "form", :locals => {:f => f} %>
+  <p> <%= submit_tag 'Create' %> <%= cancel_tag page_layout_path %> </p>
+<% end %>

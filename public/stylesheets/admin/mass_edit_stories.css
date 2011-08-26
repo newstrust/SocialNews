@@ -1,0 +1,33 @@
+.alert label              { color: #b50b05; }
+.alert select, .alert input, .alert textarea { border : 2px solid #b50b05; }
+.autofilled label         { color: #5561cf; }
+.autofilled select, .autofilled input, .autofilled textarea { border : 1px solid #5561cf; }
+form                      { width:800px; }
+form.stories *            { margin: 0; padding: 0; }
+form.stories textarea     { height: auto; width: auto; }
+form.stories input        { padding:3px; width: 400px; }
+form.stories input.narrow { padding:3px; width: 50px; }
+form.stories input.submit { margin: 0 0 10px 250px; width:auto; border:1px solid red; color: red; font-weight:bold; font-size:15px; }
+div.story                 { background:rgb(245,245,250); margin-bottom: 10px; padding: 10px 5px 10px 10px; width: auto; border: 1px solid #888; }
+div.dugg_tweeted          { border: 2px solid #00a; }
+div.two_columns           { clear:both; width:800px;}
+div.column1               { float: left;  width:55%; }
+div.column2               { float: right; width:45%; }
+div.column2 input         { width:150px; }
+div.entry                 { clear:both; margin: 5px; }
+div.entry label           { font-weight: bold; float: left;}
+div.value, div.story_relation { margin-left: 100px; }
+div.selector              { font-weight: bold; font-size: 15px; }
+div.selector input        { display: inline; width: auto; border: none; }
+.hint                     { }
+div.info_header               { clear:both; }
+div.info_header a.info_toggle { padding-left: 12px; font-weight:bold; }
+.hide                         { background: url('/images/ui/disclosuretri-shut.gif') no-repeat left top; }
+.show                         { background: url('/images/ui/disclosuretri-open.gif') no-repeat left top; }
+.hide div.info                { display: none; }
+.show div.info                { display: block; padding: 5px; border:1px dotted #888; }
+
+/* Override some css settings from 05_interaction */
+.story_lookup .status { margin-right: 25px; }
+div.batch_autocomplete input { width: 230px; }
+div.story_relation           { width: 350px; }

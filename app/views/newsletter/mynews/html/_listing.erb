@@ -1,0 +1,41 @@
+<%# --- IMPORTANT: We have to generate absolute urls here.  So, use the "XYZ_url" form of urls in link_to --- %>
+
+<%# --- Section Story list --- %>
+<tr>
+  <td colspan="3">
+  <ul style="list-style-type:none;margin:0;padding:0;">
+<% stories.each do |s| -%>
+    <li style="width:650px;line-height:1.4em;margin-bottom:15px;padding-bottom:10px;clear:both;border-bottom: 1px dotted #ADADAD;">
+    <div><%- starred = s.saved_by?(member) -%>
+      <%= link_to image_tag("#{home_url}images/ui/star_#{starred ? "on" : "off"}.png", :border => "0"), save_story_url(s, @link_params), :style => "background-color:transparent;padding-right:3px;margin:0px;float:left;", :title => (starred ? "Unstar this story" : "Star this story")%><div style="font-family:'Helvetica Neue',Arial,Helvetica,sans-serif;font-size:14px;line-height:15px;"><%= link_to s.title, newsletter_toolbar_link(s, @link_params) %><%= display_status_badge_newsletter(s.status) unless s.is_public? %></div>
+      <div style="clear:both">
+        <%if s.primary_source %><%= s.primary_source.is_public? ? link_to(s.primary_source.name, @link_params.merge(:controller => :sources, :action => :show, :id => s.primary_source.id, :only_path => false), :style => "color:#666666;font-weight:bold;font-size:11px;text-transform:uppercase;") : content_tag("span",s.primary_source.name, :style => "color:#666666;font-weight:bold;font-size:11px;text-transform:uppercase;") %><%end%>
+        <%if !s.journalist_names.blank? %>- by <span style="color:#666666;font-size:11px;text-transform:uppercase;font-weight:bold;"> <%= h s.journalist_names%></span></span><%end%>
+        <%if s.story_date%><span style="color:#adadad;"> - <%= s.story_date.strftime("%b. %d") %></span><%end%>
+        <%if s.story_type %><span style="color:#adadad;">(<%= humanize_token(s, :story_type) %>)</span><%end%>
+        <%if !s.excerpt.blank? && ["list","feature"].include?(s.status) %>
+        <br><span style="font-size:12px;color:#333333;font-weight:normal;line-height:110%"><%=StringHelpers.truncate_on_word_boundary(s.excerpt,0,200,true)%></span>
+        <% end %>
+        <div style="font-size: 11px;clear:both;color:#adadad;">
+            <%=show_submitted_by(s, {:newsletter_prefix => "Posted by", :for_newsletter => true, :absolute_urls => true}, {:style => "color:#adadad;font-weight:normal;"})%><br />
+        </div>
+       </div>
+    </div>
+    <div style="margin: 5px 0 2px 0">
+      <%#-- Cannot do JS tricks in email newsletters for reviews -- so taking them to the story overview page --%>
+      <%- reviewed = s.reviewed_by?(member) -%>
+		  <%=link_to image_tag("#{home_url}images/ui/tools/#{reviewed ? "edit_" : ""}review_btn_small.png", :border => "0"), newsletter_toolbar_link(s, @link_params, :go => "review"), :style => "width:45px;height:20px;float:left;margin:0px;", :title => (reviewed ? "Edit your review" : "Review this story") %>
+      <% if (s.reviews_count > 0) -%>
+		    <div style="background:url(<%=home_url%>images/trustometer/trustometer_bg_medium.png) no-repeat left top;_background:url(<%=home_url%>images/trustometer/trustometer_bg_medium.gif) no-repeat left top;width:73px;height:20px;margin-left:5px;margin-right:5px;float:left;">
+        <%- is_gray = s.reviews_count < SocialNewsConfig["min_reviews_for_story_rating"] -%>
+        <%= link_to static_trustometer_img(s.rating, {:absolute_path => true, :color => (is_gray ? "gray" : "")}), story_url(s, @link_params), :style => "margin-left:6px" %><%= link_to sprintf("%0.1f", s.rating), story_url(s, @link_params), :style => "font-size:0.9em;margin:0 0.5em;font-weight:bold;color:#{is_gray ? "#999" : "#3A9800"}" %>
+        </div>
+      <% end -%>
+ 		  <%=link_to see_reviews_link_text(s), story_url(s, @link_params), :style => "float:left" %>
+    </div>
+    <br clear="both"/>
+    </li>
+<% end %>
+  </ul>
+  </td>
+</tr>

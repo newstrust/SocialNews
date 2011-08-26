@@ -1,0 +1,43 @@
+<% @title = "Email Newsletters" %>
+<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div>
+	<div class="wrapper">
+		<div class="interior_content" style="font-size:1.14em;line-height:1.25em;">
+
+<h2>Email Newsletters</h2>
+
+<p><%=app_name%> offers to registered members a variety of daily and weekly newsletters, as well as MyNews emails and special notices.</p>
+<% form_for @member, :url => manage_subscriptions_path, :html => {:class => "edit_subscription"} do |f| %>
+<%- if @local_site.nil? -%>
+  <%= render :partial => "members/national_subscriptions" %>
+<%- else -%>
+  <%= render :partial => "members/local_sites/#{@local_site.slug}/subscriptions" %>
+<%- end -%>
+<br/>
+<%= f.check_box("bulk_email", {}, true, false) %>
+<%= f.label(:bulk_email, "Special Notices", :style => "display: inline; font-weight:bold") %><br>
+Helpful tips, project updates and recommended stories that match your interests. We only send out these notices occasionally.<br>
+<p>
+<%- if !@local_site.nil? -%>
+<div style="font-size:.9em;margin-right:10px;background-color:#F3F6FD;padding:10px">
+  <%= render :partial => "members/national_subscriptions" %>
+</div>
+<%- end -%>
+<p>To subscribe to any of our newsletters, simply check its box above and click "Save".</p>
+<p>To unsubscribe, uncheck its box and click "Save".</p>
+
+<p><strong>Email Format</strong><br>
+I prefer to receive email newsletters as:<br>
+<%= f.radio_button("newsletter_format", "html")%>
+<%= label_tag(:newsletter_format_html, "HTML", :style => "display: inline;") %> &nbsp; &nbsp; &nbsp;
+<%= f.radio_button("newsletter_format", "text")%>
+<%= label_tag(:newsletter_format_text, "Plain Text", :style => "display: inline;") %>
+</p>
+<div class="buttons" style="padding-top:0px;">
+	<%= submit_button "Save" %>
+</div>
+<% end -%>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>

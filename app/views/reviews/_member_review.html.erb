@@ -1,0 +1,21 @@
+<% hide_flags ||= {} -%>
+<% show_flags ||= {} -%>
+<div class="article member_detail">
+<ul>
+  <%= render :partial => "stories/story",
+             :object  => review.story,
+             :locals  => { :hide_flags => { :quote => true,
+                                            :submitted_by => true,
+                                            :rating => true,
+                                            :review_it => true,
+                                            :edit_it => true,
+                                            :reviews => true,
+                                            :fb_share => true,
+                                            :share => true},
+                           :show_flags => show_flags,
+                           :last => true } %>
+</ul>
+<div>
+  <%= render :partial => 'reviews/review', :object => review, :locals => {:hide_flags => hide_flags, :show_flags => {:see_all_reviews => true}.merge(show_flags)} %>
+</div>
+</div>

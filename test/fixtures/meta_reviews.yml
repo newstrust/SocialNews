@@ -1,0 +1,18 @@
+mr_one:
+  id: 1
+  member_id: 11
+  review_id: 1
+  rating: 3
+
+mr_two:
+  id: 2
+  member_id: 13
+  review_id: 2
+  rating: 5
+
+mr_three:
+  id: 3
+  member_id: 16
+  review_id: 1
+  rating: 4
+

@@ -1,0 +1,18 @@
+<% is_group = page_obj.class == Group -%>
+
+<%- cache @sidebar_cached_fragment_name do -%>
+  <%#-- If a group, always display image --%>
+  <%#-- Display topic image only if it hasn't already been used in the featured story area --%>
+  <%- if page_obj.image && (is_group || (@right_column_settings["show_photo?"].is_true? && (!@featured_story || @featured_story.video || @featured_story.image || !@featured_story_settings["use_topic_photo?"].is_true?))) -%>
+  <div class="span-8 last">
+    <div class="rbox" align="center">
+    <div class="featured_image clearfix" style="width:100%;">
+      <%= image_tag(page_obj.image.public_filename(:column)) %>
+      <%= topic_photo_credit(page_obj) %>
+    </div>
+    </div>
+  </div>
+  <%- end -%>
+
+  <%= render :partial => "shared/sidebar_editorial_boxes", :locals => {:is_home_page => false, :page_obj => page_obj, :show_nc_box => @news_comparison_settings["show_box?"].is_true? } %>
+<%- end -%>

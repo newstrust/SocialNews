@@ -1,0 +1,45 @@
+<%- @title = "#{app_name} Group Members: " + @group.name -%>
+
+<div class="groups">
+  <div class="story_listing_detail span-16">
+    <div class="topic_source blue_box clearfix">
+      <div class="top"></div>
+      <div class="wrapper">
+        <div class="icon_group_page_beta"><%= help_link(image_tag("/images/ui/groups/icon_group_page_beta.png"),"","group") %></div>
+        <h2 class="bottom"><%= @group.name %></h2>
+        <%= content_tag(:h3, @group.sg_attrs.subtitle) unless @group.sg_attrs.subtitle.blank? %>
+        <%= render :partial => "shared/landing_pages/group_page_intro", :locals => { :page_obj => @group, :members_page => true } %>
+        <p style="margin-top:15px;"><%= link_to("See Group Page &raquo;", group_url(@group)) %>
+      </div>
+      <div class="bottom"></div>
+    </div>
+  </div>
+</div>
+<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div>
+	<div class="wrapper">
+		<div class="interior_content">
+		<h2 class="bottom">Group Members</h2>
+		<p>
+			Here are all the members in this group, sorted alphabetically:
+		</p>
+		
+		
+		<% @group.members.sort { |a,b| a.name <=> b.name}.each_with_index do |member, i| %>
+			<% odd = (i % 2) == 1 %>
+			<div style="width: 170px; height: 40px; padding: 5px; margin:0; float: left; <% if odd %>background-color: #eef<% end %>">
+					<%= link_to_member_photo(member, {}, {:style => "margin-right: 5px; float: left"}) %>
+				<div class="group_members">
+					<%= link_to_member(member) %>
+					<br style="clear: none"/>
+					<small><%= profile_line member, "last_active_at", :humanized_key => "Last visit",
+				:formatter => :format_date_only,
+				:if_empty_say => "Never" %></small>
+				</div>
+			</div>
+		<% end %>
+		<br clear="all"/>
+	  </div>
+	</div>
+	<div class="bottom"></div>
+</div>

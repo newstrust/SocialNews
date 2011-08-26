@@ -1,0 +1,74 @@
+/* For member widgets, we hide these elements by default -- and let the user explicitly enable it if they want to show it! */
+var _NTW_defaultHides = { date: 1, authors: 1, quote: 1, like_it: 1, 'review.comment': 1, 'review.links': 1 };
+
+var _NTW_widget_defaults = {
+    /* This structure provides settings for the widget content */
+  content: {
+    tracking_code   : 'mwid',
+    num_stories     : 5,
+    site_logo       : 'images/logos/socialnews-logo_20px.png',
+    header          : true,
+    footer          : true,
+    show_stars      : true,
+    stars_dir       : 'small/',
+    gray_stars_dir  : 'small/',
+    png_stars       : false,
+    date_format     : 'M d, y',
+    title_max_length: 100,
+    quote_max_length: 200
+  },
+    /* This structure describes the base css settings for the entire widget */
+  base_css: {
+    link_target     : '_blank',
+    link_style      : 'text-decoration:none;color:#385AC8;',
+    link_hover_style: 'text-decoration:underline;',
+    base_style      : 'background:white;font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;font-size:11px;color:#acacac;line-height:14px;text-align:left;',
+    story_style     : 'font-size:11px;margin:10px 5px 10px 5px; padding:2px 0px;',
+    header_style    : 'margin:5px 5px 5px 5px; padding: 5px 0; border-bottom:1px solid #acacac;font-size:12px; color:#acacac;',
+    footer_style    : 'margin:10px; padding: 15px 0; border-top: 1px solid #acacac;font-size:11px;font-weight: bold;',
+    stars_img_style : 'border:none;float:none;margin:0px 0 1px 5px;vertical-align:middle'
+  },
+    /* This structure describes the header format */
+  header_format: [
+    { element: 'listing_topic',	dom: [{ elt: 'a', style: 'text-decoration:none;font-size:14px;font-weight:bold;color:#3f3f3f;'}] },
+    { element: 'hdr_story_type', dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;color:#666666'}], prefix: ' - ' },
+    { element: 'sources_type', dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;color:#666666'}], prefix: ' - ' }
+  ],
+    /* This structures describes the story format  */
+  story_format : [
+    { element: 'title',      dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;font-size:12px;color:#385AC8;font-family:Georgia,Times,serif;'}] },
+    { element: 'source',     dom: [{ elt: 'span', style: 'margin-bottom:3px;color:#666666;'}, { elt: 'a', style: 'text-decoration:none;font-weight:bold;font-size:10px;color:#666666;text-transform:uppercase;'}], prefix: '\n' },
+    { element: 'authors',    dom: [{ elt: 'span', style: 'font-size:10px;color:#666666;text-transform:uppercase;font-weight:bold;'}],	prefix: ' - by ' },
+    { element: 'date',       dom: [{ elt: 'span', style: 'font-size:11px;color:#acacac;'}],  	prefix: ' - ' },
+    { element: 'story_type', dom: [{ elt: 'span', style: 'font-size:11px;'}], 	prefix: ' (', suffix  : ')' },
+    { element: 'div_dom_tree',
+      style   : 'font-size:11px;line-height:15px;color:#3f3f3f;',
+      children : [
+        { element: 'review.rating',  dom: [{ elt: 'a', style: 'text-align:center;text-decoration:none;color:#3A9800;font-size:10px;font-weight:bold;background:url(/images/trustometer/trustometer_bg_medium.gif) no-repeat left top;margin:0px 3px 5px 0px;vertical-align:middle;width:73px;height:19px;display:block;float:left;padding-top:2px;'}] },
+        { element: 'review.see_it',  dom: [{ elt: 'a', style: 'text-decoration:none;color:#385AC8;font-size:10px;display:block;font-weight:bold;padding-top:6px;line-height:9px;'}] },
+        { element: '', dom:[{elt: 'div', style:'clear:both;width:0;*height:0px;'}] },
+        { element: 'Notes:', dom: [{ elt: 'span', style: 'background:url(images/ui/story_listings/notes_icon.gif) center left no-repeat;padding:5px 5px 5px 23px;font-weight:bold;'}], if_present: 'review.note'},
+        { element: 'review.note', dom: [{ elt: 'span' }], suffix: '\n' },
+        { element: 'Comment:', dom: [{ elt: 'span', style: 'background:url(images/ui/story_listings/comment_icon.gif) center left no-repeat;padding:5px 5px 5px 23px;font-weight:bold;'}], if_present: 'review.comment'},
+        { element: 'review.comment', dom: [{ elt: 'span' }], suffix: '\n' },
+        { element: 'Quote:', dom: [{ elt: 'span', style: 'background:url(images/ui/story_listings/quote_icon.gif)) center left no-repeat;padding:5px 5px 5px 23px;font-weight:bold;'}], if_present: 'quote' },
+        { element: 'quote', dom: [{ elt: 'span'}], suffix: '\n' },
+        { element: 'Links:', dom: [{ elt: 'span', style: 'background:url(images/ui/story_listings/link_icon.gif) center left no-repeat;padding:5px 5px 5px 23px;font-weight:bold;'}], if_present: 'review.links'},
+        { element: 'review.links',   dom: [{ elt: 'a', style: 'text-decoration:non; color: #385AC8;'}], suffix: '\n' },
+        { element: ' Rating:',       dom: [{ elt: 'span', style: 'background:url(images/ui/nt.gif) center left no-repeat;padding:0 5px 0 17px;font-weight:bold;'}] },
+        { element: 'rating_nostars', dom: [{ elt: 'a', style: 'text-decoration:none;font-size:11px;color: #385AC8;font-weight:bold;'}] },
+        { element: 'num_reviews',    dom: [{ elt: 'a', style: 'text-decoration:none;font-size:11px;color: #385AC8;font-weight:bold;'}], prefix: ' | ' },
+        { element: 'review_it',      dom: [{ elt: 'a', style: 'text-decoration:none;font-size:11px;color: #3A9800;font-weight:bold;'}],        prefix: ' | ' },
+        { element: 'like_it',        dom: [{ elt: 'a', style: 'text-decoration:none;font-size:11px;color: #385AC8;font-weight:bold;'}], prefix: ' | ' }
+     ]
+    }
+  ],
+    /* This structure describes the footer format */
+  footer_format: [
+    { element: 'more_stories' },
+    { element: 'help', dom: [{ elt: 'a', style: 'font-weight:normal;text-decoration:none; color:#acacac'}], prefix: ' ' },
+    { element: 'submit_story', prefix: '\n' },
+    { element: 'get_widget',   prefix: ' | ' },
+    { element: 'signup',       prefix: ' | ' }
+  ]
+};

@@ -1,0 +1,34 @@
+<h1 class="use16columns inner_left">Edit <%=@lsite.name%> Local Site Settings </h1>
+
+<%= error_messages_for :local_site %>
+
+<div class="use10columns inner_left">
+  <% form_for :lsite, :url => admin_local_site_path(@lsite), :html => {:method => :put} do |f| -%>
+    <%= render :partial => 'form' , :locals => { :f => f }%>
+    <%= form_buttons("Update", admin_local_sites_path) %>
+  <% end -%>
+</div>
+
+<div style="font-size: 16px; font-weight:bold; clear:both;margin: 20px 0">
+<%= link_to "Edit Home Page Layout", "#{@lsite.home_page}#{admin_home_path}" %>
+</div>
+
+<%#-- hosts only after the local site has been created --%>
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'admin/groups'%>
+<%- end -%>
+
+<script type="text/javascript" charset="utf-8">
+  FORMATTED_SEARCH_ADMIN_MEMBERS_PATH = "<%= search_admin_members_path(:format => :js) %>";
+  FORMATTED_ADMIN_GROUP_MEMBERS_PATH = "<%= admin_host_index_path(:hostable_id => @lsite.id, :hostable_type => 'local_site', :format => :js) %>";
+</script>
+
+<div class="use10columns inner_left fieldset" style="clear:both;">
+  <h2>Hosts</h2>
+  <%= render :partial => "admin/members/member_lookup", :locals => {
+    :no_header => true,
+    :members => @lsite.hosts,
+    :add_url => admin_host_path(:hostable_id => @lsite.id, :hostable_type => "LocalSite", :format => :js),
+    :delete_base_url => admin_host_index_path(:hostable_id => @lsite.id, :hostable_type => "LocalSite", :format => :js)} %>
+  <div style="clear:both">&nbsp;</div>
+</div>

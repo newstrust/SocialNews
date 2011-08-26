@@ -1,0 +1,24 @@
+<% stories           = @news_comparison_stories -%>
+<% subtopic          = @news_comparison_settings["subtopic"].value -%>
+<% heading           = @news_comparison_settings["heading"].value -%>
+<% description       = @news_comparison_settings["topic_description"].value -%>
+<% more_stories_text = @nc_more_stories_text -%>
+<% more_stories_link = @nc_more_stories_link -%>
+
+<div class="stage_right right_column_box span-8">
+  <div class="top"></div>
+  <div class="wrapper">
+    <div class="header"><h3 class="bottom"><%=is_home_page && heading.blank? ? "Featured Topic" : heading%></h3></div>
+    <div class="content">
+      <h2><%= link_to(subtopic.blank? ? page_obj.name : subtopic, page_obj) %></h2>
+      <p><%= description if !description.blank? %></p>
+      <ul>
+        <% stories.each do |story| -%>
+          <%= render :partial => "stories/story", :object => story, :locals => {:see_reviews_msg => "Reviews &raquo;", :hide_flags => {:quote => true, :submitted_by => true, :authors => true, :reviews => true, :favicons => false, :story_date => true, :type => true, :no_rating => true, :fb_share => true, :tw_share => true, :email => true, :share => true, :reviews => true}, :show_flags => {:starred => true, :gray_trustometer => true, :row2_reviews => false, :reviews_btn => true}} %>
+        <% end -%>
+      </ul>
+      <%= link_to "#{more_stories_text} &raquo;", more_stories_link, :style => "font-weight:bold;font-size:1em;float:left;width:100%;color: #6388C0;" %>
+    </div>
+  </div>
+  <div class="bottom"></div>
+</div>

@@ -1,0 +1,41 @@
+pledgie_slug:
+  id: 1
+  name: pledgie
+  sluggable_type: Partner
+  sluggable_id: 1
+
+moveon_slug:
+  id: 2
+  name: moveonorg
+  sluggable_type: Partner
+  sluggable_id: 2
+  
+pledgie_save_the_whales_invitation:
+  id: 3
+  name: save-the-whales
+  sluggable_type: Invitation
+  sluggable_id: 2
+
+pledgie_save_the_rainforests_invitation:
+  id: 4
+  name: save-the-rainforests
+  sluggable_type: Invitation
+  sluggable_id: 1
+
+member_fab:
+  id: 5
+  name: fabrice-florin
+  sluggable_type: Member
+  sluggable_id: 19
+
+member_kaizar:
+  id: 6
+  name: kaizar-campwala
+  sluggable_type: Member
+  sluggable_id: 20
+
+member_derek:
+  id: 7
+  name: derek-hawkins
+  sluggable_type: Member
+  sluggable_id: 21

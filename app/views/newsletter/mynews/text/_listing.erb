@@ -1,0 +1,17 @@
+<% @max_line_len = SocialNewsConfig["newsletter"]["max_line_length"] -%>
+
+<% stories.each do |s| -%>
+<%= StringHelpers.linewrap_text(s.title.upcase, @max_line_len) %><% unless s.is_public? -%> (<%= display_status(s.status) %>)<% end %>
+<% new_line = "" -%>
+<%if s.primary_source %><%new_line += s.primary_source.name%><%end-%>
+<%if !s.journalist_names.blank? %><% new_line +=" - By #{s.journalist_names}"%><%end-%>
+<%if s.story_date %><% new_line += " - #{s.story_date.strftime("%b. %d")}"%><%end-%>
+<%if s.story_type %><% new_line += " (#{humanize_token(s, :story_type)})"%><%end-%>
+<%= StringHelpers.linewrap_text(new_line, @max_line_len) %>
+<%if !s.excerpt.blank? && ["list","feature"].include?(s.status) %>
+<%=StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(s.excerpt,0,200,true), @max_line_len)%>
+<%end-%>
+<%=s.reviews_count == 0 ? "" : sprintf("%0.1f", s.rating) + " avg. rating, " %><%=s.reviews_count >= SocialNewsConfig['min_reviews_for_story_rating'] ? pluralize(s.reviews_count, "review") + ", " : "" %><%=show_submitted_by(s, {:for_newsletter => true})%>
+<%= story_url(s) %>
+
+<% end -%>

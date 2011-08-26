@@ -1,0 +1,59 @@
+/* For source widgets, we hide quote, date, and like_it by default -- and let the user explicitly enable it if they want to show it! */
+var _NTW_defaultHides = { date: 1, like_it: 1 };
+
+var _NTW_widget_defaults = {
+    /* This structure provides settings for the widget content */
+  content: {
+    tracking_code   : 'swid',
+    num_stories     : 5,
+    site_logo       : 'images/logos/socialnews-logo_20px.png',
+    header          : true,
+    footer          : true,
+    show_stars      : true,
+    stars_dir       : 'small/',
+    gray_stars_dir  : 'small/',
+    png_stars       : false,
+    date_format     : 'M d, y',
+    title_max_length: 100,
+    quote_max_length: 135
+  },
+    /* This structure describes the base css settings for the entire widget */
+  base_css: {
+    link_target     : '_blank',
+    link_style      : 'text-decoration:none',
+    link_hover_style: 'text-decoration:underline; color:#1a4',
+    base_style      : 'background:white;font-family:arial,helvetica,sans-serif;font-size:10px;color:#777;line-height:14px;text-align:left;',
+    story_style     : 'font-size:10px;margin:4px 5px; padding:2px 0px',
+    header_style    : 'margin:0 5px 5px 5px;padding:5px 0;border-bottom:1px solid #aaa;font-size:11px;line-height:15px;',
+    footer_style    : 'margin:5px;padding:5px 0;border-top:1px solid #aaa;font-size:9px;font-weight: bold;',
+    stars_img_style : 'border:none;float:none;margin:1px 0 1px 5px;vertical-align:middle'
+  },
+    /* This structure describes the header format */
+  header_format: [
+    { element: 'source_name',   dom: [{ elt: 'div', style: 'margin-bottom:2px;font-weight:bold;font-size:13px;'}, { elt: 'a' }] },
+    { element: 'listing_type',  dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;font-size:12px;color:#777'}] },
+    { element: 'timespan', prefix: ' (', suffix: ')' },
+    { element: 'listing_topic', dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;color:#777'}], prefix: '\n' },
+    { element: 'hdr_story_type',  dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;color:#777'}], prefix: ' - ' }
+  ],
+    /* This structures describes the story format  */
+  story_format: [
+    { element: 'title',       dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;font-size:11px'}], suffix: '\n' },
+    { element: 'authors',     dom: [{ elt: 'span', style: 'font-size:10px;'}], prefix: 'By ' },
+    { element: 'date',        dom: [{ elt: 'span', style: 'font-size:10px;'}], prefix: ' - ', prefix_if_present: 'authors' },
+    { element: 'story_type',  dom: [{ elt: 'span', style: 'font-size:10px;'}], prefix: ' (', suffix: ')' },
+    { element: 'quote',       dom: [{ elt: 'span', style: 'font-size:11px;margin-bottom:2px;'}],           prefix: '\n' },
+    { element: 'rating',      dom: [{ elt: 'a', style: 'text-decoration:none;color:#399800;font-size:11px;font-weight:bold;background:url(/images/trustometer/trustometer_bg_medium.png) no-repeat left top;padding:1px 3px 1px 0;vertical-align:middle'}], prefix: '\n' },
+    { element: 'num_reviews', dom: [{ elt: 'a', style: 'text-decoration:none;font-size:10px;font-weight:bold;'}], prefix: ' | ' },
+    { element: 'review_it',   dom: [{ elt: 'a', style: 'text-decoration:none;font-size:10px;color:#080'}],        prefix: ' | ' },
+    { element: 'like_it',     dom: [{ elt: 'a', style: 'text-decoration:none;font-size:10px;font-weight:bold;'}], prefix: ' | ' }
+  ],
+    /* This structure describes the footer format */
+  footer_format: [
+    { element: 'more_stories' },
+    { element: 'help', dom: [{ elt: 'a', style: 'font-weight:normal;text-decoration:none; color:#777'}], prefix: ' ' },
+    { element: 'submit_story', prefix: '\n' },
+    { element: 'get_widget',   prefix: ' | ' },
+    { element: 'signup',       prefix: ' | ' }
+  ]
+};

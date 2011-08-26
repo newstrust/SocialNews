@@ -1,0 +1,41 @@
+<% @title = "Search Results" %>
+<div class="span-24 story_listing_full search">
+<div class="listing">
+	<div class="top" style="margin-top:20px;"></div>
+	<div class="wrapper">
+	
+<%- if @results.empty? -%>
+<p class="flash_error">Your search returned no results.</p>
+<%- end -%>
+<div class="head_row"><h2>Search Results</h2></div>
+  <dl class="inline_list">
+	 <% @newparams = params.merge({:controller => 'pages'}); @newparams.delete(:page) -%>
+    <dd><%= link_to 'Show All',     @newparams.merge!({ :action => :search,       :type => ''}), :style => ((params[:type] == nil || params[:type] == "") ? "color:#333" : "") %> | </dd>
+    <dd> <%= link_to 'Stories', @newparams.merge!({ :action =>:scoped_search, :type => 'Story' }), :style => (params[:type] == "Story" ? "color:#333" : "") %> | </dd>
+    <dd> <%= link_to 'Sources', @newparams.merge!({ :action =>:scoped_search, :type => 'Source' }), :style => (params[:type] == "Source" ? "color:#333" : "") %> | </dd>
+    <dd> <%= link_to 'Members', @newparams.merge!({ :action =>:scoped_search, :type => 'Member'}), :style => (params[:type] == "Member" ? "color:#333" : "") %> </dd>
+  </dl>
+ 
+  <div class="results">
+  <%- @results.each do |r| -%>
+    <%= render :partial => "#{r.class.name.downcase}_result", :locals => { :result => r } %>
+  <%- end -%>
+  </div>
+</div>
+<div class="bottom"></div>
+</div>
+<div class="pagination_wrapper">
+<div class="center">
+  <%= will_paginate @results %>
+</div>
+</div>
+<br/>
+
+<dl class="wrong_results">
+  <dt>If you're not finding what you need:</dt>
+  
+  <dd>Try searching for fewer words (<strong>Washington</strong> rather than <strong>Washington DC</strong>, or <strong>Iraq</strong> rather than <strong>War in Iraq</strong>)</dd>
+  <dd>Try searching without suffixes (<strong>price</strong> rather than <strong>prices</strong> or <strong>pricing</strong>)</dd>
+  <dd>Doublecheck your spelling</dd>
+</dl>
+</div>

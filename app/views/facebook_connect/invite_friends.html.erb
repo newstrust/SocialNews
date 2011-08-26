@@ -1,0 +1,16 @@
+<%- if facebook_session -%>
+<div style="width:775px">
+<%- fb_serverfbml do -%>
+<script type="text/fbml">
+  <fb:fbml>
+    <% content_for("invite_user") do -%>
+      <%= "Check out #{app_name}! #{fb_req_choice("Try #{app_name}", new_sessions_url)}" %>
+    <% end -%>
+    <%- fb_request_form(app_name, "invite_user", fb_record_invitations_url, :invite => true) do -%>
+      <%= fb_multi_friend_selector("Invite your friends to check out #{app_name}", :showborder => true, :exclude_ids => @exclude_ids, :condensed => false) %>
+    <%- end -%>
+  </fb:fbml>
+</script>
+<%- end -%>
+</div>
+<%- end -%>

@@ -1,0 +1,15 @@
+<% if !logged_in? && !visitor_is_bot? -%>
+  <%- @login_overlay_added ||= false -%>
+  <%- @login_overlay_header ||= "<p>Please login or #{link_to "<strong>sign up</strong>", new_member_path} to participate on #{app_name}.</p>" -%>
+  <%- if !@login_overlay_added -%>
+    <%- @login_overlay_added = true -%>
+    <%#-- floating login container --%>
+    <div id="login_dialog_container" style="display:none;margin:0;padding:15px;font-size:0.92em">
+      <%= @login_overlay_header %>
+      <%= render :partial => "sessions/new", :locals => {:reload => true} %>
+    </div>
+    <script type="text/javascript">
+    var member_id = <%=logged_in? ? current_member.id : 0%>;
+    </script>
+  <% end -%>
+<% end -%>

@@ -1,0 +1,23 @@
+<% @title = "#{@member.name}'s Ratings" %>
+
+<div class="span-16">
+	
+	<div class="story_listing_reviews span-16"> <%# FIXME CSS classes %>
+    <div class="top"></div>
+    
+    <div class="wrapper span-16">
+      <div id="meta_reviews" class="main_column_box">
+    		<h2>Ratings <%= @given ? "given" : "received" %> by <%= link_to_member(@member) %></h2>
+    		<br/>
+
+    		<%= render :partial => 'reviews/meta_review', :collection => @meta_reviews, :locals => {:given => @given} %>
+    	</div>
+
+    	<%= will_paginate @meta_reviews %>
+    </div>
+    <div class="bottom_nav">
+    </div>
+    <div class="bottom"></div>
+  </div>
+
+</div>

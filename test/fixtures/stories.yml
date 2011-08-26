@@ -1,0 +1,144 @@
+legacy_story:
+  id: 1
+  legacy_id: ee9794d
+  title: In Terror Cases, Administration Sets Own Rules
+  url: http://nytimes.com/2005/11/27/national/nationalspecial3/27enemy.html?hp&amp;ex=1133154000&amp;en=2c869147cef04b83&amp;ei=5094&amp;partner=homepage
+  excerpt: "dummy quote"
+  story_type: special_report
+  story_date: 2005-11-27 13:40:07
+  sort_date: 2005-11-27
+  created_at: 2005-11-27 00:48:12
+  rating: 2.62
+  sort_rating: 0.31  # should actually be: 4*3+3.1*2+2.6 = 12+6.2+2.6 =20.82/30 = 2.082/3 = 0.694
+  reviews_count: 2
+  stype_code: 1
+  primary_source_id: 1
+  status: 'list'
+  editorial_priority: 4
+  submitted_by_id: 11
+  edited_by_member_id: 11
+
+story_2:
+  id: 2
+  legacy_id: eea80e9
+  title: In Terror Cases, Administration Sets Own Rules
+  excerpt: "dummy quote"
+  url:  http://nytimes.com/2005/11/27/national/nationalspecial3/27enemy.html
+  story_type: special_report
+  story_date: 2005-11-28 13:40:07
+  sort_date: 2005-11-28
+  created_at: 2005-11-27 00:48:12
+  rating: 2.97
+  sort_rating: 0.31
+  reviews_count: 1
+  stype_code: 1
+  primary_source_id: 1
+  status: 'list'
+  editorial_priority: 3
+  submitted_by_id: 16
+
+unreviewed_story:
+  id: 3
+  title: Some Unreviewed Environment Story
+  excerpt: "dummy quote"
+  url: http://review-me.com/someday
+  story_type: dramatization
+  story_date: 2005-11-28 13:40:07
+  sort_date: 2005-11-28
+  created_at: 2005-11-27 00:48:12
+  reviews_count: 0
+  rating: 0
+  sort_rating: 0.31
+  stype_code: 3
+  primary_source_id: 1
+  status: 'list'
+  editorial_priority: 3
+  submitted_by_id: 11
+
+story_4:
+  id: 4
+  title:  "McCain Doesn't Need a Fact-Checker; the Media Edit His Mistakes for Him"
+  excerpt: "Dummy excerpt"
+  url: http://www.alternet.org/mediaculture/92570
+  story_type: news_report
+  story_date: 2008-07-25 00:00:00
+  sort_date: 2008-07-25
+  created_at: 2008-08-09 00:00:00
+  rating: 3.45
+  sort_rating: 3.45
+  reviews_count: 3
+  stype_code: 2
+  primary_source_id: 3
+  status: 'feature'
+  editorial_priority: 3
+  submitted_by_id: 17
+
+story_5:
+  id: 5
+  title: How Wall Street Wrecked Your Retirement
+  excerpt: "Dummy excerpt"
+  url: http://www.alternet.org/workplace/92658
+  story_type: opinion
+  story_date: 2008-07-31 00:00:00
+  sort_date: 2008-07-31
+  created_at: 2008-08-09 00:00:00
+  rating: 3.35
+  sort_rating: 3.35
+  reviews_count: 4
+  stype_code: 4
+  primary_source_id: 3
+  status: 'feature'
+  editorial_priority: 5
+  submitted_by_id: 17
+  edited_by_member_id: 16
+  edit_lock: false
+
+contentious_story:
+  id: 6
+  title:  "Calling China's Human Rights Bluff"
+  excerpt: "Dummy excerpt"
+  url: http://www.washingtonpost.com/wp-dyn/content/article/2008/08/01/AR2008080102873.html
+  story_type: opinion
+  story_date: 2008-08-02 00:00:00
+  sort_date: 2008-08-02
+  created_at: 2008-08-09 00:00:00
+  rating: 4.5
+  sort_rating: 4.5
+  reviews_count: 3
+  stype_code: 3
+  primary_source_id: 2
+  status: 'list'
+  editorial_priority: 3
+  submitted_by_id: 17
+  edit_lock: true
+
+hidden_story:
+  id: 7
+  title:  "Dummy story 2"
+  excerpt: "Dummy excerpt"
+  url: http://www.washingtonpost.com/hidden.html
+  story_type: opinion
+  story_date: 2008-08-02 00:00:00
+  sort_date: 2008-08-02
+  created_at: 2008-08-09 00:00:00
+  rating: 2.5
+  sort_rating: 0.30
+  reviews_count: 1
+  stype_code: 0
+  primary_source_id: 2
+  status: 'hide'
+  editorial_priority: 3
+  submitted_by_id: 13
+
+# NOTE! can't add any more story fixtures till we fix up how story_spec.rb works!!!
+# contentious_story:
+#   id: 8
+#   title: Words polarized folks seldom agree on
+#   excerpt: I am the firestarter
+#   url: http://drudge-or-dredge.com/who-cares/idiots
+#   story_type: news_report
+#   story_date: 2008-07-25 00:00:00
+#   sort_date: 2008-07-25
+#   created_at: 2008-08-09 00:00:00
+#   stype_code: 2
+#   primary_source_id: 1

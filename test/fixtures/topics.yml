@@ -1,0 +1,98 @@
+
+
+# topic-like tags
+
+environment:
+  id: 1
+  tag_id: 1
+  name: Environment
+  slug: environment
+  intro:
+  topic_volume: 7
+
+election_reform:
+  id: 2
+  tag_id: 2
+  name: Election Reform
+  slug: election_reform
+  intro:
+  topic_volume: 7
+  
+john_mccain:
+  id: 3
+  tag_id: 3
+  name: John Mccain
+  slug: john_mccain
+  intro:
+  topic_volume: 7
+  
+
+# subjects
+local:
+  id: 50
+  tag_id: 50
+  name: Local
+  slug: local
+  intro:
+  type: Subject
+  topic_volume: 14
+
+health:
+  id: 10
+  tag_id: 10
+  name: Health
+  slug: health
+  intro:
+  type: Subject
+  topic_volume: 14
+
+politics:
+  id: 11 
+  tag_id: 11 
+  name: Politics
+  slug: politics
+  intro:
+  type: Subject
+  topic_volume: 1
+
+us:
+  id: 12
+  tag_id: 12
+  name: U.S.
+  slug: us
+  intro:
+  type: Subject
+  topic_volume: 1
+
+world:
+  id: 13
+  tag_id: 13
+  name: World
+  slug: world
+  intro:
+  type: Subject
+  topic_volume: 1
+
+human_rights:
+  id: 14
+  tag_id: 14
+  name: Human Rights
+  slug: human_rights
+  intro:
+  topic_volume: 14
+
+presidential_election:
+  id: 15
+  tag_id: 15
+  name: Presidential Election 2008
+  slug: presidential_election
+  intro:
+  topic_volume: 7
+
+us_economy:
+  id: 16
+  tag_id: 16
+  name: U.S. Economy
+  slug: economy
+  intro:
+  topic_volume: 7

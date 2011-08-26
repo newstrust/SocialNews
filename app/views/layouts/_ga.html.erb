@@ -1,0 +1,11 @@
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+  var pageTracker = _gat._getTracker('<%=@local_site ? "--" : "--" %>'); <%# FIXME: GA for local site should come from the db or a config file! %>
+  pageTracker._trackPageview();
+</script>
+<script type="text/javascript">
+  var _nt_ga_tracker_code = '<%=@local_site ? "--" : "--"%>';
+</script>

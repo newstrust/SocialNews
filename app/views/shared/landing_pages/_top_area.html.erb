@@ -1,0 +1,88 @@
+<%- is_group = page_obj.class == Group -%>
+<%- editable = logged_in? && current_member.has_host_privilege?(page_obj, :editor, @local_site) -%>
+
+<div class="topic_source <%= "#{is_group ? "blue_box" : "grey_box"}" %> clearfix">
+  <div class="top"></div>
+  <div class="wrapper">
+    <%- if is_group %>
+      <div class="icon_group_page_beta"><%= help_link(image_tag("/images/ui/groups/icon_group_page_beta.png"),"","group") %></div>
+    <%- end -%>
+    <h2 class="bottom"><%= "#{@local_site && page_obj.class == Subject ? @local_site.name : ""} #{page_obj.name}" %></h2>
+    <%- if is_group -%><%= content_tag(:h3, page_obj.sg_attrs.subtitle) unless page_obj.sg_attrs.subtitle.blank? %><% end %>
+    <%= render :partial => "shared/landing_pages/#{is_group ? 'group_page_intro' : 'default_page_intro'}", :locals => { :page_obj => page_obj, :editable => editable } %>
+  </div>
+  <div class="bottom"></div>
+</div>
+
+<%- cache @top_area_cached_fragment_name do -%>
+  <%- if @featured_story -%>
+  <div class="span-16 white_box" style="clear:both">
+    <div class="top"></div>
+    <div class="wrapper comments">
+      <div class="header">
+        <h3><span style="text-transform:uppercase;"><%=@featured_story_settings["box_title"].value%></span></h3>
+      </div>
+
+      <%= render :partial => "shared/featured_story", :locals => {:home_page            => false,
+                                                                  :page_obj             => page_obj, 
+                                                                  :use_topic_photo      => @featured_story_settings["use_topic_photo?"].is_true?, 
+                                                                  :featured_story_label => @featured_story_settings["story_label"].value} %>
+    </div>
+    <div class="bottom"></div>
+  </div>
+  <%- end -%>
+
+  <%- if @grid_settings["show_box?"].is_true? -%>
+  <div class="grid span-16 white_box" style="clear:both;margin-top:10px;">
+    <div class="top"></div>
+    <div class="wrapper comments">
+      <div class="header">
+        <h3><span style="text-transform:uppercase;"><%=@grid_settings["box_title"].value%></span></h3>
+      </div>
+      <ul style="border-top:none;">
+      <%- if !@grid_settings["row1_label"].value.blank?%><div class="category_sub_head"><%=@grid_settings["row1_label"].value%></div><% end -%>
+    <%- num_stories = @grid_stories.length -%>
+    <%- row2_shown = false -%>
+    <%- @grid_stories.each_with_index do |s_info, i| -%>
+      <%- story, story_label = s_info %> <%# explode opaque array for readability -%>
+      <%- max_title_length = 60 -%>
+      <%- byline_max_length = 52 -%>
+      <%- title_length = (story.title.length >= max_title_length ? max_title_length : story.title.length) -%>
+      <%- source_length = sources_length(story.sources) -%>
+      <%- author_max_length = byline_max_length - source_length -%>
+      <%#-- if the journalist name string is too long to be truncated on a word boundary, we get a nil back! --%>
+			<%- journalists = story.journalist_names.blank? ? "" : h(" by " + (StringHelpers.truncate_on_word_boundary(story.journalist_names, 0, author_max_length) || "")) -%>
+	    <%- byline_length = source_length + journalists.length -%>
+      <%- num_title_lines = (title_length.to_f / 21).ceil # 21 chars per title line -%>
+      <%- num_byline_lines = (byline_length.to_f / 28).ceil # 28 chars per byline line -%>
+      <%- num_quote_lines = 7 - num_title_lines - num_byline_lines # assumes 7 total lines between title, byline & quote -%>
+      <%- max_quote_len = 28 * num_quote_lines # assumes 28 chars per quote line -%>
+      <%- if i % 3 == 0 %> <div class="article"> <% end %>
+        <%= render :partial => "stories/story", :object => story, 
+            :locals => {:group => page_obj.class == Group ? page_obj : nil,
+                        :label => story_label,
+                        :last => i % 3 == 2,
+                        :title_max_length => max_title_length,
+                        :byline_max_length => byline_max_length,
+                        :quote_max_len => max_quote_len,
+                        :see_reviews_msg => "Reviews &raquo;",
+                        :hide_flags => { :favicons => true, :opinion => true, :type => true, :story_date => true, :no_rating => true, :reviews => true},
+                        :show_flags => { :gray_trustometer => true, :row2_starred => true, :reviews_btn => true }} %>
+      <%- if i % 3 == 2 -%>
+        </div>
+        <%- if num_stories > 3 && !row2_shown -%>
+          <%- if !@grid_settings["row2_label"].value.blank? -%>
+            <div class="category_sub_head"><%=@grid_settings["row2_label"].value%></div>
+          <%- else -%>
+            <hr>
+          <%- end -%>
+          <%- row2_shown = true -%>
+        <%- end -%>
+      <%- end -%>
+    <%- end -%>
+      </ul>
+    </div>
+    <div class="bottom"></div>
+  </div>
+  <%- end -%>
+<%- end -%> <%#-- top area cached fragment! -%>

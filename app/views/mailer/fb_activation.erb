@@ -1,0 +1,37 @@
+Hello <%= @member.name.split(' ').first %>,
+
+Welcome aboard!
+
+Your account has been created - and is linked to your Facebook account.
+
+Once you log into Facebook, you will be automatically logged
+into <%=app_name%> whenever you visit our site.
+
+You can now review stories on <%=app_name%> and have full access to our site.
+And you can also share stories you've reviewed with your friends on Facebook!
+
+Visit our Get Started page for a quick overview:
+<%=home_url%>/start/
+
+We're delighted to have you as a member.
+
+Enjoy!
+
+
+The <%=app_name%> Team
+<%=SocialNewsConfig["email_addrs"]["help"]%>
+
+P.S. For more help about Facebook Connect, check our FAQ:
+<%=home_url%>/help/
+
+<%= render :partial => 'mailer/about_site' %>
+_____________________
+
+ABOUT THIS EMAIL
+We're sending you this email because you signed up as a <%=app_name%>
+member.
+
+If you need help about becoming a member, please check our FAQ:
+<%=home_url%>/help/
+
+<%= render :partial => 'mailer/privacy_policy' %>

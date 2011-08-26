@@ -1,0 +1,143 @@
+<% m = current_member -%>
+<% review_related_stories = @review.story.story_relations.select{|sr| sr.member == m} -%>
+<script type="text/javascript" charset="utf-8">
+review_form_expanded = true;
+</script>
+
+<%= hidden_field_tag "review_form_expanded" %>
+<div class="expand">
+  <div class="expand_your_review">
+    <a class="expand" href="#">Expand your review</a>
+  </div>
+
+  <div class="expanded" style="display:none;">
+  <div class="new_tabs">
+    <ul class="tabs"> 
+      <!-- the tabs --> 
+      <%# removing counts for quotes and links for now:
+        #  + (@review.excerpts.size > 0 ? " <small>(#{@review.excerpts.size})</small>" : "")
+        #  + (review_related_stories.size > 0 ? " <small>(#{review_related_stories.size})</small>" : "")
+      -%>
+      <%- tabs = [ {:type => "notes", :name => "Notes"},
+                   {:type => "comments", :name => "Comments", :class =>"comment_tab",},
+                   {:type => "quotes", :name => "Quotes"},
+                   {:type => "links", :name => "Links"} ] -%>
+      <%- tabs.each do |tab| -%>
+      <li><a href="#<%=tab[:type]%>" class="<%=tab[:class]%>"><span class="left"></span><span class="right"><%=tab[:name]%></span></a></li> 
+      <%- end -%>
+    </ul> 
+
+    <!-- tab "panes" --> 
+    <div class="panes">
+      <div class="panes_wrapper">
+
+        <%-# Notes -%>
+        <div class="pane" id="listing_notes">
+        <div style="padding: 15px">
+          <%= f.label :comment, "Is this <strong>good journalism</strong>? Why? " +
+            help_icon('story_note', 'reviewer'), :style => "font-size: 98%; font-weight: normal" %>
+          <%= f.text_area :comment, :size => '39x4' %>
+        </div>
+        </div>
+
+        <%# Comment -%>
+        <div class="pane" id="listing_comments">
+        <div style="padding: 15px">
+          <%= f.label :personal_comment, "Share your <strong>personal views</strong> on this topic " + help_icon('story_comment', 'reviewer'),
+            :style => "font-size: 98%; font-weight: normal;" %>
+          <%= f.text_area :personal_comment, :size => '39x3' %>
+        </div>
+        </div>
+      
+        <%-# Quotes -%>
+        <div class="pane" id="listing_quotes">
+        <div style="padding: 15px">
+          <%= f.label :excerpts_attributes, "Pick your <strong>favorite excerpts</strong> " + help_icon('story_quotes', 'reviewer'),
+            :style => "border-bottom: 1px solid #ccc; font-size: 98%; padding: 0px 0px 5px 0px; margin-bottom:5px;font-weight: normal" %>
+          <%= @review.excerpts.collect{|e| render(:partial => 'reviews/excerpt_input', :locals => {:excerpt => e})} %>
+          <div id="more_excerpts">
+            <%= render(:partial => 'reviews/excerpt_input', :locals => {:excerpt => Excerpt.new}) if @review.excerpts.empty? %>
+          </div>
+          <%= link_to_function("Add another quote") do |page|
+                page.insert_html(:bottom, :more_excerpts, :partial => 'reviews/excerpt_input', :locals => {:excerpt => Excerpt.new})
+                page.call('limit_form_height')
+              end %>
+        </div>
+        </div>
+      
+        <%-# Links -%>
+        <div class="pane" id="listing_links">
+        <div style="padding: 15px">
+          <%= f.label "story[story_relations_attributes]", "Connect the dots with <strong>related stories</strong> " + help_icon('story_links', 'reviewer'),
+            :style => "border-bottom: 1px solid #ccc; font-size: 98%; padding: 0px 0px 5px 0px; margin-bottom:5px; font-weight: normal" %>
+          <%= render :partial => 'reviews/story_relation', :collection => review_related_stories %>
+          <div id="more_story_relations">
+            <%= render(:partial => 'reviews/story_relation', :object => StoryRelation.new(:member => m)) if review_related_stories.empty? %>
+          </div>
+          <%= link_to_function("Add another link") do |page|
+                page.insert_html(:bottom, :more_story_relations, :partial => 'reviews/story_relation',
+                  :object => StoryRelation.new(:member => m))
+                page.call('init_story_relations')
+                page.call('limit_form_height')
+              end %>
+          <script type="text/javascript" charset="utf-8"> init_story_relations(); </script>
+        </div>
+        </div>
+
+        <div class="panes_bottom_left"></div>
+
+        <script>
+        $(function() {
+          // setup ul.tabs to work as tabs for each div directly under div.panes
+          $("ul.tabs").tabs("div.panes > div.panes_wrapper > div.pane")
+        });
+        </script>
+      </div>
+    </div>
+
+
+     <%-# Disclosure -%>
+      <div style="display:block;padding:0;width:300px;clear:both;">
+        <div style="font-size: 95%; line-height: 1.9em;">
+          <input id="disclosure_switch" type="checkbox" class="check"
+            onclick="$('#review_disclosure_box').slideToggle(50, limit_form_height).find('select').val('')"
+            <%= "checked" unless @review.disclosure.blank? %> style="border: none; float: left">
+          <label for="disclosure_switch" style="font-size: 94%">Disclosure: <span style="font-weight: normal">Do you have a conflict of interest?</span>
+            <%= help_icon('story_disclosure', 'reviewer') %></label>
+        </div>
+        <div id="review_disclosure_box" <% if @review.disclosure.blank? %>class="hide"<% end %>>
+          <%= f.select :disclosure, pull_down_menu("review_disclosure"), {:include_blank => "Select:"}, {:style => "float: right"} %>
+          <%= f.label :disclosure, "I am involved in this story as:", :style => 'font-size: 95%; font-weight: normal' %>
+          <br/>
+        </div>
+      </div>
+
+    <%-# Display fb publish and twitter share buttons only for public members -%>
+    <%- if logged_in? and m.is_public? -%>
+      <%- short_url = @review.story.short_url(@local_site, ShortUrl::TOOLBAR) -%>
+      <%- short_url = sharable_story_url(@review.story, :ref => "tw") if short_url.blank? -%>
+      <div class="share">
+        <label> Share your review: </label>
+        <%= render :partial => "reviews/fb_publish" %>
+        <%= render :partial => "twitter/tweet_box",
+                   :locals => { :form => f,
+                                :member => m,
+                                :show_checkbox => true,
+                                :tweetable_type => "review",
+                                :short_url => short_url,
+                                :tweet => "Check out this story '#{@review.story.title[0..84]}' on #{LocalSite.nt_twitter_account(@local_site)}" } %>
+
+        <%- if m.has_published_review?(@review.id, Sharable::FACEBOOK) -%>
+          <div class="warning">
+            <label for="post_on_facebook" class="subhead_small" style="font-size:100%"> <%= help_icon("facebook_already_shared", "reviewer") %> </label>
+            You may have shared this previously on Facebook
+          </div>
+        <%- end -%>
+        <%- if m.has_published_review?(@review.id, Sharable::TWITTER) -%>
+          <div class="warning">You may have tweeted this review previously</div>
+        <%- end -%>
+      </div>
+    <%- end -%>
+  </div>
+  </div>
+</div>

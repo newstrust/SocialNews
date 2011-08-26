@@ -1,0 +1,101 @@
+<div class="use16columns">
+  <div class="use16columns inner_left inner_right">
+    <h1 class="use8columns inner_left">Roles <span class="amp">&amp;</span> Groups</h1>
+  </div>
+
+  <div>
+    <%= link_to "Create New Group", new_admin_group_path %>
+    (Opens a form to create a new group -- social or otherwise -- with minimal set of defaults)
+    <br/><br/>
+
+    <%= link_to "Create New Social Group (from template)", create_from_template_admin_groups_path %>
+    (Creates a new <b>social</b> group and associated settings from a template and opens the group for further editing)
+    <br/><br/>
+  </div>
+
+  <div class="use5columns inner_left">
+    <table cellpadding="0" cellspacing="0">
+      <caption>Roles</caption>
+      
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Members</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <%- @roles.each do |role| -%>
+        <tr>
+          <td><%= link_to role.name, admin_group_path(role) %></td>
+          <td><%= role.members.size %></td>
+          <td><%= edit_button(edit_admin_group_path(role)) %>
+							<%= role.is_protected? ? "" : delete_button(admin_group_path(role)) %></td>
+        </tr>
+        <%- end -%>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="use5columns inner_left">
+    <%= will_paginate(@social_groups) %>
+    <table cellpadding="0" cellspacing="0">
+      
+      <caption>Social Groups</caption>
+      
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Members</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <%- @social_groups.each do |group| -%>
+        <tr>
+          <td><%= link_to group.name, admin_group_path(group) %></td>
+          <td><%= group.members.size %></td>
+          <td><%= edit_button(edit_admin_group_path(group)) %>
+								<%= group.is_protected? ? "" : delete_button(admin_group_path(group)) %></td>
+        </tr>
+        <%- end -%>
+        <%= %{<tr>
+                <td colspan='2'>No Groups Available.</td>
+              </tr>
+        } if @social_groups.empty? %>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="use6columns inner_left">
+    <table cellpadding="0" cellspacing="0">
+
+      <caption>Other Internal Groups</caption>
+      
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Members</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <%- @internal_groups.each do |group| -%>
+        <tr>
+          <td><%= link_to group.name, admin_group_path(group) %></td>
+          <td><%= group.members.size %></td>
+          <td><%= edit_button(edit_admin_group_path(group)) %>
+								<%= group.is_protected? ? "" : delete_button(admin_group_path(group)) %></td>
+        </tr>
+        <%- end -%>
+        <%= %{<tr>
+                <td colspan='2'>No Groups Available.</td>
+              </tr>
+        } if @internal_groups.empty? %>
+      </tbody>
+    </table>
+  </div>
+</div>

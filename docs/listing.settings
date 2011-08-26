@@ -1,0 +1,30 @@
+config/social_news_constants/* have various settings that influence how stories
+and sources are listed.
+
+* listing_constants.yml has global listing options for stories, sources, reviews, topics,
+  widgets, newsletters, and landing pages
+
+  * For example, a story is considered rated only if it at least 3 story reviews.
+	 Most places in the code do use this symbolic reference.  So, while it is possible
+	 to tweak this setting by updating this to another value, we haven't done a
+	 thorough code audit to make sure that there are no hardcoded references to
+	 '3' story reviews in the codebase.  Changing this value from 3 to some other
+	 value would require you to audit the code to make sure there aren't hardcoded
+	 references.
+
+  * Similarly, a story is considered a top story only if it has a rating of at least 3.0
+    This value could also potentially be hardcoded in the codebase.  Changing this to 
+	 some other value (say 3.25, for example) requires a code audit.
+
+  * Please read comments in the file for what the various options mean
+
+* In source_constants.yml, options under 'source_media' key influences
+  influences what sources are considered for listing on a source index page.
+  For example, consider this:
+  -----------------------------
+		 - newspaper:
+			 name: Newspaper
+			 listing_options: {min_story_reviews: 120, min_stories: 35}
+  -----------------------------
+  So, a newspaper is considered for listing on the source index page
+  only if it has at least 120 story reviews or at least 35 rated stories.

@@ -1,0 +1,27 @@
+<%- group = page_obj -%>
+<%- sg_attrs = group.sg_attrs -%>
+<%- members_page ||= false -%>
+<div id="page_intro">
+  <p class="intro"><%= group.description %></p>
+  <div id="group_info">
+    <%- unless group.hosts.empty? -%>
+    <div><label>Hosted by </label><%= group.hosts.collect { |h| link_to(h.name, h) }.join(", ") %><%= help_icon("what_is_a_host", "host") %></div>
+    <%- end -%>
+<!--     <div style="clear:both"><label>Members </label> <%#=group.members.size%> members</div> -->
+    <div style="clear:both">
+      <label>Group Status </label> 
+      <%=SocialGroupAttributes.humanize("Visibility", sg_attrs.visibility)%>, 
+      <%=SocialGroupAttributes.humanize("MembershipMode", sg_attrs.membership_mode)%>, 
+      <%=SocialGroupAttributes.humanize("Category", sg_attrs.category)%><%= help_icon("", "group") %>
+    </div>
+  </div>
+</div>
+<%- unless members_page -%>
+  <%- tools_box :page_type => :group, :object => group, :comments_link => group.allow_comments? do -%>
+    <%= link_to("", join_group_group_path(group), :method => :post, :id => "join_group", :title => "Join the #{group.name} group", :class => "join_group") if group.has_open_membership? && logged_in? && !group.has_member?(current_member) %>
+    <%= link_to("", leave_group_group_path(group), :method => :post, :id => "leave_group", :title => "Leave the #{group.name} group", :class => "leave_group") if logged_in? && group.has_member?(current_member) %>
+    <%= link_to("", sg_attrs.website_url, :class => "visit_our_site_btn", :title => "Visit our website", :target => "_blank") unless sg_attrs.website_url.blank? %>
+    <%= link_to "Edit Page", edit_admin_group_path(group), :class => "edit_text", :title => "Edit the #{group.name} group" if editable %>
+    <span style="float:left;padding:4px 9px 0 0">|</span>
+  <%- end -%>
+<%- end -%>

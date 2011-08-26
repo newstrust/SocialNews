@@ -1,0 +1,23 @@
+<%#-- SSS: Assumes this is being rendered on a group landing page!! %>
+
+<p style="margin:15px;font-size:14px">
+These stories were automatically selected to match topics, sources and feeds chosen by our hosts.
+<%= link_to("Edit New Stories Listing", config_group_mynews_admin_group_path(@group)) if logged_in? && current_member.has_host_privilege?(@group, :staff, @local_site) %>
+</p>
+
+<div class="mynews story_listing_detail span-16">
+  <div class="mynews member_profile story_listing_reviews flat span-16">
+    <div class="wrapper span-16">
+      <%= render :partial => "mynews/show_info_toggle" %>
+      <div style="float:left;">
+        <div class="article">
+          <ul id="mynews_listing">
+            <%= render :partial => "mynews/mynews_stories" %>
+          </ul>
+        </div>
+      </div>
+
+      <%= render :partial => "shared/more_stories_button", :locals => {:member_id => @member.id, :link_class => "more_mynews"} %>
+    </div>
+  </div>
+</div>

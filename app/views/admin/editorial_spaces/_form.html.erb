@@ -1,0 +1,26 @@
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'admin/editorial_spaces' %>
+<%- end -%>
+
+<%- page_opts = @editorial_space.page_opts -%>
+<%= hidden_field_tag :page_id, page_opts[:page_id] %>
+<%= hidden_field_tag :page_type, page_opts[:page_type] %>
+
+<%= form_field f, :attr => :name %>
+<%= form_field f, :attr => :position %>
+<%= form_field f, :attr => :show_name, :name => "Show Header?", :type => "checkbox" %>
+<%= form_field f, :attr => :editorial_block_slugs, :name => "Editorial Block Slugs", :hint => "comma-separated list of slugs" %>
+<%= form_field f, :attr => :eb_arg, :name => "Parameter to this block", :hint => "enter any parameter that this block might need (ex: review id for the featured review block)" %>
+
+<style>
+div#eb_slugs { width: 750px; border: 1px solid #ccc; padding: 5px 10px; margin: 15px 0; }
+div#eb_slugs a { padding: 0 5px; color: #666; text-decoration: none; }
+</style>
+
+<div id="eb_slugs">
+  <h3> Click on a slug to add it the editorial block slugs field above </h3>
+
+  <%- EditorialBlock.find(:all, :select => "slug", :order => "slug").map(&:slug).each do |slug| -%>
+  <a href="#"><%=slug%></a>
+  <%- end -%>
+</div>

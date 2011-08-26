@@ -1,0 +1,18 @@
+<style>
+ * { font-size: 15px; }
+</style>
+
+<h2> Story rating distribution for <%=@source.name%></h2>
+
+<div id="distribution" style="float:left;width:500px;height:250px"></div>
+<div id="legend" style="float:left;"></div>
+
+<script type="text/javascript" src="/js/jquery/jquery.flot.pack.js"> </script>
+<script type="text/javascript">
+<%- @flot_data_array.each_with_index do |da,i| -%>
+  var d_<%=i%> = <%=da.to_json%>;
+<%- end -%>
+  var data = [{ data: d_0, lines: { show: true, fill: false } }]
+  $.plot($("#distribution"), data)
+</script>
+</div>

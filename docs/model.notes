@@ -1,0 +1,51 @@
+Stories
+-------
+* The is_local flag records whether the story is a "local" story, i.e. that is specific
+  to a small region of the country, rather than being national or international.  This
+  flag is useful when local site versions are deployed alongside a national site version.
+
+* There is no story_scope field on a story currently. The story_scope code you see is
+  only a decoration over the is_local flag.  So, if you want to actually introduce multiple
+  story scopes and use it in listings, you have to replace is_local with the story_scope
+  or use the "scope" field that exists already (but, need to verify it is not being used
+  for some other purpose)
+
+* story_scope display/selection is currently disabled in app/views/stories/_submit_form.html.erb
+  If you do create local sites and decide you want to separate stories by scope (local, national,
+  international), you would have to re-enable this and make additional fixes as necessary as
+  described here.
+
+Pending Jobs
+------------
+For performance and reasons of being responsive, all rating updates are not performed
+synchronously. Some computations are performed right away as part of the http request.
+But, others are performed in the background in bulk.  Pending Job is used to record a
+rating computation update task that needs to be performed in the background.
+
+Rating updates are performed in bulk as part of the rake tasks in the ratings.rake file 
+
+Email Notifications
+-------------------
+Whenever a member reviews a story, email notifications go out.  Similarly for various
+other events in the system.  The PendingNotification model tries to aggregate multiple 
+notifications into a single email rather than inundate members with lots of individual
+emails.  Each model that could aggregates its notifications is responsible for piecing
+together the aggregate notification email and the rake task in mailer.rake does the
+dispatching.  This task is currently scheduled by a cron job, but it can be scheduled
+in other ways as well.  PendingNotifications can also be used to send notifications in
+the background even when they are not aggregated.  This ensures that http requests don't
+wait for emails to be sent out before a http response is sent back.
+
+Aggregate Statistics
+-------------------
+Various kinds of aggregate statistics are computed as part of regular operation (ex: top
+sources for a subject, top authors for a source, etc.).  Since this is not critical
+information, there is no need for this info. to be update at all times.  AggregateStatistics 
+model is used to recompute these stats on a best-effort basis.  So, the stats are usually
+always behind but behave as an eventually consistent cache of real-time statistics.
+
+Activity Entry
+--------------
+The activity entry model is used to track member activity which in turn is used to
+generate mynetwork feeds.  If rewritten, member profile pages could also use this activity
+entry table to generate the activity listing show on that page.

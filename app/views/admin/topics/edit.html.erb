@@ -1,0 +1,33 @@
+<script type="text/javascript" charset="utf-8">
+  var FORMATTED_SEARCH_ADMIN_MEMBERS_PATH = '<%= search_admin_members_path(:format => :js) %>';
+  var FORMATTED_ADMIN_GROUP_MEMBERS_PATH = '<%= admin_host_index_path(:hostable_id => @topic.id, :hostable_type => "topic", :format => :js) %>';
+</script>
+
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'admin/groups'%>
+<%- end -%>
+
+<h1 class="use16columns inner_left">Edit Topic: <%= h @topic.name %></h1>
+
+<%= error_messages_for :topic %>
+
+<h3><%= link_to "Edit #{@local_site ? @local_site.name : 'National'} Topic Page Layout", layout_admin_topic_path(@topic) %> </h3>
+<h3><%= link_to "Preview #{@local_site ? @local_site.name : 'National'} Topic Page", topic_path(@topic), :target => "_blank" %></h3>
+
+<div class="use10columns inner_left">
+  <% form_for :topic, :url => admin_topic_path(@topic), :html => { :method => :put, :multipart => true } do |f| -%>
+  <%= render :partial => 'form' , :locals => { :f => f }%>
+  <p><%= submit_tag 'Update' %> <%= cancel_tag admin_topic_path(@topic) %></p>
+  <% end -%>
+</div>
+
+<div class="fieldset use6columns inner_left inner_right">
+  <h3><%=@local_site ? @local_site.name : 'National Site'%>: Hosts</h3>
+	<br/>
+  
+	<%= render :partial => "admin/members/member_lookup", :locals => {
+		:members => @topic.hosts(@local_site),
+		:add_url => admin_host_path(:hostable_id => @topic.id, :hostable_type => "topic", :format => :js),
+		:delete_base_url => admin_host_index_path(:hostable_id => @topic.id, :hostable_type => "topic", :format => :js)} %>
+	
+</div>

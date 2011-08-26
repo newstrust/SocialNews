@@ -1,0 +1,332 @@
+<% @title = "Host FAQ" %>
+<%= "<a name=\"top\"></a>" unless params[:popup] %>
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior">
+
+<%= content_tag(:h1, @title + " <span class=\"small\">(Frequently Asked Questions)</span>") unless params[:popup] %>
+
+<p>Here are some frequently asked questions about using <%=app_name%> as a host. If you still have questions, <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.
+<ul>
+<li><a href="#about_faq" class="subhead_plain_bold">About this FAQ</a></li>
+<li><a href="#edit_story_report" class="subhead_plain_bold">Editing a Story Report</a></li>
+<li><a href="#edit_source_report" class="subhead_plain_bold">Editing a Source Profile</a></li>
+<li><a href="#community_management" class="subhead_plain_bold">Community Management</a></li>
+</ul>
+</p>
+<hr size="1" />
+
+<h2 style="margin-bottom:8px;"><a name="about_faq"></a>About this FAQ</h2>
+
+<p> <p><a name="what_is_faq"></a><span class="subhead_plain_bold">What is this Host FAQ?</span>
+This FAQ was created especially for hosts of the <%=app_name%> service (see below). It contains advanced information about editing story and source reports, as well as about community management. For more information about <%=app_name%>, check our other Help FAQs:</p>
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about <em>joining <%=app_name%></em> and <em>getting started</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to mynews_colors() +' FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about your <em>MyNews</em> and <em>My Network</em> pages</td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>posting forms</em></td></tr></table>
+</p>
+
+<p><a name="what_is_a_host"></a><span class="subhead_plain_bold">What is a host?</span>
+A host is a member who has been invited by <%=app_name%> to help edit our site and/or moderate one or more topics on <%=app_name%>. Hosts are responsible for posting frequent stories for their topics, as well as checking the information in story reviews and editing them as needed.</p>
+
+<p><a name="becoming_a_host"></a><span class="subhead_plain_bold">How can I become a host?</span>
+If you would like to help edit our site and/or host a news topic or comments about specific news sources, we would love to hear from you. To become a host, you should be familiar with our site (for general hosts) and/or know something about the topic you're interested in (for topic hosts). You should be prepared to spend at least an hour each week to help edit our site and/or moderate your topic, on a volunteer basis. To apply as a host, email <%= mail_to email_addr("host"), email_addr("host"), :subject => "#{app_name} Host Info", :encode => "javascript" %>.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="edit_story_report"></a>Editing a Story Report</h2>
+
+<p><a name="full_review_story"></a><a name="quick_review_story"></a><a name="what_is_story_report"></a><span class="subhead_plain_bold">What is a story page?</span>
+A story page is an online scorecard that presents our findings about a news story. Each story on our site has a story page, which is available to all members and can be read by clicking on the link for number of reviews next to the rating icon. The story page contains information about the story, such as our overall rating, our members' reviews and a story summary.</p>
+
+<p><a name="how_to_edit_story"></a><span class="subhead_plain_bold">How do I edit a story page?</span>
+You must be a <%=app_name%> host to edit a story page. If you are a host and want to edit the information we have collected on a story, click on "Edit" in the toolbox in the right column. Then follow the instructions on the edit form (or check below). This will take you to the "Edit Story Info" page, where you may edit basic information about the story, feature or hide reviews, and make other changes. Edit carefully, as any changes you make will be featured first in <%=app_name%> story pages. When you are done, click &quot;Save.&quot;</p>
+
+<p><a name="story_summary"></a><span class="subhead_italic">Summary</span>
+The following summary information is displayed on the main page of our story report, and used in story listings to present this story in the right category. Please fill in the fields below for all stories and check them for accuracy.</p>
+
+<p><a name="story_title"></a><span class="subhead_plain_bold">Story Title</span>
+If needed, edit the title or headline of your story. If the story does not have a title, please cut and paste the first sentence of the story (without the date, place or author name). Story titles that exceed 80 characters may be truncated.</p>
+
+<tr>
+<p><a name="story_subtitle"></a><span class="subhead_plain_bold">Story Subtitle</span>
+If the story has a subtitle, please paste it in here. Since this field is not available on the &quot;Post a Story&quot; form, you may find the memeber has tacked the subtitle onto the end of the title. If so, cut it from the end of the title and paste it here.</p>
+
+<p><a name="full_story"></a><a name="story_url_main"></a><span class="subhead_plain_bold">Web Address</span>
+If needed, update the web address or URL of the story you are editing. If a print page or printer-friendly address is available for this story, enter it instead of the story's main address. The less cluttered the page, the easier it will be to review. Some browsers let you drag a page URL directly from the address bar to this field. Or you can simply cut and paste it into this field.</p>
+
+<p><a name="story_date"></a><span class="subhead_plain_bold">Story Date</span>
+If needed, edit the story's original publication date from our drop-down menu.</p>
+
+<p><a name="story_type"></a><span class="subhead_plain_bold">Story Type</span>
+If needed, select the correct story type from our drop-down menu. Options include: straight news report, special report, opinion, editorial, etc.</p>
+
+<p><a name="story_main_topic"></a><span class="subhead_plain_bold">Topics</span>
+Enter the main topics for this story. If the story belongs in more than one subject or topic category, include as many as are appropriate. If the topic does not appear in the drop down menu, you can type the appropriate topic manually, then press Enter or click the <%= image_tag('icons/add.png', :alt => 'Add', :size => '13x13') %> symbol when you're done. To remove a mislabeled topic, click the <%= image_tag('icons/delete.png', :alt => 'Delete', :size => '13x13') %> to the right of the topic you want to remove.</p>
+
+<p><a name="story_main_publication"></a><span class="subhead_plain_bold">Publication</span>
+Enter the name of the original publication for this story. If more than one publication originally published this story, you may enter the secondary publication on the following line.</p>
+
+<p><a name="story_quote"></a><span class="subhead_plain_bold">Story Quote</span>
+If needed, edit the quote or description for this story. Select a quote that summarizes the main point of the story, if possible. If you're not sure, select the first paragraph of the story, omitting the source byline, date or location. Quotes that exceed 100 words will be automatically truncated.</p>
+
+<p><a name="story_editorial_priority"></a><a name="editorial_priority"></a><span class="subhead_plain_bold">Editorial Priority</span>  
+Our hosts have the option to set an editorial priority for each story, using the story edit form. A high priority (High or Very High) will invite more members to review a story by listing it in the "Top Stories for Review" section of the home page. Conversely, a low priority story will be presented to fewer members. Please use sparingly &ndash; give a high priority setting to no more than one story per subject/day. Once a story has 3 reviews, it will no longer be listed in the Top Stories for Review section (no need to lower its priority). Hosts can check the priority setting of a story from its Story Overview page in the "Host Info" section towards the bottom. Eventually, this setting will control how many emails are sent out to invite reviewers to review this story.</p>
+
+<p><a name="story_content_type"></a><span class="subhead_plain_bold">Content Type</span>  
+Our hosts have the option to set a content type for each story, using the story edit form. The default type is "Article", but others like Images, Audio (streaming or download), Video, or Multimedia can be selected. These will be used to help sort or display the various story posts.</p>
+
+<p><a name="story_edit_lock"></a><span class="subhead_plain_bold">Edit Lock</span>  
+Hosts can check this box if they want to prevent members from editing this story's info. This would be useful on controversial stories where members (or spammers) keep changing edits back to something that's incorrect or biased.</p>
+
+<p><a name="submit_story_status"></a><span class="subhead_plain_bold">Editorial Status</span>
+Hosts can set the status of a story to determine whether or not it appears in public story listings. The possible states are:
+<ul style="padding-left:20px">
+<li><strong>Pending</strong> &ndash; When a story is posted via our Admin Feeds tool, it is set to Pending by default. Also, stories that are added as links in the story review form will be set to Pending (if they aren't already in the <%=app_name%> database)..</li>
+<li><strong>Hide</strong> &ndash; When we decide a story should be hidden because it is inappropriate, we set its status to Hide. Also,
+when duplicate stories are merged together, the Admin Merge tool hides all stories other than the primary one.</li>
+<li><strong>List</strong> &ndash; This is the default setting for all stories posted through the Post a Story form. They will be listed on <%=app_name%> for all to see.</li>
+<li><strong>Feature</strong> &ndash; While we have the Feature status, the only affect it now has is by adding the word <img src="/images/ui/story_listings/featured.png" width="56" height="13"> on the story overview page.</li>
+</ul>
+If a host goes to the story overview page of a Pending or Hidden story, they will still be able to view the page, and will see its status displayed in <span class="quiet small large">red</span> to the right of the title. Hosts may also use the "Filter this list" link on long story listing pages to display just Featured, Hidden, or Pending stories.
+</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="story_optional"></a><span class="subhead_italic">Et Cetera</span>
+The following optional information is not required for all stories. We recommend you fill it in for stories that you think are particularly important for the public interest.</p>
+
+<p><a name="story_location"></a><span class="subhead_plain_bold">Story Location</span>
+Where does this story take place? Select the primary location for this story, including country, state, city or other primary location. If you select United States, select which state in the drop-down menu below.</p>
+
+<p><a name="story_archive"></a><a name="story_text"></a><span class="subhead_plain_bold">Story Archive </span>
+Copy and paste the full text of the story, for archival purposes only. This archival procedure is recommended for important stories that cannot be accessed online, that are about to be removed or significantly revised, or for transcripts of radio or TV programs. Please include the entire, unedited text of the story, including its title, date, authors, footnotes and copyright notices. This archival copy will be used for research and educational purposes only, as a non-commercial reference to support our story reviews and source ratings. We do not advocate copyright infringement, and this archiving procedure is solely intended to preserve important information for the public interest.</td>
+</tr>    
+
+<p><a name="story_online_access"></a><span class="subhead_plain_bold">Online Access</span>
+Please confirm if this story can be accessed online and how. We encourage members to post stories that can easily be accessed online. For that reason, we tag all new posts with this most frequent online flag: "Full online access." If this story requires a subscription, please change its online status; a subscription flag will be added next to the story title in the story overview page and selected listings. If the story is not available online, it will be removed from our story listings. If this story cannot be accessed online, but is important for the public interest, you may create a story archive for it, as described below.</p>
+
+<p><a name="story_scope"></a><span class="subhead_plain_bold">Story Scope </span>
+What is the scope of this story? Is it a local story, or does it cover a national or international topic? Select the appropriate tag in our drop-down menu.</p>
+
+<p><a name="story_editorial_notes"></a><a name="story_edit_notes"></a><span class="subhead_plain_bold">Notes</span>    
+Our edit form includes an internal notepad for hosts to leave comments about this story. Add any editorial notes at the end of this shared notepad, with your initials and a divider line to separate them from earlier comments. This notepad is only displayed to other hosts in the edit form. It is not accessible to general members or to the public.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="story_editorial"></a><span class="subhead_italic">Editorial</span>
+The following section lets <%=app_name%> hosts and editors control how this story is displayed in story listings, and which reviews to hide, show or feature in our story pages.</p>
+
+<p><a name="story_reviewer_list"></a><a name="reviewed_by"></a><span class="subhead_plain_bold">Reviewer List</span>  
+All members who reviewed this story are listed here. This reviewer list is automatically updated each time the story is reviewed. Using the story edit form, our hosts can set how reviews for this story will be displayed in our story report. Please check each review below for offensive comments, or other violations of our terms of service. If a review is offensive or violates our terms of service, please click "Hide" to remove it from our story report (you may want to contact the violator, and politely explain why you removed their review). If you think a review is particularly relevant for this story, click "Feature" to have it appear first in our story report. By default, all reviews are tagged with the &quot;List&quot; label.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="edit_source_report"></a>Editing a Source Profile</h2>
+
+<p><a name="what_is_source_report"></a><span class="subhead_plain_bold">What is a source profile?</span>
+A Source Profile is an online scorecard that presents our findings about a news source (e.g. a news publication or author). Most sources on our site have a simple source profile, which you can read by clicking on their source name. This takes you to our source profile page, which presents our findings about this source.</p>
+
+<p><p><a name="how_to_edit_source"></a><span class="subhead_plain_bold">How do I edit a source profile?</span>
+You must be a <%=app_name%> host to edit a source profile. If you are a host and want to edit the information we have collected on a source, click on "Edit" in the toolbox on that source's overview page. Then follow the instructions on the edit form (or check below). Edit carefully, as any changes you make will be featured first in <%=app_name%> source profiles. When you are done, click &quot;Save.&quot;</p>
+<p>If you're not sure how to edit a source profile, check this example of a fully edited profile for the <a href="/sources/new_york_times/edit" target="_blank">New York Times</a>. </p></p>
+
+<p><a name="source_summary"></a><span class="subhead_italic">Source Summary</span>
+The following summary information is displayed on the main page of our source profile, and used in source listings to present this source in the right categories. Please fill in any empty fields below and check all answers for accuracy.</p>
+
+<p><a name="source_name"></a><span class="subhead_plain_bold">Source Name</span>
+This is the short name most commonly used by the public to refer to this source. At this time, this read-only field can only be edited by <%=app_name%> staff. To suggest a change to this field, <%= mail_to email_addr("editors"), "email us", :subject => "#{app_name} Source Name Change", :encode => "javascript" %> your recommended edits. You can also enter other names for this source below. Note that we typically do not include &quot;The&quot; in front of a source name, to avoid clutter in our source listings.</p>
+
+<p><a name="source_slug"></a><span class="subhead_plain_bold">Source Slug</span>
+Each source reviewed by <%=app_name%> has a unique identifier (e.g., 'new_york_times', 'washington_post'). The slug is part of <%=app_name%>'s URL for displaying a source. It is displayed to hosts as a read-only field in the source edit form.</p>
+
+<p><a name="source_names_other"></a><span class="subhead_plain_bold">Other Source Names </span>
+Enter other names for this source, one per line. This could include, for example, popular nicknames, pseudonyms or other spellings of the main source name. Only include names that apply to this particular source.</p>
+
+<p><a name="source_url_main"></a><span class="subhead_plain_bold">Web Address</span>
+If needed, update the web address or URL of the source you are editing. Cut and paste the home page URL for this source (or its main news story listing). Some browsers let you drag a page URL directly from the address bar to this field.</p>
+
+<p><a name="source_domain"></a><span class="subhead_plain_bold">Domain</span>
+This is main (and unique) portion of the Web address for the source. Do not include the "http://" or the "www". Just the "domain.com" portion. If multiple sources share a domain, you can add on folders or sub-domains to make sure each one is unique.</p>
+
+<p><a name="source_media_main"></a><span class="subhead_plain_bold">Media</span>
+The media types for this source are read-only for now and can only be edited by <%=app_name%> staff. To suggest a change to this field, <%= mail_to email_addr("editors"), "email us", :subject => "#{app_name} Source Media Types", :encode => "javascript" %> your recommended edits. You can enter other media types for this source below. Options include: Blog, Magazine, Newspaper, TV, Radio, Online, Wire Service or Other.</p>
+
+<p><a name="source_ownership"></a><span class="subhead_plain_bold">Source Ownership</span>
+<%=app_name%> provides separate listings for "mainstream" and "independent" news sources. This categorization serves to highlight the changing media landscape that increasingly includes consolidated media ownership and online citizen journalism. It also is meant to give space for excellent independent journalism to shine, even though independent sources often lack the investigative and reporting resources of mainstream sources. <%=app_name%> acknowledges the fluidity of these labels and potential controversy over particular source ownership decisions. We welcome your comments.</p>
+
+<tr>
+<td class="subhead_plain" style="padding-left:20px;"><a name="mainstream_media"></a><span class="subhead_plain_bold">Mainstream Media</span>
+Generally speaking, a "mainstream media" source on <%=app_name%> is a large news provider that is primarily owned or or subsidized by one or more conglomerates or mass media networks. The owners or backers of a "mainstream" source usually reach a large audience (1 million people or more), and invest considerable resources in their news operations (e.g., 1,000 employees or more, or $10 million yearly income or more). Mainstream media sources are often owned by publicly traded corporations, and commercial in nature, though not always. <%=app_name%> tags certain large news providers as "mainstream" even if they are owned by religious, political, governmental or nonprofit organizations; we consider that such ownership can significantly influence their news coverage, and jeopardize their independence; and because of their sheer size, they can also be subject to the same market forces that influence commercial conglomerates. <%=app_name%> also tags smaller publications as mainstream if it is owned or subsidized by one or more conglomerates or mass media networks.</p>
+
+<tr>
+<td class="subhead_plain" style="padding-left:20px;"><a name="independent_media"></a><span class="subhead_plain_bold">Independent Media</span>
+An "independent media" source is a smaller news provider that is not a part of or a subsidiary of a larger mainstream conglomerate. For example, bloggers, alternative newspapers, community sites or non-profit organizations would typically be viewed as "independent media" sources for our purposes. "Independent media" sources are often perceived as less beholden to commercial interests and more representative of individual viewpoints, or viewpoints from ethnic groups, affinity groups or sub-cultures. In practice, some independent media sources can sometimes be influenced by larger organizations, such as religious, political, governmental or cultural groups. But as long as they are not primarily owned or subsidized by such large organizations, we consider them to be "independent."</p>
+
+<p><a name="source_online_access"></a><span class="subhead_plain_bold">Online Access</span>
+Please confirm if this source's news content can be accessed online and how. Many large news sources now offer full online access to their content, but some offer only limited access. If this source requires a subscription, please change its online status accordingly: a subscription flag will be added next to the source website in the source overview page and selected listings.</p>
+
+<p><a name="source_description"></a><span class="subhead_plain_bold">Source Description</span>
+Quote or write a short description for this source. Try to provide a general overview of what this source is best know for, the type of journalism that it practices, and the overall audience that it serves. For example, you may want to quote this source's self-description from their website. Or you could quote a reputable third-party observer's description of that source. If you are comfortable writing your own description, please edit yourself carefully, back your words with factual evidence and identify yourself as the author. In any case, be sure to identify the source of this description below. Note that descriptions over 250 words will be automatically truncated in the Source Overview. In future versions, we plan to separate quoted descriptions from our members' original descriptions, and offer a &quot;wiki&quot; for editing purposes.</p>
+
+<p><a name="description_link_address"></a><span class="subhead_plain_bold">Description Link</span>
+Cut and paste the full web URL of your related link (example: http://www.reuters.com/about.htm). Please check that your link address is valid and accessible to the public. If you are the author of this description, leave this field blank  (when the site goes public, we'll point to your <%=app_name%> member page as the source link). </p>
+
+<p><a name="description_link_publication_name"></a><span class="subhead_plain_bold">Description Link Publication</span>
+Enter the publication name for the original source of your description.</p>
+
+<p style="margin-top:25px;"><a name="source_tags"></a><span class="subhead_italic">Source Tags</span></p>
+
+<p><a name="source_featured_authors"></a><span class="subhead_plain_bold">Featured Authors</span>
+Enter the names of key journalists that are important contributors to this source, if available. An author can be a writer, reporter, host, photographer, editor or other contributor this source's original news content. Only enter author names if they are widely recognized as significant contributors to this news source. Also, do not enter a name in this field if it is already included in the Reviewed Authors field below. Both fields will be included under Authors in the Source Overview page. </p>
+
+<p><a name="source_reviewed_authors"></a><span class="subhead_plain_bold">Reviewed Authors</span>
+Here are the author names on file for stories we've already reviewed from this source. At this time, this read-only field can only be edited in the individual story reports where these author names were originally entered. To change a reviewed author name, go to the story report where that name appears, and click &quot;Edit this Report.&quot; 
+Or you can <%= mail_to email_addr("editors"), "email us", :subject => "Suggested Edits", :encode => "javascript" %> 
+your recommended edits. You can also enter other important author names for this source in the Featured Authors field above. Both fields will be included under Authors in the Source Overview page. </p>
+
+<p><a name="source_managers"></a><span class="subhead_plain_bold">Managers</span>
+Enter the names of the key managers and executives that manage this source, if any. For example, include the publisher and editor of a newspaper, or the executive producer and news director of a TV news program. If this is a sole proprietorship, where the publication,  author and manager are all one and the same, leave this field blank. If this is a corporation, enter the CEO and top executives. </p>
+
+<p><a name="source_owners"></a><span class="subhead_plain_bold">Owners</span>
+Enter the names of the people or organizations that own this source, if available. If this is a sole proprietorship, where the publication,  author and owner are all one and the same, be sure to check all these categories in the Source Types above. If this is a privately held corporation or partnership, enter all principal owners. If this is a publicly held corporation, enter all major shareholders that own at least 10% of the stock. If possible, identify owners by their legal names, for tracking purposes. </p>
+
+<p><a name="source_organization_type"></a><span class="subhead_plain_bold">Organization Type</span>
+Select the type of organization for this source, if available. Options include: Individual, Sole Proprietorship, Partnership, Private Corporation, Public Corporation, Nonprofit Organization, Political Action Committee, Government and Other. </p>
+
+<p><a name="source_scope"></a><span class="subhead_plain_bold">Source Scope</span>
+What is the editorial scope of this source? Does it mostly cover local or international topics? Select the appropriate tag in our drop-down menu, which includes these options: International, National, Regional, State or Local.</p>
+
+<p><p><a name="source_audience_size"></a><span class="subhead_plain_bold">Audience Size</span>
+Select an estimated audience size for this source. The numbers below are based on total daily readers, viewers, listeners or visitors (depending on this source's main media type). Options include:
+</p><ul>
+<li>Very Large Audience (over 1 million people)</li>
+<li>Large Audience (500,000 - 1 million)</li>
+<li>Medium Audience (100,000 - 500,000)</li>
+<li>Small Audience (10,000 - 100,000)</li>
+<li>Very Small Audience (under 10,000) </li>
+</ul>           
+If you can't estimate this source's audience size, select &quot;Not sure,&quot; and a <%=app_name%> editor can make a final determination later on. Over time, we will add specific links to audience size measurements to verify the accuracy of this estimate.</p>
+
+<p><a name="source_language"></a><span class="subhead_plain_bold">Language </span>
+What is the primary language used by this source? Select the appropriate tag in our drop-down menu, which includes these options: English, Chinese, French, German, Italian, Japanese, Korean, Portuguese, Russian, Spanish or Other. By default, all new posts are tagged English, since the first version of our service is focused on english-language publications. If a source offers an english translation of its content, but is primarily written in another language, indicate that language here, rather than English.</p>
+
+<p><a name="source_political_viewpoint"></a><span class="subhead_plain_bold">Political Viewpoint</span>
+Choose from the drop-down menu the political viewpoint that matches the source's editorial tone and coverage of the news. Options include: Far Left, Left, Center, Far Right, Right and Neutral. If none of these fits, you may choose Not Applicable.</p>
+
+<p><a name="source_other_tags"></a><span class="subhead_plain_bold">Other Tags</span>
+Enter any other tags, separated by commas, that might apply to this source.</p>
+
+<p style="margin-top:25px;"><a name="source_research"></a><span class="subhead_italic">Source Research</span></p>
+
+<p><a name="source_related_publications"></a><span class="subhead_plain_bold">Related Publications</span>
+Enter publications that are closely related to this source (e.g., partners, properties). If this source is a publication, identify its main distributors or content partners. If this source is an author, select key publications that publish that author's work. If this source is an owner, identify its key publications or other properties.</p>
+
+<p><a name="source_related_links"></a><span class="subhead_plain_bold">Related Links </span>
+Find two informative links that provide factual data about this source. For example, you may want to include the source's own &quot;about us&quot; page, if it includes useful information. Another example might be a reliable industry publication or media watchdog site. Over time, we will open up this section to all our reviewers, so we can gather more factual data about this source. </p>
+
+<p><a name="source_related_link_title"></a><span class="subhead_plain_bold">Related Link Title</span>
+Enter a descriptive title for your related link. If this link is the source's own self-description, make that clear in the title. If this link is related evidence, write the title of the document or fact you are citing. </p>
+
+<p><a name="source_related_link_address"></a><span class="subhead_plain_bold">Related Link Address</span>
+Cut and paste the full web URL of your related link (example: http://www.reuters.com/about.htm). Please check that your link address is valid and accessible to the public. </p>
+
+<p><a name="source_related_link_source_name"></a><span class="subhead_plain_bold">Related Link Source</span>
+Select a publication name for the original source of your related link, from our publications drop-down menu. Once you select a media type for your related link source, this drop-down menu will change to only show publication names for your selected category. If your publication name does not appear in our drop-down menu, select 'Other' to type it in yourself in a special text box.</p>
+
+<p><a name="source_duplicate_links"></a><span class="subhead_plain_bold">Source Duplicate Links</span>
+Duplicate links are other websites or web pages used by this source to publish its content (e.g. an alternate web domain name owned by that source). If you find a duplicate link for this source online, please cut and paste its web address here, so we don't review the same source twice. List duplicate links one per line, separated by carriage returns. If you find another source reviewed on <%=app_name%> that duplicates this source, please cut and paste its <%=app_name%> web address here and email us right away, at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %> We will remove that duplicate from source listings as soon as possible, so we can combine all reviews for this source in one place. </td></tr>
+
+<p><a name="source_contact_info"></a><span class="subhead_plain_bold">Source Contact Info</span>
+Indicate how our members can contact this source. Once entered, we will publish all contact info below on our Source Overview page (except for the representative's phone and email address, which are only shared with <%=app_name%> staff and hosts). See below for specific instructions for each contact info field. </p>
+
+<p><a name="source_web_contact_address"></a><span class="subhead_plain_bold">Web Contact Address</span>
+If this source has a  &quot;contact us&quot; page with contact information (or a form for emailing this source), cut and paste the full web URL for that page (example: http://www.reuters.com/contact_us.htm). Please check that your link address is valid and accessible to the public. </p>
+
+<p><a name="source_public_email_address"></a><span class="subhead_plain_bold">Public Email Address</span>
+If this source publishes a public email address, enter that full email address (example: editor@sourcename.com). This could be the email of its Public Editor, Ombudsman, or Letters to the Editor, for example. Please check that this email address is valid, as we will publish it on our Source Overview page. Please do not include private email addresses in this field, if they are not already published by this source (a better place for private email addresses is the representative email field below). If a valid email address was previously filled in, click on &quot;Email this Source&quot; to send a message to this source. </p>
+
+<p><a name="source_public_phone_number"></a><span class="subhead_plain_bold">Public Phone Number</span>
+If this source publishes a public phone number, enter that full 10-digit phone number, with area code first (example: 415-555-1212). This could be the phone number of its main office or editorial department, for example. If the source is located outside of the United States, please include a country code first (example: +44 for UK). Please do not include private phone numbers in this field,  if they are not already published by this source (a better place for private phone numbers is the representative phone number field below). </p>
+
+<p><a name="source_location"></a><span class="subhead_plain_bold">Source Location</span>
+Where is this source based? Select the main headquarters for this source, including country, state, city zip code and street address.</p>
+
+<p><a name="source_representative_name"></a><span class="subhead_plain_bold">Representative Name</span>
+If this source has assigned a representative to interact with <%=app_name%>, enter their full name here. If this representative is a registered member of <%=app_name%>, check the <%=app_name%> member box, which will link this name to their member profile. We will publish that representative's name on the Source Overview page, but not their email and phone number. </p>
+
+<p><a name="source_representative_email"></a><span class="subhead_plain_bold">Representative Email Address</span>
+If this source's representative has provided us with a private email address, enter that full email address (example: representative@sourcename.com). This representative email address will not be published on the <%=app_name%> site, and is only shared with <%=app_name%> staff and hosts. If this representative is a registered <%=app_name%> member, you do not need to fill in this field, as we already have their email on file. If a valid email address was previously filled in, click on &quot;Email this Representative&quot; to send a message to this person. </p>
+
+<p><a name="source_representative_phone"></a><span class="subhead_plain_bold">Representative Phone Number</span>
+If this source's representative has provided us with a private phone number, enter that full 10-digit phone number, with area code first (example: 415-555-1212). If the representative is located outside of the United States, please include a country code first (example: +44 for UK). This representative phone number will not be published on the <%=app_name%> site, and is only shared with <%=app_name%> staff and hosts. </p>
+
+<p><a name="source_editorial"></a><span class="subhead_italic">Editorial</span>
+The following editorial information includes the source's status, editorial priority, and host information on who last edited this source's information.</p>
+
+<p><a name="source_report_options"></a><span class="subhead_plain_bold">Status</span>
+Hosts can set the status of a source to determine if links to its profile are active, and if the source appears in our Source Input fields during story posting. The possible states are:
+<ul style="padding-left:20px;margin-bottom:0">
+<li><strong>Pending</strong> &ndash; By default, all new sources are tagged with the "Pending" label. These are automatically added to our database when members post new stories.</li>
+<li><strong>Hide</strong> &ndash; When we decide to make a source into an official <%=app_name%> source, we upgrade its status to "Hide". This includes it as an option in the Source Input fields, but links to it in our story listings will not be active. If a source doesn't have enough information for display to the public, this is the appropriate status.</li>
+<li><strong>List</strong> &ndash; When the source's profile page is filled in (with at least its website URL and Description, then it can be set to "List".</li>
+<li><strong>Feature</strong> &ndash; If you think this source is particularly relevant for the <%=app_name%> community, select "Feature" to recommend that we feature it more prominently on our site.</li>
+</ul>
+</p>
+
+<p><a name="source_contact_status"></a><span class="subhead_plain_bold">Contact this Source</span>
+Check this box to display this source's contact information on its profile page for hosts. Uncheck this box to hide for hosts.</p>
+
+<p><a name="source_is_framebuster"></a><span class="subhead_plain_bold">Framebuster Site</span>
+Check this box if the source breaks out of the toolbar frame when trying to review a story. A pop-up review form will be used instead. Uncheck this box to revert back to using the toolbar again.</p>
+
+<p><a name="source_logo_status"></a><span class="subhead_plain_bold">Show Source's Logo</span>
+Check this box to display this source's logo on its profile page. Uncheck to hide it. Using this check box is easier than trying to delete an existing logo.</p>
+
+<p><a name="source_discuss_status"></a><span class="subhead_plain_bold">Discuss this Source</span>
+To be implemented when we have comments about sources. Check box to enable comments.</p>
+
+<p><a name="source_editorial_priority"></a><span class="subhead_plain_bold">Editorial Priority</span>
+Our hosts have the option to set an editorial priority for each source, using this source edit form. A high priority will invite more members to view a source, by listing it more prominently on our site. Conversely, a low priority source will be presented to fewer members. Eventually, this setting will control how many emails are sent out to invite reviewers to review this source.</p>
+
+<p><a name="hosted_by"></a><a name="source_hosts"></a><span class="subhead_plain_bold">Hosted by</span>
+All hosts for this source are listed here. Hosts are responsible for checking the information in this source report and editing it as needed, using this source edit form. Hosts can also moderate discussions about this source, if enabled. This read-only field can only be edited by a <%=app_name%> administrator (to edit this field, enter each host's full member name, separated with commas). If you would like to become a host for this source, we would love to hear from you. To become a host, you should already be familiar with this source, and you should be prepared to spend at least an hour per week to host this topic, on a volunteer basis. To apply as a host, email <%= mail_to email_addr("host"), email_addr("host"), :subject => "#{app_name} host application", :encode => "javascript" %>.</p>
+
+<p><a name="source_edited_by"></a><span class="subhead_plain_bold">Edited by</span>
+All members who edited this source report are listed here. This non-editable list is automatically updated each time the source report is edited.</p>
+
+<p><a name="source_last_edit_date"></a><span class="subhead_plain_bold">Last Edit Date</span>
+Each time the source report is edited, this non-editable field is automatically updated with the date and time of this last edit.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="community_management"></a><a name="community_questions"></a>Community Management</h2>
+
+<p><a name="our_community"></a><span class="subhead_plain_bold">What is the <%=app_name%> community?</span>
+<%=app_name%> is an online community of citizens like you, who care about good journalism – &quot;news you can trust.&quot; We rate news stories based on journalistic quality, rather than popularity or ideology. We're non-profit, non-partisan and independent. Anyone can join our community, as long as they respect our community guidelines and terms of service.</p>
+
+<p><p><a name="community_guidelines"></a><span class="subhead_plain_bold">What are your community guidelines?</span>
+Our community guidelines are simple: treat each other with respect, only share information that adds value to our community, do not harass other members or news sources,  and adhere to our terms of service. For more, please refer to our <a href="/about/terms" target="_blank">terms of service</a>. </p></p>
+
+<p><a name="report_a_problem"></a><span class="subhead_plain_bold">How can I report a problem?</span>
+To report a problem, click on the "Report a Problem" links or buttons anywhere on the site to send us an email message. Or you can email us anytime at <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>. Please write in the subject of your email the type of problem you are reporting (technical bug, duplicate story, factual error, incomplete review, offensive comment, abusive member, or questions about your account). Then describe your problem in as much detail as possible. To help us better serve you, please include in your email message the full web address of the page you are reporting a problem for, as well as any special codes inserted by <%=app_name%> when you clicked the "Report a Problem" link.</p>
+
+<p><a name="suggestions"></a><span class="subhead_plain_bold">I have suggestions for how <%=app_name%> can be improved. Who can I tell?</span>
+We're always interested in hearing from our members, as we're constantly testing and improving <%=app_name%>. So please do let us know what you think is and isn't working. A good place to do that for now is in our Suggestions comment thread, which you can join at anytime by clicking "Suggestions" in the left sidebar. Or you can email them to us at <%= mail_to email_addr("suggestions"), email_addr("suggestions"), :subject => "#{app_name} suggestions", :encode => "javascript" %>.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="question_not_answered"></a><span class="subhead_plain_bold">You didn't answer my question in this FAQ! What now?</span>
+Please send your additional questions, ideas and thoughts to <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>. We appreciate your interest in <%=app_name%> and your patience during this beta phase. For more information, check our other Help FAQs:<br><br>
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about <em>joining <%=app_name%></em> and <em>getting started</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to mynews_colors() +' FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about your <em>MyNews</em> and <em>My Network</em> pages</td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>posting forms</em></td></tr></table>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<br />
+
+</div>
+
+</div>
+<div class="bottom"></div>
+</div>
+
+</div>

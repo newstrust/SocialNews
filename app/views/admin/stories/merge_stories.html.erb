@@ -1,0 +1,9 @@
+<div style="font-size:14px; margin: 20px 0">
+<strong>Keep:</strong> <%= link_to @keep.title, story_url(@keep) %> &nbsp;
+Status: <span style="font-weight:bold;color:#a00"> <%=@keep.status.humanize%> </span> <br/>
+
+<% if !@hide.nil? -%>
+<strong>Hidden:</strong> <%= link_to @hide.title, "#{story_url(@hide)}/info" %> &nbsp;
+Status: <span style="font-weight:bold;color:#a00"> <%=@hide.status.humanize%> </span> <br/>
+<% end -%>
+</div>

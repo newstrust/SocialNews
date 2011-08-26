@@ -1,0 +1,30 @@
+Hi <%= first_name(@record.flags.last.owner) %>,
+
+<%= @record.flags.last.member.display_name %> likes a comment you made about this story:
+
+---------------------------------------------------------------------
+
+"<%= @record.commentable.title %>"
+<%= strip_tags link_to_sources(@record.commentable.sources) -%>
+<%= " - by #{@record.commentable.journalist_names}" unless @record.commentable.journalist_names.blank? %>
+<%= "#{@record.commentable.story_date.strftime('%b. %e, %Y')}" unless @record.commentable.story_date.blank? -%>
+<%= " (#{humanize_token(@record.commentable, :story_type)})" if @record.commentable.story_type %>
+
+---------------------------------------------------------------------
+
+Here's what you wrote:
+
+"<%= h(strip_tags(StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(@record.body_plain,300,400,true),72))) unless @record.body_plain.blank? %>"
+
+Your comment can be viewed here:
+<%= comment_permalink_for(@record) %>
+
+To see all comments for this story, click here:
+<%= story_url(@record.commentable, :only_path => false) %>
+
+To add a comment on this page, click "Add a Comment."
+
+To view <%= first_name(@record.flags.last.member) %>'s profile, click here:
+<%= member_url(@record.flags.last.member.to_param) %>
+
+<%= render :partial => 'footer' %>

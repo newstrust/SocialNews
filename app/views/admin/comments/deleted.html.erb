@@ -1,0 +1,15 @@
+<h1><%#= link_to "Add New Comment", "/discussions/comments/new" %></h1>
+<h1><%= link_to "View Flagged Content", "/admin/flags" %></h1>
+<br>
+
+<h1>Deleted Comments</h1>
+
+<%- @comments.each_with_index do |comment, i| -%>
+  <% if comment.title %>
+    <h3>
+      <%= i+1 %>. <%= h(link_to(comment.title, admin_comment_path(comment))) %>
+      &mdash; <%= h(pluralize(comment.all_children.size, 'comment'))%>.
+    </h3>
+    <p>Deleted by: <%=h((comment.last_edited_by_id) ? Member.find(comment.last_edited_by_id).display_name : 'unknown') %>
+  <%- end -%>
+<%- end -%>

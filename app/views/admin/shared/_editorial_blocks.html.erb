@@ -1,0 +1,58 @@
+<%- page_obj ||= nil -%>
+<%- page_type = page_obj ? page_obj.class.name : nil -%>
+<%- page_id   = page_obj ? page_obj.id : nil -%>
+
+<a name="sidebar_blocks"></a>
+<div class="note"> 
+Use the links below to: (a) create/edit/preview code blocks, (b) create/edit right sidebar boxes, and (c) assign one or more code blocks to the boxes.
+</div>
+
+<div class="col1">
+  <div class="fieldset sidebar_boxes">
+    <h2>Code blocks</h2>
+
+    <h5>The following prebaked code blocks are available for use:</h5>
+    <%- @predefined_blocks.each do |editorial_block| -%>
+      <div> 
+        <b style="float:left;width:200px"><%= h editorial_block.slug %></b>
+        <%= link_to "edit", edit_admin_editorial_block_path(editorial_block, :page_type => page_type, :page_id => page_id) %>
+      </div>
+    <%- end -%>
+
+    <div class="create_new_link"> <%= link_to "Create new code block", new_admin_editorial_block_path(:page_type => page_type, :page_id => page_id) %> </div>
+
+    <%- @editorial_blocks.each do |editorial_block| -%>
+      <div>
+        <b style="float:left;width:200px"><%= h editorial_block.slug %></b>
+        <%= link_to "edit", edit_admin_editorial_block_path(editorial_block, :page_type => page_type, :page_id => page_id) %>&nbsp;&nbsp;
+        <%= link_to "preview", preview_admin_editorial_block_path(editorial_block), :class => "popup_link" %>&nbsp;&nbsp;
+        <%= link_to 'delete', admin_editorial_block_path(editorial_block), :confirm => 'Are you sure?', :method => :delete %>&nbsp;&nbsp;
+        <small>(last updated on <%= editorial_block.updated_at.strftime('%m/%d/%Y') %>)</small>
+      </div>
+    <%- end -%>
+  </div>
+</div>
+
+<div class="col2">
+  <%#-- Right sidebar boxes area --%>
+  <div class="fieldset sidebar_boxes">
+    <h2>Assigned Right Sidebar Boxes</h2>
+    <%- if @local_site && @editorial_spaces.empty? -%>
+      <%= link_to "Clone Editorial Spaces from the national site", clone_spaces_path(:page_type => page_type, :page_id => page_id, :to_site => @local_site.id, :from_site => 0), :method => :post %>
+    <%- end -%>
+    <div class="create_new_link"> <%= link_to "Create new right sidebar box", new_admin_editorial_space_path(:page_type => page_type, :page_id => page_id) %> </div>
+
+    <%- @editorial_spaces.each do |editorial_space| -%>
+      <div style="margin-bottom:5px;">
+      <b style="font-size:14px;">#<%= h editorial_space.position %> &middot; <%= h editorial_space.name %></b>
+      <%= "(header hidden)" if !editorial_space.show_name %>
+      <%= link_to "edit", edit_admin_editorial_space_path(editorial_space) %>
+      <%= link_to 'delete', admin_editorial_space_path(editorial_space), :confirm => 'Are you sure?', :method => :delete %>
+      <br/>
+      <%- editorial_space.editorial_blocks.each do |eba| -%>
+        <div style="margin-left: 30px"> <%= h eba.slug %> </div>
+      <%- end -%>
+      </div>
+    <%- end -%>
+  </div>
+</div>

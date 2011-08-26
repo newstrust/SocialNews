@@ -1,0 +1,10 @@
+<h1 class="use16columns inner_left">New Source</h1>
+
+<%= error_messages_for :source %>
+
+<div class="use10columns inner_left">
+  <% form_for :source, :url => admin_sources_path, :html => { :multipart => true } do |f| -%>
+  <%= render :partial => 'form' , :locals => { :f => f }%>
+  <p><%= submit_tag 'Create' %> <%= cancel_tag "/admin/sources/" %></p>
+  <% end -%>
+</div>

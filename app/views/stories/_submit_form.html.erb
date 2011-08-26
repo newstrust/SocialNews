@@ -1,0 +1,124 @@
+<%= render :partial => "shared/taxonomy_js_includes" %>
+<script type="text/javascript">
+  var lookup_on_ready = <%= @lookup_on_ready.to_json %>;
+</script>
+
+<% curr_form_version = current_member.preferred_edit_form_version -%>
+<% form_field_min_levels = Story::FORM_FIELD_MIN_LEVELS -%>
+
+<div class="form_field <%=form_field_min_levels[:title]%>">
+	<%= f.label :title, "Story Title " + help_icon('submit_story_title', 'reviewer') + " " +
+	 	content_tag('span', 'Copy and paste story title <b>only</b>', :class => 'explanation') %>
+	<%= f.text_area :title, :size => "40x2", :style => "font-weight: bold; height: 2.6em" %>
+</div>
+
+<div class="form_field <%=form_field_min_levels[:subtitle]%>">
+<% disclosable :show_link_text => "Is there a subtitle?", :hide_link_text => "There is no subtitle",
+  :show => !@story.subtitle.blank?, :callback => "limit_form_height" do %>
+	<div class="form_field" style="padding-top: 0">
+		<%= f.label :subtitle, "Subtitle " + help_icon('story_subtitle', 'host'), :class => "not_required" %>
+		<div class="input">
+		  <%= f.text_field :subtitle, :size => 40, :style => "width: 315px" %>
+		</div>
+	</div>
+<% end %>
+</div>
+
+<div class="form_field <%=form_field_min_levels[:excerpt]%>">
+	<%= f.label :excerpt, "Quote " + help_icon('submit_story_quote', 'reviewer') + " " +
+	 	content_tag('span', 'Copy and paste a short excerpt', :class => 'explanation') %>
+	<%= f.text_area :excerpt, :size => '40x5', :style => "font-size: 11px" %>
+</div>
+
+<div class="form_field <%=form_field_min_levels[:journalist_names]%>">
+	<%= f.label :journalist_names, "Authors " + help_icon('submit_story_authors', 'reviewer') + " " +
+	 	content_tag('span', 'Separate author names with commas', :class => 'explanation') %>
+	<div class="input">
+		<%= f.text_area :journalist_names, :size => '40x2', :style => "font-size: 11px; height:25px" %>
+	</div>
+</div>
+
+<div class="form_field leftalign clearfix <%=form_field_min_levels[:story_type_expanded]%>">
+	<%= f.label :story_type_expanded, "Type " + help_icon('submit_story_type', 'reviewer') %>
+	<div class="input">
+		<%= f.select :story_type_expanded, pull_down_menu("story_story_type"), :include_blank => "Select Story Type:" %>
+	</div>
+</div>
+
+<% if !edit_form -%>
+<div class="form_field clearfix <%=form_field_min_levels[:story_type_condensed]%>" id="condensed_story_type_field">
+  <div class="shorteditlabel">Type <%= help_icon('submit_story_type_short', 'reviewer') %></div>
+  <div class="input">
+  <% ["news", "opinion", "other"].each do |st| -%>
+    <%- radio_sym = ("story_type_condensed_" + st).to_sym -%>
+		<%=f.radio_button(:story_type_condensed, st, :class => "inline_radio_button", :style => "float:left")%>
+    <%=f.label(radio_sym, st.capitalize, :style => "display:inline;float:left;width:50px")%>
+  <% end -%>
+	</div>
+</div>
+<% end -%>
+
+<div class="form_field leftalign clearfix <%=form_field_min_levels[:content_type]%>">
+	<%= f.label :content_type, "Content " + help_icon('story_content_type', 'host') %>
+	<%= f.select :content_type, pull_down_menu("story_content_type"), :include_blank => 'Select Content Type:' %>
+</div>
+
+<div class="form_field leftalign clearfix <%=form_field_min_levels[:authorships]%>">
+	<%= f.label :authorships_attributes, "Source " + help_icon('submit_publication_name', 'reviewer') %>
+	<div class="input">
+		<%= batch_autocomplete 'story[authorships_attributes]', @story.authorships,
+			:taxonomy => source_taxonomy,
+			:callback => "limit_form_height" %>
+	</div>
+</div>
+
+<div class="form_field leftalign clearfix <%=form_field_min_levels[:taggings]%>">
+	<%= f.label :taggings_attributes, "Topics " + help_icon('submit_story_subject', 'reviewer') + "<br >" + link_to("See all topics", h('/topics/all?' + {:popup => "true", :no_follows => "true"}.to_query), :class => "popup_link small") %>
+	<div class="input">
+    <%#-- SSS: We don't display subject tags that were inferred from topic tags & automatically added. 
+      #   These tags belong to nt_tagger which is how we know what to exclude --%>
+		<%= batch_autocomplete 'story[taggings_attributes]',
+			@story.taggings.select{|t| (!t.tag.tag_type.nil? && (t.member != Member.nt_tagger)) || (t.member == current_member)},
+			:taxonomy => topic_taxonomy,
+			:association_params => {:member_id => current_member.id},
+			:callback => "limit_form_height" %>
+	</div>
+</div>
+
+<%#-- SSS: Turn off this field for now, so this defaults to national --%>
+<%#-- SSS: Show story scope field only to hosts and for those with higher privileges! %>
+<% if false and logged_in? and current_member.has_role_or_above?(:host) -%>
+<div class="form_field leftalign clearfix <%=form_field_min_levels[:is_local]%>">
+	<%= f.label :is_local, "Story scope? " + help_icon('story_scope', 'reviewer') %>
+  <%- Story::StoryScope::ALL.each do |st| -%>
+    <%- radio_sym = ("story_scope_" + st).to_sym -%>
+		<%=f.radio_button(:story_scope, st, :class => "inline_radio_button", :style => "float:left")%>
+    <%=f.label(radio_sym, st.capitalize, :style => "display:inline;float:left;width:50px")%>
+  <%- end -%>
+  <%=f.radio_button(:story_scope, :not_sure, :class => "inline_radio_button", :style => "float:left")%>
+  <%=f.label(:story_scope_not_sure, "Not Sure", :style => "display:inline;float:left;width:50px")%>
+</div>
+<%- end -%>
+
+<div class="form_field leftalign clearfix <%=form_field_min_levels[:story_date]%>">
+	<%= f.label 'story[date_components]', "Date " + help_icon('submit_story_date', 'reviewer') %>
+	<div class="input">
+		<%= select_month @story.story_date, :prefix => 'story[date_components]', :include_blank => true %>
+		<%= select_day @story.story_date, :prefix => 'story[date_components]', :include_blank => true %>
+		<%= select_year @story.story_date, :prefix => 'story[date_components]', :include_blank => true,
+			:start_year => 1900, :end_year => Date.today.year %>
+	</div>
+</div>
+
+<% if logged_in? and current_member.has_role_or_above?(:host) -%>
+	<div class="form_field leftalign clearfix <%=form_field_min_levels[:editorial_priority]%>">
+		<%= f.label :editorial_priority, "Priority " + help_icon('story_editorial_priority', 'host') %>
+		<%= f.select :editorial_priority, pull_down_menu("story_editorial_priority") %>
+	</div>
+<%- end -%>
+	
+<div class="form_field <%= edit_form ? "" : "leftalign clearfix " %><%=form_field_min_levels[:url]%>">
+	<%- field_style = edit_form ? "width: 385px" : "" -%>
+	<%= f.label :url, "URL " + help_icon('submit_story_url_main', 'reviewer') %>
+  <%= f.text_field :url, :style => field_style %>
+</div>

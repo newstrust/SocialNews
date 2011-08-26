@@ -1,0 +1,101 @@
+/**
+* base.css
+*
+* Now that Blueprint is zeroing out most styles, there's not much here.
+*/
+
+body {
+background:url(/images/nt_bg.png) repeat-x left top;
+background-color: #f3f3f3;
+font-size: 12px; 
+color: #333333;}
+
+body.popup {
+margin:10px 20px 10px 0;
+padding-left:20px;
+*padding-left:0px;
+width:390px;
+*width:375px;
+background: none repeat scroll 0 0 #FFFFFF;
+overflow-x: hidden;
+*overflow: hidden;
+}
+div {
+margin:0px;}
+/**
+* Links
+*/
+:-moz-any-link:focus {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+  color: #385AC8;
+}
+a:active, a:hover {
+  color: #385AC8;
+  text-decoration: underline;
+}
+a img,
+a:hover img,
+a:active img {
+  border: none;
+  text-decoration: none;
+}
+
+/**
+* Forms
+*/
+
+form label {
+	font-weight: bold;
+	display: block;
+}
+
+input, textarea, select {
+  color: #000;
+  background: #fff;
+}
+
+input, textarea {
+	border: 0.1em solid #ccc;
+	padding: 2px;
+}
+input:hover, textarea:hover,
+input:focus, textarea:focus {
+	border-color: #666;
+}
+
+/***errors****/
+p.notice {
+background:#fff5b0 none repeat scroll 0 0;
+border:1px solid #cccccc;
+color:#666666;
+text-align: center;
+margin-top: 15px;
+}
+
+
+/***overrides****/
+
+div.main_column_box .remove_border .content {
+border:none;
+}
+
+#main_column_tabbed_box.main_column_box .remove_border .content {
+border:none;
+}
+
+
+span.quiet.small {
+color: #dc0000;
+margin: 0px;
+line-height: 1em;
+padding: 0px;
+}
+
+/** SSS added this **/
+.hide {
+	display:none;
+}

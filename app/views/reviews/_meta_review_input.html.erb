@@ -1,0 +1,46 @@
+<%- if logged_in? %>
+	<div class="small_note">
+    <%- mr_review = meta_review.review -%>
+    <%- cm = current_member -%>
+		<%- if cm.status == 'member' && cm.rating >= 3.0 %>
+			<div class="rate_title">
+				<%- if mr_review.member == cm -%>
+					<span class="you_cannot">You cannot rate your own review.&nbsp;</span>
+				<%- else -%>
+					<span class="rate_this">Rate this Review:</span> <%= help_icon("rate_this_review", "report") %>
+				<%- end -%>
+			</div>
+			<%- if mr_review.member != cm -%>
+				<div class="meta_review_input">
+					<% remote_form_for meta_review, :url => meta_review_review_url(:id => mr_review.id, :story_id => mr_review.story.id),
+						:before => "var $ajax_form_holster = $(this).parents('.meta_review_input'); $ajax_form_holster.pulse(true)",
+						:complete => "$ajax_form_holster.pulse(false)",
+						:html => {:method => :post} do |f| %>
+						<%= f.hidden_field :review_id %>
+						<%= rating_input :review => meta_review,
+							:param_array_prefix => "meta_review[rating_attributes]",
+							:criterion_key => "recommendation",
+							:star_class => "bulletselect",
+							:hide_clear_button => true,
+							:style => "height: 9px" %>
+					<%- end -%>
+				</div>
+			<%- end -%>
+			<%- rating_msg = "" -%>
+		<%- else -%>
+			<%- rating_msg = "Review rated " -%>
+		<%- end -%>
+		<div class="reviews_processed">
+			<%- if mr_review.meta_reviews.empty? -%>
+				<span class="you_cannot">(this review has not been rated)</span>
+			<%- else %>
+        <%- meta_rating = mr_review.processed_rating("meta") -%>
+        <%- if meta_rating.nil? -%> <%#-- Since we are not propagating processing right away, this can be nil.  So, workaround that. -%>
+				(<%= rating_msg + format_rating(meta_review.rating) %> from 1 member)
+        <%- else -%>
+				(<%= rating_msg + format_rating(meta_rating) %> from <%= pluralize(mr_review.meta_reviews.size, 'member') %>)
+			  <%- end -%>
+			<%- end -%>
+		</div>
+	</div>
+<%- end -%>

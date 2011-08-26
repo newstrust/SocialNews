@@ -1,0 +1,13 @@
+<%- @title = "Partners" -%>
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+		<div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+			<h2 style="margin-bottom:6px;">Partners</h2>
+			<p>Whether you're a news provider, an independent blogger or a journalism school, <%=app_name%> can support your work in more ways than one. Much of what you see here can be added to your site and customized to fit your needs, using our buttons and widgets. We also invite media and educational partners to share their expertise in our 'news hunts' for good journalism on important topics like the Environment or the Global Economy. If you would like to partner with us, please <%= mail_to email_addr("partners"), "email us", :subject => 'Partners Info Request', :encode => "javascript" %>.</p>
+		</div>
+	</div>
+<div class="bottom"></div>
+</div>
+</div>

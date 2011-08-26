@@ -1,0 +1,54 @@
+<div class="carousel featured_story">
+  <div class="items">
+    <%- @carousel_slides.each do |slide| -%>
+      <%-#----------- STORY -------------%>
+      <%- if slide["type"] == "story" -%>
+        <%- story_opts = slide["story"] -%>
+        <div class="carousel_story carousel_item">
+          <div class="stage_left">
+            <%= render :partial => "shared/featured_story", :locals => { :home_page            => true,
+                                                                         :story                => Story.find(story_opts["story_id"]),
+                                                                         :page_obj             => Topic.find_topic(story_opts["topic"], @local_site),
+                                                                         :featured_story_label => story_opts["label"],
+                                                                         :story_action         => story_opts["call_to_action"],
+                                                                         :hide_share_buttons   => true,
+                                                                         :use_topic_photo      => true }%>
+          </div>
+        </div>
+      <%-#----------- REPORT -------------%>
+      <%- elsif slide["type"] == "report" -%>
+        <%- report_opts = slide["report"] -%>
+        <%-#-- use same html structure as featured story --%>
+        <div class="carousel_story carousel_item report">
+          <div class="stage_left">
+            <div class="featured_story topic">
+              <div class="featured_image">
+                <%= image_tag report_opts["photo_url"] %>
+                <div class="photo_caption">Photo: <%= report_opts["photo_caption"].capitalize %> </div>
+                <%- if !report_opts["call_to_action"].blank? -%>
+                  <div class="featured_topic"><%=link_to(report_opts["call_to_action"], report_opts["link"])%></div>
+                <%- end -%>
+                <%= render :partial => "carousel_share_icons", :locals => { :curr_url => report_opts["link"] } -%>
+              </div>
+  
+              <div class="article image">
+                <label style="padding-bottom:5px;display:block;color:#8C8C8C;"><%=report_opts["label"]%></label>
+                <h3> <%= link_to report_opts["title"], report_opts["link"], :class => "external" %></h3>
+                <div class="byline"> <%= report_opts["byline"]%> </div>
+                <div class="excerpt"> <%= report_opts["blurb"] %> </div>
+                <%= link_to "Read More &raquo;", report_opts["link"], :class => "read_more"%>
+              </div>
+            </div>
+          </div>
+        </div>
+      <%-#----------- RAW HTML -------------%>
+      <%- elsif slide["type"] == "html" -%>
+        <div class="carousel_html carousel_item">
+          <%= slide["html"]["html"] %>
+        </div>
+      <%- end -%>
+    <%- end -%>
+  </div>
+</div>
+<%-#--- needed by the navigator plugin for displaying carousel navigation ---%>
+<div class="carousel_bottom"><div class="carousel_navigation_wrapper"><a class="prev"></a><div class="navi"></div><a class="next"></a></div></div>

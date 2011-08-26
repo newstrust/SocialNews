@@ -1,0 +1,22 @@
+<style>
+ * { font-size: 15px; }
+</style>
+
+<h2> Story rating distribution for <%=@member.name%>: By story and source type </h2>
+
+<div id="distribution" style="float:left;width:500px;height:250px"></div>
+<div id="legend" style="float:left;"></div>
+
+<script type="text/javascript" src="/js/jquery/jquery.flot.pack.js"> </script>
+<script type="text/javascript">
+  var stypes = { "1" : "msm_news", "2" : "ind_news", "3" : "msm_opinion", "4" : "ind_opinion" }
+  var opts = { legend : { container: $("#legend") } }
+<%- @flot_data_array.each_with_index do |da,i| -%>
+  var d_<%=i%> = <%=da.to_json%>;
+<%- end -%>
+  var data = [];
+  for (i = 0; i < 4; i++)
+    data[i] = { data: eval("d_" + i), label: "" + stypes[i+1], lines: { show: true, fill: false } }
+  $.plot($("#distribution"), data, opts)
+</script>
+</div>

@@ -1,0 +1,37 @@
+<div class="fieldset <%=clazz%>">
+  <h2> <%=heading%> </h2>
+<% @settings[area].each do |c| -%>
+  <div class="<%=clazz%>_setting" id="<%=clazz%>_setting_<%=c.name.sub(/\?/, '')%>">
+  <% scope_name = "settings[#{area}][#{c.name}]" %>
+  <% fields_for scope_name, c do |cf| %>
+    <%= cf.hidden_field :name, :value => c.name %>
+    <%= cf.hidden_field :field_order, :value => c.field_order %>
+    <% if c.name =~ /(.*)\?/ -%>
+      <%= cf.label(:value, c.name.humanize) + cf.check_box(:value) %>
+    <% elsif c.name == "topic_listing" %> 
+      <%= cf.label(:value, c.name.humanize) + listing_type_selector(scope_name, c.value) %>
+    <% elsif c.name == "topic_description" %> 
+      <%= cf.label(:value, c.name.humanize) + cf.text_area(:value, :size => "35x6") %>
+    <% elsif c.name =~ /c(\d)/ -%>
+      <% i = $1.to_i -%>
+      <% cv = c.value -%>
+      <div class="cell">
+      <h3>Story <%= i %></h3>
+      <% (cv.keys.sort - ["name"]).each do |k| -%>
+        <% fields_for scope_name do |cf| -%>
+          <%= cf.label :value, (k == "lt_slug") ? "Member/Topic Slug" : k.to_s.humanize %>
+          <% if k == "listing" -%>
+            <%= listing_type_selector(scope_name + "[listing]", cv[k], true) %>
+          <% else -%>
+            <%= cf.text_field k, :value => cv[k] %>
+          <% end -%>
+        <% end -%>
+      <% end -%>
+      </div>
+    <% else -%>
+      <%= cf.label(:value, c.name.humanize) + cf.text_field(:value) -%>
+    <% end -%>
+  <% end -%>
+  </div>
+<% end -%>
+</div>

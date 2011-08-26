@@ -1,0 +1,10 @@
+<div class="interior_content">
+<h2>Invite a friend to <%=app_name%></h2>
+
+<% form_for :member, @member, :url => inviting_members_path, :method => :post, :html => { :class => 'entry_form' }  do |f| -%>
+  <p style="margin-top:10px;"><label for="email">Your Friend's Email:</label><br/>
+  <%= f.text_field :email %></p>
+
+  <%= submit_button 'Send Invitation', '', :title => 'Send Invitation' %>
+<% end -%>
+</div>

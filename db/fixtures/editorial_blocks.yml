@@ -1,0 +1,13 @@
+about_what_is:
+  id: 1
+  slug: about_what_is
+  context: right_column
+  editorial_space_id: 1
+  body: "<h4><a href=\"/about\">What is SocialNews?</a></h4> \
+    <div class=\"blurb\"> \
+    SocialNews helps people find good journalism online. Our web review tools let you rate the news \
+    based on journalistic quality, not just popularity. Based on member ratings, we feature a daily \
+    selection of top rated news and opinions on our free site. We're non-profit, non-partisan, and \
+    committed to helping citizens make informed decisions about democracy. \
+    <a href=\"/about\" style=\"font-weight: normal\">More&nbsp;<span class=\"more\">&raquo;</span></a> \
+    </div>"

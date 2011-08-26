@@ -1,0 +1,52 @@
+<%- @title = "Smart Feeds" -%>
+
+<div class="span-24 last overview_page">
+
+<h2> <%=@title%> <span class="beta"> (BETA)</span></h2>
+<div class="smart_feeds_desc">
+<div style="width:65%; float:left;">
+<p>
+To find good journalism online, <%=app_name%> follows hundreds of <i>'smart feeds'</i> from around the web. All day long, we surface interesting news stories from trusted sources, popular news sites and APIs - as well as some of the greatest minds in 'link journalism'.  Together, these <i>'smart feeds'</i>&nbsp;harness the collective intelligence of thousands of professionals and citizens -- who extend the <%=app_name%> community to create a filtered list of quality news and opinion, round the clock.
+</p>
+<p>
+Visit <%= link_to "Today's Feeds", todays_feeds_feeds_url %> for popular news of the day.  To get <%=app_name%>'s own feeds of top stories, check our <%= link_to "RSS Feeds", page_path(:section => "rss") %> or <%= link_to "Widgets", page_path(:section => "widgets") %>, updated hourly for hundreds of news topics. 
+</p>
+</div>
+<div class="todays_feeds_image" style="margin-top:-45px;_margin-top:0px;"></div>
+</div>
+<br/>
+
+<%- [["Aggregator", "Aggregators"], ["Author", "Authors"], ["Publication", "Mainstream Sources"], ["Publication", "Independent Sources"], ["", "Others"]].each do |cat| -%>
+  <%- buf = "" -%>
+  <%- @feeds.each do |f| -%>
+    <%#-- For publications, split feeds into those that belong to msm and ind --%>
+    <%- if cat[0] == "Publication" && !f.feed_group.blank? && f.feed_group =~ /#{cat[0]}/ %>
+      <%- s = f.source_profile_id.blank? ? nil : Source.find(f.source_profile_id) -%>
+      <%- if ((cat[1] == "Mainstream Sources") && (s.nil? || s.ownership == "msm")) || ((cat[1] == "Independent Sources") && s && s.ownership == "ind") -%>
+        <% buf += link_to(f.name + (!f.subtitle.blank? ? "<span style=\"font-weight:normal\"> - #{f.subtitle}</span>" : ""), feed_url(f)) + "<br/>" -%>
+      <%- end -%>
+    <%- elsif (!cat[0].blank? && !f.feed_group.blank? && f.feed_group =~ /#{cat[0]}/) || (cat[0].blank? && f.feed_group.blank?) -%>
+      <% buf += link_to((f.name || "--Missing name--") + (!f.subtitle.blank? ? "<span style=\"font-weight:normal\"> - #{f.subtitle}</span>" : ""), feed_url(f)) + "<br/>" -%>
+    <%- end -%>
+  <%- end -%>
+
+  <%- if !buf.blank? %> 
+  <div class="span-5" style="margin-bottom: 2em; margin-right:45px; float:left;">
+    <h3> <%=cat[1]%></h3>
+   <span class="overview_entry"> <%= buf %>  </span>
+  </div>
+  <%- end -%>
+<%- end -%>
+
+<br style="clear:both" />
+<p>
+We're very grateful to all the folks who create these feeds for sharing their expertise so generously -- and to our API partners for their invaluable contributions to our cause. APIs that we use to fetch story metadata include:
+<a target="_blank" href="http://corp.daylife.com/daylife_api">Daylife</a>,
+<a target="_blank" href="http://apidoc.digg.com">Digg</a>,
+<a target="_blank" href="http://newsrack.in">NewsRack</a>, and
+<a target="_blank" href="http://help.tweetmeme.com/2009/04/07/api-documentation/">Tweetmeme</a>.  Thank you all!
+Feeds listed above have been vetted by our editors, and the stories they recommend generally receive above average ratings from our members. 
+To recommend a feed, or share your thoughts about this service, <%= mail_to email_addr("feedback"), "email us", :subject => "About Smart Feeds"%>. 
+</p>
+
+</div>

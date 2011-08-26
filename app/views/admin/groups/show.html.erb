@@ -1,0 +1,21 @@
+<h1 class="title use16columns"><%= h @group.name %><%= edit_button(edit_admin_group_path(@group) + "?return_to=show") %> <%= @group.is_protected? ? "" : delete_button(admin_group_path(@group)) %></h1>
+
+<div class="use10columns inner_left">
+  <p>Description</p>
+  <%= h @group.description %>
+  <dl>
+    <dt>Attributes</dt>
+    <dd>Members: <%= h @group.members.size %></dd>
+    <dd>Protected: <%= h @group.is_protected? %></dd>
+    <dd>Type: <%= @group.is_role? ? 'Role' : 'Group' %></dd>
+  </dl>
+  <br />
+  <%= cancel_tag ("/admin/groups") %>
+</div>
+
+<dl class="use6columns inner_right">
+  <dt>Members</dt>
+  <%- @group.members.each do |member|-%>
+  <dd><%= h member.name %></dd>
+  <%-end -%>
+</dl>

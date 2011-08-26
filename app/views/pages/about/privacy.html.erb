@@ -1,0 +1,18 @@
+<% @title = "Privacy Policy" %>
+
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior" style="<%= params[:popup] ? "" : "font-size:1.17em;line-height:1.25em;" %>">
+
+<%= content_tag(:h2, @title, :style => "margin-bottom:8px") unless params[:popup] %>
+		<p><%=app_name%> treats your contact information as private and confidential. We will not provide your contact information to any other organization without your permission.</p>
+		<p>We will send you information about this project by email. We will do our best to respect your time and attention. You can remove yourself from our mailing list at any time by replying to any of our email messages and requesting to be unsubscribed.</p>
+		<p>We treat your comments as public information. We may, for example, use your comments to help inform the development of this service, without disclosing your name or email address. We may also make your comments, along with your state and country, available to the press and the public online.</p>
+		<p>We will expand this privacy policy when we launch our full service next year. Thanks for your patience and understanding during this beta phase.</p>If you have any questions about our privacy policy, <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} Privacy Policy", :encode => "javascript" %>.
+</div>
+</div>
+<div class="bottom"></div>
+</div>
+</div>

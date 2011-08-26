@@ -1,0 +1,48 @@
+<%- cm = current_member -%>
+<%- member_id = 'null' -%>
+<%#-- Display the popup from the perspective of the group --%>
+<%- if params[:group_id] -%>
+  <%- g = Group.find(params[:group_id]); m = g && g.is_social_group? ? g.sg_attrs.mynews_dummy_member : nil -%>
+  <%- if g && m && cm.has_host_privilege?(g, :staff, @local_site) -%>
+    <%- cm = m; member_id = m.id -%>
+  <%- end -%>
+<%- end -%>
+
+<%- no_follows ||= false -%>
+<div style="margin:10px 0 0 5px;">
+  <%- groupings = [{:none => nil}] + Subject.groupings_for(subject.slug) -%>
+  <%- subj_topic_groupings = subject.topics_by_grouping(@local_site) -%>
+  <%- groupings.each do |grouping| -%>
+    <%- grouping_key = grouping.keys.first -%>
+    <%- grouping_topics = subj_topic_groupings[grouping_key] -%>
+    
+    <%- unless grouping_topics.blank? -%>
+      <%- unless grouping_key == :none -%>
+        <span class="subhead_small" style="color: #555">
+          <%= grouping.values.first["name"] %>
+        </span>
+        <br/>
+      <%- end -%>
+      
+      <%- grouping_topics.each do |topic| -%>
+        <div <% unless grouping_key == :none %> style="padding-left: 0.5em"<% end %>>
+          <div style="margin-bottom:4px;width:200px;height:15px;">
+          <span style="float:left;"><%= topic.name %></span>
+          <%- if can_follow?(cm) && !no_follows -%>
+            <%- if cm.followed_topics.include?(topic) -%>
+              <%- fc = "unfollow_button"; title = "Unfollow #{topic.name}" -%>
+            <%- else -%>
+              <%- fc = "follow_button"; title = "Follow #{topic.name}" -%>
+            <%- end -%>
+            <%- js_opts = follow_item_js_opts('topic', topic, nil, params[:popup]) -%>
+            <%#-- SSS: Important use double quotes below because the js_code above will come with single quotes.  Using single quotes will break it! --%>
+            <%- och = params[:popup] ? "popup_parent_toggle_follow(this, $(this).parent().parent(), #{member_id}, #{js_opts})" : "toggle_follow(this, #{js_opts})" -%>
+            <a href="#" class="<%=fc%>" onclick="return <%=och%>" title="<%=title%>"></a>
+          <%- end -%>
+          </div></div>
+      <%- end -%>
+      
+      <%= "<br/>" unless grouping_topics.empty? or grouping == groupings.last %>
+    <%- end -%>
+  <%- end -%>
+</div>

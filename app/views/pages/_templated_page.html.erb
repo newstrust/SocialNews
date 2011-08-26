@@ -1,0 +1,11 @@
+<%- @title = title -%>
+
+<%- pkv = PersistentKeyValuePair.find(:first, :conditions => {"persistent_key_value_pairs.key" => "#{page_slug}_template"}) -%>
+<%- @page_template = pkv ? pkv.value : "" -%>
+<%- wrap_page_template(@page_template) {} -%>
+
+<% if logged_in? && current_member.has_role_or_above?(:editor) -%>
+  <div style="clear:both;font-size:14px;font-weight:bold"><%= link_to "Edit this page", admin_edit_page_path(:page => page_slug) %></div>
+<% end -%>
+
+<%= render :partial => "shared/tools_icon_forms" %>

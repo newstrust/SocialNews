@@ -1,0 +1,115 @@
+# Topic constants
+#
+
+topic_subjects:
+ - world:
+    name: World
+    groupings:
+      - world_featured: {name: Featured}
+      - worldwide_topics: {name: Worldwide Topics}
+      - world_regions: {name: World Regions}
+      - world_countries: {name: World Countries}
+      - world_more: {name: More Topics}
+    topic_volume: 7
+ - us:
+    name: U.S.
+    groupings:
+      - us_featured: {name: Featured}
+      - us_issues: {name: U.S. Issues}
+      - us_government: {name: U.S. Government}
+      - us_states: {name: States}
+      - us_demographics: {name: Demographics}
+      - us_more: {name: More U.S. Topics}
+    topic_volume: 7
+ - politics:
+    name: Politics
+    groupings:
+      - politics_featured: {name: Featured}
+      - political_issues: {name: Political Issues}
+      - political_figures: {name: Political Figures}
+      - political_groups: {name: Political Groups}
+      - us_government: {name: U.S. Government}
+      - us_elections: {name: U.S. Elections}
+      - local_politics: {name: Local Politics}
+      - politics_more: {name: More Topics}
+    topic_volume: 7
+ - business:
+    name: Business
+    groupings:
+      - business_featured: {name: Featured}
+      - general_business_topics: {name: General Business Topics}
+      - companies_in_the_news: {name: Companies in the News}
+    topic_volume: 7
+ - scitech:
+    name: Sci/Tech
+    groupings:
+      - scitech_featured: {name: Featured}
+      - scitech_energy: {name: Energy Sources}
+      - scitech_more: {name: More Topics}
+    topic_volume: 30
+ - living:
+    name: Living
+    groupings: []
+    topic_volume: 30
+ - media:
+    name: Media
+    groupings: []
+    topic_volume: 30
+ - health:
+    name: Health
+    groupings: []
+    topic_volume: 30
+ - sports:
+    name: Sports
+    groupings: []
+    topic_volume: 30
+ - entertainment:
+    name: Entertainment
+    groupings:
+      - entertainment_media: {name: Entertainment Media}
+    topic_volume: 30
+ - education:
+    name: Education
+    groupings:
+      - education_featured: {name: Featured}
+      - education_more: {name: More Topics}
+    topic_volume: 30
+ - religion:
+    name: Religion
+    groupings:
+      - religions: {name: Religions}
+      - religion_issues: {name: Religious Issues}
+      - religion_more: {name: Other Religion Topics}
+    topic_volume: 30
+ - local:
+    name: Local
+    groupings:
+      - local_geographic: {name: Geographic Areas}
+      - metro_news: {name: Metro}
+      - state_news: {name: State}
+      - regional_news: {name: Regional}
+      - hyperlocal_news: {name: Hyperlocal}
+      - local_more: {name: Local Topics}
+    topic_volume: 60
+ - community:
+    name: Community
+    groupings:
+      - community_cities: {name: Cities}
+      - community_counties: {name: Counties}
+      - community_states: {name: States}
+      - community_demographics: {name: Demographics}
+      - community_topics: {name: Community Topics}
+    topic volume: 60
+ - extra:
+    name: Extra
+    groupings:
+      - featured_topic: {name: Featured}
+      - special_topics: {name: Specials}
+      - partners: {name: Partners}
+      - groups: {name: Groups}
+    topic_volume: 60
+
+topic_status:
+ - hide:    {name: Hide}
+ - list:    {name: List}
+ - feature: {name: Feature}

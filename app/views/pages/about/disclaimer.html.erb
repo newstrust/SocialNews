@@ -1,0 +1,20 @@
+<% @title = "Disclaimer" %>
+
+<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div>
+	<div class="wrapper">
+		<div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+<%= content_tag(:h2, "#{app_name} &ndash; Preliminary Data Disclaimer", :style => "margin-bottom:8px") unless params[:popup] %>
+
+<p><%=app_name%> ratings are considered PRELIMINARY DATA at this time. We're currently testing our beta site with a small community of reviewers. Our data will remain preliminary until we reach critical mass and have fully confirmed the accuracy of our review process. <%=app_name%> ratings are on the scale of 1 to 5 (with 1 indicating low quality and 5 indicating high quality).</p>
+
+<h3>About <%=app_name%></h3>
+<a href="/"<%= ' target="_blank"' if params[:popup] %>><%=app_name%></a> is a social news network that helps people find good journalism online. Our website and news feeds feature top-rated news stories from hundreds of mainstream and alternative news sources. Our members rate the news based on journalistic quality, not just popularity. 
+<p>
+<%- if params[:popup] -%>
+	<p align="center"><a href="javascript:self.close()">Close this window</a></p>
+<%- end -%>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>

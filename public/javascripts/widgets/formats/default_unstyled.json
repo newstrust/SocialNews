@@ -1,0 +1,53 @@
+var _NTW_widget_defaults = {
+    /* This structure provides settings for the widget content */
+  content: {
+    num_stories     : 5,
+    header          : true,
+    site_logo       : 'images/logos/socialnews-logo_20px.png',
+    footer          : true,
+    show_stars      : true,
+    stars_dir       : 'small/',
+    gray_stars_dir  : 'small/',
+    date_format     : 'M d, y',
+    title_max_length: 100,
+    quote_max_length: 135
+  },
+    /* This structure describes the base css settings for the entire widget */
+  base_css: {
+    link_target : '_top',
+    link_class  : '',
+    base_class  : 'nt_widget',
+    story_class : 'nt_story',
+    header_class: 'nt_header',
+    footer_class: 'nt_footer',
+    stars_img_class : 'nt_stars_img'
+  },
+    /* This structure describes the header format */
+  header_format: [
+    { element: 'listing_topic', dom: [{ elt: 'span', clazz: 'nt_header_listing_topic' }, {elt: 'a'}], suffix: ' - ', suffix_if_present: 'listing_type' },
+    { element: 'listing_type',  dom: [{ elt: 'span', clazz: 'nt_header_listing_type' },  {elt: 'a'}] },
+    { element: 'hdr_story_type',dom: [{ elt: 'span', clazz: 'nt_header_story_type' },    {elt: 'a'}], prefix: ' - ' },
+    { element: 'sources_type',  dom: [{ elt: 'span', clazz: 'nt_header_sources_type' },  {elt: 'a'}], prefix: ' - ' }
+  ],
+    /* This structures describes the story format  */
+  story_format: [
+    { element: 'title',         dom: [{elt: 'span', clazz: 'nt_story_title'},       {elt: 'a'}] },
+    { element: 'source',        dom: [{elt: 'span', clazz: 'nt_story_source'},      {elt: 'a'}], prefix: '\n' },
+    { element: 'authors',       dom: [{elt: 'span', clazz: 'nt_story_authors'}],                 prefix: ' - By ' },
+    { element: 'date',          dom: [{elt: 'span', clazz: 'nt_story_date'}],                    prefix: ' - ' },
+    { element: 'story_type',    dom: [{elt: 'span', clazz: 'nt_story_story_type'}],              prefix: ' (', suffix : ')' },
+    { element: 'quote',         dom: [{elt: 'span', clazz: 'nt_story_quote'}],                   prefix: '\n' },
+    { element: 'rating',        dom: [{elt: 'span', clazz: 'nt_story_rating'},      {elt: 'a'}], prefix: '\n' },
+    { element: 'num_reviews',   dom: [{elt: 'span', clazz: 'nt_story_num_reviews'}, {elt: 'a'}], prefix: ' | ' },
+    { element: 'review_it',     dom: [{elt: 'span', clazz: 'nt_story_review_it'},   {elt: 'a'}], prefix: ' | ' },
+    { element: 'like_it',       dom: [{elt: 'span', clazz: 'nt_story_save'},        {elt: 'a'}], prefix: ' | ' }
+  ],
+    /* This structure describes the footer format */
+  footer_format: [
+    { element: 'more_stories',  dom: [{elt: 'span', clazz: 'nt_footer_more_stories'}, {elt: 'a'}] },
+    { element: 'help',          dom: [{elt: 'span', clazz: 'nt_footer_help'},         {elt: 'a'}], prefix: ' ' },
+    { element: 'submit_story',  dom: [{elt: 'span', clazz: 'nt_footer_submit_story'}, {elt: 'a'}], prefix: '\n' },
+    { element: 'get_widget',    dom: [{elt: 'span', clazz: 'nt_footer_get_widget'},   {elt: 'a'}], prefix: ' | ' },
+    { element: 'signup',        dom: [{elt: 'span', clazz: 'nt_footer_signup'},       {elt: 'a'}], prefix: ' | ' }
+  ]
+};

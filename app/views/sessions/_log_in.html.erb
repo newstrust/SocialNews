@@ -1,0 +1,23 @@
+<div class="form_field leftalign">
+	<%= label_tag 'email' %>
+	<%= text_field_tag 'email' %>
+</div>
+
+<div class="form_field leftalign">
+	<%= label_tag 'password' %>
+	<%= password_field_tag 'password' %>
+</div>
+
+<div>
+	<%= check_box_tag 'remember_me', "1", false, :style => "display: inline; border: none" %>
+	<%= label_tag 'remember_me', nil, :style => "display: inline; font-weight: normal; font-size: 0.9em" %>
+	<br/><br/>
+  
+  <%= submit_tag "", :class => "login_btn" %>
+  <%# Custom submit buttons not working so hot anymore... %>
+	<%#= submit_button 'Log in' %>
+  <br/>
+
+	<%= link_to 'Forgot Your Password?', forgot_password_sessions_path(params.slice(:popup)) %><br/>
+	<%= link_to 'Lost Your Activation Email?', resend_activation_sessions_path %>
+</div>

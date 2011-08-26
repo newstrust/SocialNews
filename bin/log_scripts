@@ -1,0 +1,9 @@
+Testing for traffic spikes
+
+-------- topics --------
+grep topics newstrust.access.log | grep "GET /topics" | grep -v json | grep -v xml | cut -f4 -d " " | cut -f2-3 -d":" | uniq -c | less
+grep topics newstrust.access.log | grep "GET /topics" | grep -v json | grep -v xml | less                 
+
+-------- members --------
+grep members newstrust.access.log | grep "GET /members" | grep -v json | grep -v xml | cut -f4 -d" " | cut -f2-3 -d":" | uniq -c | less
+grep members newstrust.access.log | grep "GET /members" | grep -v json | grep -v xml | less    

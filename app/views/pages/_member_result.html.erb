@@ -1,0 +1,14 @@
+<%#- These are the member results for the Search page -%>
+<%- show_flag = result.full_profile_visible_to_visitor?(current_member) -%>
+<%#-- SSS: Mar 30, 2010; We have decided to make all search results public. But, click-through might not display much unless can view the member page --%>
+<%#- if show_flag or (logged_in? and current_member.has_role_or_above?(:sysop)) -%>
+	<dl style="font-size:1em;">
+		<dt><%= link_to image_tag((result.image ? result.image.public_filename(:small_thumb) : "/images/ui/silhouette_tiny.jpg"), :align => "left", :width => "30", :style => "margin-right:5px;"), member_path(result.to_param) %><% if !show_flag %><strong>*</strong><% end %> <%= link_to result.name, member_path(result.to_param) %> 
+		(<%= display_member_status(result) %>)
+		</dt>
+		
+		<dt>Roles: <%= list_member_groups(result, :group_list => "host,newshound,editor,partners,advisors,staff,directors,donors") %>
+		
+		</dt>
+	</dl>
+<%#- end -%>

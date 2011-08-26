@@ -1,0 +1,8 @@
+<% @title = "Edit Feed" %>
+
+<h1> Edit: Feed </h1>
+
+<% form_for :feed, :url => admin_feeds_path do |f| -%>
+  <%= render :partial => 'form' , :locals => { :f => f }%>
+  <p><%= submit_tag 'Create' %> <%= cancel_tag "/admin/feeds" %></p>
+<% end -%>

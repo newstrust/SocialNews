@@ -1,0 +1,49 @@
+The new scoring algorithm attempts to take into account the following factors:
+
+-> external recommendations for the story (via twitter feeds, presence in aggregator feeds, # diggs, # tweets)
+-> internal recommendations for the story (site activity for the story: member submits, member reviews, pageviews, likes, emails, comments)
+-> editorial recommendations (via choice of feeds, editorial priority for feeds, editorial choice in setting up aggregator filters on google news, newsrack)
+-> overlap with member preferences (more the overlap, greater the score is boosted)
+-> story age (since it first enters our system, not actual publication date) -- once born on socialnews, with every tick (30 minutes), a story moves closer to death unless members of the site feed it with activity to keep it alive.  Actually, stories that enter the site during the daytime are at an advantage when compared to those that enter the site during off-hours.  So, maybe we mimic sleep by significantly reducing the decay factor during off-peak hours so that those stories stand a chance of seeing the light of day in member's mynews listings.
+
+So, to summarize: (a) external recommendations (b) internal site activity = recommendations (c) editorial recommendations (d) member preference overlap (e) on-site story age.  Of these, (b) and (d) have more influence when compared to (a) and (c).  (e) is a cross-cutting aging factor that decays all recommendations equally.
+-------------------------------------------
+This is a rough outline of how I'll compute score for stories.  Basically, on story submit (manual or feed fetcher), the story is assigned an initial score.  For each activity, the score is updated as described below.  So, if someone clicks on the story and sees the socialnews story detail page, the score is bumped by 2 (scaled by member level of the viewer).  Similarly for other activities.  So, a good review causes a significant bump in the story's score. 
+
+Additionally, there is a regular score decay ... every 30 minutes, like clockwork, all scores are bumped down 20%.  But, subsequent activity on that story will add new score to it.  This keeps "popular" stories in circulation and pushes unpopular stories out of circulation.  This also means that my news story listings will continually keep changing. 
+
+-----------------------------------------------------------------------------
+init             : s = 100 + 40 * (2*autolist_score - 0.5) - 60 * age_in_days
+
+starts everyone off on the same slate, but modifies it based on external and editorial recommendations (autolist_score), and how stale a story it is (age in days)
+
+feature          : s += 50                       [ editors chance to influence a story ]
+nt page view     : s +=  2 * member_rating / 3.5 [ guest = 1.0; no bots ]
+target page view : s +=  5 * member_rating / 3.5 [ guest = 1.0; no bots ]
+like             : s += 10 * member_rating / 3.5 [ no guests or bots ]
+email            : s += 15 * member_rating / 3.5 [ no guests or bots ]
+comment          : s += 20 * member_rating / 3.5 [ no guests or bots ]
+review           : s += 50 * (new_story_rating / 3.5)
+every 30 mins    : s = s / 1.20 [ 20% decay every half hour; a 100 rated story decays to 5 after 8 hours without any additional activity ]
+-----------------------------------------------------------------------------
+
+Additionally, because of how decay and activity-based score increments work, spurty popularity has lower effect than sustained popularity over a longer time period.
+
+Ex: Story A starts at 100, and has 20 page views in 1st half hour, and nothing subsequently
+    After 2 hours, its score will be (100 + 40) / (1.2 ^ 4) = 67
+
+    Story B starts at 100, and has 5 page views every half hour (for a total of 20 page views as with A)
+    After 2 hours, its score will be ((((100 + 10) / 1.2 + 10) / 1.2 + 10) / 1.2 + 10) / 1.2) = 74
+
+So, B will be preferred over A after 2 hours even though both are "equally popular".
+
+These scores can be used in any story listing whatsoever.  For my news, we make an additional tweak as follows:
+
+So, a story that matches more criteria will see its score multiplied.  But, note that a very popular story that matches only 1 criteria might nevertheless trump a less popular story that matches 2 criteria.
+
+-----------------------------------------------------------------------------
+mynews_score = story_score * # matching crieria (source match, topic match, feed match, friend match [ submit / review ? ])
+-----------------------------------------------------------------------------
+
+Obviously, the co-efficients are somewhat arbitrary and will have to be tweaked empirically, but this is a start.  I am going to implement this code in trunk and push to production in a day or two to see how scores behave and what co-efficients need what tweaking.  I'll also implement a quick & dirty top-score listing to complement this so we can see what stories show up in these lists.  This way, we get to tweak this code before deploying it on my news.
+-------------------------------------------

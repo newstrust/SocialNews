@@ -1,0 +1,54 @@
+<div>
+<label for="name">Template Name: </label><br/>
+<%= f.text_field :template_name %>
+</div>
+
+<div> 
+<%= check_box("bulk_email", "is_reinvite", {}, "true", "false")%> 
+<label> Send re-invites </label>
+(NOTE: If so, among the recipients you list below, the mail will only be sent to those with a 'guest' status)
+</div>
+
+<div> 
+<%= check_box("bulk_email", "html_mail", {}, "true", "false")%> 
+<label> HTML Email? </label>
+</div>
+
+<div> 
+<%= check_box("bulk_email", "ignore_no_bulk_email", {}, "true", "false")%> 
+<label> Ignore member's "special notices" setting? (send email even if they opted out) </label>
+</div>
+
+<div>
+<label for="invitation_code">Optional Invitation code (is appended to existing invite code): </label><br/>
+<%= f.text_field :invitation_code %>
+</div>
+
+<div>
+<label for="to">From: </label><br/>
+<%= f.text_field :from %>
+</div>
+
+<div>
+<label for="to">To: (email id OR member name)</label><br/>
+<%= f.text_area :to, :rows => 3, :cols => 50 %>
+</div>
+
+<div>
+<label for="subject">Subject: </label><br/>
+<%= f.text_field :subject, :size => 80 %>
+</div>
+
+<div>
+<label for="body">Email Body (Plain Text Version): </label> <br/>
+Use [DOMAIN] (for the site domain; Ex: [DOMAIN]/about), [MEMBER.NAME], [MEMBER.FIRST_NAME], [MEMBER.LAST_NAME], [MEMBER.EMAIL] if you need to use this in the body.  For reinvitation emails, use [MEMBER.REINVITE_LINK] wherever the link needs to appear.<br/>
+</label> 
+<%= f.text_area :body, :rows => 15, :cols => 80 %>
+</div>
+
+<div>
+<label for="body">Email Body (HTML Version -- if you have checked the html email box above): </label> <br/>
+Use [DOMAIN] (for the site domain; Ex: [DOMAIN]/about), [MEMBER.NAME], [MEMBER.FIRST_NAME], [MEMBER.LAST_NAME], [MEMBER.EMAIL] if you need to use this in the body.  For reinvitation emails, use [MEMBER.REINVITE_LINK] wherever the link needs to appear.<br/>
+</label> 
+<%= f.text_area :html_body, :rows => 25, :cols => 80 %>
+</div>

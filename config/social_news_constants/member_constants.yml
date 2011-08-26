@@ -1,0 +1,153 @@
+# Member constants
+#
+
+# Commenting and Posting privileges
+min_member_level_for_comments: 2
+min_member_level_for_posts: 2
+min_validation_level_for_comments: 2
+min_validation_level_for_posts: 2
+max_posts_per_day: 5
+
+member_stats:
+ - total_reviews:                {name: Reviews}
+ - total_answers:                {name: Answers}
+ - total_meta_comments:          {name: Comments}
+ - total_meta_reviews_received:  {name: Ratings Received}
+ - total_meta_reviewers:         {name: Number of Raters}
+ - total_meta_reviews_given:     {name: Ratings Given}
+
+member_groups:
+ - host:        {name: Host}
+ - newshound:   {name: Newshound}
+ - editor:      {name: Editor}
+ - staff:       {name: Staff}
+ - sysop:       {name: Sysop}
+ - admin:       {name: Admin}
+ - advisors:    {name: Advisor}
+ - advisors:    {name: Advisor}
+ - donors:      {name: Donor}
+ - directors:   {name: Director}
+ - founding:    {name: Founding Member}
+ - partners:    {name: Partner}
+ - vips:        {name: VIP}
+ - volunteers:  {name: Volunteer}
+
+member_status:
+ - guest:       {name: Guest}             # (previously called "Provisional")
+ - member:      {name: Member}            # (as soon as they've completed registration - previously called "New")
+ - suspended:   {name: Suspended}
+ - deleted:     {name: Terminated}
+ - duplicate:   {name: Duplicate}
+
+# SSS: FIXME: Any changes here should also be reflected in app/models/member.rb module Educational Status
+member_educational_status:
+ - none:        { name: None }
+ - high_school: { name: High School Student }
+ - university : { name: University Student }
+ - high_school_educator : {name: High School Educator }
+ - university_educator  : {name: University Educator }
+
+# SSS: FIXME: Any changes here should also be reflected in app/models/member.rb module Visibility
+member_privacy:
+ - public:      {name: Everyone (public)}  # open to guests, search engines
+ - members:     {name: Members Only}       # Must be logged in to view
+ - group:       {name: Group Members Only} # Must be logged in to view and must belong to a group that this members belongs to
+# - private:     {name: Only me (private)} # Not available to everyone, hence commented out
+
+member_priority:
+  - 1:  {name: Very Low}
+  - 2:  {name: Low}
+  - 3:  {name: Medium}
+  - 4:  {name: High}
+  - 5:  {name: Very High}
+  - 0:  {name: Not Sure, group: other}
+
+member_validation:
+  - 1:  {name: Pass (1)}
+  - 2:  {name: Fair (2)}
+  - 3:  {name: Good (3)}
+  - 4:  {name: Excellent (4)}
+  - 5:  {name: Outstanding (5)}
+
+member_news_experience:
+  - 1:  {name: Rarely or never}
+  - 2:  {name: Less than 10 minutes per day}
+  - 3:  {name: 10-30 minutes a day}
+  - 4:  {name: 30-60 minutes a day}
+  - 5:  {name: 60-90 minutes a day}
+  - 6:  {name: 90 minutes a day or more}
+  - 0:  {name: Decline to state, group: other}
+
+member_internet_experience:
+  - 1:  {name: Rarely or never}
+  - 2:  {name: Less than 10 minutes per day}
+  - 3:  {name: 10-30 minutes a day}
+  - 4:  {name: 30-60 minutes a day}
+  - 5:  {name: 60-90 minutes a day}
+  - 6:  {name: 90 minutes a day or more}
+  - 0:  {name: Decline to state, group: other}
+
+member_education_experience:
+  - 1:  {name: 1st-11th grade}
+  - 2:  {name: High school graduate}
+  - 3:  {name: Some college}
+  - 4:  {name: College graduate}
+  - 5:  {name: Post-graduate school}
+  - 0:  {name: Decline to state, group: other}
+
+member_journalism_experience:
+  - 1:  {name: None}
+  - 2:  {name: Less than 1 year}
+  - 3:  {name: 1-4 years}
+  - 4:  {name: 5-9 years}
+  - 5:  {name: 10-20 years}
+  - 6:  {name: More than 20 years}
+  - 0:  {name: Decline to state, group: other}
+
+member_politics:
+  - neutral:           {name: Neutral viewpoint}
+  - far_left:          {name: Far Left}
+  - left:              {name: Left}
+  - center:            {name: Center}
+  - right:             {name: Right}
+  - far_right:         {name: Far Right}
+  - not_sure:          {name: Not sure}
+  - decline_to_state:  {name: Decline to state, group: other}
+
+member_languages:
+  - english:          {name: English-only}
+  - arabic:           {name: Arabic}
+  - chinese:          {name: Chinese}
+  - french:           {name: French}
+  - german:           {name: German}
+  - italian:          {name: Italian}
+  - japanese:         {name: Japanese}
+  - korean:           {name: Korean}
+  - portuguese:       {name: Portuguese}
+  - russian:          {name: Russian}
+  - spanish:          {name: Spanish}
+  - other:            {name: Other, group: other}
+  - decline_to_state: {name: Decline to state, group: other}
+
+member_age_group:
+  - age_17_or_under:   {name: 17 or under}
+  - age_18_24:         {name: 18-24}
+  - age_25_34:         {name: 25-34}
+  - age_35_49:         {name: 35-49}
+  - age_50_64:         {name: 50-64}
+  - age_65_or_over:    {name: 65 or over}
+  - decline_to_state:  {name: Decline to state, group: other}
+
+member_gender:
+  - male:              {name: Male}
+  - female:            {name: Female}
+  - decline_to_state:  {name: Decline to state, group: other}
+
+member_income:
+  - very_low:          {name: Less than $25K}
+  - low:               {name: $25K to $49K}
+  - medium:            {name: $50K to $74K}
+  - high:              {name: $75K to $99K}
+  - very_high:         {name: $100K or more}
+  - not_sure:          {name: Not Sure, group: other}
+  - decline_to_state:  {name: Decline to state, group: other}

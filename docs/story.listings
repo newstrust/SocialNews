@@ -1,0 +1,10 @@
+- If you mark a topic / subject as being a high volume topic, it will kick in the max-stories-per-source
+  constraint, i.e. the listing will only introduce 'max-stories-per-source' stories from that source
+
+- The max-stories-per-source constraint in turn caps the date window to the topic/subject's topic-volume
+  setting or 7 days
+
+- So, if in reality, the story volume for that topic is low, the listings may start emptying out and
+  be empty altogether!
+
+- Check README.story_volume_setting for how story volume setting is used

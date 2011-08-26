@@ -1,0 +1,18 @@
+lib/url_fixup_rules.rb
+- Add the domain of the social news site to the @@domains_with_default_fixup_rule array here 
+
+---------------
+Documentation of some gotchas and things to keep in mind:
+
+Caching
+-------
+1. Names of cached fragments for story listings *SHOULD* go through get_cached_fragment_name in app/controllers/application.rb because it generates different cached fragments for bots and non-bots.  This is because 'link_to_save' in app/helpers/stories_helper.rb catches invalid authenticity token exception and suppresses it for bots.  But, this shouldn't be suppressed for non-bots.  So, if we don't have different story listing cached fragments (at least for those where the like/unlike link is displayed), we might let through forged forms that like stories .. I know this is not catastrophic, but, documenting it here anyway.
+
+
+Creating new templated pages
+-----------------------------
+Create a new view in app/views/pages/<path-to-template>  (ex: /pages/help/faq/group; /pages/about/mynews; /pages/newshunts) which is basically 1 line with a partial render with 2 variables, the slug for the new templated page (which would be help_faq_group, about_mynews, newshunts respectively for these), and a title for the page.  
+
+If you want this page to show up in the admin area list of templated pages, edit app/controllers/admin/pages_controller.rb and add the slug to the list there.
+
+That's it.

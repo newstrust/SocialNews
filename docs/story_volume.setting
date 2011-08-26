@@ -1,0 +1,17 @@
+* If set to 7 or lower, a subject or topic is considered high-volume and
+  "source diversity" constraints kick in for listings on topic and subject
+  pages.  No more than X stories are listed per source on that page --
+  this spreads around stories across sources (currently X=1).  Presumably, since
+  this is a high volume topic, there will be sufficient stories across
+  multiple sources.
+
+* If set to 30 or lower, the topic & subject shows up in the topic listing
+  drop down on the widget index page (/widgets).  If over 30, it is considered
+  "insignificant" for widgets.  Note that you can still manually configure
+  the widget -- it just wont be available on the index page.
+
+* If set to 30 or higher, a subject is consider a minor subject and only 1 story
+  is listed on the home page for those subjects (and 2 for non-minor subjects).
+
+* This setting is also used as the default date window size for most-trusted
+  listings on topic & subject pages

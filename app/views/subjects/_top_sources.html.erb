@@ -1,0 +1,48 @@
+<%- flag = false -%>
+<%- if !@top_sources[:msm_news].empty? || !@top_sources[:ind_news].empty? || !@top_sources[:msm_opinion].empty? || !@top_sources[:ind_opinion].empty? -%>
+  <%- right_column_box :header => "Top Sources", :disclaimer_link => 'NEW' do -%>
+  <div class="top_sources">
+    <h2><%= link_to("#{name} - Top Rated", sources_path) %></h2>
+    <%- if !@top_sources[:msm_news].empty? || !@top_sources[:ind_news].empty? -%>
+      <h1> News </h1>
+      <%- if !@top_sources[:msm_news].empty? %> 
+        <div class="subsubhead">MAINSTREAM</div>
+        <div class="sources_list">
+        <%= @top_sources[:msm_news].collect { |s| link_to_source(Source.find(s['id']), {}, false) + "&nbsp;<span class='count'>(#{s['avg_source_rating']})</span>" } * ", " %>
+        </div>
+      <%- end -%>
+      <%- if !@top_sources[:ind_news].empty? %>
+        <div class="subsubhead">INDEPENDENT</div>
+        <div class="sources_list">
+        <%= @top_sources[:ind_news].collect { |s| link_to_source(Source.find(s['id']), {}, false) + "&nbsp;<span class='count'>(#{s['avg_source_rating']})</span>" } * ", " %>
+        </div>
+      <%- end -%>
+      <hr/>
+      <% flag = true -%>
+    <%- end -%>
+  
+    <%- if !@top_sources[:msm_opinion].empty? || !@top_sources[:ind_opinion].empty? -%>
+      <h1> Opinion </h1>
+      <%- if !@top_sources[:msm_opinion].empty? %> 
+        <div class="subsubhead">MAINSTREAM</div>
+        <div class="sources_list">
+        <%= @top_sources[:msm_opinion].collect { |s| link_to_source(Source.find(s['id']), {}, false) + "&nbsp;<span class='count'>(#{s['avg_source_rating']})</span>" } * ", " %>
+        </div>
+      <%- end -%>
+      <%- if !@top_sources[:ind_opinion].empty? %>
+        <div class="subsubhead">INDEPENDENT</div>
+        <div class="sources_list">
+        <%= @top_sources[:ind_opinion].collect { |s| link_to_source(Source.find(s['id']), {}, false) + "&nbsp;<span class='count'>(#{s['avg_source_rating']})</span>" } * ", " %>
+        </div>
+      <%- end -%>
+      <hr/>
+      <%- flag = true -%>
+    <%- end -%>
+  
+    <%- if flag -%>
+      <span class="read_more"><%= link_to("More Top Sources &raquo;", sources_path) %></span>
+      <%= help_link "How do you pick these sources?", 'how_we_pick_sources', "", :class => "small_note" %>
+    <%- end -%>
+  </div>
+  <%- end -%>
+<%- end -%>

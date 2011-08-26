@@ -1,0 +1,15 @@
+<%- type = @comment.commentable.class.to_s.downcase -%><%= StringHelpers.linewrap_text("#{@comment.member.display_name} left a new comment on #{type == "review" ? "a review for this story" : "this #{type=="group" ? "group page" : type}"}:",72) %>
+"<%= comment_title_for(@comment) %>"
+
+Here's what <%= first_name(@comment.member) %> wrote:
+
+"<%= h(strip_tags(StringHelpers.linewrap_text(@comment.body_plain,72))) unless @comment.body_plain.blank? %>"
+
+<%= first_name(@comment.member) %>'s comment can be viewed here:
+<%= comment_permalink_for(@comment) %>
+
+To see all comments for this <%= type=="group" ? "group page" : type %>, click here:
+<%= comment_url_for(@comment) %>
+
+To view <%= first_name(@comment.member) %>'s profile, click here:
+<%= member_url(@comment.member.to_param) %>

@@ -1,0 +1,7 @@
+<h1> List of editorially templated pages </h1>
+
+<%- @known_pages.each do |p| %>
+  <div class="use4columns" style="clear:both;font-size:14px;">
+    <div class="use3columns"><%= page_name(p) %> </div> <%= link_to "Edit", admin_edit_page_path(:page => p) %> 
+  </div>
+<%- end -%>

@@ -1,0 +1,11 @@
+<%= process_email_template(@newsletter.text_header, @recipient, @newsletter.freq) %>
+__________________________________________
+<%=@story_body-%>
+
+Please take a moment to review one of the stories above.
+For the latest updates, check our home page: <%=home_url%>.
+For a full story listing, check <%=home_url%>stories/most_recent.
+For help tips, check our FAQ <%=home_url%>help/faq.
+__________________________________________
+
+<%= process_email_template(@newsletter.text_footer, @recipient, @newsletter.freq) %>

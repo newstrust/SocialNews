@@ -1,0 +1,35 @@
+<% @title = "Duplicate Stories Merge Tool" %>
+
+<style>
+form  { margin: 20px 0; }
+label { font-weight: bold; float: left; }
+input { padding: 5px; width: 75px; margin: 0 0 0 150px; display: block; }
+input.submit { font-weight:bold; width: auto; margin-left: 50px; font-size:16px;text-decoration: none;}
+input.hidden { display: none;}
+</style>
+
+<h1> Merge Duplicate Stories </h1>
+<p>Please enter the IDs of the two stories to be merged (e.g., 25795).</p>
+<form method="post" action="<%=merge_stories_admin_stories_url%>">
+<input class="hidden" name="authenticity_token" type="hidden" value=<%=form_authenticity_token.inspect%> />
+<label> ID of story to retain: </label><input type="text" name="keep_id"> <br/>
+<label> ID of story to hide: </label><input type="text" name="merge_id"> <br/>
+
+<%= submit_tag "Merge!", :style => "display: inline"%>
+<%= cancel_tag "/admin/stories", :style => "display: inline; margin-left:3px;" %>
+</form>
+
+
+
+<hr/>
+
+<h3> Differences from the legacy tool </h3>
+
+Note that there is one significant difference in how this V3 version behaves when compared to the legacy version.
+<br/><br/>
+In the legacy version, when you merged story H(ide) into story K(eep), all of H's reviews got added to K's reviews.
+As an editor, you then decided what reviews to keep, and what to hide.
+<br/><br/>
+In this version, when you merge story H into story K, all of H's reviews (except those that are by the same member) get added to K's reviews.
+So, H's reviews that are "identical" (i.e. by the same member) to a review in K are left behind with H. Put another way, K's reviews get
+priority over H's reviews.

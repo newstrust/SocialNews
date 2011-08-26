@@ -1,0 +1,125 @@
+<% @title = @feed.name -%>
+
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'listings' %>
+  <%= javascript_include_tag 'follows' %>
+<%- end -%>
+
+<%#-- Need fixup to get around fragment caching! --%>
+<%- if logged_in? -%>
+<script type="text/javascript">
+  $(document).ready(function() {
+    var button = $('a#follow_button_to_fixup');
+    button.attr('class', '<%= current_member.followed_feeds.include?(@feed) ? "unfollow_feed" : "follow_feed"%>');
+    button.click(function() {return toggle_follow(button, {type: 'feed', id: <%=@feed.id%>})});
+    button.show();
+  });
+</script>
+<%- end -%>
+
+<%#------ Tab settings -------%>
+<%- tab_opts = { :class => "", :switch_callback => "patch_cached_stories" } -%>
+<%- tabs = [ tab_opts.merge({:name => "Most Recent",  :type => :most_recent  }),
+             tab_opts.merge({:name => "Most Popular", :type => :most_popular }),
+             tab_opts.merge({:name => "Most Trusted", :type => :most_trusted }) ] -%>
+<%- @init_listing_type ||= :most_recent -%>
+
+<script type="text/javascript">
+  <%- tabs.each do |t| -%>
+  _tabs_empty["<%=t[:type].to_s%>"] = true;
+  <%- end -%>
+  _tabs_empty["<%=@init_listing_type.to_s%>"] = false;
+</script>
+
+<div class="story_listing_detail span-16">
+  <%#------ Top area (intro, etc.) ----%>
+  <%- cache @cached_top_area_fragment_name do -%>
+  <div class="story">
+    <h2 class="bottom"><%= @feed.name %></h2>
+    <%- if !@feed.is_fb_user_newsfeed? && !@feed.is_twitter_user_newsfeed? -%>
+      <%- if !@feed.subtitle.blank? -%>
+        <h3 style="font-weight:bold"><%= (@feed.feed_type.blank? ? "" : @feed.feed_type + " Feed - ") + @feed.subtitle%></h3>
+      <%- elsif !@feed.feed_type.blank? -%>
+        <h3 style="font-weight:bold"><%= @feed.feed_type + " Feed "%></h3>
+      <%- end -%>
+    <%- end -%>
+
+    <%- if @feed.is_fb_user_newsfeed? -%>
+      <p class="content_type" style="font-size:105%"> 
+      Here are recent stories posted by your Facebook Friends. 
+      To post any of these stories on <%=app_name%>, simply click on their title - and check that their story info is accurate. 
+      Then click on the 'Review' button to review them. 
+      Note that this page is only visible to you, to protect your privacy. 
+      Some of these stories from Facebook will also appear on your own <%=link_to "MyNews page", mynews_url(@member)%>. 
+      To stop following your Facebook Feed on <%=app_name%>, click 'Unfollow this Feed' below!
+      </p>
+    <%- elsif @feed.is_twitter_user_newsfeed? -%>
+      <p class="content_type" style="font-size:105%"> 
+      Here are recent stories posted by you or your Twitter follows.
+      To post any of these stories on <%=app_name%>, simply click on their title - and check that their story info is accurate. 
+      Then click on the 'Review' button to review them. 
+      Some of these stories from Twitter will also appear on your own <%=link_to "MyNews page", mynews_url(@member)%>. 
+      To stop following your Twitter Feed on <%=app_name%>, click 'Unfollow this Feed' below!
+      </p>
+    <%- else -%>
+      <p class="content_type">
+        <%= @feed.description %>
+      </p>
+      <p class="content_type" style="font-size:105%">
+        Here are recent stories posted in this feed.  Not all of them have been reviewed by our members yet,
+        so please check that their story info is accurate. 
+        Read more about our <%=link_to "feeds", feeds_url%> -- or check <%= link_to "Today's Feeds", todays_feeds_feeds_url %> for popular news of the day.
+      </p>
+    
+      <h3 style="font-weight:bold;font-size:105%">
+        <% if !@feed.home_page.blank? %>Visit this feed's <%= link_to "home page", @feed.home_page %> <% end %>
+        <%- if @feed.source_profile_id || @member -%> 
+          <%- s = Source.find(@feed.source_profile_id) if @feed.source_profile_id -%>
+          <%- m = @member if @member -%>
+          <%- links = "" -%>
+          <%- links += link_to("Source Profile", s) if s -%>
+          <%- links += (links.blank? ? "" : " and ") + link_to("Member Profile", m) if m -%>
+          <%if !@feed.home_page.blank? %>|<% end %>
+          See our related <%= links %>
+        <%- end %>
+      </h3>
+    <%- end %>
+
+    <%#-- Member's twitter and facebook feeds are not editable by anyone, even admins! %>
+    <%- tools_box :page_type => :feed, :edit_privs => (!@feed.is_private? && logged_in? && current_member.has_role_or_above?(:host)), :edit_link => edit_admin_feed_url(@feed), :edit_title => "Edit this feed" do %>
+      <%#-- Even admins cannot follow another user's facebook newsfeed! -%>
+      <%- if can_follow? && ((current_member == @member) || !@feed.is_private?) -%>
+        <a style='display:none' id="follow_button_to_fixup" href="#"></a>
+      <%- end -%>
+    <%- end %>
+  </div>
+  <%- end -%> <%#--- cached fragment ---%>
+
+  <div style="clear:both;height:15px">&nbsp;</div>
+
+  <%- tabs.each do |tab| -%>
+    <%- tab[:content] = capture do -%> 
+      <%- if @init_listing_type == tab[:type] -%>
+        <%= render :partial => "feeds/listing", :locals => {:listing_type => tab[:type]} %>
+      <%- else -%>
+        <div>&nbsp;</div> <%#- placeholder--%>
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+
+  <%= render :partial => "shared/tabbed_column", :locals => {:tabs => tabs} %>
+</div>
+
+<div class="right_column span-8 last">
+  <%- right_column_box :header => "Feed Rating", :disclaimer_link => "Beta" do -%>
+  <div style="color:#666;margin-bottom:5px;font-weight:bold">Story Ratings:</div>
+  <%=trustometer_img(@avg_feed_rating, {})%><br/><br/>
+  <span class="small light_gray">Average from <%=@num_feed_stories%> rated stories in this feed</span>
+  <%- end -%>
+</div>
+
+<div class="right_column span-8 last">
+<%- cache @cached_feeds_sidebar do -%>
+  <%= render :partial => "feeds/feeds_sidebar" %>
+<%- end -%>
+</div>

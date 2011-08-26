@@ -1,0 +1,32 @@
+<%#-- For group pages, tabs to be displayed are determined by the hosts.  For other pages, we use default tabs as follows --%>
+<%- tabs ||= [] -%>
+<%- if tabs.blank? -%>
+  <%#- Whenever a tab is switched, switch_callback js call needs to be run after the ajax call completes 
+       See the switch_tab function in public/javascripts/listings.js %>
+  <%- tabs = [ {:name => "Most Recent",   :class => "", :type => :most_recent,   :switch_callback => "patch_cached_stories"},
+               {:name => "Most Trusted",  :class => "", :type => :most_trusted,  :switch_callback => "patch_cached_stories"},
+               {:name => "Today's Feeds", :class => "", :type => :todays_feeds,  :switch_callback => nil}] -%>
+  <%#-- No least trusted tab on topic/subject pages by default --%>
+  <%- tabs << {:name => "Least Trusted", :class => "", :type => :least_trusted, :switch_callback => "patch_cached_stories"} if @local_site.nil? -%>
+  <%#-- No starred tab for logged out visitors --%>
+  <%- tabs << {:name => "Starred", :class => "starred", :type => :starred, :switch_callback => nil} if logged_in? -%>
+<%- end -%>
+
+<%- tabs.each do |tab| -%>
+  <%- tab[:content] = capture do -%> 
+    <%- if @init_listing_type == tab[:type] -%>
+      <%= render_landing_page_listing(tab, page_obj, {:listing_route => listing_route}) %>
+    <%- else -%>
+      <div>&nbsp;</div> <%#- placeholder--%>
+		<%- end -%>
+  <%- end -%>
+<%- end -%>
+
+<%= render :partial => "shared/tabbed_column", :locals => {:tabs => tabs} %>
+
+<script type="text/javascript">
+  <%- tabs.each do |t| -%>
+  _tabs_empty["<%=t[:type].to_s%>"] = true;
+  <%- end -%>
+  _tabs_empty["<%=@init_listing_type.to_s%>"] = false;
+</script>

@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  member_id: 11
+  favoritable_id: 1
+  favoritable_type: Tag
+
+two:
+  member_id: 11
+  favoritable_id: 2
+  favoritable_type: Tag

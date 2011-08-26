@@ -1,0 +1,30 @@
+<div id="rating_inputs" class="hide">
+  <%-# all story rating criteria: quality, popularity, monitoring --%>
+  <div class="quality">
+    <%- Rating.each_criterion_by_type("quality", "form_#{@review.story.type_category}") do |criterion_key, criterion, form_level| -%>
+      <%= rating_input :review => @review,
+        :param_array_prefix => "review[rating_attributes]",
+        :criterion_key => criterion_key,
+        :criterion => criterion,
+        :form_level => form_level %>
+    <%- end -%>
+  </div>
+
+  <%-# popularity -%>
+  <%- Rating.each_criterion_by_type("popularity", "form") do |criterion_key, criterion, form_level| -%>
+    <%= rating_input :review => @review,
+      :param_array_prefix => "review[rating_attributes]",
+      :criterion_key => criterion_key,
+      :criterion => criterion,
+      :form_level => form_level -%>
+  <%- end -%>
+
+  <%-# plus source rating -%>
+  <%- Rating.each_source_criterion do |criterion_key, criterion| -%>
+    <%= rating_input :review => @source_review,
+      :param_array_prefix => "source_ratings",
+      :criterion_key => criterion_key,
+      :criterion => criterion,
+      :form_level => "quick" %>
+  <%- end -%>
+</div>

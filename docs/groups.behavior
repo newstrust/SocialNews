@@ -1,0 +1,23 @@
+- For a non-activated group:
+  . When a member is added, group stories aren't updated
+
+  . When a member is updated, group stories aren't updated
+
+  . When the group is activated
+    - For each member, all posted & reviewed stories since (start date - init days) are added to group stories
+
+- For an activated group:
+  . When a member is added,
+    - all stories posted by the member since (start date - init days) are added to group stories
+    - all stories reviewed by the member since (start date - init days) are added to group stories
+
+  . When a member is deleted,
+    - all stories *exclusively* posted by that member are removed from group stories
+    - all stories *exclusively* reviewed by that member are removed from group stories
+
+  . When a member posts a story,
+    - it is added to group stories
+
+  . When a member reviews a story,
+    - it is added to group stories
+    - it is added to process jobs to (re)compute group ratings

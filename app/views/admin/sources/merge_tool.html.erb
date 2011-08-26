@@ -1,0 +1,34 @@
+<% @title = "Duplicate Sources Merge Tool" %>
+
+<style>
+form  { margin: 20px 0; }
+label { font-weight: bold; display: block; }
+input { margin-bottom : 15px; display:block; }
+input.submit { font-weight:bold; width: auto; margin: 0; font-size:16px;}
+input.hidden { display: none; margin: 0}
+</style>
+
+<h1> Merge Duplicate Sources </h1>
+<p>Please enter the IDs of the sources to be merged (e.g., 25795).</p>
+<form method="post" action="<%=merge_admin_sources_url%>">
+<input class="hidden" name="authenticity_token" type="hidden" value=<%=form_authenticity_token.inspect%> />
+
+<label> ID of source to retain: </label>
+<input type="text" name="keep_id" value="<%=params[:keep_id]%>" size="10">
+
+<label> ID of sources to hide (space-separated list) : </label>
+<input type="text" name="merge_ids" value="<%=params[:merge_ids]%>" size="30">
+
+<%= submit_tag "Merge!", :style => "display: inline"%>
+<%= cancel_tag "/admin/sources", :style => "display: inline; margin-left:3px;" %>
+<hr/>
+
+<h3> What this does </h3>
+
+<p>
+Let K be the source that will be retained and Hs be the set of source that will be hidden.
+<ul>
+<li> Stories belonging to sources in Hs will be assigned to K. </li>
+<li> Source-reviews belonging to sources in Hs will be assigned to K -- however, if a member has reviewed both K and a source in Hs, that source review won't be moved! </li>
+</ul>
+</p>

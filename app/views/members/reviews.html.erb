@@ -1,0 +1,32 @@
+<% if (!@member.has_public_profile? || (@member.rating < 2 && @member.validation_level < 2 )) && !logged_in? -%>
+	<% @no_bots = true -%>
+	<% if @member.profile_visible_to_all_nt_members? %>
+		<% flash[:error] = "Please #{link_to "Log In", "/sessions/new"} to see this member's reviews." -%>
+	<% else %>
+		<% flash[:error] = "This page is unavailable." -%>
+	<% end %>
+<% else -%>
+<% @title = "#{@member.display_name}'s Story Reviews" %>
+
+<div class="span-16">
+	<div class="main_column_box">
+	  <div class="recent_reviews"> 
+		<h2>
+		  <%=link_to_member(@member)%>'s Story Reviews
+		  <span class="body_black"> <%=@sub_heading%> (<%= number_format(@reviews.total_entries) %>)</span>
+		</h2>
+    
+    <div class="story_listing_reviews flat">
+      <div class="top"></div>
+      <div class="wrapper">
+        <%= @reviews.collect{|review| render(:partial => 'reviews/member_review', :locals => {:review => review})} %>
+      </div>
+      <div class="bottom_nav">
+        <%= will_paginate @reviews %>
+      </div>
+      <div class="bottom"></div>
+    </div>
+	</div>
+</div>
+
+<%- end -%>

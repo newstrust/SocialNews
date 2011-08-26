@@ -1,0 +1,36 @@
+<% hostable ||= nil -%>
+<div style="float:left;">
+  <ul>
+    <%- first_item = true -%>
+    <%- if current_member && current_member.can_comment? -%>
+      <%- if comment_actions.include?('reply') -%>
+        <li<%= ' class="first"' if first_item %>><%= link_to 'Reply', '#', :class => 'comment_reply', :id => "reply_id_#{comment.id}" %></li>
+        <%- first_item = false -%>
+      <%- end -%>
+
+      <%- if comment_actions.include?('flag') -%>
+        <%= flag_links_for(comment, first_item) %>
+        <%- first_item = false -%>
+      <%- end -%>
+
+      <%- if comment.can_be_edited_by?(current_member) && comment_actions.include?('edit') -%>
+        <li<%= ' class="first"' if first_item %>><%= link_to 'Edit', "#", :class => 'comment_edit', :id => "edit_id_#{comment.id}" %></li>
+        <%- first_item = false -%>
+      <%- end -%>
+      <%- if current_member && current_member.has_host_privilege?(hostable, :editor, @local_site) -%>
+        <li<%= ' class="first"' if first_item %>><%= link_to (comment.hidden? ? 'Restore' : 'Remove'), '', :comment_id => comment.id, :class => 'hideable' %></li>
+        <%- first_item = false -%>
+      <%- end -%>
+    <%- end -%>
+    <%- if comment.children_count > 0 -%>
+      <li<%= (current_member && current_member.can_comment?) ? "" : ' class="first"' %>>
+      <%= link_to("Hide #{pluralize(comment.children_count,'Reply').split(' ').last}","#", :comment_id => comment.id, :reply_count => comment.all_children_count, :class => 'showReplies') %>
+      <%= content_tag :span, "(#{comment.all_children_count})", :id => "reply_count_#{comment.id}", :class => "grey" %>
+      </li>
+    <%- end -%>
+  </ul>
+</div>
+
+<div class="permalink">
+  <%= link_to 'permalink', comment_permalink_for(comment), :comment_id => comment.id %>
+</div>

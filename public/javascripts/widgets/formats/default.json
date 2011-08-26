@@ -1,0 +1,57 @@
+var _NTW_widget_defaults = {
+    /* This structure provides settings for the widget content */
+  content: {
+    num_stories     : 5,
+    site_logo       : 'images/logos/socialnews-logo_20px.png',
+    header          : true,
+    footer          : true,
+    show_stars      : true,
+    stars_dir       : 'small/',
+    gray_stars_dir  : 'small/',
+    png_stars       : false,
+    date_format     : 'M d, y',
+    title_max_length: 100,
+    quote_max_length: 135
+  },
+    /* This structure describes the base css settings for the entire widget */
+  base_css: {
+    link_target     : '_blank',
+    link_style      : 'text-decoration:none;color:#385AC8;',
+    link_hover_style: 'text-decoration:underline',
+    base_style      : 'background:white;font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;font-size:11px;color:#acacac;line-height:14px;text-align:left;',
+    story_style     : 'font-size:11px;margin:10px 5px 10px 5px; padding:2px 0px',
+    header_style    : 'margin:5px; padding: 5px 0; border-bottom:1px solid #acacac;font-size:12px; color:#acacac;',
+    footer_style    : 'margin:10px; padding: 15px 0; border-top: 1px solid #acacac;font-size:11px;font-weight: bold;',
+    stars_img_style : 'border:none;float:none;margin:0px 0 1px 0px;vertical-align:middle'
+  },
+    /* This structure describes the header format */
+  header_format: [
+    { element: 'title_prefix', dom: [{ elt: 'a', style: 'text-decoration:none;font-size:14px;font-weight:bold;color:#3f3f3f;'}] },
+    { element: 'listing_topic', dom: [{ elt: 'a', style: 'text-decoration:none;font-size:14px;font-weight:bold;color:#3f3f3f;'}], suffix: ' - ', suffix_if_present: 'listing_type' },
+    { element: 'listing_type',  dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;color:#666666'}] },
+    { element: 'timespan', prefix: ' (', suffix: ')' },
+    { element: 'hdr_story_type',   dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;color:#666666'}], prefix: ' - ' },
+    { element: 'sources_type', dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;color:#666666'}], prefix: ' - ' }
+  ],
+    /* This structures describes the story format  */
+  story_format: [
+    { element: 'title',       dom: [{ elt: 'a', style: 'text-decoration:none;font-weight:bold;font-size:12px;color:#385AC8;font-family:Georgia,Times,serif;'}] },
+    { element: 'source',      dom: [{ elt: 'span', style: 'margin-bottom:3px;color:#666666;'}, { elt: 'a', style: 'text-decoration:none;font-weight:bold;font-size:10px;color:#666666;text-transform:uppercase;'}], prefix: '\n' },
+    { element: 'authors',     dom: [{ elt: 'span', style: 'font-size:10px;color:#666666;text-transform:uppercase;font-weight:bold;'}], prefix: ' - by ' },
+    { element: 'date',        dom: [{ elt: 'span', style: 'font-size:11px;color:#acacac;'}], prefix: ' - ' },
+    { element: 'story_type',  dom: [{ elt: 'span', style: 'font-size:11px;'}], prefix: ' (', suffix: ')' },
+    { element: 'quote',       dom: [{ elt: 'span', style: 'font-size:12px;margin-bottom:0px;color:#3f3f3f;padding:5px 5px 5px 0px;float:left;width:100%;'}], prefix: '\n' },
+    { element: 'rating',      dom: [{ elt: 'a', style: 'text-align:center;text-decoration:none;color:#399800;font-size:10px;font-weight:bold;background:url(/images/trustometer/trustometer_bg_medium.gif) no-repeat left top;margin:0px 3px 5px 0px;vertical-align:middle;width:73px;height:19px;display:block;float:left;padding-top:2px;'}], prefix: '\n' },
+    { element: 'num_reviews', dom: [{ elt: 'a', style: 'text-decoration:none;font-size:11px;font-weight:bold;color:#385AC8;'}] },
+    { element: 'review_it',   dom: [{ elt: 'a', style: 'text-decoration:none;font-size:11px;color:#399800;font-weight:bold;'}],        prefix: ' | ' },
+    { element: 'like_it',     dom: [{ elt: 'a', style: 'text-decoration:none;font-size:11px;font-weight:bold;color:#385AC8;'}], prefix: ' | ' }
+  ],
+    /* This structure describes the footer format */
+  footer_format: [
+    { element: 'more_stories' },
+    { element: 'help', dom: [{ elt: 'a', style: 'font-weight:normal;text-decoration:none; color:#acacac;font-size:10px;'}], prefix: ' ' },
+    { element: 'submit_story', prefix: '\n' },
+    { element: 'get_widget',   prefix: ' | ' },
+    { element: 'signup',       prefix: ' | ' }
+  ]
+};

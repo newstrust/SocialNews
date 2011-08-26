@@ -1,0 +1,84 @@
+<div id="textile_support">
+  <div id="textile_support_closed" class="open">
+    <%= local_variables.include?("html_ok") ? "HTML & Textile are OK" : "No HTML please (but you can use <a class=\"textile_support_link\" href=\"#textile_support\">Textile.</a>)"%>
+  </div>
+  <div id="textile_support_open" style="padding:5px;">
+    <h2>Textile</h2>
+    <table >
+      <tr>
+        <td colspan="2" class="no_border"><h4>Textile is a simple markup language that lets you quickly format your comments.</h4></td>
+      </tr>
+      <tr>
+        <td class="heading">Input</td>
+        <td class="heading" >Output</td>
+      </tr>
+      <tr>
+        <td>*strong*</td>
+        <td style="padding-left:10px;"><strong>strong</strong></td>
+      </tr>
+
+      <tr>
+        <td>_italics_</td>
+        <td style="padding-left:10px;"><em>italics</em></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="no_border"><h4>Bulleted Lists</h4></td>
+      </tr>
+      
+      <tr>
+        <td><pre>* First Item
+* Second Item</pre>
+        </td>
+        <td style="padding-left:10px;">
+          <ul style="padding:0 0 0 20px;margin:0;">
+            <li>First Item</li>
+            <li>Second Item</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td class="no_border" colspan="2"><h4>Numbered Lists</h4></td>
+      </tr>
+      <tr>
+        <td><pre># First Item
+# Second Item</pre>
+        </td>
+        <td style="padding-left:10px;">
+          <ol style="padding:20px;margin:0;">
+           <li>First Item</li>
+           <li>Second Item</li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td class="no_border" colspan="2"><h4>Blockquotes</h4></td>
+      </tr>
+      <tr>
+        <td><pre>&gt; blockquote text</pre></td>
+        <td>
+           <blockquote style="padding-right:5px;margin-right:5px;">
+            blockquote text
+           </blockquote>
+        </td>
+      </tr>
+      <tr>
+        <td class="no_border" colspan="2"><h4>Links</h4></td>
+      </tr>
+      <tr>
+        <td><pre>"click":http://wikipedia.org</pre></td>
+        <td style="padding-left:10px;">
+        	 <a href="http://wikipedia.org">click</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="no_border" colspan="2"><h4>Additional Info</h4></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+        	<p>A detailed list of Textile syntax is <%= pop_up_link "available here", 'http://redcloth.org/hobix.com/textile/quick.html' %>.</p>
+    			<p style="margin-bottom:0"><a class="close_textile_support_link" href="#textile_support">Close this panel.</a></p>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

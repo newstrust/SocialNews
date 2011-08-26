@@ -1,0 +1,15 @@
+
+<% right_column_box :header => "Today's Top Feeds" do %>
+  <span class="big"><%=link_to("Today's Top Stories &raquo;", todays_feeds_feeds_url)%></span> <br/><br/>
+  <% ["Aggregator", "Author", "Publication", ""].each do |cat| -%>
+    <% buf = "" -%>
+    <% @top100_feeds.each do |f| -%>
+      <% if (!cat.blank? && !f.feed_group.blank? && f.feed_group =~ /#{cat}/) || (cat.blank? && f.feed_group.blank?) -%>
+        <% buf += link_to(f.name + (!f.subtitle.blank? ? " - #{f.subtitle}" : ""), feed_url(f)) + " <span class='small light_gray'>(#{f.num_stories})</span>" + "<br/>" %>
+      <% end -%>
+    <% end -%>
+    <% if !buf.blank? %> <h4 style="margin-bottom:8px;"> <%=cat.blank? ? "Others" : cat.pluralize%> </h4> <%= buf %> <br/> <% end -%>
+  <% end -%>
+  <span class="big"><%= link_to "All Feeds &raquo;", feeds_url %></span>
+
+<% end -%>

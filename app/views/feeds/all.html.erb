@@ -1,0 +1,68 @@
+<%- cm = current_member -%>
+<%- member_id = 'null' -%>
+<%#-- Display the popup from the perspective of the group --%>
+<%- if params[:group_id] -%>
+  <%- g = Group.find(params[:group_id]); m = g && g.is_social_group? ? g.sg_attrs.mynews_dummy_member : nil -%>
+  <%- if g && m && cm.has_host_privilege?(g, :staff, @local_site) -%>
+    <%- cm = m; member_id = m.id -%>
+  <%- end -%>
+<%- end -%>
+
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'follows' %>
+<%- end -%>
+
+<%- @title = "Smart Feeds" -%>
+<%= content_tag(:h2, @title) unless params[:popup] %>
+
+<p>
+<p style="margin-bottom:12px">
+Here are our <%= help_link("smart feeds","smart_feeds","") %>, which include some of the greatest minds in "link journalism." To follow a feed, click on its <span class="follow_button"><img src="/images/ui/spacer.gif" width="15"></span> button. To unfollow it, click the <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button. To recommend a feed, <%= mail_to email_addr("feedback"), "email us", :subject => "Recommend a Smart Feed"%>.</p>
+
+<%- follow = ""; feedline = "" -%>
+<%- [["Author", "Authors"], ["Aggregator", "Aggregators"], ["Publication", "Mainstream Sources"], ["Publication", "Independent Sources"], ["", "Others"]].each do |cat| -%>
+  <%- buf = "" -%>
+  <%- @feeds.each do |f| -%>
+    <%- if can_follow?(cm) -%>
+      <%- if cm.followed_feeds.include?(f) -%>
+        <%- fc = "unfollow_button"; title = "Unfollow #{f.name}" -%>
+      <%- else -%>
+        <%- fc = "follow_button"; title = "Follow #{f.name}" -%>
+      <%- end -%>
+      <%- js_opts = follow_item_js_opts('feed', f, nil, params[:popup]) -%>
+      <%- och = params[:popup] ? "popup_parent_toggle_follow(this, $(this).parent(), #{member_id}, #{js_opts})" : "toggle_follow(this, #{js_opts})" -%>
+      <%-# SSS: Important use double quotes below because the js_code above will come with single quotes.  Using single quotes will break it! --%>
+      <%- follow = "<a href=\"#\" class=\"#{fc}\" onclick=\"return #{och}\" title=\"#{title}\"></a>" -%>
+    <%- end -%>
+    <%- favicon = "<span class='favicon' style='background-image:url(#{f.favicon})'></span>" -%>
+    <%- feedline = "<div style='margin-bottom:10px;height:16px;'>" + favicon + link_to(f.name + (!f.subtitle.blank? ? "<span style=\"font-weight:normal\"> - #{f.subtitle}</span>" : ""), feed_url(f), :target => "_blank", :style => "float:left") + follow + "</div>" -%>
+    <%#-- For publications, split feeds into those that belong to msm and ind --%>
+    <%- if cat[0] == "Publication" && !f.feed_group.blank? && f.feed_group =~ /#{cat[0]}/ -%>
+      <%- s = f.source_profile_id.blank? ? nil : Source.find(f.source_profile_id) -%>
+      <%- if ((cat[1] == "Mainstream Sources") && (s.nil? || s.ownership == "msm")) || ((cat[1] == "Independent Sources") && s && s.ownership == "ind") -%>
+        <%- buf += feedline -%>
+      <%- end -%>
+    <%- elsif (!cat[0].blank? && !f.feed_group.blank? && f.feed_group =~ /#{cat[0]}/) || (cat[0].blank? && f.feed_group.blank?) -%>
+      <%- buf += feedline -%>
+    <%- end -%>
+  <%- end -%>
+  <%- if !buf.blank? -%> 
+  <div class="span-7" style="margin: 0 35px 0 0; float:left;">
+    <div class="category_sub_head subhead" style="margin: 0 0 5px 0"><%=cat[1]%></div>
+   <span class="overview_entry"> <%= buf -%>  </span>
+  </div>
+  <%- end -%>
+<%- end -%>
+
+<br style="clear:both" />
+<p style="margin-top:10px;">
+We're very grateful to all the folks who create these feeds for sharing their expertise so generously -- and to our API partners for their invaluable contributions to our cause. APIs that we use to fetch story metadata include:
+<a target="_blank" href="http://corp.daylife.com/daylife_api">Daylife</a>,
+<a target="_blank" href="http://apidoc.digg.com">Digg</a>,
+<a target="_blank" href="http://newsrack.in">NewsRack</a>, and
+<a target="_blank" href="http://help.tweetmeme.com/2009/04/07/api-documentation/">Tweetmeme</a>.  Thank you all!
+Feeds listed above have been vetted by our editors, and the stories they recommend generally receive above average ratings from our members. 
+To recommend a feed, or share your thoughts about this service, <%= mail_to email_addr("feedback"), "email us", :subject => "About Smart Feeds"%>. 
+</p>
+
+

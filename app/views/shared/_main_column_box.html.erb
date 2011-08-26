@@ -1,0 +1,31 @@
+<div class="<%= box_class %>" id="<%= box_id %>">
+	<% if tabs.empty? %>
+		<div class="top"></div>
+	<% else %>
+		<div class="tab_num_<%= tabs.length %>">
+			<% unless header.blank? %>
+				<div class="tabHeader"><div>
+					<%= header %>
+				</div></div>
+			<% end %>
+			<ul class="tabs">
+				<% for tab in tabs %>
+					<li <% if tab == tabs.first %> class="firstTab" <% end %><% if tab == tabs.second %> class="secondTab" <% end %>
+						><a href="#" <% if tab == tabs.first %>class="sel"<% end %>><span class="lbar"><span class="rbar"><span class="text"
+						><%= tab %></span></span></span></a></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
+	<div class="content">
+		<%= content %>
+	</div>
+	<div class="bottom"></div>
+</div>
+<% unless tabs.empty? %>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('div#<%= box_id %>').tabbed_content(<%= callback.to_json %>, 'div ul.tabs li a', 'div.tabbedContent', <%= tab_classes ? tab_classes.to_json : "''" %>);
+		});
+	</script>
+<% end %>

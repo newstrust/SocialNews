@@ -1,0 +1,286 @@
+Prerequisites to releasing data via API
+---------------------------------------
+- Fix confidence computations: I think it is inaccurate.  
+  - Fab: B priority; do something and that is simple
+
+- Fix/finalize data sharing/hiding policies: how will we respect user profiling hiding?  Is member review data fair game for sharing?
+  - Fab: All review data with names wil be shared for all members
+
+- Make any required name changes (listing types, story status, story type, content type, source ownership)
+  * once api is released, it will be much harder to change these name strings (except via version changes and deprecations with version updates)
+  - Fab: nothing on my plate right now, no changes anticipated (except maybe additions)
+
+- Possibly migrate to Rails 2.3 (lets us use Rack handlers for more efficiency)
+  * Rack handlers for authentication can also be high up in the request chain without hitting Rails at all
+  * Rack handlers for implementing request throttling (api request rate limiting) way up in the request chain
+  - Fab: maybe for later, phase 2
+
+- Good documentation of API, how to use it, with some examples
+
+- Initial releases: api will be in alpha/beta as we iron out hiccups and gotchas; 
+  may invite closed testers, or we will require registration with contact info so we can keep them abreast of changes
+
+Authentication, security, rate limits
+-------------------------------------
+- For starters, we will make API freely accessible
+  * But, all api users will have to register and provide a contact email id (so that we can inform them of changes)
+  * If someone uses our API without registration -- it is their responsibility to keep abreast of api changes and requirements.  We reserve the right to make changes to the API as necessary.
+  * We will keep track of requesting IPs, api request counts, and api request rate 
+    (via a rack handler & a separate db not connected with the main newstrust db)
+  * We'll blacklist / throttle ips that go beyond an unspecified limit per minute/hour (unpublished for starters?)
+
+- At some point (unknown yet), we will require all api requests to be authenticated via md5 hash signatures
+  that includes their secret key (details omitted here).  We may add rate limits, payment, etc.
+
+Data Access: Read only or Read/write
+------------------------------------
+- For starters, all data access is going to be read-only.
+  Fab: Phase 1
+
+- But, for embedding full/partial functionality on an external site with user interaction and
+  participation, we would need to support read/write access in some form.  But, we would need to have
+  a way to deal with spam.
+  Fab: Phase 2
+
+Data export format
+------------------
+- JSON, XML
+- Google allows partial GETs where the request specifies the fields that they want => they also support partial PUTs
+  * we could think of doing this at a later point
+
+Problems with REST: 
+* RPC missing .. 
+  Ex: if you want to rotate an image, you have to GET image, rotate & PUT it back -- wasteful!  what you need is a http verb ROTATE, which doesn't exist
+* Google API approach: augments POST http verb with custom method verbs -- pseudo-rpc
+
+Data encoding
+-------------
+- UTF-8 encoded
+
+Data types
+----------
+- Integer (mostly used for ids)
+- Float   (mostly used for ratings)
+- Date    (for story dates, creation dates, update dates)
+- Tuple   (<id, name> pair; for returning basic info for all resources)
+- String  (most commonly used data type for most data)
+- Array   (encoded in format-specific manner, native JSON array or XML DOM sequence)
+- Hash    (encoded in format-specific manner, native JSON hash or XML DOM tree)
+
+API URL format
+--------------
+- We will use an api subdomain and a version number in the url
+  Ex: http://api.newstrust.net/1.0/story/183403.xml
+ 
+  Need to have clear end-of-life timelines for api versions so we aren't stuck supporting legacy forever
+
+- Generic URL format for core newstrust resources (story, member, review, etc.)
+    1. http://<api-server>/<api-version>/<resource>/<resource-id-or-slug>.<format>  [ default api method is assumed to be "info" ]
+    2. http://<api-server>/<api-version>/<resource>/<resource-id-or-slug>/<method>.<format>
+    3. http://<api-server>/<api-version>/<resource>/<resource-id-or-slug>/<format>/<method-1>,<method-2>,..,<method-n>
+
+  Once we add in registration & authentication, we will require 2 additional query parameters: ?access_key=<key>&signature=<signature>
+  Details of how to compute signature is omitted from this document.  But can send it along, if necessary.
+
+- Basic format (1. and 2. above)
+    http://api.newstrust.net/1.0/story/183403.xml       -- will return results of the "info" api method call
+    http://api.newstrust.net/1.0/story/183403/info.xml  -- same as previous call
+    http://api.newstrust.net/1.0/story/183403/rating_details.xml
+    http://api.newstrust.net/1.0/story/183403/reviews.json
+
+- api methods can be chained (3. above). 
+    http://api.newstrust.net/1.0/story/183403/xml/info,ratings,rating_details,reviews
+    In addition to info, we also request ratings (basic), rating details and reviews (basic) as well -- output format is XML
+
+    http://api.newstrust.net/1.0/story/183403/json/info,ratings
+    In addition to info, we also request ratings (basic) -- output format is JSON
+
+  To keep developers sane, we will support url method-chained format 2. for single methods as well.  So, the following will be valid requests:
+    http://api.newstrust.net/1.0/story/183403/xml/info
+    http://api.newstrust.net/1.0/story/183403/json/ratings
+
+- Generic URL format for derived newstrust resources (story listings primarily)
+     http://<api-server>/<api-version>/<story-listing-path>.<format>
+
+  See details in the derived resources section in the end
+
+Generic api methods
+-------------------
+- Get story id from url 
+- Get source id from name / url
+
+Primary resources (objects)
+---------------------------
+For all api methods for these resources, the request should provide the id of the resource.
+
+Story
+------
+
+  Available API methods:
+  ----------------------
+  * info           - returns basic metadata + basic rating info num_reviews and overall rating
+  * more_info      - returns additional metadata: see below
+  * rating_details - returns individual ratings
+  * reviews        - returns a list of reviews with basic review info 
+                     (detailed review info has to be requested separately; see description of review object to find out more)
+
+  info [ Metadata (basic) ]:
+   -> id                     integer
+   -> title                  string
+   -> url                    string
+   -> nt_url                 string
+   -> story date             date
+   -> source info            tuple (<id, name>)
+   -> authors                string
+   -> excerpt                string
+   -> story_type             string (news, opinion)
+   -> num reviews            integer
+   -> overall rating         float
+
+  more_info [ Metadata (detailed) ]:
+   -> post_date              date
+   -> poster                 tuple (<id, name>)
+   -> content type           string (article, video, blog post, etc.)
+   -> topic & subject tags   list (of <id, name> tuples)
+   -> feed info              list (of <id, name> tuples) <-- Q: not necessary probably
+   Q: anything else?
+  
+  rating_details:
+   -> individual ratings     list (of hashes where each hash encodes a rating <key, value> tuple)
+
+  reviews:
+   -> reviews                list (of hashes where each hash encodes basic review info -- see review object for more info)
+
+Member
+------
+  Available API methods:
+  ----------------------
+  * info           - returns basic metadata + basic rating info num_reviews and overall rating
+  * more_info      - returns additional metadata: see above
+  * posts          - returns a list of stories with basic story info 
+                     (detailed story info has to be requested separately; see description of story object to find out more)
+  * reviews        - returns a list of reviews with basic review info 
+                     (detailed review info has to be requested separately; see description of story object to find out more)
+
+  info
+   -> id                     integer (or slug string?)
+   -> name                   string
+   -> profile_url            string
+   -> profile_status         string
+      The rest of these fields are provided only for members with public profiles
+   -> validation_level       string
+   -> member_level           string
+   -> num_reviews
+   -> num_posts
+
+  The rest of these methods return valid data only for members with public profiles.  For others, it returns a 404?
+
+  reviews:
+   -> reviews                list (of hashes where each hash encodes basic review info -- see review object for more info)
+
+  posts:
+   -> reviews                list (of hashes where each hash encodes basic review info -- see review object for more info)
+
+Review
+------
+  Available API methods:
+  ----------------------
+  * info             -- return review info with overall rating
+  * rating_details   -- return detailed ratings
+
+  info:
+   -> id                     integer
+	-> review_url             string
+	-> story_id               integer
+	-> member_id              integer
+	-> rating                 float
+	-> note                   string
+	-> comment                string
+	-> related_links          list (of urls)
+
+  rating_details:
+   -> individual ratings     list (of hashes where each hash encodes a rating <key, value> tuple)
+
+Source  
+------
+  Available API methods:
+  ----------------------
+  * info
+
+  info:
+   -> id                      integer (or slug string?)
+	-> name                    string
+	-> profile_url             string
+	-> target_url              string
+	-> rating                  float
+
+Topic
+-----
+  Available API methods:
+  ----------------------
+
+  * info
+
+- Topic   -- basic metadata + listings
+- Subject -- basic metadata + listings
+- Feed    -- basic metadata + listings <-- Q: ignore this object
+- Quote   -- basic info, links, answers, verdict will be the api methods on this object
+
+Omitted right now: groups
+
+Derived resources
+-----------------
+- Story listing api requests will be of the form: http://<api-server>/<api-version>/<story-listing-path>.<format>
+
+- Story listing paths will be of the form <primary-filter>/<listing-type>/<additional-optional-filters-in-any-order>
+    * Primary filter:
+       - All stories    : stories  
+       - Subject stories: subjects/<topic-id-or-slug>
+       - Topic stories  : topics/<topic-id-or-slug>
+       - Source stories : sources/<source-id-or-slug>
+       (groups and feeds not supported right now)
+    * Listing types:
+      - most_recent
+      - most_trusted
+      - least_trusted
+      - recent_reviews
+    * Available filters:
+      - content type    : content_type/<news or opinion>
+      - source ownership: source_ownership/<msm or ind>
+      - # days          : timespan/<num-days> (from today going backward)
+      - start date      : start/<yyyy-mm-dd>  (inclusive)
+      - end date        : end/<yyyy-mm-dd>    (inclusive)
+
+      Q: Any other filters?
+
+   Examples:
+     http://api.newstrust.net/1.0/stories/most_recent.xml
+     http://api.newstrust.net/1.0/stories/most_trusted/content_type/news/timespan/30.xml
+     http://api.newstrust.net/1.0/stories/least_trusted/source_ownership/independent/start/2010-10-10/end/2010-10-01.xml
+     http://api.newstrust.net/1.0/topics/energy/most_trusted/start/2010-10-10/end/2010-10-01/content_type/opinion.xml
+     http://api.newstrust.net/1.0/subjects/us/most_recent/timespan/7/content_type/news/source_ownership/msm.xml
+
+Authentication & signatures
+---------------------------
+- On registration, an access key (A) and a secret (S) is generated.
+- These are stored in the db as well as communicated with the user.
+
+  User request: <A, sig, args> where sig = md5(A, S, concat(args))
+
+  Authentication:
+	 Server receives <A, sig, args>
+	 S = db_lookup(A)
+	 s_sig = md5(A, S, concat(args))
+	 authenticated if s_sig == sig
+
+  args = everything in the url after the api version number (excluding query parameters)
+
+  So for this request, 
+    http://api.newstrust.net/1.0/stories/least_trusted/source_ownership/independent/start/2010-10-10/end/2010-10-01.xml?access_key=<..>&signature=<..>
+  args = "stories/least_trusted/source_ownership/independent/start/2010-10-10/end/2010-10-01.xml"
+
+- Implement this as a rack handler where the api access keys are stored
+  in a separate db altogether.  The rack handler validates accesses and
+  either passes them along or rejects them.
+
+- This way, the backend code doesn't have to deal with request validation.

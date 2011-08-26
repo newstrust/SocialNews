@@ -1,0 +1,13 @@
+<% if (['list', 'feature'].include?(result.status)) %>
+<dl style="font-size:1em;">
+  <dt><%= link_to image_tag(result.image.public_filename(:column), :align => "right"),result if result.image %><%= link_to result.name, result %> (Source <%= "| #{humanize_token(result, :ownership)}" unless result.ownership.blank? %>)
+  </dt>
+  
+  <dt>
+  <% unless result.source_media.blank?  %>
+  	Media: <%= result.source_media.collect{|sm| link_to(Source.source_medium_name(sm.medium), list_sources_url(:medium => sm.medium))}.join(", ") %>
+  <% end %>
+  </dt>
+  <dt>Domain: <%= link_to(result.domain, result.url) if result.domain && result.url %></dt>
+</dl>
+<% end %>

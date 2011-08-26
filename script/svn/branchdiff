@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/svn'
+require File.dirname(__FILE__) + '/args'
+
+options = OptParse.parse(ARGV)
+
+if svn = Collectivex::Svn.new(ARGV[0], false, options)
+  puts svn.diff
+end

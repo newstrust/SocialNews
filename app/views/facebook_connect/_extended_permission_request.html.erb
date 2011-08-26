@@ -1,0 +1,13 @@
+  <div class="form_field leftalign" style="font-size:85%">
+    <% if !@member.facebook_connect_settings || !@member.facebook_connect_settings.send("ep_"+ep) %>
+    <div id="ep_<%=ep%>">
+    <%= check_box_tag ep, "1", false, :class => "check", :style => "float:left", :onclick => "fb_request_extended_permission(this, '#{ep}')" %>
+    <%= label_tag ep, prompt, :style => "font-weight:normal;width:370px; ;float:left" %><br style="clear:both;" />
+    <div id="granted" style="display:none;margin-left:17px;color:green">Thank you! Please visit <%=link_to "Facebook Application Settings page", "http://www.facebook.com/editapps.php", :target => "_blank"%> to revoke the <span style='font-weight:bold'><%=ep%></span> permission.</div>
+    </div>
+    <% else %>
+    <div style="margin-left:17px;color:green">You've previously granted us the <%=ep%> permission.  Please visit <%=link_to "Facebook Application Settings page", "http://www.facebook.com/editapps.php", :target => "_blank"%> to revoke this.</div>
+    <% end %>
+    <% clarification ||= "" %>
+    <% if !clarification.blank? %> <div class="body_black_small" style="margin-left:17px">(<%=clarification%>)</div> <% end %>
+  </div>

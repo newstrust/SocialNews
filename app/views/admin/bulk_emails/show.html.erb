@@ -1,0 +1,18 @@
+<h1 class="use16columns inner_left">Bulk Email Template: <%= @bulk_email.template_name %></h1>
+
+<%= link_to "Edit", edit_admin_bulk_email_url(@bulk_email) + "?return_to=show" %> &nbsp; &nbsp;
+<%= link_to "Initialize mail using this template", admin_bulk_email_setup_url(@bulk_email) + "?return_to=show" %>
+
+<dl>
+<dt> Is Reinvite? </dt> <dd> <%= @bulk_email.is_reinvite ? "Yes" : "No" %> </dd>
+<dt> HTML? </dt> <dd> <%= @bulk_email.html_mail ? "Yes" : "No" %> </dd>
+<dt> Ignore "bulk email" setting? </dt> <dd> <%= @bulk_email.ignore_no_bulk_email ? "Yes" : "No" %> </dd>
+<dt> Invitation Code: </dt> <dd> <%= @bulk_email.invitation_code %> </dd>
+<dt> From: </dt> <dd> <%= @bulk_email.from %> </dd>
+<dt> To: </dt> <dd> <%= @bulk_email.to %> </dd>
+<dt> Subject: </dt> <dd> <%= @bulk_email.subject %> </dd>
+<dt> Body: </dt> <dd> <%= @bulk_email.body.gsub("\n", "<br/>") %> </dd>
+</dl>
+
+<br />
+<%= cancel_tag "/admin/bulk_emails" %>

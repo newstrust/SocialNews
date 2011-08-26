@@ -1,0 +1,39 @@
+<div class="use16columns">
+	<h1 class="use8columns">Bulk Email</h1>
+
+	<div class="use8columns">
+	<p><%= link_to "Create New Template", new_admin_bulk_email_url %></p>
+	<p><%= link_to "Send email (without a template)", setup_admin_bulk_emails_url %></p>
+	</div>
+
+	<br/><br/>
+
+	<% if @templates.empty? -%>
+	<strong> No Email Templates Available. </strong>
+	<% else -%>
+	<h2 class="use8columns">Existing Templates</h2>
+	<div class="use8columns">
+	<table cellpadding="0" cellspacing="0">
+		<thead>
+			<tr>
+				<th>Template Name</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+		<%- @templates.each do |t| -%>
+			<tr>
+				<td><%= link_to t.template_name, admin_bulk_email_url(t) %></td>
+				<td>
+				<%=link_to "Initialize Email", admin_bulk_email_setup_url(t)%>&nbsp;&nbsp;
+				<%=edit_button(edit_admin_bulk_email_url(t))%>&nbsp;&nbsp;
+				<%=delete_button(admin_bulk_email_url(t)) %>
+			  </td>
+			</tr>
+			<%- end -%>
+		</tbody>
+	</table>
+	</div>
+	<% end -%>
+</div>

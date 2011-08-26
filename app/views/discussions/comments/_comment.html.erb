@@ -1,0 +1,69 @@
+<%- cm = current_member -%>
+<%- c_id = comment.id %>
+<%- cm_is_editor_or_host = cm && cm.has_host_privilege?(hostable, :editor, @local_site) -%>
+
+<div id="comment_container_<%= c_id %>" class="comment_container" ancestor_ids= "<%= comment.ancestors.map(&:id).join('-') %>" comment_id ="<%= c_id %>">
+  <a href="#comment_target_<%= c_id %>" id="comment_target_<%= c_id %>"></a>
+  <div class="depth_<%= local_variables.include?('index') ? index : 0 %> comment <%= 'my_comment' if cm && cm.comments.include?(comment) %>" commentable_type="<%= comment.commentable_type %>" id="comment_<%= c_id %>">
+    <%- if comment.visible? || cm_is_editor_or_host -%>
+      <!-- comment body -->
+      <div class="commentAvatar">
+        <%= link_to(image_tag(comment.member.image ? comment.member.image.public_filename(:thumb) : "/images/ui/silhouette_sml.jpg", :size => "40x40", :style=> "margin-left: 5px;"), comment.member) unless comment.member.id <= 10 %>
+      </div>
+      <div class="comment_text">
+        <%#= "<h3>#{s(comment.title)}</h3>" if comment.title %>
+        <h5>
+          <%= comment_author_for(comment) %> 
+          &ndash; <span style="font-size:90%"><%= comment.created_at.strftime("%b. %e, %Y - %I:%M %p") %></span>
+          <%- if cm_is_editor_or_host -%>
+            <span id="hidden_comment_<%= c_id %>" style="color:#ff0000;display:<%= comment.visible? ? 'none' : 'inline' %>;">(Removed)</span>
+          <%- end -%>
+        </h5>
+        <div class="comment_body">
+          <div id="comment_content_<%= c_id %>"><%= h(comment.body) %></div>
+          <div id="liked_comment_<%= c_id %>" class="liked_comment">
+            <%= likable_members_for(comment) %>
+          </div>
+        </div>
+        <div id="raw_comment_body_<%= c_id %>" style="display:none;"><%= comment.body(:source)%></div>
+        <div id="server_result_<%= c_id %>" class="notice"></div>
+      </div>
+      <!-- /comment body -->
+      <!-- /comment actions -->
+      <div class="commentActions">
+        <%= render(:partial => "discussions/comments/actions.html.erb", :locals => {:comment_actions => ['reply','like', 'flag', 'edit'], :comment => comment}) unless local_variables.include?('readonly') && readonly == true %>
+      </div>
+      <br />
+      <!-- /comment actions -->
+    <%- else -%>
+      <div class="commentActions" style="padding:0;margin:0">
+         <ul style="padding:0;margin:0">
+          <li class="first">This comment has been removed.
+            <%- if comment.all_children_count > 0 -%>
+              <%= link_to("Hide #{pluralize(comment.children_count,'Reply').split(' ').last}","#", :comment_id => c_id, :reply_count => comment.all_children_count, :class => 'showReplies') %>
+              <%= content_tag :span, "(#{comment.children_count})", :id => "reply_count_#{c_id}", :class => "grey" %>
+             <%- end -%>
+          </li>
+        </ul>
+      </div>
+    <%- end -%>
+  </div>
+
+  <%- unless local_variables.include?('readonly') && readonly == true  -%>
+    <div class="depth_<%= local_variables.include?('index') ? index : 0 %>" id="comment_form_container_<%= c_id %>" style="display:none;">
+      <% content_tag :div, :id =>"submitting_#{c_id}", :style => 'display:none;' do %>
+      <%= image_tag('/images/ui/indicator.gif') %> Now Adding Comment.
+      <%- end -%>
+      
+      <%- comment_form_wrapper do %>
+        <% form_for(cm.comments.build(:initial_ancestor_id => c_id, :commentable_type => comment.commentable_type, :commentable_id => comment.commentable_id), :url => discussions_comments_path, :html => { :mode => 'reply', :id => "reply_#{comment.commentable_id}", :class => 'comment_form' }) do |f| %>
+          <% character_counter_id = "character_counter_#{(f.object.initial_ancestor_id.blank? ? 0 : f.object.initial_ancestor_id)}" %>
+          <%= render :partial => "discussions/comments/form.html.erb", :locals => { :character_counter_id => character_counter_id, :form_title => 'Add A Reply', :f => f, :comment => comment } %>
+          <div align="left" id="comment_submit_container_<%= character_counter_id %>" style="margin-top:5px;">
+            <%= link_to "", '#', :class => 'reply_submit submit_btn', :style => "float: left"  %> <span class="civil_note">Please be civil (see our <%= pop_up_link('guidelines', tos_path + "#community_guidelines") %>). Comments can be edited for <%= pluralize(Comment.minutes_before_locked, 'minute')%> <%= help_icon("adding_comments", "reviewer") %></span>
+          </div>
+        <%- end -%>
+      <%- end -%>
+    </div>
+  <%- end -%>
+</div>

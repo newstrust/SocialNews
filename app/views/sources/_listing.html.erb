@@ -1,0 +1,66 @@
+<%- if @is_ajax_listing -%>
+  <%= render :partial => 'shared/story_listing_js_includes' %>
+<%- end -%>
+
+<%- cache @cached_listing_fragment_name do -%> 
+  <%#-- Feed info for new stories listing --%>
+  <%- if listing_type.to_sym == :new_stories && !@source.active_feeds.blank? -%>
+    <p class="listing_info">
+      These stories are automatically selected from this source's feed(s), including: 
+      <%= @source.active_feeds.collect { |f| link_to(f.name + (!f.subtitle.blank? ? " - #{f.subtitle}" : ""), f) } * ", " -%>
+    </p>
+  <%- elsif listing_type.to_sym == :most_trusted -%>
+    <p class="listing_info">
+      Here are the top-rated stories from this source in the past <%=@timespan%> days.
+    </p>
+  <%- end -%>
+
+  <%- unless @source.slug.blank? -%>
+    <%- listing_route = {:controller => :stories, :source => @source.slug, :listing_type => listing_type} -%>
+    <%- rss_listing_url = {:controller => "stories", :action => "index", :source => @source.slug, :listing_type => listing_type, :format => "xml"} -%>
+    <%- widget_url = "/widgets?url=/sources/#{@source.slug}/#{listing_type}" -%>
+  <%- end -%>
+
+  <div class="story_listing_reviews span-16">
+    <div class="category_sub_head">
+    <%#-- No widget & rss links for new stories listing --%>
+    <%- if listing_type.to_sym != :new_stories && !listing_route.blank? -%>
+      <span class="shareLinks">
+        <%= link_to("Get Widget", widget_url ) %>
+        <%= " | #{link_to("RSS", rss_listing_url)} #{ link_to(rss_icon_tag, rss_listing_url)}" %>
+      </span>
+      <%= link_to listing_type.to_s.titleize, listing_route, :class => "tabSubHeader" %>
+    <%- else -%>
+      <span class="tabSubHeader"><%= listing_type.to_s.titleize %></span>
+    <%- end -%>
+    </div>
+
+  <%- unless @stories.empty? %>
+    <div class="flat"><div class="wrapper">
+      <div class="article">
+      <ul>
+        <%= render :partial => "stories/story", :collection => @stories, :locals => { :hide_flags => {:reviews => true}, :show_flags => {:reviews_btn => true} } %>
+      </ul>
+      </div>
+    </div></div>
+
+    <div style="padding-bottom: 0.6em">
+      <div class="category_sub_foot">
+        <%- if listing_type.to_sym != :new_stories && !listing_route.blank? -%>
+          <div class="shareLinks">
+            <%= link_to "Submit", submit_story_url, :class => "popup_link" %>
+            <%= " | #{link_to("Get Widget", widget_url )}" %>
+            <%= " | #{link_to("RSS", rss_listing_url)} #{ link_to(rss_icon_tag, rss_listing_url)}" %>
+          </div>
+          <span class="read_more"><%= link_to "More &raquo;", url_for(listing_route) %></span>
+        <%- end -%>
+        <%= help_link "How we pick these stories", 'how_we_pick_stories', "", :class => "small_note" %>
+      </div>
+    </div>
+  <%- else %>
+    <div class="empty_list">
+      No stories yet! Please <%= link_to "Submit", submit_story_url, :class => "popup_link" %> some stories for this source.
+    </div>
+  <%- end %>
+  </div>
+<%- end -%>

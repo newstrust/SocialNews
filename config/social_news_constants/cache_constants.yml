@@ -1,0 +1,27 @@
+# caching constants
+#
+
+# All times below are in seconds
+caching:
+  refresh_times:
+    home_page                 : 60
+    home_page_staging         : 60
+    home_page_grid_n_listings : 90
+    home_page_right_column    : 120
+    topic_top_area            : 60
+    topic_sidebar             : 120
+    topic_right_column        : 120
+    topic_listings :
+      most_recent    : 60
+      most_trusted   : 120
+      least_trusted  : 120
+      todays_feeds   : 600
+    story_listings            : 60
+    source_landing_page       : 60
+    feed_pages                : 150
+    todays_feeds_body         : 90
+    todays_feeds_sidebar      : 1800
+    trusted_sources           : 39200 # 12 hours
+    trusted_members           : 39200 # 12 hours
+    all_topics                : 39200 # 12 hours
+    featured_topics           : 39200 # 12 hours

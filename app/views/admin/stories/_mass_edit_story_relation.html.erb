@@ -1,0 +1,14 @@
+<%#-- This file is mostly a copy of app/views/reviews/_story_relation.html.erb ... since I don't want to muck with that .. styles & fields are slighly different! --%>
+<div class="story_relation">
+<% fields_for "#{story_obj}[story_relations_attributes][]", mass_edit_story_relation do |srf| %>
+  <%= srf.hidden_field :related_story_id, :index => nil %>
+  <%= srf.hidden_field(:id, :index => nil) unless mass_edit_story_relation.new_record? %>
+  <%= srf.hidden_field :should_destroy, :index => nil, :value => "false" %>
+  <%= srf.hidden_field :member_id, :index => nil %>
+  <%= srf.label :url, "URL", :style => "margin-left:-30px;width:25px;font-size: 95%" %>
+  <%= render :partial => '/stories/lookup', :locals => {:url_field => srf.text_field(:url, :index => nil, :style => "width: 280px")} %>
+  <%= srf.label :title, nil, :style => "margin-left:-30px;width:25px;font-size: 95%" %>
+  <%= srf.text_field :title, :index => nil, :size => 38, :style => "width: 280px" %> 
+  <%= link_to_function("remove", "remove_story_relation('#{story_obj}', this)", :class => "small") %>
+<% end %>
+</div>

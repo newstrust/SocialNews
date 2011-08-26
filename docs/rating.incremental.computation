@@ -1,0 +1,32 @@
+Delta updates of story ratings with add/remove/edit/rating of reviews for a story
+---------------------------------------------------------------------------------
+For every story S with n review {r_1, .. r_n}, retain these intermediate values (in processed_ratings table?)
+  C(s) = SUM(i=1..n) [ C(r_i) ]
+  Q(s) = SUM(i=1..n) [ Q(r_i) * C(r_i) ] / C(s)
+  P(s) = SUM(i=1..n) [ P(r_i) * C(r_i) ] / C(s)
+
+1. Given Q(s), P(s), C(s) for a story, and a new review r_new, we can update the story rating as follows:
+
+  q_tmp = Q(s) * C(s) + Q(r_new) * C(r_new)
+  p_tmp = P(s) * C(s) + P(r_new) * C(r_new)
+  C(s)  = C(s) + C(r_new)
+  Q(s)  = q_tmp / C(s)
+  P(s)  = p_tmp / C(s)
+
+2. Given Q(s), P(s), C(s) and update of a review r with old values Q(r), P(r), C(r) and new values Q(r_new), P(r_new), C(r_new)
+  q_tmp = Q(s) * C(s) + [Q(r_new) * C(r_new) - Q(r) * C(r)]
+  p_tmp = P(s) * C(s) + [P(r_new) * C(r_new) - P(r) * C(r)]
+  C(s)  = C(s) + [C(r_new) - C(r)]
+  Q(s)  = q_tmp / C(s)
+  P(s)  = p_tmp / C(s)
+
+3. Generalizing this, given Q(s), P(s), C(s), and need to add/remove reviews R from the rating, we can do this as follows:
+
+  q_tmp = Q(s) * C(s) +/- SUM(r in R) [ Q(r) * C(r) ]
+  p_tmp = P(s) * C(s) +/- SUM(r in R) [ P(r) * C(r) ]
+  C(s)  = C(s) +/- SUM(r in R) [ C(r) ]
+  Q(s)  = q_tmp / C(s)
+  P(s)  = p_tmp / C(s)
+
+After updating Q(s), P(s), C(s), overall rating can be recomputed as follows in each case:
+  O(s) = (w_q * Q(s) + w_p * P(s)) / (w_q + w_p) is the weighted rating of quality & popularity

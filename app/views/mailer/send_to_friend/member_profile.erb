@@ -1,0 +1,21 @@
+<%= @body + "\n\n" unless @body.blank? -%>
+<%- first_name = first_name(@record) -%>
+Check out this member profile on <%=app_name%>:
+
+__________________________________________
+
+<%= @record.display_name %>
+<%= display_member_status(@record) %> (since <%= @record.created_at.strftime('%B %Y') %>)
+<%= list_member_groups(@record, :group_list => "host,newshound,editor,partners,advisors,staff,directors,donors") %>
+
+<%= h(strip_tags(StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(@record.about,300,400,true),72))) unless @record.about.blank? %>
+
+
+<%= first_name %> has reviewed <%= plural(@record.reviews.size,"story") %> since <%= @record.created_at.strftime('%B %Y') %>.
+<%= first_name %>'s Member Level: <%= sprintf("%.1f", @record.rating || 0.0) %> avg.
+(preliminary)
+
+Check <%= first_name %>'s member profile at:
+<%= member_url(@record.to_param) %>
+
+<%= render :partial => 'mailer/send_to_friend/footer' %>

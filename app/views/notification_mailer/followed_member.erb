@@ -1,0 +1,11 @@
+Hi <%= first_name(@to) %>,
+
+<%= @follower.display_name %> is now following you on <%=app_name%>.
+
+Visit <%= first_name(@follower) %>'s profile here:
+<%= member_url(@follower.to_param) %>
+
+Follow other members and see their activity on your network page:
+<%= home_url %>mynetwork
+
+<%= render :partial => 'footer' %>

@@ -1,0 +1,42 @@
+<a name="fb_friends_panel"></a>
+<div style="margin:0px 0 4px 0"><a href="#" id="fb_follow_friends_link" class="facebook_friends" title="Find your Facebook friends that are also <%=app_name%> members"></a></div>
+
+<div id="fb_friends_box" class="friends_box">
+  <div class="fb_error_msg" id="fb_logged_out">
+    <fb:login-button html="target_blank" length="short" v="2" onlogin="open_popup('/fb_connect/activate','', {height: 340, width: 675})">Login</fb:login-button> Please login to Facebook so you can follow your friends.
+    <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
+  </div>
+  <div class="fb_error_msg" id="fb_unconnected">
+    <%=fb_login_button "open_popup('/fb_connect/activate','', {height: 340, width: 675})", :v => "2", :length=>"long", :html => {"target" => "_blank"}%> to follow your Facebook friends on <%=app_name%>.
+    <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
+  </div>
+  <div class="fb_error_msg" id="fb_no_friends">
+    None of your Facebook friends have connected to <%=app_name%>. Do you want to <a target="_blank" href="<%=fb_invite_friends_path%>">invite any of them to <%=app_name%>?</a>
+    <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
+  </div>
+  <div class="fb_error_msg" id="fb_no_more_friends">
+     You are already following all your <%=app_name%>-connected Facebook friends. Do you want to <a target="_blank" href="<%=fb_invite_friends_path%>">invite any of your other friends to <%=app_name%>?</a>
+    <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
+  </div>
+  <div class="mynews_adding_msg" id="fb_friends_notice"></div>
+  <% form_for @member, :url => "#", :html => {:method => :post, :id => "fb_friends_form", :style => "padding: 2px 5px; display:none;"} do |f| -%>
+    <h3>Find your friends on Facebook</h3>
+    <span class="mynews_prompt">Pick the friends you want to follow on <%=app_name%>:</span><br/>
+    <input type="hidden" name="follow_type" value="member">
+    <div id="fb_followable_friends"></div>
+
+<%#--
+  #  <div style="margin:4px 2px;">
+  #  = check_box_tag "autofollow_friends", "1", @member.fbc_autofollow_friends?, :class => "check" 
+  #  Henceforth, automatically follow my Facebook friends who connect to <-=app_name->
+  #  </div>
+-%>
+    <div class="explanation">(these Facebook friends are also <%=app_name%> members.)</div>
+    <div style="margin:5px 2px 50px 2px;">
+      <%= submit_tag "", :class => "follow_friends_btn", :onclick => "return fb_follow_friends()" %>
+
+    <%#= submit_button "Follow these Friends", nil, :class => 'save', :onclick => "return fb_follow_friends()" %>
+    <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
+    </div>
+  <% end -%>
+</div>

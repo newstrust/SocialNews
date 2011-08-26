@@ -1,0 +1,30 @@
+<%- all_members = group.members_ordered_by_activity -%>
+<%- with_photo = all_members.reject { |m| m.image.nil? } -%>
+<%- without_photo = all_members.reject { |m| !m.image.nil? } -%>
+
+<div id="right_column_box" class="right_column_box span-8">
+  <div class="top"></div>
+  <div class="wrapper">
+    <div class="header">
+      <div>
+        <div class="tabs"></div>
+        <h3 class="bottom">Group Members <%= content_tag(:span, "(#{all_members.size})", :class => "editorial_gray med") %></h3>
+      </div>
+    </div>
+    <div class="content clearfix">
+      <div class="member_photos">
+        <%- with_photo[0..24].each do |member| %><%= link_to(image_tag(member.image.public_filename(:thumb), :size => "40x40", :alt => member.name, :title => member.name), member) if member.image -%><%- end -%>
+      </div>
+      <%- unless without_photo.empty? -%>
+        <div style="margin-bottom:8px">
+          <br>
+          <h2 style="font-size: 9px; color: #999;"><strong>Other Members:</strong></h2>
+          <%= without_photo[0..12].collect { |member| link_to_member(member) } * " | " %>
+        </div>
+      <%- end -%>
+      <p style="margin:10px 0 0 0;font-weight:bold;"><%= link_to("See All Members &raquo;", group_url(group) + "/members") %>
+    </div>
+  </div>
+  <div class="bottom"></div>
+</div>
+<%#--= link_to "See all members &raquo;", "/members/" --%>

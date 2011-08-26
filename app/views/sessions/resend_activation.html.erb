@@ -1,0 +1,18 @@
+<span style="font-size:1.33em;"><%= content_tag(:h2, "Resend Activation Code") %></span>
+
+<p style="font-size:1.17em; padding-top:20px;">
+Enter the email address you signed up with, and <%=app_name%> will send your activation code to that email address.
+</p>
+
+<div class="popup_form" style="font-size:1.17em;">
+<% form_tag resending_activation_sessions_path, :class => 'entry_form' do -%>
+	<div class="form_field leftalign">
+		<%= label_tag 'email' %>
+  	<%= text_field_tag 'email' %>
+	</div>
+
+	<div class="submit" style="margin-left: 140px">
+		<%= submit_button 'Resend Activation' %>
+	</div>
+<% end -%>
+</div>

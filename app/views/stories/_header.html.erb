@@ -1,0 +1,61 @@
+<%- edit_form ||= false -%>
+<%- @url_tracking_key ||= nil -%>
+<%- article_class = "" -%>
+<div class="story">
+  <% if !edit_form && story.has_embedded_video? -%>
+  <% article_class = " video" -%>
+  <div class="story_video">
+    <%= story.video.embed_code %>
+  </div>
+  <% elsif !edit_form && story.image -%>
+  <% article_class = " image" -%>
+  <div class="featured_image">
+    <%= image_tag(story.image.public_filename(:column)) %>
+    <%= photo_credit(story.image) %>
+  </div>
+  <% end -%>
+  <div class="article<%=article_class%>">
+		<h2 class="bottom">
+			<%= link_to_star(story,{:cached => @will_be_cached, :ref => @url_tracking_key}) if !edit_form %>
+			<%= link_to_toolbar(story, h(story.title), :ref => @url_tracking_key, :class => "external") %>
+			<% if story.status != "list" %>
+				<% if story.status == "feature" %>
+					<span class="featured"></span>
+				<% else %>
+					<%= display_status_badge(story.status) %>
+				<% end %>
+			<% end %>
+		</h2>
+		<div class="byline">
+		<%= link_to_sources(story.sources, :ref => @url_tracking_key, :class => "pubname") %>
+		
+		<% unless story.journalist_names.blank? %>
+			by <span class="author"><%= h(story.journalist_names) %></span>
+		<% end %>
+		
+		<% unless story.story_date.nil? %>
+			| <span class="date"> <%= story.story_date.strftime('%b. %e, %Y') %></span>
+		<% end %>
+	
+		<%= story_type_and_online_access(story) %>
+		</div>
+		<%- unless edit_form -%>
+			<%= content_tag(:div, story.subtitle, :class => "subtitle") unless story.subtitle.blank? %>
+			<p><%= content_tag(:span, "(#{humanize_token(story, :content_type)})", :class => "content_type") if !story.content_type.blank? and story.content_type != "article" %>
+				<%= h StringHelpers.truncate_on_word_boundary(story.excerpt.strip.gsub(/\r?\n/, "<br/>"), 0, 465) unless story.excerpt.blank? %>
+				<%= link_to 'Full&nbsp;Story&nbsp;&raquo;', story.url, :onclick => "#{record_click_ajax_code(story)}", :style => "font-weight: normal; white-space: nowrap", :target => "_blank" %>
+			</p>
+			
+			<span class="posted_by bottom">
+				 <%= show_submitted_by(story, {:via_credits => false}) %> <%= x=show_feed_attribution(story, 1000); x ? " - " + x : "" %>
+			</span>
+		
+			<% if show_story_links %>
+				<% s_url = @url_tracking_key ? story_path(story, :ref => @url_tracking_key) : story_path(story) -%>
+				<p style="font-weight:bold;padding-top:5px;font-size:1.25em">
+					<%= link_to "See All Reviews &raquo;", s_url %>
+				</p>
+			<% end %>
+		<%- end -%>
+	</div>
+</div>

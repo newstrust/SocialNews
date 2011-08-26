@@ -1,0 +1,91 @@
+<%- is_group_page = page_obj.class == Group -%>
+<%- story ||= @featured_story -%>
+<%- hide_share_buttons ||= false -%>
+<%- story_action ||= nil -%>
+
+<div class="featured_story topic">
+<%- unclosed_div=false -%>
+<%- article_class = "" -%>
+<%- if story.has_embedded_video? -%>
+  <%- unclosed_div=true -%>
+  <%- article_class = " video" -%>
+  <div class="story_video">
+  <%= story.video.embed_code %>
+<%- elsif story.image -%>
+  <%- unclosed_div=true -%>
+  <%- article_class = " image" -%>
+  <div class="featured_image">
+    <%= image_tag(story.image.public_filename(:column)) %>
+    <%= photo_credit(story.image) %>
+<%- elsif !is_group_page && page_obj.image && use_topic_photo -%>
+  <%- unclosed_div=true -%>
+  <%- article_class = " image" -%>
+  <%- max_img_height = 150 -%>
+  <div class="featured_image">
+    <%- if page_obj.image.height > max_img_height -%>
+      <%- scale = max_img_height.to_f / page_obj.image.height -%>
+      <%- img_h = (page_obj.image.height * scale).to_i -%>
+      <%- img_w = (page_obj.image.width * scale).to_i -%>
+      <%= image_tag(page_obj.image.public_filename(:column), :width => img_w, :height => img_h) %>
+    <% else -%>
+      <%= image_tag(page_obj.image.public_filename(:column)) %>
+    <% end -%>
+    <%= photo_credit(page_obj.image) %>
+<%- end -%>
+
+<%- if home_page -%>
+    <div class="featured_topic"> <%= link_to "More #{page_obj.name} stories &raquo", page_obj, :class => "featured_topic" %></div>
+  <%- if !story_action.blank? -%>
+    <br/>
+    <div class="featured_topic"><%=story_action%></div>
+  <%- end -%>
+  <%= render :partial => "home/carousel_share_icons", :locals => { :curr_url => story_url(story) } -%>
+<%- end -%>
+
+  <%- if unclosed_div -%></div> <% end -%>
+
+  <div class="article<%=article_class%>">
+    <%- if !featured_story_label.blank? -%>
+      <label style="padding-bottom:5px;display:block;color:#8C8C8C;"><%=featured_story_label%></label>
+      <%#-- <span class="featured_topic"><=featured_story_label></span> --%>
+    <%- end -%>
+   
+    <h3> <%= link_to_star(story, {:cached => true, :ref => @url_tracking_key}) %><%= link_to_toolbar(story, h(story.title), :ref => @url_tracking_key, :class => "external") %></h3>
+    <div class="byline">
+      <%= link_to_sources(story.sources, {:ref => @url_tracking_key}) %>
+      <%- unless story.journalist_names.blank? -%>
+        by <span class="author"><%= h(story.journalist_names) %></span>
+      <%- end -%>
+    </div>
+    <div class="excerpt">
+      <%= h StringHelpers.truncate_on_word_boundary(story.excerpt, 0, 250) %>
+      <div class="posted_by"> <%=show_submitted_by(story)%> </div>
+    </div>
+    <div class="tools">
+      <div story_id="<%= story.id %>" class="story_links">
+        <div class="row1">
+          <% s_url = @url_tracking_key ? story_path(story, :ref => @url_tracking_key) : story_path(story) -%>
+          <%= link_to_toolbar(story, "", :ref => @url_tracking_key, :go => "review", :cached => true, :embedded_video_link => story.has_embedded_video?) %> 
+          <%- rating = is_group_page ? story.group_rating(page_obj) : story.rating -%>
+          <%- rating = 0 if rating.nil? -%>
+          <%- hide_rating = is_group_page ? story.hide_rating(page_obj) : story.hide_rating(nil) -%>
+          <%- if is_group_page -%>
+            <%= link_to(trustometer_img(rating, hide_rating ? {:color => "gray", :num_rating_class => "numeric_rating_gray", :group => true} : {:group => true}), s_url, :class => "#{popup_check}", :title => "Group Rating: #{"%.2f" % rating}") %>
+            <%= content_tag(:div, "#{nt_colors()} Rating: <span class=\"green\">#{format_rating(story.rating)}</span>", :class => "see_all_nt_reviews") %>
+          <%- else -%>
+            <%= link_to(trustometer_img(rating, hide_rating ? {:size => "large", :color => "gray", :num_rating_class => "numeric_rating_gray"} : {:size => "large"}, :style => "float: left"), s_url, :title => "Rating: #{"%.2f" % rating}") %>          
+          <%- end -%>
+          <%= link_to( "", s_url, :class => "reviews_large", :title => "See all reviews for this story") %>
+        </div>
+        <%- if !hide_share_buttons -%>
+          <div class="row2">
+            <%= fb_share_link(story_url(story)) + tweet_story(story) + email_story(story) + share_link(story, :editorial, "") %>
+            <span class="edit_link" style="display: none">
+              <%= link_to "", edit_story_url(story), :class => "editorial" %>
+            </span>
+          </div>
+        <%- end -%>
+      </div>
+    </div>
+  </div>
+</div>

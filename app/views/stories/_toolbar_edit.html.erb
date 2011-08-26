@@ -1,0 +1,83 @@
+<%- if logged_in? -%>
+  <%- if current_member.has_story_edit_privileges?(@story) -%>
+   
+    <%- remote_form_for @story, :url => story_path(@story, :format => :js),
+                               :html => {:class => "edit_story"},
+                               :success => "toolbar_form_response(request)",
+                               :failure => "toolbar_form_response(request, true)",
+                               :datatype => :json do |f| -%>
+      <%-#= f.hidden_field :referred_by -%>
+      <% if !params[:ref].blank?%><input type="hidden" name="ref" value="<%=params[:ref]%>"><% end%>
+
+      <div class="form_header">
+       <%= link_to_function "", "show_popdown_form()", :class => "close_panel", :title => "Minimize the Edit form - this will not save any changes you've made" if !params[:popup] %>
+        <div id="edit_form_selector" class="edit_form_selector">
+          <%- fields_for "member", current_member do |opt| -%>
+            <%= opt.select :preferred_edit_form_version,
+                     [Story::SHORT_FORM, Story::QUICK_FORM, Story::FULL_FORM].collect{ |fv| ["#{fv.titlecase} Edit Form", fv] }, {} %>
+          <%- end -%>
+          <%= link_to("Advanced edit form &raquo;", edit_story_url(@story), :class => "editorial_gray#{ popup_check }") %>
+        </div>
+
+        <h3>Edit this story's info</h3>
+        <%- if current_member.has_role_or_above?(:editor) -%>
+        <%- end -%>
+      </div>
+      <br style="clear:both" />
+
+      <%-# SSS: Need to do this because IE7 barfs otherwise! This used to be inside form_header div above.  But, in computing height,
+         #  IE7 returns the entire window height with these hidden divs ... So, separating hidden divs from the form_header div.
+         #  Don't ask me why!  --%>
+      <%-# NOTE: If you add a new hidden div here, go fix up limit_form_height code in js/toolbar.js --%>
+      <p class="error hide"></p>
+      <p class="notice hide"></p>
+      <div id="fetch_metadata_messages">
+        <p id="fetch_metadata_loading" class="loading hide">Fetching story info from sources... Please wait.</p>
+        <p id="fetch_metadata_done" style="margin-top:2px" class="notice hide">You are the first to edit this story. Some of the fields have been automatically filled in. Can you check that they're correct?</p>
+      </div>
+
+      <div class="longform_window edit">
+        <div class="longform">
+          <%= render :partial => 'submit_form', :locals => {:f => f, :edit_form => false} %>
+        </div>
+      </div>
+
+      <%-# submit buttons -%>
+      <div class="button_footer">
+        <div class="processing_form_msg"> Saving ... </div>
+        <span>
+        <%= submit_tag "", :class => "save_button", :onclick => "done_with_edits(); deactivateSubmit(this)" %>
+        <%= link_to_function "Cancel", "done_with_edits(); show_popdown_form()", :class => "cancel" %>
+ 	      <%= close_this_panel(:title => "Minimize the Edit form - this will not save any changes you've made") %>
+        </span>
+      </div>
+    <% end -%>
+
+    <%-# use form_remote_tag so that Rails encapsulates all the auth token stuff for us. -%>
+    <%-# see jquery.fetch_metadata.js -%>
+    <% form_remote_tag :url => fetch_metadata_story_path(@story, :format => :js),
+      :success => "$('form.edit_story').trigger('populate_edit_form', request)",
+      :failure => "$('form.edit_story').trigger('populate_edit_form', request, true)",
+      :datatype => :json,
+      :html => {:id => "fetch_metadata"} do end -%>
+  <%- else %> <%# logged_in, but doesn't have edit privileges -%>
+    <%= link_to_function "", "show_popdown_form()", :class => "close_panel", :title => "Minimize this panel" if !params[:popup] %>
+    <p class="notice">
+    <%- if @story.edit_lock -%>
+      Editing has been disabled for this story.
+    <%- elsif current_member.rating < 3 # not submitter, and member level < 3 -%>
+      To edit this story info, your <%= help_link('member level', 'member_levels', 'member') %> must be 3 or more.<br/>
+    <%- end -%>
+    </p>
+    <p>If you think you have received this message in error, <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+ 	  <%= close_this_panel(:title => "Minimize this panel") %>
+  <% end -%>
+<%- else -%> <%# not logged in -%>
+  <%= link_to_function "", "show_popdown_form()", :class => "close_panel", :title => "Minimize this panel" if !params[:popup] %>
+  <p class="notice">You must be logged in to edit story info.</p>
+  <p>
+    <a href="#" onclick="set_form_transition('edit', 'edit'); switch_popdown_form('sign_up'); return false">Sign Up</a> or
+    <a href="#" onclick="set_form_transition('edit', 'edit'); switch_popdown_form('log_in'); return false">Log In</a>
+  </p>
+ 	<%= close_this_panel(:title => "Minimize this panel") %>
+<% end -%>

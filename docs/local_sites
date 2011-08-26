@@ -1,0 +1,66 @@
+Adding/managing local sites
+
+* Update the following models:
+  - app/models/local_site.rb for any site-specific hacks
+  - app/models/newsletter.rb for any site-specific newsletter hacks
+  - app/controllers/admin/pages_controller.rb for any site-specific templated pages
+
+* Update layout files
+  - update app/views/layouts/_ga.html.erb for site-specific google-analytics code
+		 (This could be refactored to do this more cleanly by adding this to the local-site
+		  form, but hasn't happened.  This is a possible enhancement.)
+  - For custom navbar, add app/views/layouts/local_sites/<local-site-slug>/_navbar_links.html.erb
+  - For custom footer, add app/views/layouts/local_sites/<local-site-slug>/_footer_links.html.erb
+
+* Add stylesheets in public/stylesheets/local_sites/<local-site-slug>.css
+
+* Update view files:
+  - Add app/views/members/local_sites/<local-site-slug>/_subscriptions.html.erb for
+    site-specific newsletter subscription management
+  - Add app/views/members/manage_<local_newsletter_type>.html.erb for each
+    site-specific newsletter that a member could subscribe to.  For reference,
+	 check out the app/views/members/manage_mynews.html.erb, 
+	 app/views/members/manage_weekly.html.erb pages on the national site.
+  - Update FAQs as necessary
+
+* For site-specific pages for which there is a local-site or national site page template,
+  add the page in the right place according to the the page slug
+  - Ex: app/views/pages/local_sites/baltimore/* 
+        - photos.html.erb
+		  - about/press.html.erb
+		  - about/about.html.erb
+		  - about/partners.html.erb
+
+* Site Constants:
+  - update config/social_news_settings/listings.yml for site-specific newsletter
+    settings.  Add newsletter -> local-site-slug -> ... constants.
+	 Ex:
+	 newsletter:
+	   environment:
+		  num_top_stories_news_msm      : 2
+		  num_top_stories_news_ind      : 1
+		  num_top_stories_opinion_msm   : 2
+		  num_top_stories_opinion_ind   : 1
+		  num_top_rated_news_msm        : 1
+		  num_top_rated_news_ind        : 1
+		  num_top_rated_opinion_msm     : 1
+		  num_top_rated_opinion_ind     : 1
+   - update config/social_news_constants/bj_constants.yml for newsletter dispatch times
+	  Add newsletter_dispatch_times -> <newsletter_type> ... for each newsletter type
+	  Ex: 
+	    environment_daily:
+	      hour: 11
+		   min : 0
+	    environment_weekly:
+	      day : 3   # wednesday
+	      hour: 11
+		   min : 0
+			   
+* Update national site setup/pages
+  - Update app/views/layouts/application.html.erb if you want to display any message
+    when a members goes to the local site from the national site
+  - Update app/views/layouts/_navbar_links.html.erb if you want to display any
+    hardcoded navbar links to the local site
+  - Update config/routes.rb for any hardcoded routes
+  - Add app/views/pages/<local-site-slug>.html.erb that national site members can visit to know more
+    about the local site

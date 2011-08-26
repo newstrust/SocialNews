@@ -1,0 +1,22 @@
+Hi <%= first_name(@record.flags.last.owner) %>,
+
+<%= StringHelpers.linewrap_text("#{@record.flags.last.member.display_name} likes a comment you made on this group page:",72) %>
+
+<%= StringHelpers.linewrap_text("\"#{@record.commentable.name}\"",72) %>
+
+Here's what you wrote:
+
+"<%= h(strip_tags(StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(@record.body_plain,300,400,true),72))) unless @record.body_plain.blank? %>"
+
+Your comment can be viewed here:
+<%= comment_permalink_for(@record) %>
+
+To see all comments for this group, click here:
+<%= group_url(@record.commentable, :only_path => false) %>
+
+To add a comment on this page, click "Add a Comment."
+
+To view <%= first_name(@record.flags.last.member) %>'s profile, click here:
+<%= member_url(@record.flags.last.member.to_param) %>
+
+<%= render :partial => 'footer' %>

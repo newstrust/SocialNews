@@ -1,0 +1,17 @@
+<% lval = Rating.review_label(metric, metric == "trust" ? @source_review.component_rating(metric) : @review.component_rating(metric)) -%>
+
+<div id="review_label_<%=metric%>" class="question <%= form_level %> <%= "hide" unless form_level.blank? %>">
+<%#--
+  # SSS: NOTE
+  # Right now, the label input values aren't required -- the labels can just be a front-end
+  # UI thing, and all labels can be converted to rating inputs as before.  But, if in the future, 
+  # we want to diverge the rating & labelling forms, at that time, we will need these labels stored
+  # in the db in some form.  In anticipation, I am retaining that code, but commenting it out
+  #
+  #= hidden_field_tag "review[label_attributes][#{metric}]", lval
+-%>
+  <h3><%=question["question"]%></h3>
+  <a class="positive<%=" selected" if lval == "yes"%>" href="#" onclick="select_label(this, '<%=metric%>', 'yes', 4); return false;">Yes</a>
+  <a class="negative<%=" selected" if lval == "no"%>"  href="#" onclick="select_label(this, '<%=metric%>', 'no', 2); return false;">No</a>
+    <%= tooltipped_help_icon(question["description"], :head => question["question"], :subhead => question["subquestion"], :class => "tooltipped_icon_popular") %>
+</div>

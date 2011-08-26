@@ -1,0 +1,243 @@
+<%- @additional_css_includes = ["admin/landing_page_layout" ] -%>
+
+<style>
+div.clear_both                          { clear: both; }
+div#lp_layout div#group_info_staff_only { width: 475px; }
+div#lp_layout div#group_info_hosts      { width: 475px; margin-left: 10px; }
+div#lp_layout div.save_not_needed       { border: 2px solid #a00; }
+div#lp_layout div.special               { font-size: 130%; width: 970px; }
+div#lp_layout div.special label         { color: #080; font-size: 110%; font-weight: bold; }
+div#lp_layout div.form_field textarea   { height:60px; width: 250px; }
+</style>
+
+<script type="text/javascript" charset="utf-8">
+  var group_members_member_search_path  = '<%= search_admin_members_path(:format => :js) %>';
+  var group_members_member_listing_path = '<%= admin_group_members_path(@group, :format => :js) %>';
+  var group_hosts_member_search_path    = '<%= search_admin_members_path(:format => :js) %>';
+  var group_hosts_member_listing_path   = '<%= admin_host_index_path(:hostable_id => @group.id, :hostable_type => "group", :format => :js) %>';
+</script>
+
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'admin/landing_page_layout' %>
+<%- end -%>
+
+<%= render :partial => "shared/taxonomy_js_includes" %>
+
+<%- return_to = params[:return_to] %>
+<%- cm = current_member -%>
+
+<%#- List 1 & 3 are present in all groups; List 2 & 4 are present only in social groups.  So, the attributes for 2 & 4 com from @group.sg_attrs.
+  #
+  #- List 1 & 2 are staff-editable only
+  #- List 3 & 4 are host-editable 
+  #- List 5 is for group story listings -%>
+
+<%- attr_list_1 = [{ :attr => :name, :hint => "(Group ID: #{@group.id})"}, 
+                   { :attr => :slug, :hint => "(Will generate url of the form #{home_url}groups/#{@group.slug})"} ] -%>
+<%- attr_list_2 = [{ :attr => :short_name },
+                   { :attr => "email"},
+# Invitation codes are associated with the invitation object with this group
+#                   { :attr => "invitation_code" },
+                   { :attr => "status", :type => "dropdown", :sel_opts => SocialGroupAttributes::STATUS_SELECT_OPTS},
+                   { :attr => "category", :type => "dropdown", :sel_opts => SocialGroupAttributes::Category::SELECT_OPTS},
+#                   { :attr => "moderation", :type => "dropdown", :sel_opts => SocialGroupAttributes::Moderation::SELECT_OPTS, :hint => "<span class='incomplete'>This feature is not yet implemented.</span>"},
+                   { :attr => :num_init_story_days,:name => "Pre-activation age (# days) of group stories", :hint => "The group is seeded with stories from upto these many days before the group's activation date."},
+                   { :attr => :allow_comments, :name => "Allow Comments?", :type => "checkbox" },
+                   { :attr => :discussion_description, :name => "Comment Description", :type => "text_area", :hint => "Add any editorial description needed to set the appropriate context for the comment thread."}] -%>
+<%- attr_list_3 = [{ :attr => "description", :type => "text_area"}] -%>
+<%- attr_list_4 = [{ :attr => "subtitle"}, 
+                   { :attr => "website_url"},
+                   { :attr => :visibility, :name => "Access", :type => "dropdown", :sel_opts => SocialGroupAttributes::Visibility::SELECT_OPTS},
+#                   { :attr => :membership_mode, :name => "Membership", :type => "dropdown", :sel_opts => SocialGroupAttributes::MembershipMode::SELECT_OPTS, :hint => "<span class='incomplete'>'Host invite members' and 'Open + Approval Required' not yet supported.</span>"},
+                   { :attr => :membership_mode, :name => "Membership", :type => "dropdown", :sel_opts => SocialGroupAttributes::MembershipMode::SELECT_OPTS},
+#                   { :attr => :listing_mode, :name => "Available stories", :type => "dropdown", :sel_opts => SocialGroupAttributes::ListingMode::SELECT_OPTS, :hint => "<span class='incomplete'>Only the first option is supported right now.</span>"},
+                   { :attr => :host_notes, :type => "text_area"}] -%>
+<%- attr_list_5 = [# { :attr => :num_msm_stories, :name => "# MSM Stories" }, 
+                   # { :attr => :num_ind_stories, :name => "# IND Stories" },
+                   { :attr => :listing_date_window_size, :name => "Trusted Listing Period (days)", :hint => "(How far back to look for most trusted stories)" }] -%>
+
+<div id="lp_layout">
+  <div class="buttons"><%= submit_tag 'Update' %> <%= cancel_tag (return_to=="show" ? admin_group_path(@group) : "/admin/groups") %></div>
+
+  <div class="fieldset clear_both" id="group_info_staff_only">
+    <h2> Group Info (Staff Only) </h2> 
+    <%- if cm.has_role_or_above?(:staff) -%>
+      <%#----- Activation -----%>
+      <%- fields_for :social_group_attributes, @group.sg_attrs do |sgf| -%>
+        <%= form_field(sgf, :attr => "activated", :name => "Activate Group?", :type => "checkbox", :class => "special") %>
+      <%- end -%>
+
+      <%#----- Group Invitation -----%>
+      <div style="margin:5px 0 25px 0;font-size:13px;">
+      <%- if !@group.invitations.blank? -%>
+        <%- @group.invitations.each do |invite| -%> 
+          Edit Group Invitation: <%= link_to "#{invite.partner.name}: #{invite.name}", edit_admin_partner_invitation_path(invite.partner, invite) %><br/>
+        <%- end -%>
+      <%- else -%>
+        There are no invitations for this group yet.
+        <%- if cm.has_role_or_above?(:staff) -%>
+          <%= link_to "Visit the partners page", admin_partners_path %> to create a new partner if necessary, and a new invitation for this group.
+        <%- else -%>
+          <%= mail_to email_addr("staff"), "Email #{app_name} staff", :subject => "Please create an invitation template for the new group" %> to request a new invitation template for this group.
+        <%- end -%>
+      <%- end -%>
+      </div>
+
+      <%= common_group_fieldset(f, @group, attr_list_1) %>
+      <%= social_group_fieldset(f, @group, attr_list_2) %>
+
+      <div class="form_field">
+        <%- m = @group.sg_attrs.mynews_dummy_member -%>
+        <label>Dummy User Account</label>
+        <b>ID:</b> <%= m.id%>; <b>Email:</b> <%= m.email%>
+        <b> <%=link_to "Edit dummy member", edit_account_member_path(m), :target => "_blank" %> </b>
+      </div>
+
+    <%- else -%>
+      <div class="form_field">
+        <%#-- So that when a non-staff member edits this page, the group doesn't get de-activated -- this is the Rails hidden-field hack for checkboxes! -%>
+        <%= hidden_field_tag("social_group_attributes[activated]", "1") if @group.activated? %>
+        <%=@group.activated? ? "Activated" : "Not activated yet"%>
+      </div>
+      <%- attr_list_1.each do |row| -%>
+        <div class="form_field">
+          <label><%=!row[:name].blank? ? row[:name] : row[:attr].to_s.humanize %>:</label> <%= @group.send(row[:attr]) %>
+        </div>
+      <%- end -%>
+      <%- attr_list_2.each do |row| -%>
+        <div class="form_field">
+          <label><%=!row[:name].blank? ? row[:name] : row[:attr].to_s.humanize %>:</label>
+          <span><%v = @group.sg_attrs.send(row[:attr])%><%= v.blank? ? "--" : v%></span>
+        </div>
+      <%- end -%>
+    <%- end -%>
+  </div>
+
+  <div class="fieldset" id="group_info_hosts">
+    <h2> Group Info (Hosts) </h2> 
+    <h3 style="margin:-10px 0 10px 0; text-align:center;font-size:14px">
+      <%= help_link("(Group Hosts Help)", "", "group-hosts") %>
+    </h3>
+
+    <%= common_group_fieldset(f, @group, attr_list_3) %>
+    <%= social_group_fieldset(f, @group, attr_list_4) %>
+
+    <%#-- What tags to constrain group to --%>
+    <div class="form_field">
+      <div class='hint'>Select story tags that you want group stories to be restricted to (if left empty, group stories won't be constrained)</div>
+      <label>Tag constraints</label>
+      <%= batch_autocomplete 'group[tag_attributes]', @tag_constraint_list, :taxonomy => topic_taxonomy %>
+    </div>
+
+    <div class="form_field"> <%#-- save_not_needed" style="margin:-5px;padding:5px"> --%>
+      <label>Hosts</label>
+      <%= render :partial => "admin/members/member_lookup", :locals => {
+        :no_header => true,
+        :ac_id => "group_hosts",
+        :members => @group.hosts,
+        :add_url => admin_host_path(:hostable_id => @group.id, :hostable_type => "group", :format => :js),
+        :delete_base_url => admin_host_index_path(:hostable_id => @group.id, :hostable_type => "group", :format => :js)} %>
+      <div style="clear:both">&nbsp;</div>
+    </div>
+  </div>
+
+  <br style="clear:both;" />
+
+  <%#-- Membership moderation here.  Not yet implemented. --%>
+
+  <%#-- Flagged comments --%>
+  <%- if !@flagged_comments.empty? -%>
+  <div class="fieldset">
+  <%= render :partial => "admin/flags/flagged_comments", :locals => { :flagged_comments => @flagged_comments, :no_separator => true } %>
+  </div>
+  <%- end -%>
+
+  <%#!-- Once in the middle --%>
+  <div class="buttons"><%= submit_tag 'Update' %> <%= cancel_tag (return_to=="show" ? admin_group_path(@group) : "/admin/groups") %></div>
+
+  <div class="col1">
+    <%#-- Featured story + Top stories grid  --%>
+    <%= render :partial => "admin/shared/layout_settings", :locals => {:area => "featured_story", :clazz => "staging", :heading => "Featured Story Box" } %>
+    <%= render :partial => "admin/shared/layout_settings", :locals => {:area => "grid", :clazz => "grid", :heading => "Story Grid (3x2)"} %>
+    <div class="fieldset">
+      <h2>Story Listings</h2>
+
+      <div class="form_field" id="story_listings">
+        <div id="no_tabs">
+          <%= check_box_tag "group[no_tabs]", "1", @group.no_listings?, :style => "width:40px;float:left;" %> <%=label_tag("group[no_tabs]", "No listings", :style => "margin-left:20px;color:red;width:80px;")%>
+        </div>
+
+        <div id="tab_options" style="clear:both;display:<%=@group.no_listings? ? 'none' : 'block'%>">
+          <label>Listing Tabs</label>
+          <div style="float:left;width:420px">
+            <%- SocialGroupAttributes::AVAILABLE_LISTINGS.each do |l| -%>
+              <div style='float:left;width:125px;font-weight:13px;'>
+                <%= check_box_tag "group[listings][#{l[1]}]", "1", @group.has_listing?(l[1]), :style => "width:20px;float:left;" %> <%=label_tag("group[listings][#{l[1]}]", l[0], :style => "width:80px;float:left;font-weight:normal;")%>
+              </div>
+            <%- end -%>
+          </div>
+
+          <div id="mynews_config_link" style="clear:both;font-size:11px;margin-bottom:10px;<%="display:none;" if !@group.has_listing?("new_stories")%>">
+            <%= link_to "Edit New Stories Listing", config_group_mynews_admin_group_path(@group), :style => "font-size:14px;font-weight:bold;", :target => "_blank" %>
+            <span style="margin-left:5px; font-size:11px; color:#666"> (Will open in a new window) </span>
+          </div>
+
+          <div class="form_field">
+            <label>Default Tab</label>
+          <%- fields_for :social_group_attributes, @group.sg_attrs do |sgf| -%>
+            <%= form_input(sgf, :attr => "default_listing", 
+                                :type => "dropdown", 
+                                :sel_opts => SocialGroupAttributes::AVAILABLE_LISTINGS.reject { |l| !@group.has_listing?(l[1]) })%>
+          <%- end -%>
+          </div>
+
+          <%= social_group_fieldset(f, @group, attr_list_5) %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col2">
+    <div class="fieldset">
+      <h2> Group Image </h2>
+
+      <%- if @group.image -%>
+      <div>
+        <%= image_tag @group.image.public_filename(:column) %>
+        <%= delete_button(destroy_image_admin_group_path(@group)) %>
+	    </div>
+      <%- end -%>
+
+	    <%- fields_for :image, @group.image do |imgf| -%>
+        <%= form_field(imgf, :attr => :uploaded_data, :name => "Picture", :type => "file") %>
+        <%= form_field(imgf, :attr => :credit) %>
+        <%= form_field(imgf, :attr => :credit_url, :name => "Credit URL") %>
+      <%- end -%>
+    </div>
+
+    <%= render :partial => "admin/shared/layout_settings", :locals => {:area => "news_comparison", :clazz => "news_comparison", :heading => "News Comparison Area"} %>
+
+    <div class="fieldset">
+      <h2> Members </h2>
+
+      <%= render :partial => "admin/members/member_lookup", :locals => {
+        :no_header => true,
+        :ac_id => "group_members",
+        :members => @group.members,
+        :add_url => join_admin_group_members_path(@group, :format => :js),
+        :delete_base_url => admin_group_members_path(@group, :format => :js)} %>
+      <div style="clear:both">&nbsp;</div>
+    </div>
+  </div>
+
+  <div style="clear:both;" class="buttons">
+    <%= submit_tag 'Update' %> <%= cancel_tag (return_to=="show" ? admin_group_path(@group) : "/admin/groups") %>
+  </div>
+
+  <%#-- Editorial blocks --%>
+  <div>
+    <%= render :partial => "admin/shared/editorial_blocks", :locals => {:page_obj => @group} %>
+    <div style="clear:both">&nbsp;</div>
+  </div>
+</div>

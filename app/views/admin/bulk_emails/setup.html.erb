@@ -1,0 +1,11 @@
+<%- return_to = params[:return_to] %>
+<% @title = "Bulk Emailer" %>
+
+<h1 class="use16columns inner_left">Send Bulk Email</h1>
+
+<%= error_messages_for :bulk_email %>
+
+<% form_for :bulk_email, :url => send_mail_admin_bulk_emails_url do |f| -%>
+<%= render :partial => 'form' , :locals => { :f => f }%>
+<p><%= submit_tag 'Send Mail' %> <%= cancel_tag (return_to=="show" ? admin_bulk_email_path(@bulk_email) : "/admin/bulk_emails") %></p>
+<% end -%>

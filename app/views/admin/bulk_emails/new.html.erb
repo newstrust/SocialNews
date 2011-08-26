@@ -1,0 +1,8 @@
+<h1 class="use16columns inner_left">New Bulk Email Template</h1>
+
+<%= error_messages_for :bulk_email %>
+
+<% form_for :bulk_email, :url => admin_bulk_emails_path do |f| -%>
+<%= render :partial => 'form' , :locals => { :f => f }%>
+<p><%= submit_tag 'Create' %> <%= cancel_tag "/admin/bulk_emails" %></p>
+<% end -%>

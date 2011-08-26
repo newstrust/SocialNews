@@ -1,0 +1,31 @@
+<div class="panel">
+  <%= link_to_function "", "show_popdown_form()", :class => "close_panel", :title => "Minimize this panel" if !params[:popup] %>
+	<h3 class="review_thanks">Thanks for your review!</h3>
+	<p class="notice hide"></p>
+	<p class="hide error_message suspended">
+		<strong>Your review has been saved, but will not be published due to your member status.</strong>
+		For help, check our <%= help_link('FAQ', 'member_status', 'member') %>.
+	</p>
+	
+  <div class="review_todo">
+  <h3 class="from_here">From here you can:</h3>
+		<%- if logged_in? && current_member.has_story_edit_privileges?(@story) -%>
+			<p class="published">
+			 <a href="#" class="edit" onclick="show_popdown_form('edit'); return false"></a>
+			</p>
+		<%- end -%>
+		<p class="published">
+		 <%= link_to "", @story, :class => "outbound" %>
+		</p>
+		<p class="published">
+		 <%= link_to "", "/", :class => "outbound_nt outbound" %>
+		</p>
+			
+  </div>
+  <div class="share_tools">
+		<h3>Share this story:</h3>
+		<%= share_icons_page(@story, :class => "share_page_tools text", :page_type => "story", :fb_like_layout => "button_count", :fb_like_width => "80", :fb_like_height => "21", :fb_share_type => "icon_link", :twitter_link_text => "Tweet", :email_link_text => "Email", :addthis_link_text => "More", :toolbar => true) %>
+	</div>
+ 	<%= close_this_panel() %>
+  <div class="clearfix"></div>
+</div>

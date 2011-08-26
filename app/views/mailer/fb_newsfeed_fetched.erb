@@ -1,0 +1,28 @@
+Dear <%=@member.first_name%>,
+
+Thanks for adding your Facebook Feed to your account on <%=app_name%>.
+
+Your Facebook News Feed has been fetched successfully!
+
+You can now view news links posted by your Facebook Friends on this private Feed page:
+<%=feed_url(@feed)%>.
+
+Please note that this page is only visible to you, and only when you are logged in, to protect your privacy.
+
+Some of these stories from Facebook will also appear on your own MyNews page:
+<%="#{home_url}mynews"%>
+
+(the number and order of stories depends on what other items you are following on MyNews)
+
+Going forward, <%=app_name%> will fetch your Facebook News Feed every couple hours (but we won't be emailing you every time).  To see the latest stories, visit your MyNews page -- or your Facebook Feed page, at the links above. We recommend you bookmark these pages for regular use.
+
+To stop following your Facebook Feed on <%=app_name%>, either go to your MyNews page or click here:
+<%=fb_unfollow_newsfeed_url%>
+
+Please email us at <%=SocialNewsConfig["email_addrs"]["feedback"]%> if you have any questions -- and visit the MyNews FAQ for helpful tips on this new service:
+<%="#{home_url}help/faq/mynews#add_feeds"%>
+
+Enjoy!
+
+
+The <%=app_name%> Team

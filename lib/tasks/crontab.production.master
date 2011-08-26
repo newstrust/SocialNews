@@ -1,0 +1,20 @@
+# SSS: IMPORTANT: Try to stagger the tasks so that you dont have multiple tasks starting off at periodic intervals.
+
+# Every minute, check that bj is alive
+*/1 * * * * /usr/bin/lockrun --lockfile=/tmp/bj_socialnews.lockrun -- /usr/bin/bj run --forever --rails_env=production --rails_root=/data/socialnews/current --log=/data/socialnews/shared/log/backgroundjob.log
+
+# Every 30 minutes, decay activity score for stories
+13,43 * * * * /usr/bin/ruby /data/socialnews/current/lib/tasks/decay_activity_score.rb
+
+### Every morning at 3:30 am, copy over stuff from home (bin, stats, logs) to media.socialnews.net
+30 3 * * * /data/socialnews/current/bin/backup.home.sh 2> /data/socialnews/home.backup.errs 1> /data/socialnews/home.backup.out
+
+# Every day at 4:30 am, archive newsletter logs
+30 4 * * * /bin/mv /data/socialnews/current/log/production_newsletter.log-*gz /home/socialnews/newsletter.logs/
+
+# Not relevant any more
+## Every Sunday at 10:33 pm, run the socialnews source aggregate info recalc task
+##33 22 * * sun /data/socialnews/current/bin/run_rake_task.sh production socialnews:ratings:update_aggregate_source_info
+
+# Every Sunday at 1:50 am, clear out cached friendship info
+50 1 * * sun /data/socialnews/current/bin/run_rake_task.sh production socialnews:clear_cached_friendships

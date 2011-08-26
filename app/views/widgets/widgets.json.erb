@@ -1,0 +1,5 @@
+var _NTW_file_metadata = <%= @metadata.to_json %>
+var _NTW_stories = <%= @stories.to_json %>
+<% if !@access_denied_msg.blank? -%>
+var _NTW_access_denied = <%=@access_denied_msg.to_json%>
+<% end -%>

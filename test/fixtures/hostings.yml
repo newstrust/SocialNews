@@ -1,0 +1,19 @@
+one:
+  page_host_id: 1
+  hostable_id: 1
+  hostable_type: Topic
+
+two:
+  page_host_id: 1
+  hostable_id: 2
+  hostable_type: Topic
+
+three:
+  page_host_id: 1
+  hostable_id: 3
+  hostable_type: Topic
+
+trusted_member_hosts_election_reform:
+  page_host_id: 2
+  hostable_id: 2
+  hostable_type: Topic

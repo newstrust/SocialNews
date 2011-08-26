@@ -1,0 +1,19 @@
+<%= render :partial => 'comment', :locals => { :comment => @parent, :readonly => true } %>
+
+<h1>Reply To 
+    <% if @parent.member == Member.nt_bot %>
+        <%=app_name%> Staff
+    <% else %>  
+        <%= h @parent.member.display_name %>
+     <% end %>
+</h1>
+<%= error_messages_for :comment %>
+
+<% form_for(@comment, :url => discussions_comments_path, :html => { :class => 'comment_form' }) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f, :comment => @parent } %>
+  
+<div align="left" style="margin-top:5px;">
+  <%= submit_button "Submit Comment", nil, :style => "float: left"  %>
+  <span class="civil_note">Please be civil (see our <%= pop_up_link('guidelines', tos_path + "#community_guidelines") %>). Comments can be edited for <%= pluralize(Comment.minutes_before_locked, 'minute')%> <%= help_icon("adding_comments", "reviewer") %></span>
+</div>
+<% end %>

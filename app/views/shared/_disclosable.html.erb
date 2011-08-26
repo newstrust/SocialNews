@@ -1,0 +1,13 @@
+<div class="disclosable_content_container">
+	<div class="disclosable_content" style="display:<%= show ? 'block' : 'none'%>">
+		<%= content %>
+		<%= link_to_function hide_link_text,
+			"$(this).parents('.disclosable_content').slideUp(180#{callback}).siblings('.disclosure_link').show()",
+			:class => "about_you",
+			:style => "" %>
+	</div>
+	<%= link_to_function show_link_text,
+		"$(this).hide().siblings('.disclosable_content').slideDown(180#{callback})",
+		:class => "disclosure_link about_you_open",
+		:style => "" + (show ? "; display: none" : "") %>
+</div>

@@ -1,0 +1,108 @@
+<% @title = "Feeds AutoFetch Summary" %>
+
+<style>
+div.stats_box { border:1px dotted #888; margin-top: 10px; padding: 10px 0 }
+div.stats_box div.stats_header { font-size:14px; padding:10px; margin-bottom: 25px; }
+div.stats_box div.stats_row { float: left; padding: 0 10px; }
+div.stats_box div.col { float: left; padding:0; width:240px; margin-right:5px;}
+div.stats_box div.col table { width:100%; margin:0; padding:0; }
+div.stats_box div.col table thead { font-weight: bold; }
+
+div.feed_summary { margin-bottom: 10px; font-size:11px; }
+div.feed_summary div { padding: 0; }
+div.feed_summary span.title { font-size:13px; font-weight:bold; }
+div.feed_summary span.stat  { font-size:12px; font-weight:bold; color:#a00; }
+div.feed_summary a { text-decoration: none; }
+div.feed_summary div.listed_stories { margin: 5px 0 10px 35px; padding: 0; }
+div.feed_summary div.story { margin-bottom:5px; }
+</style>
+
+<% if logged_in? and current_member.has_role_or_above?(:editor) # only editors and above should have access to the queued stories %>
+<ul>
+	<li> <%=link_to "Feeds index page", admin_feeds_path %> </li>
+	<li> <%=link_to "Mass edit all queued stories (last 24 hours)", mass_edit_queued_stories_admin_stories_path %> </li>
+</ul>
+<% end %>
+
+<% ts = params[:timespan] || 1 -%>
+
+<h1> 
+Auto-fetch summary for all feeds for last <%=ts%> days<br/>
+<span style="color:#888;font-size:11px;font-weight:bold;">(Add ?timespan=N to the url if you want queued stories from the last N days)</span>
+</h1>
+
+<% stats_config = [ {:name => "Subject",     :data => @subject_stats, :model => Subject, :num_cols => 1, :end_row => false},
+                    {:name => "Source Type", :data => @src_stats,     :model => nil,     :num_cols => 1, :end_row => false},
+                    {:name => "Story Type",  :data => @stype_stats,   :model => nil,     :num_cols => 1, :end_row => true},
+                    {:name => "Topic",       :data => @topic_stats,   :model => Topic,   :num_cols => 3, :end_row => true},
+                    {:name => "Feed",        :data => @feed_stats,    :model => Feed,    :num_cols => 3, :end_row => false} ] -%>
+
+<div class="stats_box">
+  <div class="stats_header">
+  In the stats tables below, the links will take you to the mass story edit form with queued stories that topic/subject/feed.<br/>
+  Or <%= link_to "click here to mass edit queued stories across all subjects/topics/feeds", mass_edit_queued_stories_admin_stories_url %></span> 
+  </div>
+<% stats_config.each do |stat| -%>
+  <% keys = stat[:model] ? stat[:data].keys.sort { |a,b| stat[:model].send(:find, a).name <=> stat[:model].send(:find, b).name } \
+                         : stat[:data].keys.sort -%>
+  <% next if keys.blank? -%>
+  <% n = keys.length/stat[:num_cols]; n = 1 if n == 0 -%>
+  <% first = 0 %>
+  <% pname = stat[:model] ? (stat[:model].to_s.downcase + "_id").to_sym : nil -%>
+  <div class="stats_row" style="width:<%=750/stat[:num_cols]%>;">
+    <h2><%=stat[:name]%> Stats</h2>
+    <br/>
+  <% (1..stat[:num_cols]).each do |col| %>
+    <div class="col">
+      <table>
+        <thead> <tr> <td> <%=stat[:name]%> </td> <td style="width:60px;text-align:center;"> Count </td> </tr> </thead>
+        <tbody>
+    <% keys[first..first+n-1].each do |s| -%>
+      <% obj = stat[:model] ? stat[:model].send(:find, s) : nil %>
+        <tr> 
+        <td>
+        <%= obj ? link_to(obj.name + ((stat[:model] == Feed) && !obj.subtitle.blank? ? " - #{obj.subtitle}" : ""), mass_edit_queued_stories_admin_stories_path(:timespan => params[:timespan], pname => s)) : (s.blank? ? "--None--" : s) %>
+        </td> 
+        <td style="text-align:center"> <%= stat[:data][s] %> </td>
+        </tr>
+    <% end -%>
+        </tbody>
+      </table>
+    </div>
+    <% first += n -%>
+  <% end -%>
+  </div>
+
+  <% if stat[:end_row] %> <br clear="both" /><hr/><br/> <% end %>
+<% end -%>
+<br clear="both" />
+</div>
+
+<br/><br/>
+
+<h2>Feed summary for all feeds for last <%=ts%> days</h2>
+
+<br/><br/>
+
+<% @feeds.each do |f| %>
+<div class="feed_summary">
+  <%= edit_button(edit_admin_feed_path(f.id)) %>
+  <span class="title"><%= link_to f.name + (f.subtitle.blank? ? "": " - #{f.subtitle}"), { :controller => "/feeds", :id => f.id, :action => 'show'}%></span> (<%=f.feed_level%>) --
+  <span class="stat"><%= f.feed_stories_count(:all, ts) %></span> stories in db;
+  <span class="stat"><%= f.feed_stories_count(:queued, ts)%></span> (<%=f.percentage_queued_stories(ts)%>% of feed stories) stories queued;
+  <% listed_stories = f.feed_stories(:listed, ts) -%>
+  <% if !listed_stories.blank? -%>
+  <span class="stat"><%= f.feed_stories_count(:listed, ts)%></span> (<%=f.percentage_listed_stories(ts)%>% of feed stories) stories listed
+  <div class="listed_stories">
+    <div style="font-weight:bold"> Listed Stories </div>
+    <% listed_stories.each do |s| -%>
+    <div class="story">
+      <%= link_to s.title, s.url %> <%= story_type_and_online_access(s) %>;
+      <span style="font-weight:bold">Subjects: </span><%= s.subjects.collect {|ss| ss.name } * ',' %>;  
+      <span style="font-weight:bold">Topics: </span><%= s.topics.collect {|st| st.name } * ',' %>
+    </div>
+    <% end -%>
+  </div>
+  <% end -%>
+</div>
+<% end -%>

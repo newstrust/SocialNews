@@ -1,0 +1,44 @@
+<%# Skinny popup layout for FAQ, review & submit forms -%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+  <head>
+    <title><%= @title || "Your Guide to Good Journalism" %> - <%=app_name%></title>
+		<%= render :partial => 'shared/css_includes' %>
+    <%= render :partial => 'shared/jquery_includes' %>
+    <%= render :partial => 'shared/story_listing_js_includes' %>
+    <%= yield :page_scripts -%>
+    <%= @inline_js || "" %>
+
+		<%#-- Add RSS auto-discovery links --%>
+    <% if @rss_autodiscovery_links -%>
+			<% @rss_autodiscovery_links.each do |rss_stuff| -%>
+	    	<%= auto_discovery_link_tag :rss, rss_stuff[:link], :title=> rss_stuff[:title] %>
+	    <% end -%>
+    <% end -%>
+  </head>
+  
+  <body class="popup"><a name="top"></a>
+    <% unless @hide_nav -%>
+		  <%= link_to(image_tag(SocialNewsConfig["app"]["logo_path"], :alt => app_name), home_path(:expand => true)) %>
+      <%- if @local_site -%>
+      <span class="local_logo"><a href="#"><%=@local_site.name.capitalize%><span class="r">&#0174;</span></a></span>
+      <%- end -%>
+		  <h2 style="display: inline; color: #666; margin-left: 5px"><%= @title %></h2>
+		<% end -%>
+		
+		<div class="popup_form">
+			<% if render_flash -%>
+				<p><%= render_flash %></p>
+			<% end -%>
+			<%= yield %>
+		</div>
+		<br/>
+
+    <%= render :partial => "layouts/ga" %> <%#-- Google Analytics --%>
+
+  	<%#-- FACEBOOK CONNECT --%>
+  	<%= fb_connect_javascript_tag %>
+    <% @fb_no_auto_reload ||= nil %>
+  	<%= init_fb_connect_FIXED_UP(@fb_no_auto_reload) %>
+  </body>
+</html>

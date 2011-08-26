@@ -1,0 +1,13 @@
+<div style="font-weight:bold; font-size:14px;">
+<h2><%= "New" if @source_review.new_record?%> Source Review for <%= @source_review.source.name %> </h2>
+<br/>
+This source review is specific to the <%= @local_site ? @local_site.name : "National" %> site
+</div>
+
+<%- content_for(:page_scripts) do %>
+  <%= javascript_include_tag "#{@local_site ? "#{@local_site.slug}." : ""}topic_taxonomy.json" %>
+  <%= javascript_include_tag "source_review" %>
+  <%= javascript_include_tag "jquery/source_review_topic_autocomplete" %>
+<%- end -%>
+
+<%= render :partial => "form", :locals => {:source_review => @source_review, :show_form => true } %>

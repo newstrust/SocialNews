@@ -1,0 +1,5 @@
+<%- national_site_taxonomy ||= false -%>
+<%- local_site_prefix = @local_site && !national_site_taxonomy ? "#{@local_site.slug}." : "" -%>
+<%#---- do not use content(:page_scripts) for these scripts since they are used by the toolbar without any layout! ----%>
+<%= javascript_include_tag "source_taxonomy.json" %>
+<%= javascript_include_tag "#{local_site_prefix}topic_taxonomy.json" %>

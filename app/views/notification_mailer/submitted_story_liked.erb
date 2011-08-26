@@ -1,0 +1,29 @@
+Hi <%= first_name(@story_submitter) %>,
+
+<%= @liker.display_name %> starred a story you posted on <%=app_name%>.
+---------------------------------------------------------------------
+
+"<%= @story.title %>"
+<%= strip_tags link_to_sources(@story.sources) -%>
+<%= " - by #{@story.journalist_names}" unless @story.journalist_names.blank? %>
+<%= "#{@story.story_date.strftime('%b. %e, %Y')}" unless @story.story_date.blank? -%>
+<%= " (#{humanize_token(@story, :story_type)})" if @story.story_type %>
+
+<%=app_name%> Rating: <%= @story.hide_rating ? "not enough reviews" : "#{sprintf("%.1f", @story.rating || 0.0)} avg. from #{pluralize(@story.reviews_count, "review")}" %>
+
+---------------------------------------------------------------------
+
+To see all reviews for this story, click here:
+<%= story_url(@story, :only_path => false) %>
+
+To add a comment, a quote, or a link to a related story, click 'Review'
+on this story page. 
+
+To view <%= first_name(@liker) %>'s profile here:
+<%= member_url(@liker.to_param) %>
+
+Thanks for reviewing on <%=app_name%>. The more stories you review, the more
+your ratings count -- and the smarter we get as a community. It's people
+like you who make this service possible.
+
+<%= render :partial => 'footer' %>

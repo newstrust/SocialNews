@@ -1,0 +1,36 @@
+<% if !@member.follows_fb_newsfeed? -%>
+  <a name="fb_feed_panel"></a>
+
+  <%# -- No FB feed follow for members with validation level under 2 --%>
+  <%- if @member.validation_level < 2 -%>
+    <div style="margin:0 0 4px 0">
+      Your account must be validated before you can follow your Facebook or Twitter feeds.
+      To have your account validated, please review two stories on our site, then <%=validation_email_url%>.  
+      <%= help_link("Click here", "member_profile_why_validation", "member")%> to learn about account validation and member levels.
+    </div>
+  <%- else -%>
+    <div style="margin:0 0 4px 0">
+      <a href="#" onclick="return add_facebook_stream_feed(this)" class="facebook_feed" title="Add a feed of your Facebook friends' links"></a>
+    </div>
+
+    <div id="fb_user_stream_box">
+      <div class="fb_error_msg" id="fb_logged_out">
+        <fb:login-button html="target_blank" length="short" v="2" onlogin="open_popup('/fb_connect/activate','', {height: 340, width: 675})">Login</fb:login-button> Please login to Facebook so you can follow news from Facebook feed.
+        <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
+      </div>
+      <div class="fb_error_msg" id="fb_unconnected">
+        One final step! Your <%=app_name%> and Facebook accounts are not yet connected.<br/>
+        Please <%=fb_login_button "open_popup('/fb_connect/activate?popup=true&follow_user_stream=true','', {height: 340, width: 675})", :v => "2", :length=>"long", :html => {"target" => "_blank"}%> to follow your facebook user stream.
+      </div>
+    </div>
+  <%- end -%>
+<% else -%>
+  <% if !@member.can_follow_fb_newsfeed? -%>
+  <script type="text/javascript"> $(document).ready(function() { $('#fb_refresh_perms').show() }) </script>
+  <% end -%>
+<% end -%>
+
+<a name="refresh_fb_perms"></a>
+<div id="fb_refresh_perms" style="display:none;">
+We no longer have the necessary facebook permissions for reading your Facebook newsfeed.  <a href='#' onclick='return request_extended_perms()'>Click here to refresh permissions to continue following your Facebook newsfeed</a>
+</div>

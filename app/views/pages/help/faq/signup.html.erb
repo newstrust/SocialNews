@@ -1,0 +1,232 @@
+<%- @title = "Sign Up FAQ" -%>
+<%= "<a name=\"top\"></a>" unless params[:popup] %>
+
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior">
+
+<%= content_tag(:h1, @title + " <span class=\"small\">(Frequently Asked Questions)</span>") unless params[:popup] %>
+
+<p>Thanks for your interest in <%=app_name%>. Here are some frequently asked questions about our news rating network. Click on any question below for answers on signing up for <%=app_name%>. If you still have questions, <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.
+<ul>
+<li><a href="#about_faq" class="subhead_plain_bold">About this FAQ</a></li>
+<li><a href="#about_<%=app_slug%>" class="subhead_plain_bold">About <%=app_name%></a></li>
+<li><a href="#signup" class="subhead_plain_bold">How to Sign Up</a></li>
+<li><a href="#sign_in_registration" class="subhead_plain_bold">Registration and Sign In</a></li>
+<li><a href="#community_questions" class="subhead_plain_bold">Community Questions</a></li>
+<li><a href="#technical_questions" class="subhead_plain_bold">Technical Questions</a></li>
+<li><a href="#partnering_with_us" class="subhead_plain_bold">Partnering with <%=app_name%></a></li>
+</ul></p>
+
+<hr size="1" />
+
+<h2 style="margin-bottom:8px;"><a name="about_faq"></a>About this FAQ</h2>
+
+<p><a name="political_agenda"></a><span class="subhead_plain_bold">Do you have a political agenda?</span>
+This FAQ answers frequently asked questions about signing up for our site. It also provides general help about using our site.</p>
+
+<h2><a name="about_<%=app_slug%>"></a>About <%=app_name%></h2>
+
+<a name="what_is_<%=app_slug%>"></a><span class="subhead_plain_bold">What is <%=app_name%>?</span>
+<%=app_name%> is an online social network that helps people find quality journalism &ndash; or "news you can trust." Our members rate the news online, based on journalistic quality, rather than popularity or ideology. Our free website and news feed  features some of the best and the worst news of the day, selected from hundreds of blogs and mainstream media sources. Posted stories and news sources are carefully reviewed and rated for balance, fairness, importance and information quality by citizen reviewers, students and practicing journalists.</p>
+
+<p><a name="why_<%=app_slug%>"></a><span class="subhead_plain_bold">Why did you start this service?</span>
+-- To be filled out --
+</p>
+
+<p>By tracking the quality of news media, <%=app_name%> offers a unique opportunity for citizens to collaboratively search for truth online, through reasonable inquiry rather than ideology, impulse or blind faith. We think this non-partisan, community-based online network can bring about broad scale social change by enabling the "wisdom of the crowds,"  and help rebuild the trust that has been lost between the news media and the public.</p>
+
+<p><a name="what_is_mission"></a><span class="subhead_plain_bold">What is your mission?</span>
+<%=app_name%>'s mission is to help citizens find quality journalism and make informed decisions about our democracy. Our objectives encourage both media literacy and  civic engagement.</p>
+<p><%=app_name%> will accomplish its mission by empowering an online community of citizens, students and journalists to collaboratively evaluate the quality of journalism.  The <%=app_name%> service will  provide:</p><ul>
+<li>powerful research and review tools enabling citizens to reliably analyze stories and sources;</li>
+<li>a standard metric for evaluating news quality according to rigorous journalistic principles;</li>
+<li>a central database of news providers, with in-depth information and quality ratings;</li>
+<li>an online conversation space for discussing selected news stories and sources; </li>
+<li>an important online feedback loop between journalists and the public.</li></ul></p>
+
+<p><a name="who_is_<%=app_slug%>"></a><span class="subhead_plain_bold">Who is behind <%=app_name%>?</span>
+-- To be filled out --
+</p>
+
+<p><a name="what_is_business"></a><span class="subhead_plain_bold">What is your business model?</span>
+-- To be filled out --
+</p>
+
+<p><a name="political_agenda"></a><span class="subhead_plain_bold">Do you have a political agenda?</span>
+<%=app_name%> has no partisan political agenda. Our main goal is to help citizens  make informed decisions about democracy by identifying quality journalism. We believe that better decisions result from careful evaluation of diverse viewpoints. As an organization, we are firmly non-partisan. We encourage  our members to check their ideology at the door and review the news with a neutral viewpoint. Though many of our founding members  identify with a liberal viewpoint, we have invited members with other viewpoints to play a leading role in building our community. We are delighted to have a mix of republicans, independents and democrats as advisors: they have all made significant intellectual contributions to this project, and we are thankful for their willingness to put their differences aside for this common cause.</p>
+
+<p><hr size="1" /></p>
+
+<p><a name="what_news"></a><span class="subhead_plain_bold">What kinds of news will I find there?</span>
+<%=app_name%> members are encouraged to post any English-language news item that is available online and that concerns the public interest. We welcome posts from a wide range of publication types (e.g.: blogs, newspapers, radio and TV) and news types (e.g.: news reports, opinions). We discourage posts that are primarily of an entertainment or sensational nature, such as celebrity coverage, or tabloid news.</p>
+
+<p><a name="how_we_pick_stories"></a><a name="editor_picks" id="editor_picks"></a><a name="how_we_pick"></a><span class="subhead_plain_bold">How do you pick which stories to feature on the <%=app_name%> site?</span>
+Stories with the highest and the lowest ratings are  automatically listed in ranked order in our story listings. We also list best and worst stories by category (e.g.: best & worst blog posts, best & worst opinions, etc.) or by topic (e.g.: best &amp; worst stories on the War in Iraq).</p>
+
+<p><a name="how_we_pick_sources"></a><span class="subhead_plain_bold">How do you pick which sources to feature on the <%=app_name%> site?</span>
+Sources with the highest average ratings are  automatically listed in ranked order on our source listing pages, by broad categories.We also list  best and worst sources by sub-categories (e.g.: best & worst liberal blogs, best & worst local TV news, etc.). In order to be listed, a source has to receive a minimum number of story reviews, which is periodically adjusted, based on the average number of reviews per source on our site.</p>
+
+<p><a name="how_often"></a><span class="subhead_plain_bold">How often is the site updated? How long are news reviews stored?</span>
+-- To be filled out --
+</p>
+
+<p><hr size="1"/></p>
+
+<h2><a name="signup"></a>How to Sign Up</h2>
+
+<p><a name="join" class="subhead_plain_bold" id="join"></a><a name="how_to_signup"></a><span class="subhead_plain_bold">How do I sign up?</span>
+At this time, <%=app_name%> is a private site. If you would like to join <%=app_name%>, but did not get an invitation, <a href="/signup/gen.htm" target="_blank">click here</a>. If a <%=app_name%> member or advisor referred you, please fill in their name in the "Your Reference" field. If you have already received an invitation, simply click on the link in your email invitation and follow the instructions on our welcome page. 
+This invitation link can only be used once, so please register right away and do not forward it to anyone. (see <a href="#sign_in_registration">registration section</a> below).</p>
+
+<p><a name="why_signup_form"></a><span class="subhead_plain_bold">Why do I have to fill a sign up form?</span>
+At this time, <%=app_name%> is a private site. We're busy developing the site and we do not yet have the resources to support large numbers of people. So we use this signup process to check new members and keep overall traffic manageable. To speed up this process, be sure to include your real name and a link to a web page about you, if you have one. If a <%=app_name%> member or advisor referred you, please include their name as well. We will give  special consideration to friends of people we already know.</p>
+
+<p><a name="why_full_name"></a><span class="subhead_plain_bold">Why do I have to give my real name?</span>
+To insure the integrity of our reviews, we ask that every member identify themselves with their real name only, including first and last name. We do not allow anonymous or pseudonymous posts on <%=app_name%> at this time. Please do not sign up or register if you do not agree with this term of service.</p>
+<p><a name="why_email_address"></a><span class="subhead_plain_bold">How will my email address be used?</span>
+Your email address will only be used for purposes you specifically authorize (see our <%= link_to 'privacy policy', "/about/privacy/", :class => "popup_link" %>). If you become a registered site member, your email address will be used for identification purposes during the sign-in process, and to inform you about any changes to your account or new developments at <%=app_name%>.</p>
+<p><a name="why_signup_questions"></a><span class="subhead_plain_bold">Why are you asking these questions?</span>
+We're still a small community and just want to know who we let in to our site. Nothing personal. We also strive to include a variety of viewpoints and experiences on our site, which is why we ask the optional questions about journalism and politics.</p>
+
+<p><a name="privacy_policy"></a><span class="subhead_plain_bold">What is your privacy policy?</span>
+<%=app_name%> treats your contact information as private and confidential. We will not provide your contact information to any other organization without your permission. We treat your ratings and comments as public information. We may, for example, make your comments available to the public, along with your state and country, but without ever disclosing your name, email address, or other personal information, unless you specifically authorize us to do so. For more information, check our <a href="/about/privacy" target="_blank">full privacy policy</a>.</p>
+
+<p><a name="how_to_read"></a><span class="subhead_plain_bold">How long do I have to wait for my invitation?</span>
+You should receive your invitation within a few minutes If you haven't received it after 24 hours, please email us at <%= mail_to email_addr("invite"), email_addr("invite"), :subject => "#{app_name} help request", :encode => "javascript" %>. Be sure to include your full name and email address as you entered them on our sign-up form.</p>
+<p><hr size="1" /></p>
+
+<h2><a name="sign_in_registration"></a>Registration and Sign in</h2>
+
+<p><a name="register"></a><span class="subhead_plain_bold">How do I register on <%=app_name%>?</span>
+If you received an email invitation to register on our site, go to the link in your invitation, then follow the instructions on our welcome page. If you did not get an invitation and would like to sign up, <a href="/signup/gen.htm" target="_blank">click here</a>. If a <%=app_name%> member or advisor referred you, please fill in their name in the "Your Reference" field.</p>
+<p>This invitation link can only be used once, so please register right away and do not forward it to anyone. If you've already registered before, you do not need to register again; click on "Sign In" instead.</p>
+
+<p><a name="invitation_expired"></a><span class="subhead_plain_bold">What if my invitation expired?</span>
+Your invitation link to join <%=app_name%> can only be used once. Once it has  been used to register a member account, it automatically expires. If you clicked your invitation link a second time, you will see a message that your invitation has expired.  If you've already registered, click on "Sign In" below the <%=app_name%> logo. If you were not able to sign-in, please email us at <%= mail_to email_addr("invite"), email_addr("invite"), :subject => "#{app_name} help request", :encode => "javascript" %> to request another invitation. Be sure to include your pre-approved member name and email address from our first invitation, so we can validate your request.</p>
+
+<p><a name="sign_in"></a><span class="subhead_plain_bold">How do I sign in to <%=app_name%>?</span>
+To sign in to <%=app_name%>, click on the "Sign in" link at the top of our site's left sidebar, below the <%=app_name%> logo. Then enter your real name (or email address) and password. If you're already signed in, your member name will be displayed, along with a link to your Edit your Profile, which includes your account settings and preferences. If you haven't registered as a <%=app_name%> member yet, <a href="#join">read this paragraph</a>.</p>
+
+<p><a name="lost_password"></a><span class="subhead_plain_bold">What if I forgot my password?</span>
+If you forget your password at anytime, click on "Lost Password" at the bottom of the Sign in form. A new password will be emailed to the address you gave us earlier.</p>
+
+<p><a name="member_company"></a><span class="subhead_plain_bold">Your Organization</span>
+Please enter your company or organization name. If you are a student, enter your school name. If you are self-employed, you do not need to fill in this field. Once you sign in to <%=app_name%>, you can decide whether to make this information public or not.</p>
+
+<p><a name="how_heard_about_us"></a><span class="subhead_plain_bold">How did you hear about <%=app_name%>?</span>
+Let us know how you first heard about <%=app_name%>. Was it from a friend, blog, website, email, conference? Please enter the name or URL.</p>
+
+<p><a name="member_referred_by"></a><span class="subhead_plain_bold">Your Reference</span>
+If a <%=app_name%> member or referred you here, please enter their name.</p>
+
+<p><a name="member_web_address"></a><span class="subhead_plain_bold">Your Web Page</span>
+If you have your own web page, enter it here. Copy and paste your complete web address or URL from your web browser. Some browsers let you drag a page URL directly from the address bar to this field. Once you sign in to <%=app_name%>, you can decide whether to make this link public or not.</p>
+
+<p><a name="member_news_experience"></a><span class="subhead_plain_bold">News</span>
+<em>How often do you read, watch or listen to the news?</em><br>
+Select how often you read, watch or listen to the news, on an average day.  Options for this news field include: Rarely or never, Less than 10 minutes per day, 10-30 minutes per day, 10-30 minutes per day, 30-60 minutes per day, 60-90 minutes per day, 90 minutes per day or more, Decline to state and Not sure.  Note that this field is also used to calculate a member's experience level.</p>
+
+<p><a name="member_journalism_experience"></a><span class="subhead_plain_bold">Journalism</span>
+<em>How much experience do you have as a journalist? (if any)</em><br>
+Select much experience you have as a journalist, if any. Options for this journalism field include: None, Less than 1 year, 1-4 years, 5-9 years, 10-20 years,  More than 20 years, Decline to state and Not sure.  Note that this field is also used to calculate a member's experience level.</p>
+
+<p><a name="member_politics"</a><span class="subhead_plain_bold">Politics</span>
+<em>What are your political views? (if any)</em><br>
+Select your overall political viewpoint, if any. Options for this political viewpoint field include: Neutral viewpoint, Far Left, Left, Center, Right, Far Right, Decline to state and Not sure. In future versions of this service, we will offer more nuanced ways for members to indicate their political viewpoints.</p>
+<p><hr size="1" /></p>
+
+<h2><a name="community_questions%22"></a> <a name="community_questions "></a><a name="community_questions"></a>Community Questions</h2>
+
+<p><a name="our_community"></a><span class="subhead_plain_bold">What is the <%=app_name%> community?</span>
+<%=app_name%> is an online community of citizens like you, who care about good journalism &ndash; &quot;news you can trust.&quot; We rate news stories based on journalistic quality, rather than popularity or ideology. We're a non-profit, non-partisan and independent organization.</p>
+
+<p><a name="community_guidelines"></a><span class="subhead_plain_bold">What are your community guidelines?</span>
+Our community guidelines are simple: treat each other with respect, only share information that adds value to our community, do not harass other members or news sources,  and adhere to our terms of service. We will post our full community guidelines here very soon. For now, please refer to our terms of service below.</p>
+
+<p><a name="terms_of_service"></a><span class="subhead_plain_bold">What are your terms of service?</span>
+By signing up and/or registering with <%=app_name%>, you agree to our terms of service and community guidelines, which include the following terms:</p>
+<ul>
+<li><strong>Courtesy:</strong> You will be courteous to every <%=app_name%> member, even those whose beliefs you do not share.</li>
+<li><strong>No Disruptive Behavior: </strong>You will not disrupt or interfere with <%=app_name%> ratings, comments, or other community functions. You will not engage in hate speech, advocate violence, or attempt to convert another member's views. </li>
+<li><strong>No Solicitation:</strong> You will not use this community site to advertise or solicit on behalf of commercial, political, religious, charitable or other organizations, causes, products or services.</li>
+<li><strong>No Copyrighted Material:</strong> You will not post on the <%=app_name%> sites any copyrighted material without the express permission of its owner. However, you may  include in your posts or reviews the title of a news item you wish to share with other members, as well as its web address and a brief excerpt (max. 100 words). </li>
+<li><strong>No Copying: </strong>You will not  reproduce material from <%=app_name%> (including member posts) without express written permission from <%=app_name%>. </li>
+<li><strong>Privacy: </strong>You will not collect or use information about members of this site without their express permission. (see our <%= link_to 'privacy policy', "/about/privacy/", :class => "popup_link" %>) </li>
+<li><strong>Contact information:</strong> you will provide your full name and a valid e-mail address in your <%=app_name%> registration. Your e-mail address will be hidden from other members, unless you choose to show it in your profile. However, <%=app_name%> staff must be able to contact you by e-mail if necessary, to discuss your account. If the e-mail address in your profile is not valid, or if you do not provide your full name, your posting privileges may be suspended.</li>
+<li><strong>Local guidelines:</strong> you will observe all rules and guidelines posted in specific parts of the site, such as in review forms and comments. </li>
+</ul>
+<p><%=app_name%> is committed to protecting your freedom of expression, and to maintaining a welcoming and safe community in which that expression can flourish. We will not censor members for expressing an opinion, within the limits of our terms of service. But we will take action against any behavior that disrupts community on our site. <%=app_name%> has the right, but not the obligation, to remove or move any member-generated content for any reason, without notice.  We have the right to suspend or terminate your membership for violation of the above rules. We have the right to reprint from the <%=app_name%> site any post or portion of a post (along with the name of the <%=app_name%> member who posted it) somewhere else on the site or in any other medium.</p>
+<p>If you do not agree with these terms of service,  please do not sign up or register on this site. If you are already registered and wish to cancel your account, please email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>. We will delete your member account within 24 hours from your request. You will no longer have access this site.</p>
+<p>We will post our full terms of service here very soon. Thanks for your patience and understanding during this private phase.</p>
+
+<p><a name="report_a_problem"></a><span class="subhead_plain_bold">How can I report a problem?</span>
+To report a problem,  email us anytime at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>. Please write in the subject of your email the type of problem you are reporting (technical bug, duplicate story, factual error, incomplete review, offensive comment, abusive member, or questions about your account). Then describe your problem in as much detail as possible. To help us better serve you, please include in your email message the full web address of the page you are reporting a problem for, as well as any special codes inserted by <%=app_name%> when you clicked the "Report a Problem" link.</p>
+
+<p><a name="suggestions"></a><span class="subhead_plain_bold">I have suggestions for how <%=app_name%> can be improved. Who can I tell?</span>
+We're always interested in hearing from our members, as we're constantly testing and improving <%=app_name%>. So please do let us know what you think is and isn't working. A good place to do that for now is in our Suggestions comment thread, which you can join at anytime by clicking "Suggestions" in the left sidebar. Or you can email them to us at <%= mail_to email_addr("suggestions"), email_addr("suggestions"), :subject => "#{app_name} suggestions", :encode => "javascript" %>.</p>
+
+<p><a name="invite_friends"></a><span class="subhead_plain_bold">Can I invite friends to join <%=app_name%>?</span>
+If you have a friend, colleague or relative that you think would be interested in participating in the <%=app_name%> , please email us at <%= mail_to email_addr("invite"), email_addr("invite"), :subject => "#{app_name} help request", :encode => "javascript" %>. In your message, please give us your friend's name and email address and tell us why you think that person should be invited (e.g.: journalistic experience, subject expertise, special interest in news, etc.). Be sure to include your current member name and email address from our first invitation, so we can verify your request. We will give them special consideration for inclusion in our next round of invitations. We plan to offer an invitation form soon, so you can invite new members yourself.</p>
+<p><hr size="1" /></p>
+
+<h2><a name="technical_questions"></a>Technical Questions</h2>
+
+<p><a name="my_computer"></a><span class="subhead_plain_bold">Can I use <%=app_name%> with my computer?</span>
+You should be able to use <%=app_name%> on any personal computer with  an online connection and a web browser. Once you receive you have registered, simply point your web browser to our site and sign-in under your member name and password. <%=app_name%> works on many types of personal computers, including Windows, Macs and Linux. As a rule of thumb, our service works best with fast connections, large screens,  recent operating systems and new browsers. See below for specific technical requirements.</p>
+
+<p><a name="technical_requirements"></a><span class="subhead_plain_bold">What are your technical requirements?</span> 
+Here are the minimum requirements to use the <%=app_name%> service:
+<ul>
+<li><strong>Online connection: 56Kb</strong>  connection or faster <em>(recommended: cable,  DSL or T1) </em></li>
+<li><strong>Large screen: XVGA</strong> (800 x 600)  or larger <em>(recommended: 1024 x 786) </em></li>
+<li><strong>Windows XP </strong>or newer</li>
+<li><strong>Mac OS X 10.5 </strong>or newer</li>
+<li><strong></strong><strong>Internet Explorer 7</strong> or newer</li>
+<li><strong>FireFox 3.0</strong> or newer</li>
+<li><strong>Safari 3.0</strong> or newer (Mac)</li>
+<li><strong>JavaScript enabled</strong> (required)</li>
+<li><strong>Cookies enabled</strong> (required)</li>
+</ul></p>
+
+<p><a name="browser_settings"></a><span class="subhead_plain_bold">What browser settings are required to use <%=app_name%>?</span>
+Please make sure JavaScript is turned on, that cookies are enbled and that your browser is up to date: Internet Explorer 7.0 (or newer), Netscape 7.1 (or newer), Mozilla 1.4 (or newer), Firefox 2.0 (or newer), Opera 7.54 (or newer), or Safari 3.0 (or newer). Note: we have had reports of minor bugs on the Mac with Internet Explorer and Firefox 1.0, so we recommend you use a different browser, like Firefox 1.5 or Safari 1.3.2, if you have that option.</p>
+
+<p><a name="different_computers"></a><span class="subhead_plain_bold">Can I visit <%=app_name%> from different computers?</span> 
+Yes, you can. Simply point your web browser to our site and sign-in under your member name and password. If you are using someone else's computer, be sure to sign out when you are done.</p>
+<p><hr size="1" /></p>
+
+<h2><a name="partnering_with_us"></a>Partnering with <%=app_name%></h2>
+
+<p><a name="displaying_ratings"></a><span class="subhead_plain_bold">Can I include <%=app_name%> ratings on my site?</span>
+Not yet, but later this year. We appreciate your interest in our service, which is designed to be included on sites like yours. But we have to launch first. Stay tuned.</p>
+
+<p><a name="writing_about_<%=app_slug%>"></a><span class="subhead_plain_bold">I am a journalist and would like to write about <%=app_name%>. Who do I talk to?</span>
+If you are a journalist and would like to blog or write about this project, please email us at <%= mail_to email_addr("press"), email_addr("press"), :subject => "#{app_name} press request", :encode => "javascript" %>.</p>
+
+<p><a name="our_content_on_<%=app_slug%>"></a><span class="subhead_plain_bold">I work for a news organization. Who do I talk to about our news content on <%=app_name%>?</span>
+Please contact us at <%= mail_to email_addr("sources"), email_addr("sources"), :subject => "#{app_name} sources info request", :encode => "javascript" %>. We're pleased to work with individual publishers to ensure your content is appropriately represented in <%=app_name%>.</p>
+
+<p><a name="media_partnerships"></a><span class="subhead_plain_bold">Is <%=app_name%> interested in partnerships with other media companies?</span>
+Absolutely. Please contact us at <%= mail_to email_addr("partners"), email_addr("partners"), :subject => "#{app_name} partnership info request", :encode => "javascript" %>. We'd be delighted to hear from you. Our business model is to license our news rating service to partners like you, so you may offer it to your own customers.</p>
+
+<p><a name="school_partnerships"></a><span class="subhead_plain_bold">Can my school use <%=app_name%> for educational purposes?</span>
+Yes, we'd love to have your school use <%=app_name%>. We are partnering with a few good journalism schools and training programs to integrate <%=app_name%> participation into their educational experience. If you are an educator and would like to use <%=app_name%> to teach journalism in your school, please contact us at <%= mail_to email_addr("schools"), email_addr("schools"), :subject => "#{app_name} school info request", :encode => "javascript" %>. We believe our service can help propagate journalistic 'best practices' and high standards to the next generation of news professionals.</p>
+<p><hr size="1" /></p>
+
+<p><a name="question_not_answered"></a><span class="subhead_plain_bold">You didn't answer my question in this FAQ! What now?</span>
+Please send your additional questions, ideas and thoughts to <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>. We appreciate your interest in <%=app_name%> and your patience during this phase.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<br />
+
+</div>
+
+</div>
+<div class="bottom"></div>
+</div>
+
+</div>

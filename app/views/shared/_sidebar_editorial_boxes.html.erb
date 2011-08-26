@@ -1,0 +1,42 @@
+<%#-- SSS FIXME: On the homepage page_obj is not null! This is because I stupidly am passing in the featured topic as the page_obj argument --%>
+<%- is_home_page ||= false -%>
+<div class="span-8 last">
+  <%- @right_column_spaces.each do |rcs| -%>
+    <%- blocks = rcs.editorial_blocks -%>
+    <%- unless blocks.empty? -%>
+      <%#-- Pick a random block among all the blocks assigned to this space --%>
+      <%- b = blocks[rand(blocks.size)] %>
+
+      <%#-- Capture the block's content --%>
+      <%- block_content = capture do %>
+         <%= case b.slug 
+           when "news_comparison"
+             !show_nc_box ? "" : render(:partial => "sidebar_widgets/news_comparison", :locals => { :is_home_page => is_home_page, :page_obj => page_obj })
+           when "group_members"
+             render :partial => "sidebar_widgets/group_members",    :locals => { :group => page_obj }
+           when "group_signup_badge"
+             render :partial => "sidebar_widgets/group_signup_badge", :locals => { :group => page_obj, :espace => rcs }
+           when "recent_reviews"
+             render :partial => "sidebar_widgets/recent_reviews",   :locals => { }
+           when "recent_reviewers"
+             render :partial => "sidebar_widgets/recent_reviewers", :locals => { }
+           when "featured_review"
+             render :partial => "sidebar_widgets/featured_review",  :locals => { :page_obj => is_home_page ? nil : page_obj, :espace => rcs }
+           else
+             render :inline => b.body
+          end -%>
+      <%- end -%>
+
+      <%#-- Render the block's content with / without header --%>
+      <%- if rcs.show_name -%>
+        <%- right_column_box :header => rcs.name do -%>
+          <%= block_content %>
+        <%- end -%>
+      <%- else -%>
+        <div>
+          <%= block_content %>
+        </div>
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+</div>

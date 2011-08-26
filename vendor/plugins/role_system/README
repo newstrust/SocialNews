@@ -1,0 +1,51 @@
+RoleSystem
+==========
+
+This documentation is IN PROGRESS, please consider this a draft.
+
+The RoleSystem grants or denies access to controllers methods based on membership to role
+groups. The group model has a context attribute, which when set to 'role'
+will appear in the member's list or roles
+
+This implementation derives some inspiration from Tim Charper's Role Requirement System
+
+Include this in your ApplicationController to make the RoleSystem available for all controllers.
+
+Example
+=======
+Here is a hypothetical example of how a model can be created to have roles.
+@group = Group.create_with(:name => 'admin', :description => 'admin role', :context => 'role')
+@member.groups << @group
+@member.roles => [:admin]
+
+
+   Used to find the current member (if any)
+   This before filter needs to be called BEFORE any role checking.
+   A good place for this would be the application.rb file.
+
+   before_filter { |controller| controller.role_player = :current_member }
+
+   grant_access_to "editor" # editors are allowed 
+   grant_access_to "admin", :only => :destroy # Editors can create but not destroy 
+
+Valid Options
+
+ * :only - Only require the role for a specific actions
+ * :except - The role is required for all but the specificed action(s)
+ * :if - A Proc or string to evaluate; a result of true means the role is required.
+ * :unless - The opposite of if
+
+Example Account Model Methods
+=======
+The Role System expects that the account model includes a has_role? method, which is used 
+to determine available roles.
+
+def roles
+  groups.find(:all, :conditions => "context = 'role'")
+end
+
+def has_role?(role)
+  roles.map{ |g| g.name.downcase.to_sym }.include?(role)
+end
+
+Copyright (c) 2008 RoleSystem Mark Daggett, released under the MIT license

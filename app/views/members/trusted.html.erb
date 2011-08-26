@@ -1,0 +1,45 @@
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'follows' %>
+<%- end -%>
+
+<% @title = "Trusted Members" -%>
+<%= content_tag(:h2, @title) unless params[:popup] %>
+<%- c = 0; odd = false -%>
+
+<p>
+<p style="margin-bottom:12px">
+Here are our most <%= help_link "trusted members","trusted_member","member" %> with recent reviews. To follow a member, click the <span class="follow_button"><img src="/images/ui/spacer.gif" width="15"></span> button. To unfollow that member, click the <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button.
+</p>
+
+<%- cm = current_member -%>
+<%- member_id = 'null' -%>
+<%#-- Display the popup from the perspective of the group --%>
+<%- if params[:group_id] -%>
+  <%- g = Group.find(params[:group_id]); m = g && g.is_social_group? ? g.sg_attrs.mynews_dummy_member : nil -%>
+  <%- if g && m && cm.has_host_privilege?(g, :staff, @local_site) -%>
+    <%- cm = m; member_id = m.id -%>
+  <%- end -%>
+<%- end -%>
+
+<%- @trusted_members.each_with_index do |member, i| -%>
+  <%- c +=1 -%><%- if c == 2 || c == 4 -%><%- odd = !odd %><%- end -%><%- if c > 3 -%><%- c=0 -%><%- end -%>
+  <div style="width: 170px; height: 40px; padding: 5px; margin:0; float: left; background-color: <%= odd ?  "#eef" : "#fff" -%>">
+    <%= link_to(image_tag(member.image ? member.image.public_filename(:thumb) : "/images/ui/silhouette_sml.jpg", :size => "40x40", :style=> "margin-right: 5px; float: left", :target=>"_blank"), member) %>
+    <div>
+      <%= h(link_to(member.name, member, :target=>"_blank")) %>
+      <%- if can_follow?(cm) && member != cm -%>
+        <% if cm.followed_members.include?(member) -%>
+          <%- fc = "unfollow_button"; title = "Unfollow #{first_name(member)}" -%>
+        <%- else -%>
+          <%- fc = "follow_button"; title = "Follow #{first_name(member)}" -%>
+        <%- end -%>
+        <%- och = params[:popup] ? "popup_parent_toggle_follow(this, $(this).parent(), #{member_id}, #{follow_item_js_opts('member', member, cm)})" : "toggle_follow(this, {type: 'member', id: #{member.id}})" -%>
+        <%#-- SSS: Important use double quotes below because the js_code above will come with single quotes.  Using single quotes will break it! --%>
+        <a href="#" class="<%=fc%>" onclick="return <%=och%>" title="<%=title%>"></a>
+      <%- end -%>
+      <br style="clear: none"/>
+      <small>Member Level: <%= format_rating(member.rating) %></small>
+    </div>
+  </div>
+<%- end -%>
+<br clear="all"/>

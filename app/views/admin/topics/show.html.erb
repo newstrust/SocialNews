@@ -1,0 +1,31 @@
+<h1 class="title use16columns"><%= h @topic.name %><%= edit_button(edit_admin_topic_path(@topic)) %><%= delete_button(admin_topic_path(@topic)) %></h1>
+<h3><%= link_to "Edit #{@local_site ? @local_site.name : 'National'} Topic Page Layout", layout_admin_topic_path(@topic) %> </h3>
+<h3><%= link_to "Preview #{@local_site ? @local_site.name : 'National'} Topic Page", topic_path(@topic), :target => "_blank" %></h3>
+<dl>
+  <dt>Image</dt>
+<%- if @topic.image -%>
+  <dd><%= image_tag @topic.image.public_filename(:column) %></dd>
+  <dd>Credit: <%= @topic.image.credit || '(empty)' %>
+  <dd>Credit Url: <%= @topic.image.credit_url || '(empty)' %>
+  </dd>
+<%- else -%>
+  <dd>(No Image)</dd>
+<%- end -%>
+  <dt>Subjects</dt>
+  <%- @topic.subjects.each do | subject | -%>
+  <dd><%= h subject.name %></dd>
+  <%- end -%>
+  <dt>Topic Status (do we list it on the full topic lists?)</dt>
+  <dd><%= h @topic.status %></dd>
+  
+  <dt>Topic Volume (# of days worth of stories to display)</dt>
+  <dd><%= h @topic.topic_volume %> <%= " - will appear in the Widgets pull-down list" if @topic.topic_volume <= 30 %></dd>
+</dl>
+<div class="use10columns inner_left">
+  <dt>Description</dt>
+  <div class="preview_source">
+  <%= h @topic.intro %>
+  </div>
+</div>
+<br />
+ <%= cancel_tag "/admin/topics" %>

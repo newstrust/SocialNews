@@ -1,0 +1,20 @@
+<% if member.twitter_connected? -%>
+  <%- short_url ||= "" -%>
+  <%- tweet ||= "" -%>
+
+  <span class="share_option tw_share_<%=tweetable_type%>">
+    <%- if show_checkbox -%>
+      <%= check_box_tag "post_on_twitter", "1", false, :onchange => "toggle_tweet_box($(this).hasClass('selected') ? 1 : 0, $('#tweet_box'), true)",
+                                                       :class => "check", 
+                                                       :style => "float:left" %>
+      <a id="twitter_button" href="#">Twitter</a>
+    <%- end -%>
+  </span>
+
+  <div id="tweet_box" style="display:none;clear:both;">
+    <div id='short_url_msg' style='font-weight:bold;color:red;display:none;'>We are fetching a short url for your post.  Please wait ...</div>
+    <input type="hidden" name="short_url" value="<%=short_url%>" id="short_url_value">
+    <div><span id='tweet_char_counter' style="float:none;" class="character_counter"></span></div>
+    <textarea name="tweet" rows="3" cols="30" class="twitter_input_box"><%=tweet%></textarea>
+  </div>
+<% end -%>

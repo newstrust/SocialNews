@@ -1,0 +1,113 @@
+<% @title = "Tools" %>
+
+<div class="help_page span-25 " style="margin-top:0px;">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior_content">
+  <h2>Our Tools</h2>
+  <p>
+    <%=app_name%> offers a wide range of tools to help you find and share good journalism.
+    Read more about our tools below &mdash; and give them a try.
+  </p>
+  
+  <div class="span-7">
+    <a name="review_tools"></a>
+    <h3 style="margin-bottom:8px">Review &amp; Posting Tools</h3>
+    <h4><%= link_to 'Review a Story', "/guides/how-to-review" %>: Help rate the news</h4>
+    <p class="quiet">
+      Help rate the news. Our web review form lets you quickly review stories on <%=app_name%>, based on quality, not just popularity.
+      We rate news and opinions based on evidence, fairness, sourcing, context and other core principles of journalism. 
+      <%= link_to 'More&nbsp;<span class="more">&raquo;</span>', "/guides/how-to-review", :style => "font-weight: normal" %>
+    </p>
+    
+    <h4><a href="/tools/bookmarklet">Bookmarklet</a>: A faster way to post stories</h4>
+    <p class="quiet">
+      Our bookmarklet is a link you can add to your browser's bookmarks toolbar. It makes it very easy to post and review a
+      story on <%=app_name%>, from any web page. Wherever you are on the web, click our bookmarklet on your browser's toolbar to
+      bring up our "Post a Story" form, with the story's title and URL already filled in. 
+      <a href="/tools/bookmarklet">More&nbsp;<span class="more">&raquo;</span></a>
+    </p>
+    
+    <h4><%= link_to "Post a Story", submit_story_url, :class => "popup_link" %>: Add new stories to <%=app_name%> </h4>
+    <br />
+    <hr/>
+    <br/>
+    
+    <a name="partner_services"></a>
+    <h3 style="margin-bottom:8px">Partner Services</h3>
+    <p>
+      This <%=app_name%> code base is an open source version of the <%= link_to "NewsTrust.net", "http://newstrust.net", :target => "_blank"%> platform. 
+      To find out more about this open source project, check this <%= link_to "blog post", "http://blog.newstrust.net/2011/08/open-source.html" %>.
+    </p>
+    <p>
+       NewsTrust also offers a range of consulting services to organizations that wish to help their communities
+       become better informed and more engaged about public issues. For example,
+       NewsTrust provides development services to help your organization adapt this
+       SocialNews code to create your own social news site. 
+       To inquire about these partner services, email NewsTrust
+       at <%= mail_to "partners@newstrust.net", "partners@newstrust.net", :encode => "javascript" %>.
+    </p>
+    <p>
+      To find out more about <%=app_name%> partners, 
+      <a href="/partners/" style="font-weight: normal">see here&nbsp;<span class="more">&raquo;</span></a>
+      To find out more about <%=app_name%>'s partner services, please
+      <%= mail_to email_addr("partners"), "email us", :subject => "#{app_name} Partner Services", :encode => "javascript" %>. 
+    </p>
+  </div>
+  
+  <div class="span-8">
+    <a name="news_feeds"></a>
+    <h3 style="margin-bottom:8px">News Feeds</h3>
+    <h4><a href="/email/">Email Feeds</a>: Get our daily and weekly newsletters</h4>
+    <p class="quiet">
+      <%=app_name%> offers daily and weekly email news feeds, which are free to all registered members. Our email feeds are
+      available in HTML or plain text format, and are sent <%=Newsletter.humanized_dispatch_time(Newsletter::DAILY, :no_sent => true)%>.
+      They feature updated selections of news and opinions from our most trusted sources, including: <em>Top Stories</em>,
+      <em>This Week's TopRated</em>, and <em>Stories for Review</em>. 
+      <a href="/email/">More&nbsp;<span class="more">&raquo;</span></a>
+    </p>
+    
+    <h4><a href="/rss/">RSS Feeds</a>: Subscribe to our hourly feeds</h4>
+    <p class="quiet">
+      <%=app_name%> offers hundreds of RSS feeds (RSS stands for "Really Simple Syndication": it's an XML-based format for
+      distributing and gathering content from many sources across the Web). Our RSS feeds are updated hourly and can be read
+      using any RSS reader. They feature our selections of news and opinions for hundreds of topics (look for the orange icons
+      throughout our site).  
+      <a href="/rss/">More&nbsp;<span class="more">&raquo;</span></a>
+    </p>
+  </div>
+  
+  <div class="span-7 last">
+    <h3 style="margin-bottom:8px">Tools for your Site</h3>
+    <h4><a href="/widgets/">Widgets</a>: Put <%=app_name%> on your site</h4>
+    <p class="quiet">
+      Add <%=app_name%> to your site! We offer hundreds of web widgets, featuring quality news and opinions on important topics
+      like <em>World</em>, <em>U.S. Congress</em> or the <em>Iraq War</em>. Anyone can add our widgets to their site in just
+      minutes. Our widgets are updated hourly and come in many different sizes and formats, to fit any web style: from
+      <em>small skyscrapers</em> to <em>full page listings</em>. 
+      <a href="/widgets/">More&nbsp;<span class="more">&raquo;</span></a>
+    </p>
+    
+    <h4><a href="/tools/buttons">Buttons</a>: Get reviewed on <%=app_name%></h4>
+    <p class="quiet">
+      Get reviewed on <%=app_name%>! Our buttons are simple graphics with links you can add to your own website or blog. <%=app_name%>
+      buttons let your readers post and review stories to <%=app_name%> from any page on your site. We offer a variety of buttons,
+      which are all very easy to install. <%=app_name%> Buttons are a great way to build trust with your readers and promote your
+      site to the <%=app_name%> community. 
+      <a href="/tools/buttons">More&nbsp;<span class="more">&raquo;</span></a>
+    </p>
+    
+    <hr/>
+    
+    <p>
+      The tools above are free to individuals and nonprofit organizations. For commercial uses, please
+      <%= mail_to email_addr("partners"), "email us", :subject => "#{app_name} Partner Services", :encode => "javascript" %>. 
+    </p>
+  </div>
+  
+</div>
+</div>
+<div class="bottom"></div>
+</div>
+</div>

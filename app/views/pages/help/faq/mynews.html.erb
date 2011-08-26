@@ -1,0 +1,260 @@
+<% @title = "MyNews FAQ" %>
+<%= "<a name=\"top\"></a>" unless params[:popup] %>
+
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior">
+
+<%= content_tag(:h1, @title + " <span class=\"small\">(Frequently Asked Questions)</span>") unless params[:popup] %>
+
+<p>Here are some frequently asked questions about <%=app_name%>'s <%= mynews_colors() %> and My Network services. Click on any question below to learn more about our service. If you still have questions, <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.
+<ul>
+<li><a href="#about_faq" class="subhead_plain_bold">About this FAQ</a></li>
+<li><a href="#about_mynews" class="subhead_plain_bold">About <em>MyNews</em></a></li>
+<li><a href="#about_mynetwork" class="subhead_plain_bold">About My Network</a></li>
+</ul>
+</p>
+<hr size="1" />
+
+<h2 style="margin-bottom:8px;"><a name="about_faq"></a>About this FAQ</h2>
+<p><a name="what_is_faq"></a><span class="subhead_plain_bold">What is this FAQ?</span>
+<br />
+This FAQ answers questions about <%=app_name%>'s <em>MyNews</em> and My Network services. If you would like more specific information about using <%=app_name%>, check our other FAQs:<br />
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for general questions about <em><%=app_name%> and our website</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>submission forms</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr>
+</table>
+
+<p><a name="suggestion_problem"></a><span class="subhead_plain_bold">How can I make a suggestion or report a problem?</span>
+To help us improve our service, please click "Feedback" in the bottom navigation bar, anywhere on our site. To email us about issues that need to be fixed right away, email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>. Thanks for your patience during our beta phase.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="about_mynews"></a>About <%= mynews_colors() %></h2>
+<p><a name="what_is_mynews"></a><span class="subhead_plain_bold">What is <em>MyNews</em>?</span>
+  <em>MyNews</em> is a personal news filter that gathers the news you care about, all in one place. This free service from <%=app_name%> lets you create your own news page by following your favorite topics, sources, friends and feeds &ndash including people you follow on Facebook and Twitter.</p>
+<p>
+Your personal <em>MyNews</em> page is updated continuously with stories recommended by your community, on issues that matter to you. It's a great way to keep up with the news, with a focus on stories that are relevant to you and people you trust.</p>
+<p>
+<em>MyNews</em> is in public beta, with more features coming soon. If you like <em>MyNews</em>, please invite your friends and spread the word in your community.</p>
+
+<p><a name="where_is_mynews"></a><span class="subhead_plain_bold">How do I find <em>MyNews</em>?</span>
+To find <em>MyNews</em>, first login on the main <%= link_to("#{app_name} site", "/sessions/new", :target => "_blank") %>. Click on "<strong>MY NEWS</strong>" in the top navbar of any page on <%=app_name%> (or on <%= mynews_colors() %> at the top right corner of any page, just below your name). This will take you to your personal <%= link_to("<em>MyNews</em> page", "/mynews" + (params[:popup] ? '" target="_blank' : "")) %>.</p>
+
+<p><a name="mynews_setup"></a><span class="subhead_plain_bold">How do I set up <em>MyNews</em>?</span>
+It only takes a few minutes to set up your personal <%= link_to("<em>MyNews</em> page", "/mynews" + (params[:popup] ? '" target="_blank' : "")) %>, by adding your interests in the right sidebar, with these four easy steps:</p>
+<ol>
+  <li>Follow your favorite <strong>topics</strong> &ndash; add subjects and topics that interest you. </li>
+  <li>Follow your trusted <strong>sources</strong> &ndash; add publications that you like. </li>
+  <li>Follow <strong>people</strong> you trust &ndash; add reviewers you find interesting. </li>
+  <li>Follow more <strong>feeds</strong> &ndash; including your own Facebook or Twitter feeds. </li>
+</ol>
+<p>Each time you add another item you want to follow, your list will update automatically to show stories that match your interests. To stop following any item in the <em>MyNews</em> sidebar, click its <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button.</p>
+<p>
+When you're done adding your favorite topics, sources, members or feeds on the right sidebar, click on "Settings" to adjust your settings and update your list, as described <a href="#adjust_settings">below</a>.</p>
+
+
+<p><a name="add_topics"></a><span class="subhead_plain_bold">How do I follow topics in <em>MyNews</em>?</span>
+You can <strong>follow</strong> subjects and topics that interest you in five different ways:</p>
+<ul>
+  <li>Pick a subject &ndash; Under "My Topics" in the right column, click any of five subject areas (World, U.S., etc.), to make stories on these subjects appear in your list.</li>
+  <li>Follow a featured topic &ndash; Click the "Follow our Featured Topics" button to view a menu of our most popular topics on <%=app_name%>, and then click on the <span class="follow_button"><img src="/images/ui/spacer.gif" width="15"></span> button next to the topic(s) you want to add to your list (you can also click on &quot;All Topics&quot; to see more topic in our pop-up menu).</li>
+  <li>Type a topic name &ndash; In the text box at the bottom of the topics panel, type the names of topics you want to follow (e.g., Obama, Health Care), to make stories on these topics appear in your list.</li>
+  <li>Follow a topic &ndash; On a subject or topic page, click on the yellow button called "Follow this topic."</li>
+</ul>
+<p>
+Each time you add a topic, your list will update automatically to show stories that match that topic. To remove a topic, click its <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button.</p>
+
+<p><a name="add_sources"></a><span class="subhead_plain_bold">How do I follow sources in <em>MyNews</em>?</span>
+You can <strong>follow</strong> sources that interest you in three different ways:</p>
+<ul>
+  <li>Pick a trusted source from our menu &ndash; Click the "Follow our Trusted Sources" button to view a menu of the top-rated sources on <%=app_name%>, then click on the <span class="follow_button"><img src="/images/ui/spacer.gif" width="15"></span> button next to the source(s) you want to add.</li>
+  <li>Type a source name &ndash; In the text box at the bottom of the sources panel, type the name of the sources whose stories you want to appear in your list. If a source is not in our database, its stories will not appear in your list (to request that a source be added to our database, email <%= mail_to email_addr("editors"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>).</li>
+  <li>Follow a source &ndash; On a source's page, click on the yellow button called "Follow this source."</li>
+</ul>
+<p>
+Each time you follow a source, your list will update automatically to show stories that match that source. To remove a source, click its <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button.</p>
+
+<p><a name="add_members"></a><span class="subhead_plain_bold">How do I follow people in <em>MyNews</em>?</span>
+You can <strong>follow</strong> <%=app_name%> members you like in a variety of ways, using the &quot;My Network&quot; panel in right the sidebar of the <em>MyNews</em> page (as well as your My Network page, see <a href="#about_mynetwork">My Network FAQ</a> below):</p>
+<ul>
+  <li>Follow your Facebook friends &ndash; Click the &quot;Find friends from Facebook&quot; button to view a menu of your Facebook friends who are also <%=app_name%> members; then click on the checkboxes next to the member(s) you want to follow. (see <a href="#authorize_facebook">Facebook FAQ</a> below)</li>
+  <li>Follow your Twitter contacts &ndash; Click the &quot;Find people I follow on Twitter&quot; button to view a menu of people you follow on Twitter who are also <%=app_name%> members; then click on the checkboxes next to the member(s) you want to follow. (see <a href="#authorize_twitter">Twitter FAQ</a> below)</li>
+  <li>Pick a trusted member from our menu &ndash; Click the "Follow our Trusted Members" button to view a menu of recent <%=app_name%> reviewers with a member level of 3 or higher, and then click on the <span class="follow_button"><img src="/images/ui/spacer.gif" width="15"></span> button next to the member(s) you want to add.</li>
+  <li>Type a member name &ndash; In the text box under "Follow our Trusted Members", type the name of the <%=app_name%> member whose stories you would like to see in your list.</li>
+  <li>Follow a member &ndash; On a member's profile page, click on the yellow button called "Follow this member."</li>
+</ul>
+<p>
+Each time you follow another member, your list will update automatically to show stories which that member has posted or reviewed. To remove a member, click its <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button.</p>
+
+<p><a name="add_feeds"></a><span class="subhead_plain_bold">How do I follow feeds in <em>MyNews</em>?</span>
+<%=app_name%> is tracking hundreds of <em><%= link_to 'smart feeds', "/help/faq/" + (params[:popup] ? "?popup=true#smart_feeds" : "#smart_feeds") %></em> which you can add to your <em>MyNews</em> page. Our <em>smart feeds</em> collect thousands of news stories each day from trusted sources, popular news sites and social networks &ndash; as well as some of the greatest minds in "link journalism." <em>MyNews</em> also lets you follow your own Facebook or Twitter feeds, to track recommended links from your friends and trusted people on these social networks.</p>
+<p>
+You can <strong>follow</strong> feeds with <em>MyNews</em> in a variety of ways:</p>
+<ul>
+  <li>Follow news from your Facebook Feed &ndash; Click the &quot;Follow news from my Facebook Feed&quot; button to fetch any news-related links recommended by your friends on Facebook. (see <a href="#authorize_facebook">Facebook FAQ</a> below)</li>
+  <li>Follow news from your Twitter Feed &ndash; Click the &quot;Follow news from my Twitter Feed&quot; button to to fetch any news-related links recommended by people you follow on Twitter. (see <a href="#authorize_twitter">Twitter FAQ</a> below)</li>
+  <li>Pick a <em>smart feed</em> from our menu &ndash; Click the "Follow our Smart Feeds" button to view a menu of all the <em>smart feeds</em> we track on <%=app_name%>; then click on the <span class="follow_button"><img src="/images/ui/spacer.gif" width="15"></span> button next to the feed(s) you want to follow. To recommend a <em>smart feed</em>, <%= mail_to email_addr("feedback"), "email us", :subject => 'Recommend a Smart Feed', :encode => "javascript" %>.</li>
+  <li>Type a feed name &ndash; In the text box provided, type the name of the feeds whose stories you want to appear in your list. To recommend a <em>smart feed</em>, <%= mail_to email_addr("feedback"), "email us", :subject => 'Recommend a Smart Feed', :encode => "javascript" %>.</li>
+  <li>Follow a feed &ndash; On a feed page, click on the yellow button called "Follow this feed."</li>
+  </ul>
+Each time you add a feed, your <em>MyNews</em> page will update automatically to show stories that match that feed. To remove a feed, click its <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button.</p>
+
+
+<p><a name="adjust_settings"></a><span class="subhead_plain_bold">How do I adjust my settings for <em>MyNews</em>?</span>
+You can easily change the settings of your own <%= link_to( "<em>MyNews</em> page", "/mynews" + (params[:popup] ? '" target="_blank' : "")) %> by clicking on the "Settings" button at the top of that page (right below the <em>MyNews</em> logo). This opens a "Settings" panel with drop-down menus and checkboxes that let you customize your list, by changing the number of stories, their story dates, story types and other settings. These settings can be edited at any time, but you need to click the yellow "Update" button to update your list.</p>
+<ul>
+<li>Number of Stories &ndash; Select how many stories you want to see in your list.</li>
+<li>Story Date &ndash; Adjust the date range of stories shown in your list. Increasing the number of days will show more stories in your list, but they may not be as current.</li>
+<li>Story Status &ndash; Change the number of reviews and overall rating a story must have to appear in your list.</li>
+<li>Source Status &ndash; Adjust the trust level a source must have for its stories to appear in your list.</li>
+<li>Source Medium &ndash; Filter your list to show only stories from a particular media type (e.g., newspapers, TV or blogs).</li>
+<li>Number of Matches &ndash; To appear in your list, a story must match at least one of the topics, sources, members or feeds you're following on <em>MyNews</em>. Raising the number of matches will display stories that better match your interests, but may result in fewer stories in your list.</li>
+<li><a name="mynews_privacy"></a>Who can see my <em>MyNews</em> page &ndash; Control who has access to your <em>MyNews</em> page and RSS feed. There are two levels of access:	
+	<ul style="margin-top:0;">
+		<li>Everyone (public) &ndash; Your <em>MyNews</em> page and <em>MyNews</em> RSS feed are avaliable to non-<%=app_name%> members. If you do not want non-members to view your <em>MyNews</em> page or RSS feed, then select Members Only.</li>
+		<li>Members Only &ndash; Only <%=app_name%> members can visit your <em>MyNews</em> page, and they have to be logged in to gain access. Your <em>MyNews</em> RSS feed will not be available. (This is the default setting.)</li>
+	</ul></li>
+<li>Hide stories I've reviewed &ndash; Remove from <em>MyNews</em> any story you've already reviewed (checked by default).</li>
+<li>Hide stories I've read &ndash; Remove from <em>MyNews</em> any story you've already read (unchecked by default).</li>
+<li>Get <em>MyNews</em> by email &ndash; Subscribe to a daily email with the first 20 stories on your <em>MyNews</em> page (unchecked by default &ndash; see more about this email in our <%= link_to 'Member FAQ', "/help/faq/member" + (params[:popup] ? "?popup=true#member_mynews_newsletter" : "#smart_feeds") %>).</li>
+</ul>
+<p>
+After you've adjusted your settings, click the yellow "Update" button to update your list.</p>
+
+<p><a name="mynews_star"></a><span class="subhead_plain_bold">How can I bookmark ("star") stories I like in <em>MyNews</em>?</span>
+To narrow down your list and keep track of stories that interest you, click on the "Star" icon next to any story title you like; then click on the "Starred" button (next to "Settings") to see only stories you've "starred" in <em>MyNews</em>. To remove a story from this "Starred" list, click on its yellow "Star" button again. To see your full list again, click on the "Starred" button one more time.</p>
+
+<p><a name="mynews_show"></a><span class="subhead_plain_bold">How can I filter the types of stories I see <em>MyNews</em>?</span>
+To narrow down the types of stories listed in <em>MyNews</em>, click the "Show" drop-down menu (next to the "Starred" button). You can filter your list in a variety of ways:</p>
+<ul>
+<li>Show only <strong>news</strong> stories</li>
+<li>Show only <strong>opinions</strong></li>
+<li>Show only stories from <strong>mainstream</strong> sources</li>
+<li>Show only stories from <strong>independent</strong> sources</li>
+</ul>
+Each time you select a different option, your <em>MyNews</em> page will update automatically to show stories that match your selection. To see all story types again, click on "All".</p>
+
+<p><a name="mynews_filter"></a><span class="subhead_plain_bold">How can I see stories for just one of my interests in <em>MyNews</em>?</span>
+To see stories that only match one of your interests, click on the "Filter" button that appears when you rollover topics, sources, people or feeds in the right sidebar (it has a little 'eye' icon, right next to the 'X' button for each button). Each time you click on a different interest, your <em>MyNews</em> page will update automatically to show only stories that match that interest. To remove that filter and see all listed stories again, click on that button one more time.</p>
+
+<p><a name="mynews_sort"></a><span class="subhead_plain_bold">How can I sort stories in <em>MyNews</em>?</span>
+To sort the stories listed in <em>MyNews</em>, click the "Sort" drop-down menu (below to the "Starred" button). You can sort your list in a variety of ways:</p>
+<ul>
+<li>Sort by <strong>relevance</strong> &ndash; This setting surfaces stories that seem most relevant for you, weighing your interests and recommendations from trusted members (default).</li>
+<li>Sort by <strong>matches</strong> &ndash; This setting surfaces stories that have the most matches with your interests.</li>
+<li>Sort by <strong>rating</strong> &ndash; This setting surfaces stories with the highest rating.</li>
+<li>Sort by <strong>date</strong> &ndash; This setting surfaces the most recent stories in your list.</li>
+</ul>
+Each time you select a different option, your <em>MyNews</em> page will be automatically sorted based on your selection.</p>
+
+<p><a name="more_info"></a><span class="subhead_plain_bold">How can I get more info about stories in <em>MyNews</em>?</span>
+To get more info about stories in your list, click "Show Info" under "Settings." If a story's source, topic, reviewer or feed matches one on your interests, it will be <span class="following">highlighted in green</span>. You will also see a collection of icons for each match. To hide this story info, click on "Hide info." You can view the additional info for a specific story by clicking the "matches" box in the bottom right corner of each story on your <em>MyNews</em> page.</p>
+
+<p><a name="authorize_facebook"></a><span class="subhead_plain_bold">How can I authorize <%=app_name%> to follow friends and news from my Facebook Feed?</span>
+To follow people and/or news items from your Facebook Feed, your <%=app_name%> and Facebook accounts need to be <%= link_to 'connected', "/help/" + (params[:popup] ? "?popup=true#facebook" : "#smart_feeds") %>. If you have not yet connected your account to Facebook, you will get a chance to do this when you click on one of these buttons in <em>MyNews</em>:</p>
+<ul>
+<li>Click on "Find friends from Facebook" in <em>MyNews</em> to get a list of Facebook friends you can follow on <%=app_name%> (see <a href="#about_mynetwork">My Network FAQ</a>).</li>
+ <li>Click on "Follow news from my Facebook Feed" in <em>MyNews</em> to track news links recommended by your friends on Facebook (see <a href="#add_feeds">My Feeds FAQ</a> above).</li>
+ </ul>
+<p>
+You can also <%= link_to 'connect', "/help/" + (params[:popup] ? "?popup=true#facebook" : "#smart_feeds") %> to Facebook by clicking on 'Facebook Connect' when you sign up, log in, or go to <%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>.</p>
+<p>Once you are connected and have authorized <%=app_name%> to transfer data from Facebook, we carefully restrict how that data is used, to protect your privacy and that of your friends &ndash and to comply with Facebook's terms of service. Here's how this works:</p>
+<ul>
+ <li>You can only follow friends from Facebook who are already <%=app_name%> members.</li>
+ <li>We only feature news-related links from your Facebook Feed &ndash and do not show names or comments from your friends.</li>
+ <li>Your Facebook Feed is only visible to you on <%=app_name%>, and we only show that feed for a limited time. </li>
+ <li>We do not store anything in our database other than web links from your Facebook Feed. </li>
+</ul>
+
+<p>To stop data transfers from Facebook, go to <%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %> and unlink your Facebook account from <%=app_name%>.</p>
+
+
+<p><a name="authorize_twitter"></a><span class="subhead_plain_bold">How can I authorize <%=app_name%> to follow people and news from my Twitter Feed?</span>
+To follow people and/or news items from your Twitter Feed, your <%=app_name%> and Twitter accounts need to be connected. If you have not yet connected your account to Twitter, you will get a chance to do this when you click on one of these buttons in <em>MyNews</em>:</p>
+<ul>
+<li>Click on "Find people I follow on Twitter" in <em>MyNews</em> to get a list of people you follow on Twitter who are also <%=app_name%> members (see <a href="#about_mynetwork">My Network FAQ</a>).</li>
+ <li>Click on "Follow news from my Twitter Feed" in <em>MyNews</em> to track news links recommended by people you follow on Twitter (see <a href="#add_feeds">My Feeds FAQ</a> above).</li>
+</ul>
+<p>
+You can also click on "Twitter Connect" in <%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %> to login to Twitter and connect it to <%=app_name%>. Once you are connected and have authorized <%=app_name%> to transfer data from Twitter, we carefully restrict how that data is used, to protect your privacy and that of people you follow &ndash and to comply with Twitter's terms of service. Here's how this works:</p>
+<ul>
+<li>You can only follow people from Twitter who are already <%=app_name%> members.</li>
+ <li>We only feature news-related links from your Twitter Feed &ndash and do not show names or comments from people you follow on Twitter.</li>
+ <li>Your Twitter Feed is only visible to you on <%=app_name%>, and we only show that feed for a limited time. </li>
+ <li>We do not store anything in our database other than web links from your Twitter Feed. </li>
+</ul>
+
+<p>To stop data transfers from Twitter, go to <%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %> and unlink your Twitter account from <%=app_name%>.</p>
+
+<p><a name="feedback"></a><span class="subhead_plain_bold">How can I share feedback about <em>MyNews</em>?</span>
+Email us at <%= mail_to email_addr("feedback"), "feedback", :subject => "#{app_name} MyNews Feedback", :encode => "javascript" %>. To report a bug, please fill in our <%= link_to( "bug report form", "https://spreadsheets.google.com/viewform?formkey=dF9ZTnljOWs0YTZkMTFDZkwtTFVmQlE6MA", :target => "_blank" ) %>.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="about_mynetwork"></a>About My Network</h2>
+
+<p><a name="what_is_mynetwork"></a><span class="subhead_plain_bold">What is My Network?</span>
+My Network is the group of people you follow on <%=app_name%>. You can keep track of them, along with your own followers, on your special <%= link_to 'Network page', "/mynetwork" + (params[:popup] ? '" target="_blank' : "") %>.</p>
+<p>
+Your Network page includes the following sections:</p>
+<ul>
+  <li><strong>Network Activity</strong> &ndash; A list of the most recent reviews, posts and likes from members you follow, sorted by date.</li>
+  <li><strong>Following</strong> &ndash; A list of all <%=app_name%> members you follow, sorted alphabetically (includes their latest activity).</li>
+  <li><strong>Followers</strong> &ndash; A list of all <%=app_name%> members who follow you, sorted alphabetically (includes their latest activity).</li>
+  <li><strong>Expand your Network</strong> &ndash; A panel in the right sidebar that lets you follow (or unfollow) more <%=app_name%> members.</li>
+</ul>
+<p>Click on the tabs for Network Activity, Following or Followers to view these sections in the main column of this page.</p>
+
+
+<p><a name="where_is_mynetwork"></a><span class="subhead_plain_bold">How do I find my Network page?</span>
+To find your Network page, first login on the main <%= link_to("#{app_name} site", "/sessions/new", :target => "_blank" ) %>. Click on "My Network" at the top right corner of any <%=app_name%> page, right below your name. This will take you to your personal <%= link_to 'Network page', "/mynetwork" + (params[:popup] ? '" target="_blank' : "") %>. You can also click on "My Network" on either your member profile or <em>MyNews</em> page.</p>
+
+
+<p><a name="add_members_mynetwork"></a><span class="subhead_plain_bold">How do I add people to My Network?</span>
+To expand your network and follow more <%=app_name%> members, use the &quot;Expand My Network&quot; panel in the right sidebar of the My Network page. It works just like the My Network panel in <em>MyNews</em> (see <a href="#add_members">My Network FAQ</a> above).</p>
+<p>The &quot;Expand My Network&quot; panel gives you four different ways to add people to your network:</p>
+<ul>
+  <li>Follow your Facebook friends &ndash; Click the &quot;Find friends from Facebook&quot; button to view a menu of your Facebook friends who are also <%=app_name%> members; then click on the checkboxes next to the member(s) you want to follow. (see <a href="#authorize_facebook">Facebook FAQ</a> above)</li>
+  <li>Follow your Twitter contacts &ndash; Click the &quot;Find people I follow on Twitter&quot; button to view a menu of people you follow on Twitter who are also <%=app_name%> members; then click on the checkboxes next to the member(s) you want to follow. (see <a href="#authorize_twitter">Twitter FAQ</a> above)</li>
+  <li>Pick a trusted member from our menu &ndash; Click the "Follow our Trusted Members" button to view a menu of recent <%=app_name%> reviewers with a member level of 3 or higher, and then click on the <span class="follow_button"><img src="/images/ui/spacer.gif" width="15"></span> button next to the member(s) you want to add.</li>
+  <li>Type a member name &ndash; In the text box under "Follow our Trusted Members", type the name of the <%=app_name%> member whose stories you would like to see in your list.</li>
+</ul>
+
+<p><a name="remove_members_mynetwork"></a><span class="subhead_plain_bold">How do I remove people from My Network?</span>
+To stop following a member listed in My Network, simply click its <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button. You can do this either in the "Network Activity," "Following" or "Followers" sections &ndash or in the panel in the right sidebar of the My Network page.</p>
+
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span><p><a name="question_not_answered"></a><span class="subhead_plain_bold">You didn't answer my question in this FAQ! What now?</span>
+Please <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %> your additional questions, ideas and thoughts. We appreciate your interest in <%=app_name%> and your patience during this beta phase.<br />
+
+<br />If you already are a member or a host, and would like more information about using <%=app_name%>, check our other help FAQs:<br /><br />
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for general questions about <em><%=app_name%> and our website</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>submission forms</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr>
+</table>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<br />
+
+</div>
+
+</div>
+<div class="bottom"></div>
+</div>
+
+</div>

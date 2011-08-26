@@ -1,0 +1,41 @@
+<% @title = "Edit #{@source.name}" %>
+
+<div class="span-6" style="float:right">
+	<% if @source.image %>
+		<% if @source.url.blank? %>
+			<%= image_tag(@source.image.public_filename(:column), :alt => @source.name, :title => @source.name) %>
+		<% else %>
+			<%= link_to(image_tag(@source.image.public_filename(:column), :alt => @source.name, :title => @source.name), 
+						@source.url, :target => "_blank") %>
+		<% end %>
+		<br />
+	<% end %>
+		<br />
+	<%= ratings_box_line :rating_name => "Overall Rating:",
+				:processable => @source,
+				:use_processed_ratings => true,
+				:rating_value => @source.rating,
+				:hide_trustometer_message => @source.hide_rating(@local_site) ? "no rating" : nil,
+				:heading_class => "headRating",
+				:trustometer_img_options => {:size => :large}.merge(@source.hide_rating(@local_site) ? {:color => :gray} : {}) %>
+		<div class="editorial_gray" style="text-align:right; margin-right: 10px; clear: both"><%= "from " + plural(@source.story_reviews_count, "review") %></div>				
+</div>
+<div class="story_listing_detail edit span-16">
+  <span class="edit_story">Edit Source Info
+<% admin_only_content(current_member) do %>
+  &ndash; <span style="font-size:80%">Jump to <%= link_to 'Admin Source Page Edit Form', edit_admin_source_path(@source) %></span>
+<%- end -%>
+</span>
+<span class="subhead_small"><%= @source.name %></span>
+<span class="explanation"><%= "- #{link_to("Website", @source.url, :class => "external", :target => "_blank")}" unless @source.url.blank? %>
+- <%= link_to "View Source Info", @source, :target => "_blank" %></span>
+<div class="explanation">
+Please check all summary fields below for accuracy. Edit carefully, as any changes you make will be featured first in <%=app_name%> reports.
+Click <a href="#bottom">Submit</a> when you are done. For edit tips, click on any <%= help_icon "", "host" %>.
+For more help, check our <%= help_link "FAQ","","host" %>.</span>
+</div>
+
+
+<%= render :partial => 'form' %>
+
+</div>

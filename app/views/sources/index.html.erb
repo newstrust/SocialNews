@@ -1,0 +1,106 @@
+<%- @title = "Sources" -%>
+
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag "jquery/jquery.masonry.min.js" -%>
+<%- end -%>
+
+<%- @inline_js ||= "" -%>
+<%- @inline_js += capture do -%>
+<script type="text/javascript">
+   $(document).ready(function() {
+     $('#mason').masonry({ singleMode: true, itemSelector: '.box' });
+   });
+</script>
+<%- end -%>
+
+<div class="overview_page span-24">
+  <div class="overview_page_info">
+    <h2><%=@title%></h2>
+  <%- if @local_site -%>
+    <%= link_to '<img src="images/ntbadges/rate_your_sources_badge_newspaper.gif" style="float:right;margin-left:15px;">', rate_sources_sources_path %>
+    <p>
+      <%=app_name%> tracks dozens of news sources covering <%=@local_site.name %>
+      to help identify trustworthy news providers.  Here are some of the sources
+      we have rated so far, listed by medium.  Source ratings below are based on
+      reviews from members like you.  Can you help add more ratings?
+    </p>
+  <%- else -%>
+    <p>
+      <%=app_name%> tracks hundreds mainstream and independent
+      news sources, to help identify trustworthy news providers from around the world. 
+      Here are our most <strong>trusted sources</strong> this year,
+      listed alphabetically by category, and updated 24x7. Publications listed here consistently received
+      above average ratings from our members and had the most reviews in the past 365 days (<%= link_to( "see methodology", "#methodology" ) %> below).<br />
+    </p>
+  <%- end -%>
+    <p>
+      <%= link_to "Rate these sources", rate_sources_sources_path %> all on one page -- 
+      or click on any source below to <%= help_link("review it", "review_source", "reviewer")%>.
+      To see unrated sources, click on the 'More' links below.
+    </p>
+  </div>
+
+  <div id="mason" class="overview_sources">
+  <%- Source.each_source_medium do |key, medium| -%>
+    <div class="column box">
+      <div class="column_header">
+        <h3><%= link_to medium["name"] + " &raquo;", list_sources_path(:medium => key) %></h3>
+      </div>
+      <%- srcs = @sources[key][0..14] -%>
+      <%- if srcs.blank? -%>
+         No sources rated for this category yet.
+      <%- else -%>
+        <%- srcs.each do |source| -%>
+          <div class="overview_entry">
+            <%= link_to(trustometer_img(source.rating, {}, {:style => "float: right"}), source_path(source)) %>
+            <%= link_to_source(source) %>
+          </div>
+        <%- end -%>
+      <%- end -%>
+      <div class="more_sources">
+        <%= link_to("More &raquo;", list_sources_url(:medium => key), :class => "more") %>
+        <%= help_link("How we pick these sources", "how_we_pick_sources", "", :class => "editorial_gray") %>
+      </div>
+    </div>
+  <%- end -%>
+  </div>
+
+<%- if @local_site.nil? -%>
+  <div class="end_note">
+    Please note that all source ratings on our site are still considered
+    <%= help_link "preliminary data", "source_ratings" %> during this beta stage.
+    As more reviews come in, we'll add more trusted sources to this page.
+    For more info, check our <%= help_link "FAQ", "what_is_source_listing", "report" %>.
+    To rate a source, review any of its stories - or <%= link_to "post a new story", "/submit", :class => "popup_link" %> from that source.
+  </div>
+    
+  <div class="footnotes"><a name="methodology"></a>
+    <%- disclosable :show_link_text => "<span class='more'><h4>Methodology</h4></span>", 
+                    :hide_link_text => "<span class='less'>Hide Methodology</span>" do -%>
+      <h4>Methodology</h4>
+      <p style="margin-bottom:4px;">
+      The top sources above were selected based on their average story ratings for each category, following these criteria:<br />
+      <br />
+      <strong>1. Date Range</strong><br />
+      The sources listed above are rated based on stories dated in the past 365 days.<br />
+      <br />
+      <strong>2. Minimum Source Ratings</strong><br />
+      To qualify for selection, all sources on this page require a minimum source rating of 3.0 overall. Current source ratings can be found on their source profiles.<br />
+      <br />
+      <strong>3. Minimum Number of Rated Stories</strong><br />
+      Sources featured on this page require a minimum number of rated stories to be selected. Required minimums vary for each category, to spotlight the most reviewed sources, while insuring source diversity. Here are the minimum thresholds used for each category:</p>
+      
+      <p style="margin-left:20px;">
+      <%- Source.each_source_medium do |key, medium| -%>
+        <%- listing_constants = Source.source_medium_info(key)["listing_options"] -%>
+          <strong><%=medium["name"]%></strong>
+          <span>= min <%=listing_constants["min_stories"]%> rated stories OR min <%=listing_constants["min_story_reviews"]%> reviews</span>
+          <br />
+      <%- end -%>
+      </p>
+      <p><strong>4. Preliminary Data</strong><br />
+      Please note that all source ratings on our site are still considered <%= help_link("preliminary data","source_ratings","") %> during this beta stage. This preliminary list is presented for demonstration purposes only, and <%=app_name%> makes no claims that its source ratings and rankings represent an accurate, comprehensive or definitive measurement of the work quality of the sources listed here.</p>
+    <%- end -%>
+  </div>
+<%- end -%>
+</div>

@@ -1,0 +1,13 @@
+<h1>Register new OpenID for account</h1>
+
+<%= error_messages_for :openid %>
+
+<% form_for :openid, :url => member_openids_url(@member) do |f| %>
+  <p>
+    <label>OpenID:</label>
+    <%= text_field_tag :openid_url %>
+  </p>
+  <p>
+    <%= submit_tag 'Add', :disable_with => "Adding&hellip;" %>
+  </p>
+<% end %>

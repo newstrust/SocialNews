@@ -1,0 +1,22 @@
+<% @title = "Mass tag assignment" %>
+
+<h1>Mass Tag Assignment</h1>
+<p>Enter the actual tags rather than the slugs (e.g., Global Warming instead of global_warming)</p><br />
+
+
+<form method="post" action="<%=admin_add_mass_tags_url%>">
+<input class="hidden" name="authenticity_token" type="hidden" value=<%=form_authenticity_token.inspect%> />
+<label> <strong>Source Tag NAME </strong>(all stories with this tag will be selected): </label> <br/>
+<input type="text" name="source_tag" size="20"> <br/>
+
+<label> <strong>Target Tag NAME </strong>(all selected stories will get this tag): </label> <br/>
+<input type="text" name="target_tag" size="20"> <br/>
+
+<label> <strong>OPTIONAL Start date (yyyy-mm-dd) </strong>(only stories on or after this date will be selected): </label> <br/>
+<input type="text" name="start_date" size="20"> <br/>
+
+<label> <strong>OPTIONAL End date (yyyy-mm-dd) </strong>(only stories on or before this date will be selected): </label> <br/>
+<input type="text" name="end_date" size="20"> <br/>
+
+<input type="submit" class="submit" name="submit" value="Tag!"> <%= cancel_tag "/admin/tags" %>
+</form>

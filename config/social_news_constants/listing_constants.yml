@@ -1,0 +1,91 @@
+# IMPORTANT: A ratings recalc may be required if certain of these min_*_for_*_rating values are modified
+# once the database has been populated with stories, reviews, and sources
+
+# A story is considered a top story only if has at least this rating 
+# NOTE: Changing this requires a code audit to verify that this value has not been hardcoded
+min_rating_for_top_story: 3.0
+
+# A story is considered rated only if it has at least these many reviews
+# NOTE: Changing this requires a code audit to verify that this value has not been hardcoded
+min_reviews_for_story_rating: 3
+
+# A source is considered rated if it has at least these many rated stories
+min_stories_for_source_rating: 3
+
+# A source is considered rated if it has at least these many reviews
+min_reviews_for_source_rating: 10
+
+# An editor can set the editorial priority of a story to this value or higher and override other requirements that would
+# have to be satisfied if a story ought to be considered for a 'most_recent' story listing
+min_editorial_priority_for_most_recent: 3
+
+# If a story belongs to a source with this or higher editorial priority, it is automatically a candidate for most recent story listing
+min_source_editorial_priority_for_most_recent: 4  
+
+# An editor can set the editorial priority of a story to this value or higher to filter out stories for listing
+# in the 'for_review' story listing
+# have to be satisfied if a story ought to be considered for a most_recent story listing
+min_editorial_priority_for_review: 3
+
+# Minimum rating for a source for it to be considered trusted
+min_trusted_source_rating: 3.0
+
+high_volume_topic_days: 7
+high_volume_subject_days: 7
+
+featured_reviews:
+  min_comment_length: 50
+  min_member_rating: 3.0
+  min_ratings_count: 5
+  min_meta_rating: 3.0
+
+widgets:
+  stories_per_widget        : 10
+  stories_per_legacy_widget : 10
+
+# How many stories to display for a mainstream or an independent source?
+# The values are different for high-volume and low-volume topics.
+landing_pages:
+  num_high_volume_msm       : 6
+  num_high_volume_ind       : 4
+  num_low_volume_msm        : 3
+  num_low_volume_ind        : 2
+
+# When the feed fetcher runs and fetches stories, it also assigns a score to every story
+# that determines how noteworthy this story is.
+#
+# Increase this value when you have a lot of feeds in your system and if you are
+# fetching metadata from different APIs and the stories are likely to be popular
+# and shared on social networks which you can query for getting popularity data
+# (diggs, tweets, +1s, fb shares).  Decrease this value if you have very few feeds
+# in your system, the stories in your feeds are not likely to be shared a lot.
+queue_status_min_score: 0.5
+
+# This setting below determines when an auto-fetched story is considered for listing
+# on feed pages.  You will have to tweak this score to figure out what works best 
+# in your setup.  About 40%-50% of 'queue_status_min_score' is a good value to start with.
+todays_feeds_min_score: 0.2
+
+# How many stories to display for a mainstream or an independent source
+# for each section of the newletter.
+newsletter:
+  num_most_recent_news_msm      : 3
+  num_most_recent_news_ind      : 2
+  num_most_recent_opinion_msm   : 3
+  num_most_recent_opinion_ind   : 2
+  num_most_trusted_news_msm     : 3
+  num_most_trusted_news_ind     : 2
+  num_most_trusted_opinion_msm  : 3
+  num_most_trusted_opinion_ind  : 2
+#  num_for_review_news_msm       : 6
+#  num_for_review_news_ind       : 4
+#  num_for_review_opinion_msm    : 6
+#  num_for_review_opinion_ind    : 4
+  sending_batch_size            : 50
+  max_line_length               : 72  # How many characters per line in the plain-text newsletter?
+  weekly_delivery_display_text  : "Wednesday afternoon" # For use in instruction pages, etc.
+  max_stale_stories_age_in_mins : 120                   # Stories should have been refreshed within a 2-hour interval of dispatch time
+
+# SEO Meta Tag defaults
+meta_description: "your meta-description text here"
+meta_tags:        "meta tags here"

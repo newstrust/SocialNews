@@ -1,0 +1,32 @@
+1. log onto nt_app_master; 
+   rename logs to master.*
+   scp nginx_logs/* capistrano@media.newstrust.net:prod-stats
+
+2. log onto nt_app_slave; 
+   rename logs to slave.*
+   scp nginx_logs/* capistrano@media.newstrust.net:prod-stats
+
+3. log onto capistrano@media.newstrust.net
+   cd prod-bin
+   Merge the json & rss log entries into a single file
+   (gunzip < master.json.access.* >> json.access.MONTH.log
+    gunzip < slave.json.access.* >> json.access.MONTH.log
+    gunzip < master.rss.access.* >> rss.access.MONTH.log
+    gunzip < slave.rss.access.* >> rss.access.MONTH.log)
+   run.visitors.sh MONTH
+   gzip logs and archive them away
+
+#1. log onto nt_app_master; 
+#   cd bin
+#   edit process.logs.rb and udpate year, date & month to set to last day of the month for which you are generating stats
+#   run process.logs.rb ("ruby process.logs.rb")
+#
+#2. log onto nt_app_slave; 
+#   cd bin
+#   edit process.logs.rb and udpate year, date & month to set to last day of the month for which you are generating stats
+#   run process.logs.rb ("ruby process.logs.rb")
+#
+#3. log onto prod1; 
+#   run run.visitors.sh ... pass month as a param (ex: sh run.visitors.sh 11 OR sh run.visitors.sh 01) to process logs for that month
+#   note down output (#widget pageviews on spreadsheet, #widget visitors on spreadsheet); 
+#   open the html file (link in the output from the script above) and note the # of unique visitors from the html file (# widget visits on spreadsheet)

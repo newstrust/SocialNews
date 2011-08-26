@@ -1,0 +1,35 @@
+<script type="text/javascript" charset="utf-8">
+  var FORMATTED_SEARCH_ADMIN_MEMBERS_PATH = '<%= search_admin_members_path(:format => :js) %>';
+  var FORMATTED_ADMIN_GROUP_MEMBERS_PATH = '<%= admin_group_members_path(@group, :format => :js) %>';
+</script>
+
+<%- return_to = params[:return_to] %>
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'admin/groups'%>
+<%- end -%>
+
+<h1>Edit: <%= @group.name %> <%= @group.is_role? ? 'Role' : 'Group' %><%= " - #{link_to("Preview Group Page", group_url(@group), :target => "_blank")}" if @group.is_social_group? %></h1>
+
+<%= error_messages_for :group %>
+
+<div class="<%=@group.is_social_group? ? "use16columns" : "use10columns"%> inner_left">
+  <% form_for :group, :url => admin_group_path(@group), :html => { :method => :put, :multipart => true } do |f| -%>
+    <%- if @group.is_social_group? -%>
+      <%= render :partial => 'social_group_form', :locals => { :f => f }%>
+    <%- else -%>
+      <%= render :partial => 'form', :locals => { :f => f }%>
+      <%= form_buttons("Update", return_to=="show" ? admin_group_path(@group) : admin_groups_path) %>
+    <%- end -%>
+  <%- end -%>
+</div>
+
+<%- if !@group.is_social_group? -%>
+<div class="use10columns inner_left fieldset" style="clear:both;">
+  <h5>Member Search</h5>
+
+  <%= render :partial => "admin/members/member_lookup", :locals => {
+    :members => @group.members,
+    :add_url => join_admin_group_members_path(@group, :format => :js),
+    :delete_base_url => admin_group_members_path(@group, :format => :js)} %>
+</div>
+<% end -%>

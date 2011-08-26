@@ -1,0 +1,282 @@
+<%- @title = @source.name -%>
+<%- @meta_keywords =  @title -%>
+<%- @meta_description = @source.name + " -" -%>
+<%- unless @source.source_text.blank? -%>
+  <%- @meta_description += " " + StringHelpers.truncate_on_word_boundary(@source.source_text, 100, 200, false)  -%>
+<%- end -%>
+
+<%- rating_stats = @local_site ? @source.source_stats.find_by_local_site_id(@local_site.id) : @source -%>
+
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'listings' %>
+  <%= javascript_include_tag 'follows' %>
+  <%= javascript_include_tag "#{@local_site ? "#{@local_site.slug}." : ""}topic_taxonomy.json" %>
+  <%= javascript_include_tag 'source_review' %>
+  <%= javascript_include_tag "jquery/source_review_topic_autocomplete" %>
+<%- end -%>
+
+<%- @inline_js ||= "" -%>
+<%- @inline_js += capture do -%>
+  <script type="text/javascript">
+    $(document).ready(function() {
+  <%#-- Need fixup to get around fragment caching! --%>
+  <%- if logged_in? -%>
+      var button = $('a#follow_button_to_fixup');
+      button.attr('class', '<%= current_member.followed_sources.include?(@source) ? "unfollow_source" : "follow_source"%>');
+      button.click(function() {return toggle_follow(button, {type: 'source', id: <%=@source.id%>})});
+      button.show();
+  <%- end -%>
+    });
+  </script>
+<%- end -%>
+
+<%#------ Tab settings -------%>
+<%- tabs = [] -%>
+<%- tab_opts = { :class => "", :switch_callback => "patch_cached_stories" } -%>
+
+<%#-- add the new stories tab for sources that have auto-fetchable feeds -%>
+<%- tabs << tab_opts.merge({:name => "New Stories",  :type => :new_stories }) if !@source.active_feeds.blank? -%>
+<%- tabs += [ tab_opts.merge({:name => "Most Recent",  :type => :most_recent  }),
+              tab_opts.merge({:name => "Most Trusted", :type => :most_trusted }),
+            # SSS: turning this off for now since it will take time to change display of this listing tab
+            # tab_opts.merge({:name => "Story Reviews", :type => :recent_reviews }), 
+              tab_opts.merge({:name => "Source Reviews", :type => :source_reviews, :switch_callback => "activate_review_form" }) ] -%>
+
+<script type="text/javascript">
+  <%- tabs.each do |t| -%>
+  _tabs_empty["<%=t[:type].to_s%>"] = true;
+  <%- end -%>
+  _tabs_empty["<%=tabs[0][:type].to_s%>"] = false;
+</script>
+
+<div class="story_listing_detail span-16">
+
+<%#----------------- Top Area -----------------%>
+<%- cache @cached_top_area_fragment_name do -%>
+  <div class="topic_source clearfix">
+    <%- if @source.image && @source.source_logo_status == "list" -%>
+      <%- source_image_tag = image_tag(@source.image.public_filename(:column), :alt => @source.name, :title => @source.name) -%>
+      <%- if @source.url.blank? -%>
+        <%= content_tag(:div, source_image_tag, :class => "overview_image") %>
+      <%- else -%>
+        <%= link_to(source_image_tag, @source.url, :class => "overview_image", :target => "_blank") %>
+      <%- end -%>
+    <%- end -%>
+
+    <h2 class="bottom">
+      <%= @source.name %>
+      <%- if @source.status != "list" -%>
+        <span class="quiet small"><%= display_status(@source.status) %></span>
+      <%- end -%>
+    </h2>
+
+    <p>
+      <%= "#{link_to humanize_token_direct("source_media", @source.primary_medium), list_sources_url(:medium => @source.primary_medium)} | " unless @source.primary_medium.blank? %>
+      <%= humanize_token(@source, :ownership) %>
+      <%- unless @source.hosts.empty? -%>
+        <br/>
+        <strong>Hosted by</strong> <%= @source.hosts.collect{|h| link_to(h.name, h)}.join(", ") %><%= help_icon("what_is_a_host", "host") %>
+      <%- end -%>
+    </p>
+
+    <p>
+    <%= StringHelpers.truncate_on_word_boundary(@source.source_text, 0, 600, true) if @source.source_text %>
+    <%- if @source.description_link_address -%>
+      <%= link_to 'More&nbsp;&raquo;', @source.description_link_address, :style => "font-weight: normal" %>
+      <span class="editorial_gray" style="white-space:nowrap";>
+        (<%= help_link "Source", "source_description", "report", :class => "editorial_gray" %>:
+      <%= link_to (@source.description_link_source_name || "check source"),
+        @source.description_link_address %>)</span>
+    </p>
+    <%- end -%>
+  </div>
+
+  <%- more_info_box do -%>
+    <%- profile_section "Overview", :help_icon => help_icon("source_tags", "report") do -%>
+      <%#= profile_line @source, "source_other_tags", :humanized_key => "Categories" -%>
+      <%= render(:partial => 'shared/profile_line', :locals => {
+              :humanized_key => "Media",
+              :value => @source.source_media.collect{|sm| link_to(Source.source_medium_name(sm.medium), list_sources_url(:medium => sm.medium))}.join(", ")}) %>
+
+      <%= profile_line @source, ["source_audience_size", "source_language"], :humanized_key => "Audience",
+          :separator => " ",
+          :formatter => :format_source_audience %>
+
+      <%= profile_line @source, "source_scope", :humanized_key => "Scope", :humanize_token => true %>
+      <%= profile_line @source, "political_viewpoint", :humanize_token => true %>
+      <%= profile_line @source, ["source_owners", "source_organization_type", "source_managers"], :humanized_key => "Owners",
+          :separator => " | ",
+          :formatter => :format_source_owners %>
+    <%- end -%>
+
+    <%- profile_section "Research", :help_icon => help_icon("source_research", "report") do -%>
+      <%- unless @source.related_sources_reciprocal.empty? -%>
+        <%= render(:partial => 'shared/profile_line', :locals => {
+          :humanized_key => "Related Publications",
+          :value => link_to_sources(@source.related_sources_reciprocal)}) -%>
+      <%- end -%>
+
+      <%= profile_line @source, ["source_web_contact_address", "source_public_email_address", "source_public_phone_number", 
+          "source_representative_name", "source_representative_email", "source_representative_phone" ], :humanized_key => "Contact Info",
+          :formatter => :format_contact_info %>
+      <%= profile_line @source, ["source_address1", "source_address2", "source_city", "source_state", "source_zip", "source_country"],
+          :humanized_key => "Location",
+          :formatter => :format_source_location %>
+    <%- end -%>
+
+    <%- profile_section "Editorial", :help_icon => help_icon("source_editorial", "report") do -%>
+      <%#- TODO: list all reviewers of this source.- %>
+      <%#- TODO: list all members who edited this page, not just one. Member should be a link to their profile page.- %>
+      <%- if @source.edited_by_member -%>
+        <%- edited_by_link = link_to @source.edited_by_member.display_name, @source.edited_by_member -%>
+        <%= render(:partial => 'shared/profile_line', :locals => {
+          :humanized_key => "Edited By", 
+          :value => edited_by_link }) %>
+      <%- end -%>
+      <%- if @source.last_edited_at -%>
+        <%= render(:partial => 'shared/profile_line', :locals => {
+          :humanized_key => "Last Edit", 
+          :value =>  @source.last_edited_at.strftime('%b %e, %Y - %l:%M %p %Z') }) %>
+      <%- end -%>
+      <%- if logged_in? and current_member.has_role_or_above?(:host) # only hosts and above should see these notes and editorial priority setting -%>
+        <%= profile_line @source, "editorial_priority", :humanized_key => "Source Editorial Priority", :humanize_token => true %>
+      <%- end -%>
+    <%- end -%>
+
+    <%- profile_section "Story Stats" do -%>
+      <%= aggregate_info_profile_line @source, "top_topics",  :formatter => :format_aggregate_info, :link_it => true, :model => Topic -%>
+      <%= aggregate_info_profile_line @source, "top_authors", :formatter => :format_aggregate_info, :link_it => false -%>
+      <%= aggregate_info_profile_line @source, "top_formats", :formatter => :format_aggregate_info, :link_it => false -%>
+    <%- end -%>
+  <%- end -%>
+
+  <%- tools_box :page_type => :source, :object => @source, :comments_link => @source.allow_comments?, :edit_privs => logged_in? && current_member.has_role_or_above?(:host), :edit_link => edit_source_url(@source), :edit_title => "Edit this source's information" do -%>
+    <%- if can_follow? -%>
+      <a style='display:none' id="follow_button_to_fixup" href="#"></a>
+    <%- end -%>
+    <%- unless @source.url.blank? -%>
+      <%= link_to "View", @source.url, :class => "view", :target => '_blank', :title => "Open this source's website in a new window" %>
+    <%- end -%>
+  <%- end -%>
+<%- end -%> <%# -- top area cached fragment -- %>
+
+  <div style="clear:both;height:15px">&nbsp;</div>
+
+  <%#----------------- First tab content -------------------%>
+  <%- tabs[0][:content] = capture do -%>
+    <%= render :partial => "listing", :locals => {:listing_type => tabs[0][:type] } %>
+  <%- end -%>
+
+  <%#----------------- Placeholder content for rest of the tabs -----------------%>
+  <%- tabs[1..tabs.length].each do |tab| -%>
+    <%- tab[:content] = "<div>&nbsp;</div>" -%> <%#- placeholder--%>
+  <%- end -%>
+
+  <%#----------------- Render tabs -----------------%>
+  <%= render :partial => "shared/tabbed_column", :locals => {:tabs => tabs} %>
+
+  <%#----------------- comments -----------------%>
+  <%- if @source.allow_comments? -%>
+    <div class="span-16 white_box" style="clear:both"><a name="comments"></a>
+      <div class="top"></div>
+      <div class="wrapper comments">
+        <div class="header">
+          <h3><span style="text-transform:uppercase;">Comments:</span> <%= @source.name %>
+            <%= "<span class=\"comment_count\"> (#{@source.comments.count})</span>" if @source.comments.count > 0 %><%= help_icon("adding_comments", "reviewer") %><span class="beta" style="float:right;padding-right:15px"> (BETA)</span></h3>
+        </div>
+
+        <div class="comment_description"><%= @source.discussion_description.blank? ? "Welcome to our discussion about #{@source.name}. Please feel free to join in." : "#{@source.discussion_description}" %>
+          <%- unless @source.hosts.empty? -%>
+            <p><strong>Hosted by</strong>
+              <%= @source.hosts.collect { |h| link_to(h.name, h) }.join(", ") %><%= help_icon("what_is_a_host", "host") %>
+          <%- end -%>
+        </div>
+
+        <%= render :partial => '/discussions/comments/thread', :locals => { :record => @source, :commentable_klass => 'Source' } %>
+      </div>
+      <div class="bottom"></div>
+    </div>
+  <%- end -%>
+</div>
+
+<%- cache @cached_right_column_fragment_name do %>
+  <div class="span-8 last">
+    <%- right_column_box :header => 'Ratings', :disclaimer_link => help_link('Beta', 'source_ratings', 'report') do -%>
+      <div class="clearfix ratings_top">
+        <div class="headRating">
+          <div class="ratingLabel" style="padding-bottom:3px;white-space: nowrap">
+          Overall Rating
+          </div>
+        </div>
+        <div class="trust_good" style="margin-left:10px">
+          <%- if !@source.hide_rating(@local_site) -%>
+            <%= trustometer_img(rating_stats.rating, {:size => :large}) %>
+          <%- else -%>
+            <div class="trustometer">
+              <div class="no_rating" style="font-size:1.0em;width:86px;text-align:center;">
+                <span class="quiet">No Rating</span>
+              </div>
+            </div>
+          <%- end -%>
+          <br/>
+          <%= !@source.hide_rating(@local_site) ? content_tag(:span, adjectival_rating(rating_stats.rating).capitalize, :class => "very_good") : 
+                content_tag(:span, "not enough reviews", :class => "very_good not_enough") %></span>
+        </div>
+        <div class="from_reviews" style="font-size:80%; width:75px;">
+          from <%= plural(rating_stats.story_reviews_count, "story review") %>
+        </div>
+      </div>
+
+      <%#- Overall Rating + breakdown -%>
+      <%= ratings_box :processable => @source, :hide_trustometer_message => @source.hide_rating(@local_site) ? "no rating" : nil, :use_processed_ratings => true %>
+
+      <%- if logged_in? and current_member.has_role_or_above?(:admin) -%>
+        <span style="float: left; font-size: 0.92em; color: rgb(172, 172, 172); width: 100%; margin-top: 20px; margin-bottom:15px;">Rating confidence: <%= confidence_rating(@source) %></span>
+      <%- else -%>
+        <br /><br /><br />
+      <%- end -%>
+
+      <%#--- Disclaimer for local site for some sources since we dont have detailed ratings available across the board! ---%>
+      <%- if @local_site && ['Associated Press', 'Baltimore Sun', 'UPI', 'Washington Post', 'New York Times'].include?(@source.name) -%>
+        <div class="editorial_gray" style="margin-bottom:10px">Ratings above include national story reviews.</div>
+      <%- end -%>
+
+      <%#------------- SSS: Temporarily ignoring this.  Too many ratings on this page and they are confusing ------------- %>
+      <%#- My rating -%>
+      <%#- if @current_member_rating -%>
+        <%#= ratings_box_line :rating_name => "My Rating",
+          :rating_value => @current_member_rating,
+          :heading_class => "headRating source_page",
+          :trustometer_img_options => {:size => :large, :color => :green} %>
+      <%#- end -%>
+      <%#----------------------------------------------------------------------------------------------------------------- %>
+
+      <span class="help_link" style="margin-top:10px;"><%= help_link "How our ratings work", 'source_ratings', '', :class => "popup_link info_popup" %></span>
+    <%- end -%>
+
+    <%- right_column_box :header => "Expertise" do -%>
+      <%- stat_array = AggregateStatistic.find_statistic(@source, "topic_expertise", @local_site ? @local_site.id : nil) %>
+      <%- if !stat_array.empty? -%>
+        <%- stat_array.each { |s| m = Topic.find(s[0]); s[0] = link_to(m.name, m) } -%>
+        <h1>This source is an expert on these topics, according to our reviewers.</h1>
+        <p>
+          <%= format_aggregate_info(stat_array, "topic_expertise") %>
+        </p>
+        <span class="add_your_two_cents">
+          <%= link_to_function "Add your 2 cents: Review this source", "" %>
+        </span>
+      <%- end -%>
+    <%- end -%>
+
+    <%- source_name = (@source.name.length > 18) ? "This Source's" : @source.name -%>
+    <%- right_column_box :header => source_name + " Widget ", :disclaimer_link => 'NEW' do -%>
+      <script type="text/javascript">
+      _NTW_numStories = 3;
+      </script>
+      <script src="/sources/<%= @source.slug %>/most_recent.json" type="text/javascript"></script>
+      <script src="/javascripts/widgets/formats/source_widget.json" type="text/javascript"></script>
+      <script src="/javascripts/render_widget.js" type="text/javascript"></script>
+      <a href="/widgets?url=/sources/<%= @source.slug %>/most_recent">Add this widget to your site <span class="more">&raquo;</span></a>
+    <%- end -%>
+  </div>
+<%- end -%>

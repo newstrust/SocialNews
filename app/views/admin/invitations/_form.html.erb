@@ -1,0 +1,80 @@
+<style>
+div.fieldset label    { font-weight:bold; width: 150px; font-size: 12px; }
+div.fieldset textarea { width: auto; height: auto; }
+</style>
+
+<div class="fieldset">
+  <h3>1. Invitation Details</h3>
+
+  <%- unless @invitation.new_record? -%>
+  <p>Invitation Url: <%= link_to "#{home_url}partners/#{@partner.to_param}/#{@invitation.to_param}", "#{home_url}partners/#{@partner.to_param}/#{@invitation.to_param}" %><p>
+  <%- end -%>
+
+  <%- [ { :attr => "name", :hint => "Will produce an invite url such as #{home_url}#{@partner.to_param}/:name/)" },
+        { :attr => :group_id, :name => "Group, if any, associated with this invite" },
+        { :attr => :code },
+        { :attr => :validation_level }].each do |row| -%>
+    <%= form_field(f, row) %>
+  <%- end -%>
+</div>
+
+<div class="fieldset">
+  <h3>2. Welcome Page &mdash; Users see this page first.</h3>
+  <h6>You can use a template or a hyperlink but not both.</h6>
+
+  <%= render :partial => 'shared/textile_support' , :locals => { :html_ok => true } %>
+  <%= form_field(f, :attr => :welcome_page_template, :name => "Template", :type => "text_area", :hint => "Place '<={page}=>', wherever you want the normal welcome page content to appear in the template.") %>
+  <%= form_field(f, :attr => :welcome_page_link, :name => "Link") %>
+</div>
+
+<div class="fieldset">
+  <h3>3. Signup Page &mdash; Wraps the existing signup form.</h3>
+
+  <%= render :partial => 'shared/textile_support' , :locals => { :html_ok => true } %>
+  <%= form_field(f, :attr => :landing_page_template, :name => "Template", :type => "text_area", :hint => "Place '<={page}=>', wherever you want the signup form to appear in the template.") %>
+  <%= form_field(f, :attr => :landing_page_link, :name => "Link") %>
+
+  <p><label for="additional_signup_fields">Add Optional Signup Fields</label><br/>
+    <ul>
+    <%- Invitation::optional_fields.each do |k| -%>
+    <li><%= check_box('optional_fields', k ) %> <%= k.to_s.humanize %></li>
+    <%- end -%>
+    </ul>
+  </p>
+</div>
+
+<div class="fieldset">
+  <h3>4. Activation Email &mdash; Users receive this once they sign-up.</h3>
+
+  <em>These variables will be replaced with dynamic content once rendered.</em>
+  <ul>
+    <li><span class="note">[MEMBER.FIRST_NAME]</span></li>
+    <li><span class="note">[MEMBER.NAME]</span></li>
+    <li><span class="note">[INVITE_LINK]</span></li>
+    <li><span class="note">[MEMBER.EMAIL]</span></li>
+    <li><span class="note">[MEMBER.PASSWORD]</span></li>
+  </ul>
+
+  <%= form_field(f, :attr => :email_from) %>
+  <%= form_field(f, :attr => :email_subject) %>
+  <%= form_field(f, :attr => :invite_message, :type => "text_area", :name => "Invitation Email Template") %>
+</div>
+
+<div class="fieldset">
+  <h3>5. Success Page</h3>
+  <h6>You can use a template or a hyperlink but not both.</h6>
+
+  <%= render :partial => 'shared/textile_support' , :locals => { :html_ok => true } %>
+  <%= form_field(f, :attr => :success_page_template, :name => "Template", :type => "text_area", :hint => "Place '<={page}=>', wherever you want the normal success page to appear in the template.") %>
+  <%= form_field(f, :attr => :success_page_link, :name => "Link") %>
+</div>
+
+<div class="fieldset">
+
+  <h3>6. NewsHunt Widget Parameters</h3>
+
+  <%= form_field(f, :attr => :widget_newshunt_topic, :name => "News Hunt Topic (enter topic slug below)") %>
+  <%= form_field(f, :attr => :widget_newshunt_url, :name => "News Hunt URL") %>
+  <%= form_field(f, :attr => :widget_newshunt_title, :name => "Widget Title") %>
+  <%= form_field(f, :attr => :widget_newshunt_desc, :type => "text_area", :name => "Widget Description") %>
+</div>

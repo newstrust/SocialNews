@@ -1,0 +1,18 @@
+<div class="batch_autocomplete" id="<%= div_id %>">
+	<ul class="selections"></ul>
+	<div class="add"></div>
+	<input type="text">
+</div>
+
+<% callback ||= nil -%>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('div#<%= div_id %>').batch_autocomplete(
+			'<%= param_array_prefix %>',
+			<%= taxonomy %>,
+			<%= current_associations.to_json %>,
+			<%= association_params.to_json %>,
+			<%= callback.blank? ? 'null' : callback.to_json %>);
+	});
+</script>

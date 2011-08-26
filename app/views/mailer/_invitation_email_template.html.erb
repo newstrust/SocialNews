@@ -1,0 +1,32 @@
+Dear [MEMBER.FIRST_NAME],
+
+Your <%=app_name%> account has been created.
+
+  Email: [MEMBER.EMAIL]
+  Password: [MEMBER.PASSWORD]
+
+Visit this url to activate your account:
+[INVITE_LINK]
+
+The <%=app_name%> Team
+<%=SocialNewsConfig["email_addrs"]["help"]%>
+
+
+P.S. Once you're logged in, visit our Get Started page for a quick overview:
+<%=home_url%>/start/
+
+<%= render :partial => 'mailer/about_site' %>
+_____________________
+
+ABOUT THIS EMAIL
+We're sending you this email because you signed up as a <%=app_name%>
+member.
+
+If you need help about becoming a member, please check our FAQ:
+<%=home_url%>/help/
+
+If you received this message in error, or if you would like to remove
+your email address from our list, please reply to this email with
+"unsubscribe" in the subject line.
+
+<%= render :partial => 'mailer/privacy_policy' %>

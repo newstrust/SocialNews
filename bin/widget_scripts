@@ -1,0 +1,8 @@
+echo "----- Pageviews by widget -----"
+cut -f7 -d" " /tmp/balt.widget.accesses | sort | uniq -c  | sort -nr
+
+echo "----- Pageviews by referrer (top 25)[referrer = widget page host]  -----"
+cut -f11 -d" " /tmp/balt.widget.accesses | sort | uniq -c  | sort -nr | head -25
+
+echo "----- Pageviews by widget & referrer (top 25) -----"
+cut -f7,11 -d" " /tmp/balt.widget.accesses | sort | uniq -c  | sort -nr | head -25

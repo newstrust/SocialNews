@@ -1,0 +1,95 @@
+<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div>
+	<div class="wrapper">
+		<div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+<% if !facebook_session %>
+  <b>Have you logged out of Facebook? Please log into Facebook and try again!</b>
+<% else -%>
+  <% url_prefix = @invitation ? "/partners/#{@partner.to_param}/#{@invitation.to_param}" : "" -%>
+  <% popup_suffix = params[:popup] ? "?popup=true" : "" -%>
+  <div style="float:left; margin-right:20px;">
+    <fb:profile-pic uid="<%=facebook_session.user.uid%>" facebook-logo="true"> </fb:profile-pic>
+  </div>
+
+  <div style="float:left; margin-top: 20px;">
+    <h2>Welcome <%= @member.name %>!</h2>
+    <p> 
+      You are now linked with Facebook! <br/><br/>
+      Now let's create your <%=app_name%> account. <br />
+      <span class="body_black_small">(or link your current <%=app_name%> account)</span>
+    </p>
+  </div>
+  
+  
+  <div class="other_login_option" style="clear:both;margin-bottom:10px">
+    <div class="question">
+      Already have a <%=app_name%> account?<%=help_icon("facebook_log_in_member", "") %>
+    </div>
+    <% url_prefix = @invitation ? "/partners/#{@partner.to_param}/#{@invitation.to_param}" : "" -%>
+    <%= link_to "Link it with Facebook!", "#{url_prefix}#{fb_link_accounts_path}#{popup_suffix}" %>
+  </div>
+  
+  <br/>
+  
+  <div class="popup_form">
+    <h3>Create a <%=app_name%> Account</h3>
+    <%= error_messages_for :member, :header_message => nil, :message => nil %>
+    <br/>
+
+    <p>
+      In order to participate on this site, we need to create an account for you.
+      Please complete the form below and we'll go ahead and sign you up!
+    </p>
+
+    <% form_for @member, :url  => "#{url_prefix}#{fb_new_account_path}#{popup_suffix}",
+                         :html => {:class => "entry_form", :autocomplete => "off"} do |f| -%>
+      <% if @name_conflict -%>
+        <div style="padding:2px; color:#b50b05">Another <%=app_name%> member has the same full name as yours.  Try adding your middle initial to make this name unique.</div>
+        <div class="form_field leftalign">
+          <%= f.label :name, "Full Name" + help_icon("why_full_name") %>
+          <div class="input" style="width: 185px">
+          <%= f.text_field :name, :value => @name, :size => 24 %>
+          <div id="name_result" ></div>
+        </div>
+
+        <script type="text/javascript" charset="utf-8">
+          formatted_login_available_members_path = '<%= login_available_members_url(:format => :js) %>';
+        </script>
+
+        <%- content_for(:page_scripts) do -%>
+          <%= javascript_include_tag 'members'%>
+        <%- end -%>
+      </div>
+      <% else -%>
+        <%= f.hidden_field :name, :value => @name -%>
+      <% end -%>
+      <%= f.hidden_field :status, :value => "member" -%>
+      <div class="form_field leftalign">
+        <%= f.label :email, "Email Address " + help_icon("why_email_address") %>
+        <%= f.text_field :email, :size => 24 %>
+      </div>
+      <div style="margin-left: 140px;font-size:90%">
+
+  <%= check_box_tag "autofollow_friends", "1", false, :class => "check", :style => "float:left" %>
+  <%= label_tag "autofollow_friends", "Automatically follow my Facebook friends who connect to #{app_name}", :style => "font-weight:normal;width:230px;padding-bottom:7px" %>
+  <%= check_box_tag "import_fb_photo", "1", true, :class => "check", :style => "float:left" %> 
+  <%= label_tag "import_fb_photo", "Import my photo from Facebook", :style => "font-weight:normal;width:220px;" %><br />
+
+       </div>
+  <div style="font-size:90%">
+      <%= render :partial => 'members/newsletter_and_tos_signup', :locals => { :f => f } %>
+  </div>
+  <br style="clear:both"/><hr>
+  
+      <div align="right">
+        <%= submit_button "Sign Up" %>
+        <%= link_to "Cancel", fb_cancel_path %>
+      </div>
+    <% end %>
+  </div>
+<% end -%>
+
+      </div>
+    </div>
+	<div class="bottom"></div>
+</div>

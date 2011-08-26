@@ -1,0 +1,161 @@
+nt_bot:
+  id: 1
+  name: Bot
+  login: bot@dummydomain.com
+  email: bot@dummydomain.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  created_at: <%= 5.days.ago.to_s :db %>
+  bulk_email : true
+  newsletter_format : html
+  password_reset : false
+  show_profile: members
+nt_anon:
+  id: 2
+  name: Anonymous
+  login: bot.anon@dummydomain.com
+  email: bot.anon@dummydomain.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  created_at: <%= 5.days.ago.to_s :db %>
+  bulk_email : true
+  newsletter_format : html
+  password_reset : false
+  show_profile: members
+nt_tagger:
+  id: 3
+  name: Tagger
+  login: bot.tagger@dummydomain.com
+  email: bot.tagger@dummydomain.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  created_at: <%= 5.days.ago.to_s :db %>
+  bulk_email : true
+  newsletter_format : html
+  password_reset : false
+  show_profile: members
+legacy_member:
+  id: 11
+  name: Legacy Member
+  login: legacy_member@dummydomain.com
+  email: legacy_member@dummydomain.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  created_at: <%= 5.days.ago.to_s :db %>
+  bulk_email : true
+  newsletter_format : html
+  rating: 3
+  status: member
+  validation_level: 2
+  show_profile: public
+  show_email: true
+  show_in_member_list: true
+  profile_status: list
+  news_experience: 5
+  internet_experience: 5
+  education_experience: 5
+  journalism_experience: 5
+  password_reset : false
+  show_profile: public
+heavysixer:
+  id: 12
+  name: Mark Daggett
+  login: heavysixer@bar.com
+  email: heavysixer@bar.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a
+  created_at: <%= 5.days.ago.to_s :db %>  
+  bulk_email : false
+  newsletter_format : text
+  status: member
+  validation_level: 0
+  show_profile: members
+  password_reset : false
+  rating: 4
+heavysixers_friend:
+  id: 13
+  name: Friend of Heavsixer
+  email: elliott@bar.com
+  referred_by: 2
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9c
+  created_at: <%= 5.days.ago.to_s :db %>  
+  bulk_email : false
+  rating: 3
+  status: guest
+  password_reset : false
+  show_profile: members
+all_newsletters_html:
+  id: 14
+  name: Dummy User
+  email: sastry@cs.wisc.edu
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  created_at: <%= 5.days.ago.to_s :db %>  
+  bulk_email : true
+  newsletter_format : html
+  password_reset : false
+  show_profile: members
+trusted_member:
+  id: 16
+  name: Trusted Member
+  email: trusted@dummydomain.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  rating: 5
+  status: member
+  validation_level: 5
+  password_reset : false
+  profile_status: list
+  show_profile: members
+untrustworthy_member:
+  id: 17
+  name: Raffish Ne'er-Do-Well
+  email: delinquent@dummydomain.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  rating: 1
+  status: member
+  validation_level: 4
+  password_reset : false
+  show_profile: members
+deleted_member:
+  id: 18
+  name: Mr. Deleted
+  email: deleted@dummydomain.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  status: terminated
+  password_reset : false
+  show_profile: members
+staff_fab:
+  id: 19
+  name: Fabrice Florin
+  email: fabrice@dummydomain.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  status: member
+  validation_level: 5
+  activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9c
+  created_at: <%= 5.days.ago.to_s :db %>  
+  bulk_email : true
+  rating: 3
+  password_reset : false
+  show_profile: members
+staff_kaizar:
+  id: 20
+  name: Kaizar Campwala
+  email: kaizar@dummydomain.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  status: member
+  validation_level: 5
+  activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9c
+  created_at: <%= 5.days.ago.to_s :db %>  
+  bulk_email : true
+  rating: 3
+  password_reset : false
+  show_profile: members
+staff_derek:
+  id: 21
+  name: Derek Hawkins
+  email: derek@dummydomain.com
+  crypted_password: 098f6bcd4621d373cade4e832627b4f6 # "test" MD5'd without salt
+  status: member
+  validation_level: 5
+  activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9c
+  created_at: <%= 5.days.ago.to_s :db %>  
+  bulk_email : true
+  rating: 3
+  password_reset : false
+  show_profile: members

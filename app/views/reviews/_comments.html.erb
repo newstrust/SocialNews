@@ -1,0 +1,62 @@
+<%- hostable ||= nil -%>
+<%- num_comments = review.comments.count -%>
+<%- show_hide = num_comments > 1 ? "Show" : "Hide" -%>
+<%- cm = current_member -%>
+<%- cm_is_editor_or_host = cm && cm.has_host_privilege?(hostable, :editor, @local_site) -%>
+
+<%- if logged_in? -%>
+  <%- add_comment_msg = cm.can_comment? ? "<a href=\"#\" review=\"#{review.id}\" class=\"addReviewComment\">Add a Comment</a>" : "" -%>
+<%- else -%>
+  <%- add_comment_msg = link_to_function "Login to Comment", "show_login_dialog()", :title => "Log into #{app_name}", :class => "login_add_comment" -%>
+<%- end -%>
+
+<div review="<%= review.id %>" comments_count="<%= num_comments %>" class="reviewCommentsContainer">
+  <div class="reviewCommentHeader">
+    <%= add_comment_msg %>
+    <%- if num_comments > 0 -%>
+    <span comments_count="<%= num_comments %>" class="toggleCommentsContainer">
+      <%if !add_comment_msg.blank?%> <span style="float:left"> | </span><% end %>
+      <span review="<%= review.id %>" class="<%= show_hide.downcase %>_comments"></span><a href="#" review="<%= review.id %>" class="toggleReviewComments"><%= show_hide %> <%=pluralize(num_comments, "Comment")%></a>
+    </span>
+    <%- end -%>
+  </div>
+
+  <%- review_comments = review.comments %>
+  <%- num_comments = review_comments.size -%>
+  <%- review_comments.each_with_index do |comment, index| -%>
+    <div review="<%= review.id %>" commentable_type="<%= comment.commentable_type %>" index="<%=index %>" id="comment_<%= comment.id %>" class="review comment<%=' last_comment' if index == num_comments-1%><%= ' my_comment' if cm && cm.comments.include?(comment) %>" style="display:none;">
+    <%- if comment.visible? || cm_is_editor_or_host -%>
+      <!-- comment body -->
+      <div class="commentAvatar">
+        <%= link_to(image_tag(comment.member.image ? comment.member.image.public_filename(:small_thumb) : "/images/ui/silhouette_tiny.jpg", :size => "30x30", :style=> "margin-left: 5px;"), comment.member) unless comment.member.id <= 10 %>
+      </div>
+      <div class="comment_text">
+        <h5>
+          <%= comment_author_for(comment) %> 
+          &ndash; <span style="font-size:90%"><%= comment.created_at.strftime("%b. %e, %Y - %I:%M %p") %></span>
+          <%- if cm && cm.has_host_privilege?(hostable, :editor, @local_site) -%>
+            <span id="hidden_comment_<%= comment.id %>" style="color:#ff0000;display:<%= (comment.hidden? || !comment.member.can_comment?) ? 'inline' : 'none' %>;">(Removed)</span>
+          <%- end -%>
+        </h5>
+        <div class="comment_body">
+          <div id="comment_content_<%= comment.id %>"><%= h(comment.body) %></div>
+          <div id="liked_comment_<%= comment.id %>" class="liked_comment">
+            <%= likable_members_for(comment) %>
+          </div>
+        </div>
+        <div id="raw_comment_body_<%= comment.id %>" style="display:none;"><%= comment.body(:source)%></div>
+        <div id="server_result_<%= comment.id %>" class="notice"></div>
+      </div>
+      <!-- /comment body -->
+      <div class="commentActions">
+        <%= render(:partial => 'discussions/comments/actions.html.erb', :locals => { :comment_actions => ['like', 'flag', 'edit'], :comment => comment }) unless local_variables.include?('readonly') && readonly == true %>
+      </div>
+    <%- else -%>
+      This comment has been removed.
+    <%- end -%>
+    </div>
+  <%- end -%>
+  <div review="<%= review.id %>" class="reviewCommentFooter" style="display:<%= num_comments > 0 ? "block" : "none" -%>;">
+    <%= add_comment_msg %>
+  </div>
+</div>

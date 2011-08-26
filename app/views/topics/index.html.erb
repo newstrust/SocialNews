@@ -1,0 +1,46 @@
+<%- local = "" -%>
+<%- more = "" -%>
+<%- if @local_site -%>
+  <%- local = @local_site.name + " " -%>
+  <%- more = "More " -%>
+<%- end -%>
+<% @title = more + "Topics" %>
+
+<div class="span-24 last overview_page">
+<script type="text/javascript">
+   $(document).ready(function() {
+     $('#mason').masonry({ singleMode: true, itemSelector: '.box' });
+   });
+</script>  
+  <h2><%= more %>Topics</h2>
+  <p>
+    Here are <%= local %>news topics reviewed by <%=app_name%> members, listed by subject and activity.
+    Click on any topic below to see items we've reviewed so far, or that still need to be reviewed.
+  </p>
+<div id="mason" class="overview_sources">
+  <%- topics = @local_site ? AggregateStatistic.find_statistic(@local_site, "active_topics_by_subject") : nil -%>
+  <%- @subjects.each do |subject| -%>
+    <%- subj_topics = @local_site ? (topics[subject.id] || []).collect { |e| [Topic.find(e[0]), e[1]] } : subject.topics(:order => 'tags.taggings_count DESC', :limit => 10).collect { |t| [t, t.taggings_count] } -%>
+    <%- if !subj_topics.blank? %>
+     <div class="column box topics">
+      <div class="column_header">
+      <h3><%= link_to subject.name + ' &raquo;', subject %></h3>
+      </div>
+      <div class="overview_entry">
+      <%- subj_topics.each do |te| -%>
+        <%- topic = te[0] -%>
+        <%= rss_icon({:listing_type => :most_recent, :t_slug => topic.slug}, {:style => "float: right"}) %>
+        <%= link_to topic.name, topic %>
+        <%- if @local_site.nil? -%>
+        <span class="small_note">(<%= number_format(te[1]) %>)</span>
+        <%- end -%>
+        <br/>
+      <%- end -%>
+      </div>
+      <div class="more_sources"><%= link_to "More &raquo;", subject, :class => "more"%></div>
+      </div>
+      
+
+    <%- end -%>
+  <%- end -%>
+</div>

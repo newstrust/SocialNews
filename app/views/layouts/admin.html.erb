@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title><%= @title || app_name %></title>
+    <%= render :partial => 'shared/jquery_includes' %>
+    <%= yield :page_scripts %>
+    <%= @inline_js || "" %>
+    <%= stylesheet_link_tag ['admin/admin'] + (@additional_css_includes || []) %>
+  </head>
+  <body>
+    <div id="wrap">
+      <div class="use16columns inner_left" style="height:64px;">
+        <div class="use10columns inner_left">
+          <%= link_to image_tag(SocialNewsConfig["app"]["logo_path"], :alt => app_name), "/" %> &nbsp;&nbsp;
+          <span style="font-size:24px" class="tools_home"><%=@local_site ? @local_site.name : "National"%></span>
+        </div>
+        <div style="float:right">
+          <%= render :partial => 'shared/user_links' %>
+        </div>
+        <div style="float:left;" class="use8columns inner_left">
+          <span class="tools_home"><%=link_to("Admin Tools", admin_path) %></span>
+          <%- if @local_site -%>
+            <span class="tools_home"><%=link_to("Go to National Admin Tools", LocalSite.national_site + admin_home_path, :style => "padding-left:10px;color:#66a;font-size:12px") %></span>
+          <%- else -%>
+            <%- ls = LocalSite.first_site -%>
+            <%- if ls -%>
+            <span class="tools_home"><%=link_to("Go to #{ls.name} Admin Tools", ls.home_page + admin_home_path, :style => "padding-left:10px;color:#{ls.navbar_background_css ? ls.navbar_background_css: "#66a"};font-size:12px") %></span>
+            <%- end -%>
+          <%- end -%>
+        </div>
+      </div>
+
+      <div class="use16columns inner_left admin_nav">
+        <ul class="inline_list admin_navbar"<%=" style='background: #{@local_site && @local_site.navbar_background_css ? @local_site.navbar_background_css: "#66a"}'"%>>
+					<li><%= link_to('Home', admin_home_path) if current_member.has_role_or_above?(:editor) %></li>
+          <li><%= link_to('Comments', admin_comments_path) if current_member.has_role_or_above?(:admin) %></li>
+          <li><%= link_to('Emails', admin_bulk_emails_path) if current_member.has_role_or_above?(:admin) %></li>
+          <li><%= link_to('Feeds', admin_feeds_path) if current_member.has_role_or_above?(:editor) %></li>
+          <li><%= link_to('Groups', admin_groups_path) if current_member.has_role_or_above?(:host) %></li>
+          <li><%= link_to('Local Sites', admin_local_sites_path) if @local_site.nil? && current_member.has_role_or_above?(:host) %></li>
+          <li><%= link_to('Members', admin_actions_admin_members_path) if current_member.has_role_or_above?(:admin) %></li>
+          <li><%= link_to('Newsletter', admin_newsletter_path) if current_member.has_role_or_above?(:admin) %></li>
+          <li><%= link_to('Pages', admin_pages_path) if current_member.has_role_or_above?(:admin) %></li>
+          <li><%= link_to('Partners', admin_partners_path) if current_member.has_role_or_above?(:admin) %></li>
+          <li><%= link_to('Stories', admin_stories_path) if current_member.has_role_or_above?(:newshound) %></li>
+          <li><%= link_to('Sources', admin_sources_path) if current_member.has_role_or_above?(:admin) %></li>
+          <li><%= link_to('Subjects', admin_subjects_path) if current_member.has_role_or_above?(:host) %></li>
+          <li><%= link_to('Topics', admin_topics_path) if current_member.has_role_or_above?(:host) %></li>
+          <li class="last"><%= link_to('Tags', admin_tags_path) if current_member.has_role_or_above?(:admin) %></li>
+          &nbsp;
+        </ul>
+      </div>
+      <br/>
+      <%= yield :sub_nav %>
+
+      <div id="flash_container">
+        <%= render_flash %>
+      </div>
+
+      <%= yield %>
+    </div>
+
+    <%#-- FACEBOOK CONNECT --%>
+    <%= fb_connect_javascript_tag %>
+    <%- @fb_no_auto_reload ||= nil -%>
+    <%= init_fb_connect_FIXED_UP(@fb_no_auto_reload) %>
+  </body>
+</html>

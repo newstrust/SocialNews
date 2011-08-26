@@ -1,0 +1,419 @@
+/**
+* typography.css
+*
+* Lots of custom classes here for various layouts... A lot of this is legacy and should
+* be tightened to use a smaller subset of styles rather than the sprawl below.
+*/
+
+
+/**
+* LINKS
+*/
+
+/* review links */
+
+a.visited {
+  color: #666;
+}
+.helvetica {
+font-family:"Helvetica Neue",Arial,Helvetica,sans-serif !important;
+}
+/**
+* FAQ question mark icons
+*/
+a.help img, img.help {
+background:transparent url(/images/ui/help_large.png) no-repeat scroll left top;
+_background:transparent url(/images/ui/help_large.gif) no-repeat scroll left top;
+height:12px;
+margin-left:2px;
+width:15px;
+}
+a:hover.help img,
+a.help img.sel {
+  background-position: left bottom;
+}
+
+a.editorial {
+	color: #666;
+}
+
+a.cancel {
+display:block;
+float:left;
+margin-top:5px;
+padding-left:5px;
+width:50px;}
+
+.disabled_link {
+  text-decoration:none !important;
+  color: #acacac !important;
+  cursor: default !important;
+}
+
+/**
+* Large Type
+*/
+
+.head {
+  color: #333333;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+}
+/* based on category_sub_head but with subtler text */
+div.tabSubHeader {
+  padding: 0 0.25em 0.25em 0.25em;
+  margin: 5px 0em 10px 0em;
+  border-bottom: 1px solid #bababa;
+  color: #666;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+span.grey {
+color: #acacac;
+}
+
+span.new_feature {
+ text-transform: uppercase;
+ color: #399900;
+ font-size: 0.9em;
+ font-weight: bold;
+}
+/**
+* Small type
+*/
+
+.editorial_gray {
+  font-size: 11px;
+  color: #acacac;
+  font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;
+  font-weight: normal;
+}
+.note {
+  font-size: 0.9em;
+  color: #333333;
+  font-weight:normal;
+  padding-right: 10px;
+}
+.small_note,
+.explanation,
+.body_black_small {
+  font-size: 10px;
+  color: #acacac;
+	font-weight: normal;
+	font-family:"Helvetica Neue",Arial,Helvetica,sans-serif !important;
+
+}
+.explanation {
+	font-size: .92em;
+	line-height: 1.17em;
+	color: #3f3f3f;
+	margin-bottom: 20px;
+}
+
+
+/**
+* MISC. LEGACY HEADER & TEXT STYLES
+*
+* The headers are mostly used on the Welcome page and on the FAQ pages, where they are defined inline anyway.
+* One day we should strive to phase these all out.
+*/
+
+td.sectionspacer {
+  padding-bottom:10px;
+}
+.subhead {
+  font-size: 14px;
+  font-weight: bold;
+  padding-bottom: 6px;
+}
+.subhead_plain {
+  font-size: 14px;
+}
+.subhead_small {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+}
+.subhead_small_plain {
+  font-size: 12px;
+  font-weight: normal;
+}
+a.subhead_small_plain:link,
+a.subhead_small_plain:visited,
+a.subhead_small_plain:active,
+a.subhead_small_plain:hover {
+  font-weight: normal;
+}
+
+/* just for those &raquos; */
+/*span.more {
+  font-size: 130%;
+  line-height: 80%
+}
+*/
+/*.story_quote {
+  color: #333333;
+  font-weight: normal;
+  line-height: 1.2em;
+}*/
+
+.backpath {
+  font-weight:bold;
+}
+.body_black {
+  font-size: 12px;
+}
+a.body_black_small:link,
+a.body_black_small:visited,
+a.body_black_small:active,
+a.body_black_small:hover {
+  font-size: 11px;
+  font-weight: normal;
+}
+.body_gray {
+  font-size: 12px;
+  color: #333;
+}
+
+
+span.featured {
+background:url(/images/ui/story_listings/featured.png) no-repeat left bottom; 
+height: 13px;
+width: 56px;
+float: right;
+}
+
+span.student_badge {
+background:url(/images/ui/groups/student.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/student.gif) no-repeat left bottom; 
+height: 13px;
+width: 51px;
+padding-bottom:2px;
+float: left;
+}
+span.educator_badge {
+background:url(/images/ui/groups/educator.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/educator.gif) no-repeat left bottom; 
+height: 13px;
+width: 61px;
+padding-bottom:2px;
+float: left;
+}
+span.trusted_member_badge {
+background:url(/images/ui/groups/trusted_member.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/trusted_member.gif) no-repeat left bottom; 
+height: 13px;
+width: 95px;
+padding-bottom:2px;
+float: left;
+}
+span.advisor_badge {
+background:url(/images/ui/groups/advisor.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/advisor.gif) no-repeat left bottom; 
+height: 13px;
+width: 54px;
+padding-bottom:2px;
+float: left;
+}
+span.donor_badge {
+background:url(/images/ui/groups/donor.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/donor.gif) no-repeat left bottom; 
+height: 13px;
+width: 47px;
+padding-bottom:2px;
+float: left;
+}
+span.director_badge {
+background:url(/images/ui/groups/director.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/director.gif) no-repeat left bottom; 
+height: 13px;
+width: 59px;
+padding-bottom:2px;
+float: left;
+}
+span.editor_badge {
+background:url(/images/ui/groups/editor.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/editor.gif) no-repeat left bottom; 
+height: 13px;
+width: 46px;
+padding-bottom:2px;
+float: left;
+}
+span.host_badge {
+background:url(/images/ui/groups/host.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/host.gif) no-repeat left bottom; 
+height: 13px;
+width: 37px;
+padding-bottom:2px;
+float: left;
+}
+span.newshound_badge {
+background:url(/images/ui/groups/newshound.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/newshound.gif) no-repeat left bottom; 
+height: 13px;
+width: 74px;
+padding-bottom:2px;
+float: left;
+}
+span.partner_badge {
+background:url(/images/ui/groups/partner.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/partner.gif) no-repeat left bottom; 
+height: 13px;
+width: 55px;
+padding-bottom:2px;
+float: left;
+}
+span.reviewer_badge {
+background:url(/images/ui/groups/reviewer.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/reviewer.gif) no-repeat left bottom; 
+height: 13px;
+width: 61px;
+padding-bottom:2px;
+float: left;
+}
+span.staff_badge {
+background:url(/images/ui/groups/staff.png) no-repeat left bottom; 
+_background:url(/images/ui/groups/staff.gif) no-repeat left bottom; 
+height: 13px;
+width: 41px;
+padding-bottom:2px;
+float: left;
+}
+span.certified_reviewer {
+background:url(/images/ui/story_listings/certified_reviewer.png) no-repeat left bottom; 
+height: 13px;
+width: 108px;
+float: right;
+}
+
+
+/***favicon****/
+
+span.favicon,
+span.favicon12,
+span.favicon18,
+span.fb_favicon,
+span.t_favicon,
+span.mutual_follow {
+background-position:left top;
+background-repeat:no-repeat;
+float:left;
+height:16px;
+padding-right:3px;
+width:16px;
+}
+span.favicon12,
+span.fb_favicon,
+span.t_favicon{
+height:12px;
+width:12px;
+margin-left:5px;
+margin-top:2px;
+}
+span.favicon18 {
+height:18px;
+width:18px;
+}
+span.mutual_follow {
+background:url(/images/ui/mynews/icon_mutual_follow.png) no-repeat left top; 
+height:12px;
+width:12px;
+margin-left:5px;
+margin-top:2px;
+}
+span.fb_favicon {
+background-image:url(/images/ui/mynews/facebook_favicon.png)
+}
+span.t_favicon {
+background-image:url(/images/ui/mynews/twitter_favicon.png)
+}
+span.small_thumb {
+height:30px;
+width:30px;
+margin-right:5px;
+float:left;
+}
+
+/***byline****/
+
+.byline {
+	 color: #adadad;
+	 font-size: 11px;
+	 font-weight: bold;
+	 height: 16px;
+	 padding-top: 3px;
+	 }
+.byline a.pubname {
+	 text-transform: uppercase;
+	 color: #666666;
+	 font-size: 1em;
+	 }
+.byline span.author {
+	 text-transform: uppercase;
+	 color: #666666;
+	 }
+*/
+
+.small { font-size: 10px; }
+.big   { font-size : 14px; }
+.light_gray { color : #666666 !important; }
+.beta { vertical-align:middle; font-size: 10px; font-weight: normal; color:#666; }
+.deactivated_gray {color:#acacac;}
+.story_listing_detail p.smaller_copy {
+font-size:1.08em;
+}
+
+.wrapper.comments .beta {
+color: #acacac;
+font-weight: bold;
+_margin-top:-15px;}
+
+.story_listing_detail .topic_source p {
+font-size:1.08em;
+}
+
+/*****Fonts*****/
+
+@font-face {
+	font-family: 'AvantGardeBookBold';
+	src: url('/images/fonts/avantgarde-book_bold_bold_wwww.font-cat.com-webfont.eot');
+	src: local('?'), url('/images/fonts/avantgarde-book_bold_bold_wwww.font-cat.com-webfont.woff') format('woff'), url('/images/fonts/avantgarde-book_bold_bold_wwww.font-cat.com-webfont.ttf') format('truetype'), url('/images/fonts/avantgarde-book_bold_bold_wwww.font-cat.com-webfont.svgz#webfontLAtODcfU') format('svg'), url('/images/fonts/avantgarde-book_bold_bold_wwww.font-cat.com-webfont.svg#webfontLAtODcfU') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'AvantGardeBkBTDemi';
+	src: url('/images/fonts/avgardd-webfont.eot');
+	src: local('?'), url('/images/fonts/avgardd-webfont.woff') format('woff'), url('/images/fonts/avgardd-webfont.ttf') format('truetype'), url('/images/fonts/avgardd-webfont.svgz#webfontHRKwNQKy') format('svg'), url('/images/fonts/avgardd-webfont.svg#webfontHRKwNQKy') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'VollkornRegular';
+	src: url('/images/fonts/vollkorn-regular-webfont.eot');
+	src: local('?'), url('/images/fonts/vollkorn-regular-webfont.woff') format('woff'), url('/images/fonts/vollkorn-regular-webfont.ttf') format('truetype'), url('/images/fonts/vollkorn-regular-webfont.svgz#webfont3i05lE34') format('svg'), url('/images/fonts/vollkorn-regular-webfont.svg#webfont3i05lE34') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'TeXGyreAdventorRegular';
+	src: url('/images/fonts/texgyreadventor-regular-webfont.eot');
+	src: local('?'), url('/images/fonts/texgyreadventor-regular-webfont.woff') format('woff'), url('/images/fonts/texgyreadventor-regular-webfont.ttf') format('truetype'), url('/images/fonts/texgyreadventor-regular-webfont.svgz#webfontfWQ9c6Cw') format('svg'), url('/images/fonts/texgyreadventor-regular-webfont.svg#webfontfWQ9c6Cw') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+div.avant-garde_book {font-family:'AvantGardeBookBold',"Helvetica Neue",Arial,Helvetica,sans-serif !important;}
+
+div.avant-garde_bold {font-family:'AvantGardeBkBTDemi',"Helvetica Neue",Arial,Helvetica,sans-serif !important;}
+
+div.vollkorn {font-family: 'VollkornRegular',"Helvetica Neue",Arial,Helvetica,sans-serif !important;}
+
+div.texg {font-family:'TeXGyreAdventorRegular',"Helvetica Neue",Arial,Helvetica,sans-serif !important; }
+

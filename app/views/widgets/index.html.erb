@@ -1,0 +1,309 @@
+<%- @title = "#{app_name} Widgets - Add our news feeds to your website" -%>
+
+<style>
+div#topic_widget_opts  div.widget_param select, 
+div#source_widget_opts div.widget_param select, 
+div#member_widget_opts div.widget_param select { width: 150px; }
+</style>
+
+<script type="text/javascript"> 
+var baseUrl     = "<%= home_url %>" 
+var numSubjects = <%=@subjects.size%>
+
+  /* Fire up on document ready! */ 
+$(document).ready(function () {
+    /* Set up member autocomplete */
+  $("#member_autocomplete").autocomplete('<%=search_members_path(:format => :js)%>', {
+      minChars: 2,
+      matchSubset: 1,
+      matchContains: 1,
+      cacheLength: 10,
+      dataType: 'json',
+      formatItem: function(row) { return row[0]; }
+  });
+
+  $('input#member_autocomplete').result(function(event, data, formatted) {
+      if (data && typeof(data) == 'object') {
+        $("#member_slug").val(data[1]);	// member-slug
+        updateWidget('member');
+      }
+  });
+  
+  	/* Set up source autocomplete */
+  $("#source_autocomplete").autocomplete('<%=search_sources_path(:format => :js)%>', {
+     minChars: 2,
+     matchSubset: 1,
+     matchContains: 1,
+     cacheLength: 10,
+     dataType: 'json',
+     formatItem: function(row) { return row[0]; }
+  });
+  
+  $('input#source_autocomplete').result(function(event, data, formatted) {
+     if (data && typeof(data) == 'object') {
+       $("#source_slug").val(data[1]);	// source-slug
+       updateWidget('source');
+     }
+  });
+
+    /* Show the right kind of widget */
+  showWidget("<%=@w_params[:wt]%>");
+});
+</script>
+
+<%- content_for(:page_scripts) do -%>
+  <%= stylesheet_link_tag "widget_preview" %>
+  <%= javascript_include_tag 'widget_preview' %>
+<%- end -%>
+
+<span class="head">Widgets</span> 
+
+<%- if @local_site -%>
+  <p>Add <%=app_name%> <%= @local_site.name %> to your site! We offer hundreds of free <%= @local_site.name %>-related widgets on topics like <a href="/widgets/samples/politics.htm">Politics</a> or <a href="/widgets/samples/media.htm">Media</a>. We also offer source widgets to track your favorite sources &ndash; and member widgets to share your latest reviews on your site. Our web widgets feature our recommended news and opinions in a variety of formats, to fit your style. Give them a try.</p>
+
+  <p>To add to our widgets to your site, <b>follow the easy steps below</b>.</p>
+
+  <p> If you have any questions or comments about our widgets, please <%= mail_to email_addr("feedback"), "contact us", :subject => "#{app_name} info request - widgets", :encode => "javascript" %>. For our National Widgets, <%= link_to("click here", LocalSite.national_site + page_path(:section => "widgets")) %>.</p>
+<%- else -%>
+  <p>Add <%=app_name%> to your site! We offer hundreds of free  widgets on topics like <a href="/widgets/samples/politics.htm">Politics</a>, <a href="/widgets/samples/media.htm">Media</a> or the <a href="/widgets/samples/congress.htm">U.S. Congress</a>. We also offer source widgets to track your favorite sources &ndash; and member widgets to share your latest reviews on your site. Our web widgets feature our recommended news and opinions in a variety of formats, to fit your style. Give them a try.</p>
+
+  <p> To add to our widgets to your site, <b>follow the easy steps below</b>.  And if you use iGoogle, be sure to add our <a href="/igoogle/">iGoogle Gadget</a> to your personal search page.</p>
+
+  <p> If you have any questions or comments about our widgets, please <%= mail_to email_addr("feedback"), "contact us", :subject => "#{app_name} info request - widgets", :encode => "javascript" %>. 
+  <%- ls = LocalSite.first_site -%>
+  <%- if ls -%>
+  For our <%=ls.name%> Widgets, <%= link_to("click here", "#{ls.home_page}/widgets") %>.
+  <%- end -%>
+  </p>
+<%- end -%>
+
+<table id="widget_options">
+<tr>
+<td id="widget_opts_cell">
+  <div class="widget_opt_section">
+    <h2 class="header"> 1. Choose Widget Type </h2>
+    <% [["topic", "tw"], ["member", "mw"], ["source", "sw"]].collect do |t| -%>
+      <input id="<%=t[1]%>" type="radio" name="widget_type" <%=@w_params[:wt] == t[0] ? "checked" : ""%> value="#" onClick="showWidget('<%=t[0]%>')"><label for="<%=t[1]%>"> <%=t[0].capitalize%> Widgets</label><br/>
+    <% end -%>
+  </div>
+
+  <div class="widget_opt_section" id="member_widget_opts">
+    <h2 class="header"> 2. Choose Widget Content </h2>
+
+    <div class="widget_param">
+      <div class="param">Member Name:</div>
+    <%- if logged_in? -%>
+      <% show_me = (@w_params[:wt] != "member" || @w_params[:who].id == current_member.id) -%>
+      <% who = show_me ? current_member : @w_params[:who] -%>
+      <script type="text/javascript"> curr_member_slug = '<%=who.friendly_id%>'; </script>
+      <input id="me_input" type="radio" name="member_name" <%=show_me ? "checked" : ""%>  value=""  onClick="showMemberReviews('<%=current_member.friendly_id%>')"><label for="me_input"> Me</label> <br/>
+      <input id="other_input" type="radio" name="member_name" <%=!show_me ? "checked" : ""%> value="#" onClick="showMemberReviews('')"><label for="other_input"> Other Member</label> <br/>
+      <div id="member_ac" style="<%=show_me ? "display:none;" : ""%>padding-left:25px;">
+    <%- else -%>
+      <div id="member_ac">
+      <% show_me = false -%>
+      <% who = @w_params[:who] -%>
+    <%- end -%>
+      <input id="member_autocomplete" type="text" autocomplete="off" value="<%=show_me ? "": (who ? who.name : "") %>"/>
+      <input id="member_slug" type="text" style="display:none;" name="member_slug" value="<%=@w_params[:wt] == "member" ? (who ? who.friendly_id : "") : ""%>" />
+      </div>
+      <br/>
+	 </div>
+
+    <div class="widget_param" id="member_widgetType">
+      <div class="param">Widget Type:</div>
+      <select name="review_type" onChange="updateWidget('member')">
+      <%= options_for_select([["MyNews", "mynews"],
+                              ["All Reviews", "reviews"],
+                              ["Reviews with Notes", "reviews_with_notes"],
+                              ["Picks (Starred)", "picks"]], @w_params[:lt]) %>
+		</select>
+	 </div>
+  </div>
+
+  <div class="widget_opt_section" id="source_widget_opts">
+    <h2 class="header"> 2. Choose Widget Content </h2>
+
+    <div class="widget_param">
+      <div class="param">Source Name:</div>
+      <input id="source_autocomplete" type="text" autocomplete="off" value="<%=@w_params[:wt] == "source" ? @w_params[:src].name : ""%>"/>
+      <input id="source_slug" type="text" style="display:none;" name="source_slug" value="<%=@w_params[:wt] == "source" ? @w_params[:src].slug : ""%>" />
+	  </div>
+
+    <div class="widget_param" id="src_topic">
+      <div class="param">Subject/Topic:</div>
+      <select name="topic" onChange="updateWidget('source')">
+        <option value="all_stories"<%=@w_params[:topic_name] == "all_stories" ? " selected": ""%>>All Stories</option>
+        <optgroup label="-- Subjects --">
+        <%=options_from_collection_for_select(@subjects, :first, :last, @w_params[:topic_name])%>
+        </optgroup>
+        <optgroup label="-- Topics --">
+        <%=options_from_collection_for_select(@topics, :slug, :name, @w_params[:topic_name])%>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="widget_param" id="src_listingType">
+      <div class="param">Listing Type:</div>
+      <select name="listingType" onChange="updateWidget('source')">
+        <%= options_for_select([["Most Recent","most_recent"],
+                                ["Most Trusted", "most_trusted"],
+                                ["Least Trusted", "least_trusted"],
+                                ["All Rated Stories", "all_rated_stories"],
+                                ["For Review", "for_review"],
+                                ["Recent Reviews", "recent_reviews"]], @w_params[:lt]) %>
+      </select>
+    </div>
+
+    <div class="widget_param" id="src_dateWindow" style="margin:10px 0; display:none;">
+		<span style="font-size:10px; color:#444">This widget lists stories from the past 30 days. You may change the # of days below.</span><br/>
+		<div class="param inline"># days: </div>
+    <input id="src_dateWindowVal" size="3" type="text" name="src_date_window_days" value="<%=@w_params[:tr_nd]%>" />
+		<input type="button" style="background:#666; color:white;font-weight:bold;" value="Change" onclick="updateWidget('source')" />
+		<br/>
+    </div>
+
+    <div class="widget_param" id="src_contentType">
+      <div class="param">Content Type: </div>
+      <select name="contentType" onChange="updateWidget('source')">
+        <%= options_for_select([["News only","news"],["Opinion only","opinion"],["News and Opinion", ""]], @w_params[:ct]) %>
+      </select>
+    </div>
+  </div>
+
+  <div class="widget_opt_section" id="topic_widget_opts">
+    <h2 class="header"> 2. Choose Widget Content </h2>
+
+    <div class="widget_param" id="content_topic">
+      <div class="param">Subject/Topic:</div>
+      <select name="topic" onChange="updateWidget('topic')">
+        <option value="all_stories"<%=@w_params[:topic_name] == "all_stories" ? " selected": ""%>>All Stories</option>
+        <optgroup label="-- Subjects --">
+        <%=options_from_collection_for_select(@subjects, :first, :last, @w_params[:topic_name])%>
+        </optgroup>
+        <optgroup label="-- Topics --">
+        <%=options_from_collection_for_select(@topics, :slug, :name, @w_params[:topic_name])%>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="widget_param" id="content_listingType">
+      <div class="param">Listing Type:</div>
+      <select name="listingType" onChange="updateWidget('topic')">
+        <%= options_for_select([["Most Recent","most_recent"],
+                                ["Most Trusted", "most_trusted"],
+                                ["Least Trusted", "least_trusted"],
+                                ["For Review", "for_review"],
+                                ["Recent Reviews", "recent_reviews"]], @w_params[:lt]) %>
+      </select>
+    </div>
+
+    <div class="widget_param" id="content_dateWindow" style="margin:10px 0; display:none;">
+		<span style="font-size:10px; color:#444">This widget lists stories from the last 7-90 days depending on choice of topic/subject above.  You may change the # of days below.</span><br/>
+		<div class="param inline"># days: </div>
+      <input id="content_dateWindowVal" size="3" type="text" name="content_date_window_days" value="<%=@w_params[:tr_nd]%>" />
+		<input type="button" style="background:#666; color:white;font-weight:bold;" value="Change" onclick="updateWidget('topic')" />
+		<br/>
+    </div>
+
+    <div class="widget_param" id="content_contentType">
+      <div class="param">Content Type: </div>
+      <select name="contentType" onChange="updateWidget('topic')">
+        <%= options_for_select([["News only","news"],["Opinion only","opinion"],["News and Opinion", ""]], @w_params[:ct]) %>
+      </select>
+    </div>
+
+    <div class="widget_param" id="content_mediaType">
+      <div class="param">Source Group: </div>
+      <select name="media" onChange="updateWidget('topic')">
+        <%= options_for_select([["All Sources", ""], ["Independent","independent"],["Mainstream","mainstream"]], @w_params[:so]) %>
+      </select>
+    </div>
+  </div>
+
+  <div class="widget_opt_section" id="widget_disp_options">
+    <h2 class="header"> 3. Choose Widget Options </h2>
+
+    <div id="js_disp_options" style="display:none;">
+      <!-- Convert this into a selectable parameter -->
+      <div class="widget_param" id="js_numStories">
+        <div class="param inline">Number of stories:</div>
+        <select name="numStories" onChange="refreshJSWidget()">
+          <%= options_for_select((1..10), 5) %>
+        </select>
+      </div>
+
+      <div class="widget_param" id="js_width">
+        <div class="param inline">Width:</div>
+        <select name="widget" onchange="refreshJSWidget()">
+          <%= options_for_select([["auto", "auto"]] + [160,200,250,300,350,400,450,500,550,600].collect {|s| ["#{s}px", "#{s}"]}, "auto") %>
+        </select>
+      </div>
+
+      <div class="widget_param">
+        <div class="param" style="cursor:pointer;padding-top:2px;" onClick="toggleWidgetThemeCheckBoxes()">
+			 <img id="js_moreOptsArrow" src="/images/ui/disclosuretri-shut.gif">
+			 &nbsp;
+		    <span id="js_moreOptsText" style="color:#44c">More options</span>
+		  </div>
+
+		  <div id="js_checkboxes" style="display:none;">
+		    <div style="padding:5px 0; font-weight:bold">Select options to show:</div>
+			  <%[["date", "Story Date"], ["source", "Publication"], ["stars", "Trust-O-Meter"],["rating", "Rating Number"], ["story_type", "Story Type"],
+			     ["authors", "Authors"], ["quote", "Story Quote"], ["num_reviews", "# Reviews"], ["review_it", "Review It"], ["like_it", "Like"],
+					 ["review.note", "Member Note"], ["review.comment", "Member Comment"], ["review.links", "Member Links"]].each do |elt|-%>
+			    <div>
+			      <input id="show:<%=elt[0]%>" type="checkbox" checked onClick="refreshJSWidget()">
+			      <div><label for="show:<%=elt[0]%>"><%=elt[1]%></label></div>
+			    </div>
+		    <% end -%>
+     </div>
+
+	   <div style="clear:both;"></div> <!-- DO NOT REMOVE THIS -->
+
+     <div id="js_widgetTheme" style="display:none;">
+        <div class="param">Select widget theme:</div>
+        <input type="radio" name="widget_theme" checked value="default" onClick="setWidgetFormat('default', false)">Default (pre-styled) <br />
+		  <%if logged_in? && current_member.has_role_or_above?(:host) -%>
+		  <div id="unbranded_theme">
+        <input type="radio" name="widget_theme" value="unbranded" onClick="setWidgetFormat('unbranded', false)">No header or footer
+		  </div>
+		  <% end -%>
+		  <div id="unstyled_theme">
+        <input type="radio" name="widget_theme" value="default_unstyled" onClick="setWidgetFormat('default_unstyled', true)">Unstyled &nbsp; <a id="unstyled_help" style="font-size:11px;display:none;" target="_blank" href="/help/widget_styling">(Styling help)</a> <br />
+		  <span style="font-size:10px; color:#666">(More themes will be made available in the future)</span>
+		  </div>
+      </div>
+    </div>
+
+    <div style="clear:both;"><br/></div> <!-- DO NOT REMOVE THIS -->
+  </div>
+
+  <div class="widget_opt_section">
+    <h2 class="header"> 4. Copy Your Widget Code</h2>
+    <p>Copy the HTML code below into the Web page where you want the widget to appear. </p>
+    <div> <textarea readonly id="widget_code" cols="38" rows="15" style="font-size:10px;" onClick="selectCode()"></textarea> </div>
+  </div>
+
+</td>
+
+<td id="widget_preview_cell">
+
+<div id="preview_div">
+  <h2 class="header" style="margin-bottom:10px;">Widget Preview</h2> 
+  <center style="position:relative;">
+    <!-- Overlay that hides the iframe while it is being resized ... lets us hide the scrollbars when it shows up temporarily -->
+    <div id="temporary_overlay" style="z-index:5;position:absolute;left:0;top:0;width:100%;height:100%;background:white;">&nbsp;</div>
+    <!-- PREVIEW -->
+    <iframe onLoad="showIframe()" name="wpIframe" id="widget_preview" frameborder="0" marginheight="0" marginwidth="0" style="padding:0;margin:0;overflow-x:hidden;" src="javascript:void(0);">Will be replaced!</iframe> 
+    <div id="member_placeholder" style="width:400px;margin-top:120px;font-size:18px;display:none;"> Please select a member (in the choose widget content menu on the left) to display a widget here! </div>
+    <div id="source_placeholder" style="width:400px;margin-top:120px;font-size:18px;display:none;"> Please select a source (in the choose widget content menu on the left) to display a widget here! </div>
+  </center>
+
+  <div style="z-index:10;margin-left:150px;margin-top:100px;font-size:16px;font-weight:bold;" id="loading_msg"></div>
+
+</div>
+
+</td>
+</tr>
+</table>

@@ -1,0 +1,208 @@
+<% hide_flags ||= {} -%>
+<% show_flags ||= {} -%>
+<% see_reviews_msg ||= "See Reviews &raquo;" -%>
+<% followed ||= {} -%>
+<% @url_tracking_key ||= nil -%>
+<% @will_be_cached ||= false -%>
+<% hide_flags[:tw_share] = true if visitor_is_bot? -%>
+
+<%#-- SSS: Disable this for now --%>
+<%#-- hide_flags[:fb_share] = true ---%>
+
+<% unless story.submitted_by_member.blank? || hide_flags[:submitted_by] -%>
+  <div class="posted_by">
+  	<%= show_submitted_by(story) %>
+  </div>
+<% end -%>
+
+<% s_url = @url_tracking_key ? story_path(story, :ref => @url_tracking_key) : story_path(story) -%>
+<% rating = story.group_rating(group) || 0.0 -%>
+<% reviews_count = story.group_reviews_count(group) -%>
+<% hide_rating = story.hide_rating(group) -%>
+
+<%#-- SSS: If you change the story_id attr and class of the following div, OR if you change the DOM layout of stories, 
+  #-- please update all JS that relies on these attrs. being present -- mynews.js, application.js and anything else --%>
+<div story_id="<%=story.id%>" class="story_links">
+	<%- if show_flags[:my_news_info] # new version, used for MyNews -%>
+    <%- unless hide_flags[:rating] && hide_flags[:review_it] -%>
+      <div class="row1">
+      <%= link_to_toolbar(story, "", :go => "review", :ref => @url_tracking_key, :cached => @will_be_cached) unless hide_flags[:review_it] %>
+      <%- unless hide_flags[:rating] -%>
+        <%- if reviews_count > 0 -%>
+          <%- if show_flags[:gray_trustometer] -%>
+            <%= link_to(trustometer_img(rating, hide_rating ? {:color => "gray", :num_rating_class => "numeric_rating_gray"} : {}), s_url) %>
+          <%- else -%>
+            <%= link_to(trustometer_img(rating), s_url) %>
+          <%- end -%>
+        <%- elsif !hide_flags[:no_rating] -%>
+          <div class="trustometer">
+            <div class="no_rating">
+              <%= link_to "No Rating", s_url, :class => "quiet" %>
+            </div>
+          </div>
+        <%- end -%>
+      <%- end -%>
+      </div>
+    <%- end -%>
+
+      <div class="row2">
+      <%= link_to("", s_url, :title => "See all reviews for this story", :class => "reviews_btn") if show_flags[:reviews_btn] %>
+      <%- unless hide_flags[:reviews] -%>
+        <%= link_to(see_reviews_msg, s_url, :title => "See all reviews for this story") %>
+      <%- end -%>
+      
+      <%- if show_flags[:num_reviews] && reviews_count > 0 -%>
+        <%= link_to(pluralize(reviews_count, "review"), s_url, :class => "see_reviews_count", :title => "See all reviews for this story") %>
+      <%- end -%>
+
+      <div class="icons">
+        <%- if show_flags[:row2_starred] %><%= link_to_star(story, {:cached => @will_be_cached, :ref => @url_tracking_key}) %><% end %>
+        <%- unless hide_flags[:fb_share] %><%= fb_share_link(story_url(story)) %><% end %>
+        <%- unless hide_flags[:tw_share] %><%= tweet_story(story) %><% end %>
+        <%- unless hide_flags[:email]    %><%= email_story(story) %><% end %>
+        <%- unless hide_flags[:share]    %><%= share_link(story, "share_icon", "") %><% end %>
+        <%- unless hide_flags[:edit_it] -%>
+          <span class="edit_link hide"><%= link_to("", edit_story_url(story), :title => "Edit this story", :class => "edit_icon") %></span>
+        <%- end -%>
+      </div>
+
+      <%- if show_flags[:submit_it] -%>
+        <%= link_to_toolbar(story, "Submit", :go => "edit") %>
+      <%- end -%>
+      <%- if show_flags[:see_all_reviews] -%>
+        <div class="see_all_nt_reviews">
+        <%= nt_colors() %> Rating: <%= content_tag(:span, format_rating(rating), :class => "green") %> | <%= link_to "See All #{nt_colors()} Reviews &raquo;", story %>
+        <%= link_to_toolbar(story, "", :ref => @url_tracking_key, :go => "review", :cached => @will_be_cached) if show_flags[:bottom_review_button] %>
+        </div>
+      <%- end -%>
+	  </div>
+    <%- show_details = @mynews_opts.show_details -%>
+    <%- match_info = @story_matches[story.id] -%>
+    <%- num_matches = match_info[:count] -%>
+    <div class="matches_box clearfix" style="cursor:pointer" onclick="toggle_story_info(this)">
+      <div class="matches_title"><%= plural(num_matches, "match") %></div>
+      <div class="<%= show_details ? "matches_arrow_up" : "matches_arrow_down"%>"></div>
+      <div class="my_news_info" style="padding:2px;margin:0<%=";display:none" if !show_details%>">
+        <%- icon_count = 0; max_icons = 18; max_per_row = 6; match_tag = "" -%>
+        <%- if num_matches > max_icons -%>
+          <%- max_icons -= 1; match_tag = "<span style=\"color:#333;padding-left:8px;\">+#{num_matches - max_icons}</span>" -%>
+        <%- end -%>
+        <%- match_info[:sources].collect { |s| -%>
+          <%- if icon_count < max_icons && !s.favicon.blank? -%>
+            <%= link_to(image_tag(s.favicon, :style => "padding:3px;float:left", :title => s.name),s) %>
+            <%- icon_count += 1 %><%= "<br />" if icon_count % max_per_row == 0 %>
+          <%- end -%>
+        <%- }.compact if match_info[:sources]-%>
+        <%- match_info[:members].collect { |m| -%>
+          <%- if icon_count < max_icons -%>
+            <%= link_to(image_tag(m.image ? m.image.public_filename(:favicon) : "/images/ui/silhouette_favicon.jpg", :style => "padding:2px;float:left;", :title => m.name), m) %>
+            <% icon_count += 1 %><%= "<br />" if icon_count % max_per_row == 0 %>
+          <%- end -%>
+          <%- } if match_info[:members] -%>
+        <%- match_info[:topics].collect { |t| %>
+          <%- if icon_count < max_icons %>
+            <%= link_to(image_tag(t.image ? t.image.public_filename(:favicon) : "/images/ui/topic_favicon.png", :style => "padding:2px;float:left;", :title => t.name) ,t) %>
+            <% icon_count += 1 %><%= "<br />" if icon_count % max_per_row == 0 %>
+          <%- end %>
+          <%- } if match_info[:topics] -%>
+        <%- match_info[:feeds].collect { |f| -%>
+          <%- if icon_count < max_icons -%>
+            <%- favicon = f.favicon; favicon = "/images/ui/feed_favicon.png" if favicon.blank? -%>
+            <%= link_to(image_tag(favicon, :style => "padding:3px;float:left;", :title => f.name),f) %>
+            <% icon_count += 1 %><%= "<br />" if icon_count % max_per_row == 0 %>
+          <%- end -%>
+          <% } if match_info[:feeds] -%>
+          <%= match_tag %>
+      </div>
+	  </div>
+  	<div class="my_news_info" style="width:450px;margin-top:10px<%=";display:none" if !@mynews_opts.show_details%>">
+  	  <%= story.story_type.blank? ? nil : "Story type: #{humanize_token(story, :story_type)}<br />" %>
+      <%= show_submitted_by(story, :via_credits => false, :followed_members => followed[:members]) %>.
+      <%= show_reviewers(story,:followed_members => followed[:members]) %><br />
+      <%- feed_info = show_feed_info(story, :followed_feeds => followed[:feeds]) -%>
+      <span class="feed_attribution"> <%= "#{feed_info}<br />" unless feed_info.blank? %> </span>
+      <%= show_topics(story, :prefix => "Topics: ", :followed_topics => followed[:topics]) %>
+    </div>
+  <%- else # original display -%>
+    <%- unless hide_flags[:rating] && hide_flags[:review_it] -%>
+      <div class="row1">
+      <%= link_to_toolbar(story, "", :go => "review", :ref => @url_tracking_key, :cached => @will_be_cached) unless hide_flags[:review_it] %><%=  %>
+      <%- unless hide_flags[:rating] -%>
+        <%- if reviews_count > 0 -%>
+          <%- if show_flags[:gray_trustometer] -%>
+            <%= link_to(trustometer_img(rating, hide_rating ? {:color => "gray", :num_rating_class => "numeric_rating_gray", :group => group} : {:group => group}), s_url, :class => "#{popup_check}", :title => "#{group ? "Group " : ""}Rating: #{"%.2f" % rating}") %>
+          <%- else -%>
+            <%= link_to(trustometer_img(rating, :group => group), s_url, :title => "#{group ? "Group " : ""}Rating: #{"%.2f" % rating}") %>
+          <%- end -%>
+        <%- elsif !hide_flags[:no_rating] -%>
+          <div class="trustometer">
+            <div class="no_rating">
+              <%= link_to "No Rating", s_url, :class => "quiet" %>
+            </div>
+          </div>
+        <%- end -%>
+        <%= content_tag(:div, "#{nt_colors()} Rating: <span class=\"green\">#{format_rating(story.rating)}</span>", :class => "see_all_nt_reviews") if group %>
+      <%- end -%>
+
+      <%= link_to("", s_url, :title => "See all reviews for this story", :class => "reviews_btn") if show_flags[:reviews_btn] %>
+      <%- unless hide_flags[:reviews] -%>
+        <%= link_to(see_reviews_msg, s_url, :title => "See all reviews for this story", :class => "reviews") %>
+        <%- sep = " | " -%>
+      <%- end -%>
+      </div>
+    <%- end -%>
+
+    <div class="row2">
+      <%- sep ||= " " -%>
+      <% if show_flags[:row2_reviews] -%>      
+        <%= link_to(see_reviews_msg, s_url, :title => "See all reviews for this story", :class => "reviews") %>
+        <%- sep = " | " -%>
+      <%- end -%>
+
+      <%- unless hide_flags[:share_icons] -%>
+        <div class="icons">
+          <%- if show_flags[:row2_starred] %><%= link_to_star(story, {:cached => @will_be_cached, :ref => @url_tracking_key}) %><% end %>
+          <%- unless hide_flags[:fb_share] %><%= fb_share_link(story_url(story)) %><% end %>
+          <%- unless hide_flags[:tw_share] %><%= tweet_story(story) %><% end %>
+          <%- unless hide_flags[:email]    %><%= email_story(story) %><% end %>
+          <%- unless hide_flags[:share]    %><%= share_link(story, "share_icon", "") %><% end %>
+          <%- unless hide_flags[:edit_it] -%>
+            <span class="edit_link hide"><%= link_to("", edit_story_url(story), :title => "Edit this story", :class => "edit_icon") %></span>
+            <%- sep = " | " -%>
+          <%- end -%>
+        </div>
+      <%- end -%>
+
+      <%- if show_flags[:num_reviews] -%>
+        <%= sep + link_to(pluralize(reviews_count, "review") + " &raquo;", s_url, :title => "See all reviews for this story", :class => "#{popup_check}") %>
+      <%- end -%>
+
+      <%- if show_flags[:submit_it] -%>
+        <%= link_to_toolbar(story, "Submit", :ref => @url_tracking_key, :go => "edit") %>
+      <%- end -%>
+
+      <%- if show_flags[:see_all_reviews] -%>
+        <div class="see_all_nt_reviews">
+        <%= link_to_toolbar(story, "", :go => "review", :ref => @url_tracking_key, :cached => @will_be_cached) if show_flags[:bottom_review_button] %>
+        <%= nt_colors() %> Rating: <%= content_tag(:span, format_rating(story.rating), :class => "green") %> | <%= link_to "See All #{nt_colors()} Reviews &raquo;", s_url %>
+        </div>
+      <%- end -%>
+      <%- if show_flags[:toolbar_more_info] -%>
+        <div class="more_info" style="clear:both;margin-top:14px;border-top:2px solid #f3f3f3">
+          <a class="more" href="#" onclick="$('.show_more_info').toggle(); $(this).toggleClass('selected'); return false">More Info</a>
+        </div>
+        <div class="show_more_info" style="display:none;">
+          <%- reviewers = show_reviewers(story,:followed_members => followed[:members]) -%>
+          <%= "#{reviewers}<br />" unless reviewers.blank? %>
+          <%- feed_info = show_feed_info(story, :followed_feeds => followed[:feeds]) -%>
+          <%= content_tag(:span, "#{feed_info}<br />", :class => "feed_attribution") unless feed_info.blank? %>
+          <%= show_topics(story, :prefix => "Topics: ", :followed_topics => followed[:topics]) %><br /><br />
+          <%= link_to("See more stories &raquo;", "/", :class => "#{popup_check}") %> 
+          <%- if @local_site.nil? -%>
+          | <%= link_to("Visit #{mynews_colors}", "/mynews", :class => "#{popup_check}") %>
+          <%- end -%>
+        </div>
+      <%- end -%>
+	  </div>
+  <%- end -%>
+</div>

@@ -1,0 +1,65 @@
+<%- @title = "Rate your sources - #{@medium_name}" %>
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag "source_review" %>
+  <%= javascript_include_tag "rate_sources" %>
+  <%= javascript_include_tag "#{@local_site ? "#{@local_site.slug}." : ""}topic_taxonomy.json" %>
+  <%= javascript_include_tag "jquery/source_review_topic_autocomplete" %>
+<%- end -%>
+
+<div class="span-18">
+	<div class="main_column_box_new">
+	  <h2 class="medium_name"><%= @title %></h2>
+    <p>
+      Please take a moment to quickly <%= help_link "rate sources you know", "review_source", "reviewer" %> on this page -- or click on any yellow button
+      below to <%= help_link "add a review", "review_source", "reviewer" %>.
+
+      Then visit our <%= link_to "Sources page", sources_path %> to see our top-rated news providers<%= " in #{@local_site.name}" if @local_site%>,
+      based on reviews from members like you.
+      <%- if !logged_in? -%>
+      <span style='font-weight:bold'>
+      If you are a member, please <%= link_to_function "login to review", "show_login_dialog()" %>.  
+      If you're not yet a member, please <%= link_to "sign up", new_member_path%> to participate.
+      </span>
+      <%- end -%>
+      Thanks for helping rate <%= @local_site ? "your local" : "the"%> news!
+    </p>
+
+    <div class="return"> <%= link_to "&laquo Return to 'Rate your sources'", rate_sources_sources_path %> <br/><br/></div>
+	
+		<table class="listing" cellspacing="0">
+			<tr class="head_row">
+				<th>Name</th>
+<%#--
+  # SSS: No longer displaying this since we dont have stats for this on local sites
+				<th align="center">Stories</th>
+--%>
+				<th align="center">Story Reviews</th>
+				<th align="center">Rate sources you know</th>
+			</tr>
+			<%- @sources.each_with_index do |source, si| -%>
+        <%- rating_stats = @local_site ? source.source_stats.find_by_local_site_id(@local_site.id) : source -%>
+				<tr <% if !(si%2).zero? %> class="odd" <% end %>>
+					<td><%= link_to source.name, source %></td>
+<%#--
+  # SSS: No longer displaying this since we dont have stats for this on local sites
+					<td align="center"><= number_format(rating_stats.public_stories_count(365)) ></td>
+--%>
+					<td align="center"><%= number_format(rating_stats.story_reviews_count) %></td>
+          <%- source_review = @my_reviews_hash[source.id] || SourceReview.new(:source_id => source.id, :member_id => logged_in? ? current_member.id : nil) -%>
+          <td class="source_entry">
+<%#--- No bots please! ---%>
+<%- if !visitor_is_bot? -%>
+            <div class="full_review">
+              <%= link_to "", "#", :id => "source_review_source_#{source.id}", :class => "full_review#{' on' if !source_review.incomplete?}" -%>
+            </div>
+            <%= render :partial => "source_reviews/quick_rating", :locals => { :source_review => source_review } %>
+<%- end -%>
+          </td>
+				</tr>
+			<%- end -%>
+		</table>
+	</div>
+</div>
+
+<%= render :partial => "source_review_overlay" -%>
+<%= render :partial => "shared/login_overlay" -%>

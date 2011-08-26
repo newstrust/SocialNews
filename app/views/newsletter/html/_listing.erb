@@ -1,0 +1,39 @@
+<%# --- IMPORTANT: We have to generate absolute urls here.  So, use the "XYZ_url" form of urls in link_to --- %>
+
+<%# --- Section Story list --- %>
+<tr>
+  <td colspan="3">
+  <ul class="stories">
+<% stories.each do |s| -%>
+    <li>
+    <div class="storyInfo">
+      <div class="story_title"><%= link_to s.title, newsletter_toolbar_link(s, @link_params) %></div>
+      <%if s.primary_source %><span class="pubname"><%= s.primary_source.is_public? ? link_to(s.primary_source.name, @link_params.merge(:controller => :sources, :action => :show, :id => s.primary_source.id, :only_path => false)) : s.primary_source.name %></span><%end%>
+      <span class="byline"><%if !s.journalist_names.blank? %>- by <span class="author"> <%= h s.journalist_names%></span></span><%end%>
+      <%if s.story_date%><span class="date"> - <%= s.story_date.strftime("%b. %d") %></span><%end%>
+      <%if s.story_type %><span class="type">(<%= humanize_token(s, :story_type) %>)</span><%end%>
+      <%if !s.excerpt.blank? %>
+      <br><span class="story_quote"><%=StringHelpers.truncate_on_word_boundary(s.excerpt,0,200,true)%></span>
+      <% end %>
+    </div>
+    <div class="storyRating">
+      <div class="trustometer">
+      <% if (s.reviews_count > 0) -%>
+      <%= link_to static_trustometer_img(s.rating, {:absolute_path => true}), story_url(s, @link_params) %><%= link_to sprintf("%0.1f", s.rating), story_url(s, @link_params), :class => "rating" %>
+      <% else -%>
+			  <%= link_to "NO RATING", story_url(s, @link_params), :class => "no_rating" %>
+      <% end -%>
+      </div>
+      <div style="clear:both;font-size: 11px;">
+		  <%=link_to see_reviews_link_text(s), story_url(s, @link_params)%> <br />
+        <%#-- Cannot do JS tricks in email newsletters for reviews -- so taking them to the story overview page --%>
+		  <%=link_to "Review It", newsletter_toolbar_link(s, @link_params, :go => "review"), :class => "rate_it" %> | <%= link_to "Like", save_story_url(s, @link_params)%> <br />
+     <span class="via"> <%=show_submitted_by(s, {:for_newsletter => true})%></span>
+		  </div>
+    </div>
+    <br clear="left"/>
+    </li>
+<% end %>
+  </ul>
+  </td>
+</tr>

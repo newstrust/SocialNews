@@ -1,0 +1,74 @@
+<%- @title, @meta_keywords, @meta_description = subject_title_and_meta_info(@subject) -%>
+<%- @login_overlay_header = "<p>Please login or #{link_to "<strong>sign up</strong>", new_member_path} to add your comment.</p>" -%>
+<%#-- Specify a facebook OG meta-tag to let FB know what image to pick when someone likes the page %>
+<%- @og_meta_tags = { "og:image" => @subject.image.public_filename(:thumb) } if @subject.image -%> 
+
+<% content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'listings' %>
+  <%= javascript_include_tag 'follows' %>
+<% end -%>
+
+<script type="text/javascript">
+  $('#page_intro').truncate({max_length: 800});
+<%- if logged_in? -%>
+<%#-- Need fixup to get around fragment caching! --%>
+  $(document).ready(function() {
+    var button = $('a#follow_button_to_fixup');
+    button.attr('class', '<%= current_member.followed_topics.include?(@subject) ? "unfollow_tag" : "follow_tag"%>');
+    button.click(function() {return toggle_follow(button, {type: 'topic', id: <%=@subject.id%>})});
+    button.show();
+  });
+<% end -%>
+</script>
+
+<div class="story_listing_detail span-16">
+  <%= render :partial => 'shared/landing_pages/top_area',     :locals => {:page_obj => @subject} %>
+  <%= render :partial => 'shared/landing_pages/listing_tabs', :locals => {:listing_route => {:s_slug => @subject.slug}, :page_obj => @subject } %>
+  <%= render :partial => 'shared/landing_pages/comments',     :locals => {:page_obj => @subject} %>
+</div>
+
+<%= render :partial => 'shared/landing_pages/sidebar', :locals => {:page_obj => @subject} %>
+
+<%- cache @right_column_cached_fragment_name do -%>
+<div class="span-8 last">
+  <% subject_name = (@subject.name == "Other") ? "Other Subjects" : @subject.name -%>
+  <%#= render :partial => 'subjects/smart_feeds_widget', :locals => {:name => subject_name, :slug => @subject.slug} -%>
+
+  <%#-- SSS: No top sources widget for topic & subject pages on local sites -%>
+  <%- if @local_site.nil? && @right_column_settings["show_top_sources?"].is_true? -%>
+    <%= render :partial => 'subjects/top_sources', :locals => {:name => @subject.name, :slug => @subject.slug} %>
+  <% end -%>
+
+  <%- if @local_site && !logged_in? -%>
+    <%- right_column_box :header => "Sign Up" do -%>
+      <p>Help find good local journalism. Sign up to review stories -- and get our free newsletters.</p>
+      <div class="fb_button">
+        <fb:login-button onlogin="fbc_init_activation('/partners/<%=@local_site.slug%>/public', '')" length="long" v="2"></fb:login-button>
+      </div>
+      <div style="margin-top:10px;font-size:12px"> or 
+        <strong>
+          <a href="/partners/<%=@local_site.slug%>/">sign up with <span style="color:#385ac8">News</span><span style="color:#399800">Trust</span>&nbsp;&nbsp;&raquo;</a>
+        </strong>
+      </div>
+    <%- end -%>
+  <%- end -%>
+
+  <%- if @right_column_settings["show_other_topics?"].is_true? -%>
+    <%= render :partial => 'topics_column', :locals => {:subject => @subject} %>
+  <% end -%>
+
+  <% if @right_column_settings["show_widget?"].is_true? %>
+    <% right_column_box :header => subject_name + " Widget ", :disclaimer_link => 'NEW' do -%>
+      <% if @num_stories >= 5 -%>
+        <script type="text/javascript"> _NTW_numStories = 3; </script>
+        <script src="/subjects/<%= @subject.slug %>/most_recent.json" type="text/javascript"></script>
+        <script src="/javascripts/widgets/formats/default.json" type="text/javascript"></script>
+        <script src="/javascripts/render_widget.js" type="text/javascript"></script>
+        <a href="/widgets?url=/subjects/<%= @subject.slug %>/most_recent">Add this widget to your site <span class="more">&raquo;</span></a>
+      <% else -%>
+        <a href="/widgets?url=/subjects/<%= @subject.slug %>/most_recent">See this subject's widget <span class="more">&raquo;</span></a>
+      <% end -%>
+    <% end -%>
+  <% end -%>
+</div>
+<%- end -%>

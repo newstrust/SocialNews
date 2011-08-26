@@ -1,0 +1,23 @@
+<div id="page_intro">
+  <%- if page_obj.intro.blank? -%>
+    Help find good journalism on this <%= "#{@local_site.name}-related " if page_obj.class == Topic && @local_site %>topic. Please <%=link_to "review", "/guides/how-to-review", :target=> "_blank"%>
+    or <%= link_to "post", post_story_path, :target => "_blank"%> stories below.
+  <%- else -%>
+    <%= page_obj.intro %>
+  <%- end -%>
+</div>
+
+<%- ph = page_obj.hosts(@local_site) %>
+<% unless ph.empty? -%>
+  <p>
+    <strong>Hosted by</strong>
+    <%= ph.collect { |h| link_to(h.name, h) }.join(", ") %><%= help_icon("what_is_a_host", "host") %>
+  </p>
+<% end -%>
+
+<%- type_name = page_obj.class.name.downcase -%>
+<%- tools_box :page_type => type_name.to_sym, :object => page_obj, :comments_link => page_obj.allow_comments?, :edit_privs => editable, :edit_link => "/admin/#{type_name.pluralize}/#{page_obj.friendly_id}/layout", :edit_title => "Edit #{type_name} " + page_obj.name do -%><%# already determined earlier that this is an admin or a topic/subject host %>
+  <%- if can_follow? -%>
+    <a style='display:none' id="follow_button_to_fixup" href="#"></a>
+  <%- end -%>
+<% end -%>

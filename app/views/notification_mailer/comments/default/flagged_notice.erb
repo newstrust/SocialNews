@@ -1,0 +1,6 @@
+Content was flagged on <%=app_name%>:
+
+Reason: <%= @record.flags.last.reason %>
+Flagged By: <%= h @record.flags.last.member.display_name %>
+Flagged Content: <%= link_to(h('%s %i' % [@record.class, @record.id]), ['admin', @record]) %>
+Offending Member:<%= link_to h("#{@record.flags.last.owner.display_name} (#{@record.flags.last.owner.flaggings.size})"), @record.flags.last.owner %>

@@ -1,0 +1,40 @@
+<script type="text/javascript" charset="utf-8">
+  FORMATTED_SEARCH_ADMIN_MEMBERS_PATH = '<%= search_admin_members_path(:format => :js) %>';
+  FORMATTED_ADMIN_GROUP_MEMBERS_PATH = '<%= admin_host_index_path(:hostable_id => @source.id, :hostable_type => "source", :format => :js) %>';
+</script>
+
+<%- return_to = params[:return_to] %>
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'admin/groups'%>
+<%- end -%>
+
+<div class="use16columns inner_left">
+  <h1>Edit Source "<%= h @source.name %>"</h1>
+
+    <%= error_messages_for :source %>
+    <h3><%= link_to 'Preview Public Source Page', source_path(@source), :target => "_blank" %></h3>
+    <h3><%= link_to 'Public Source Page Edit Form', edit_source_path(@source), :target => "_blank" %></h3>
+    <h5>Source ID: <%= @source.id %></h5><br />
+
+  <div class="use10columns inner_left">
+    <% form_for :source, :url => admin_source_path(@source.id), :html => { :method => :put, :multipart => true } do |f| -%>
+      <%= render :partial => 'form' , :locals => { :f => f }%>
+      <div class="buttons">
+      <%= submit_tag 'Update' %> <%= cancel_tag (return_to=="show" ? admin_source_path(@source.id) : "/admin/sources") %>
+      </div>
+    <% end -%>
+  </div>
+
+  <div class="use6columns inner_right">
+  <div class="fieldset">
+    <h3>Hosts</h3>
+    
+    <%= render :partial => "admin/members/member_lookup", :locals => {
+      :members => @source.hosts,
+      :add_url => admin_host_path(:hostable_id => @source.id, :hostable_type => "source", :format => :js),
+      :delete_base_url => admin_host_index_path(:hostable_id => @source.id, :hostable_type => "source", :format => :js)} %>
+   
+    <div style="clear:both;">&nbsp;</div>
+  </div>
+  </div>
+</div>

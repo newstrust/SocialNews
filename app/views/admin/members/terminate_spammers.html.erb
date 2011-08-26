@@ -1,0 +1,49 @@
+<h1> Termination Report </h1>
+
+<%=@spammers.length-@rejected_terminations.length%> spammers were marked 'terminated'. <br />
+<%=@hidden_stories.length%> of their submitted stories were hidden. <br />
+<%=@recalc_stories.length%> of their reviewed stories were submitted for rating recalc. <br />
+<%- if @rejected_terminations.empty? -%>
+The following members were not terminated because they had validation levels 3 or higher.
+Please downgrade their validation before attempting to terminate them.
+<ul>
+  <% @rejected_terminations.each do |m| -%>
+    <li> <%=m.id%>: <%= link_to_member(m) %> </li>
+  <%- end -%>
+</ul>
+<%- end -%>
+<%- if !@other_spammers.empty? -%>
+The following members are also potentially spammers since they share their IP with the spammers we terminated now.
+Their member ids and link to their profile is given below.  Please investigate and resubmit any new spammers.<br/><br/>
+<ul>
+  <% @other_spammers.each do |s| -%>
+  <% ip = s.http_x_real_ip ? SpammerIp.find_by_ip(s.http_x_real_ip) : nil %>
+  <li> ID: <%=s.id%>; <%= link_to_member(s)%>; <%= "#{ip.ip} (#{ip.spammer_count})" if ip %></li>
+  <% end -%>
+</ul>
+<% end %>
+<% id_string = @other_spammers.map(&:id) * "," -%>
+Comma-separated list of new spammer ids: <%=id_string%><br/>
+<%= link_to "Click here to go to the spammer termination form!", spammer_termination_form_admin_members_path(:ids => id_string) %>
+<br/> <hr/> <br/>
+Here is the full list of terminated spammers:
+<ul>
+  <% @spammers.each do |s| -%>
+  <% ip = s.http_x_real_ip ? SpammerIp.find_by_ip(s.http_x_real_ip) : nil %>
+  <li> ID: <%=s.id%>; <%= link_to_member(s)%>; <%= "#{ip.ip} (#{ip.spammer_count})" if ip %></li>
+  <% end -%>
+</ul>
+<br/> <hr/> <br/>
+Here is the full list of hidden stories:
+<ul>
+  <% @hidden_stories.each do |s| -%>
+  <li> <%= link_to s.title, s %> </li>
+  <% end -%>
+</ul>
+<br/> <hr/> <br/>
+Here is the full list of spammer-reviewed stories submitted for recalc:
+<ul>
+  <% @recalc_stories.each do |s| -%>
+  <li> <%= link_to s.title, s %> </li>
+  <% end -%>
+</ul>

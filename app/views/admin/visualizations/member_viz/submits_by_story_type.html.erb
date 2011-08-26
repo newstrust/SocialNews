@@ -1,0 +1,18 @@
+<style>
+ * { font-size: 15px; }
+</style>
+
+<h2> Distribution of stories posted by <%=@member.name%>: By story type and source ownership </h2>
+
+<div id="distribution" style="float:left;width:500px;height:250px"></div>
+<div id="legend" style="float:left;"></div>
+
+<script type="text/javascript" src="/js/jquery/jquery.flot.pack.js"> </script>
+<script type="text/javascript">
+<%- @flot_data_array.each_with_index do |da,i| -%>
+  var d_<%=i%> = <%=da.to_json%>;
+<%- end -%>
+  var data = [{ data: d_0, bars: { show: true, barWidth:0.5, fill: true } }]
+  $.plot($("#distribution"), data, {xaxis: {min: 0.5, max:5,  ticks: [[1.25, "msm_news"], [2.25, "ind_news"], [3.25, "msm_opinion"], [4.25, "ind_opinion"]]}})
+</script>
+</div>

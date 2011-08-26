@@ -1,0 +1,16 @@
+<script type="text/javascript">
+<% if (!params[:numStories].nil?) %> _NTW_numStories = <%=params[:numStories]%>; <% end -%>
+<% if (!params[:width].nil? && (params[:width] != "auto")) %> _NTW_width = "<%=params[:width]%>px"; <% end -%>
+<% if (!params[:width].nil? && (params[:width] == "auto")) %> _NTW_width = 'auto'; <% end -%>
+_NTW_hideElts = new Array();
+<% ['date','source','stars','rating','story_type','authors','quote','num_reviews','review_it','save','review.note','review.comment'].each do |elt| -%>
+<% if (params[elt.to_sym]) -%> _NTW_hideElts['<%=elt%>'] = <%=params[elt.to_sym].to_i%>; <% end -%>
+<% end %>
+</script>
+<%if params[:widgetName] =~ /legacy./-%>
+<script src="/widgets/js/<%=params[:widgetName].gsub("legacy.", "")%>.json" type="text/javascript"></script>
+<%else-%>
+<script src="/<%=params[:widgetName]%>.json" type="text/javascript"></script>
+<%end-%>
+<script src="/javascripts/widgets/formats/<%=params[:widgetFormat]%>.json" type="text/javascript"></script>
+<script src="/javascripts/render_widget.js" type="text/javascript"></script>

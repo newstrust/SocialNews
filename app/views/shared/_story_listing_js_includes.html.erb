@@ -1,0 +1,14 @@
+<%- @no_third_party_content ||= false -%>
+<%- if !@no_third_party_content -%>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js?pub=<%=SocialNewsConfig["app"]["slug"]%>"></script>
+<%- end -%>
+<script type="text/javascript" charset="utf-8">
+	// for cached stories
+  is_story_listing = true;
+  <%#--- FIXME: this logic for active reviewer is arbitrary! ---%>
+  member_is_active_reviewer = <%= (logged_in? && current_member.total_reviews > 15).to_json %>;
+  cached_stories_state = <%= member_cached_stories_state(@cached_story_ids).to_json %>;
+  <%#-- This ensures that in ajax listings, patching always happens after the js is loaded completely! --%>
+  <%if @is_ajax_listing-%> patch_cached_stories(); <%end%>
+</script>
+<%= javascript_include_tag "twitter" %>

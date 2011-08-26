@@ -1,0 +1,29 @@
+<div id="comment_form_<%= character_counter_id %>">
+  <!--
+  <strong>Title: </strong>
+  <%#= f.text_field :title, :value => initial_title_for(f.object, @parent), :size => 50 %>
+  -->
+  <%= f.hidden_field(:commentable_type) %>
+  <%= f.hidden_field(:commentable_id) %>
+  <%= f.hidden_field(:initial_ancestor_id) unless f.object.initial_ancestor_id.blank? %>
+  <p><strong class="form_title"><%= form_title %></strong></p>
+  <span id='<%= character_counter_id %>' class="character_counter"></span>
+  <%= render :partial => 'shared/textile_support.html.erb' %>
+  <%= f.text_area :body, :cols => 54, :class => 'comment_body' %>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function(){
+    $('#comment_form_<%= character_counter_id %> textarea').keyup(function() {
+      var charLimit = <%= Comment.body_character_limit %>;
+      var charLength = $(this).val().length;
+      $('#<%= "#{character_counter_id}" %>').html((charLimit - charLength) + ' characters left.');
+      if((charLimit - charLength) <= 0 ) {
+        $('#<%= "#{character_counter_id}" %>').html('<h3>Please limit your response to ' + charLimit + ' characters.</h3>');
+        $('#comment_submit_container_<%= character_counter_id %>').hide();
+      } else {
+        $('#comment_submit_container_<%= character_counter_id %>').show();
+      }
+    });
+  });
+</script>

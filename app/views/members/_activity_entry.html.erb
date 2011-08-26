@@ -1,0 +1,76 @@
+<%- group ||= nil -%>
+<%- story_hf  = {:quote => true, :submitted_by => true, :rating => true, :review_it => true, :edit_it => true, :fb_share => true, :tw_share => true, :email => true, :reviews => true, :share => true, :type => true} -%>
+<%- story_sf  = {:see_all_reviews => true, :days_ago => true, :bottom_review_button => true, :starred => true} -%>
+<%- review_hf = {:add_review_comment => true, :fb_share => true, :is_featured => true, :like_it => true, :meta_review_input => false, :review_date => true, :reviewer_name => true, :reviewer_photo => true, :reviewer_submission => true, :share => true, :type => true} -%>
+<%- review_sf = {:days_ago => true, :see_full_review_member_name => true, :bottom_review_button => true, :starred => true} -%>
+<%- comment_sf = {:days_ago => true, :bottom_review_button => true, :starred => true, :mynetwork_permalink => true} -%>
+<%- comment_hf = {:display_header => true, :type => true, :fb_share => true, :tw_share => true, :email => true} -%>
+<%- netfriend_first_name = first_name(netfriend) -%>
+<%- hide_follows ||= false -%> 
+
+<li>
+  <div class="activity_entry">
+    <div style="float:left;width:45px;">
+      <%= link_to(image_tag(netfriend.image ? netfriend.image.public_filename(:thumb) : "/images/ui/silhouette_sml.jpg", :size => "40x40", :style=> "margin-right: 5px; float:left"), netfriend) %><br />
+      <%- if !hide_follows && my_page -%>
+        <%= content_tag('span', "", :class => "fb_favicon", :title => 'You and ' + netfriend_first_name + ' are Facebook friends.') if fbc_session_user_friends_with?(netfriend) %>
+        <%= content_tag('span', "", :class => "t_favicon", :title => 'You follow ' + netfriend_first_name + ' on Twitter.') if is_twitter_follower?(@member, netfriend) %>
+        <%= content_tag('span', "", :class => "mutual_follow", :title => 'You and ' + netfriend_first_name + ' are following each other.') if @member.mutual_follower?(netfriend) %>
+      <%- end -%>
+    </div>
+    
+    <div style="float: left;width: 550px;padding-left:5px">
+        <% case obj.class.name
+          when "Save": -%> <%#-- Picks --%>
+            <div class="member_activity">
+              <div class="activity_meaning"><%= link_to_member(netfriend) %> <span class="green">starred</span> this story <%= time_ago_in_words(updated_at) %> ago
+               <%= follow_item("member",netfriend,{:refresh_panel => my_page}) unless hide_follows || netfriend == current_member %>
+              </div>
+              <ul>
+              <%=render :partial => "stories/story",
+                        :object  => obj.story,
+                        :locals  => { :group => group, :hide_flags => story_hf, :show_flags => story_sf} %>
+              </ul>
+            </div>
+
+          <% when "Story": -%> <%#-- Submissions --%>
+            <div class="member_activity">
+               <div class="activity_meaning"><%= link_to_member(netfriend) %> <span class="green">posted</span> this story <%= time_ago_in_words(updated_at) %> ago
+               <%= follow_item("member",netfriend,{:refresh_panel => my_page}) unless hide_follows || netfriend == current_member %>
+              </div>
+              <ul>          
+              <%=render :partial => "stories/story",
+                        :object  => obj,
+                        :locals  => { :group => group, :hide_flags => story_hf, :show_flags => story_sf} %>
+              </ul>
+            </div>
+
+          <% when "Review": -%> <%#-- Reviews --%>
+            <div class="review article member_activity">
+               <div class="activity_meaning"><%= link_to_member(netfriend) %> <span class="green">reviewed</span> this story <%= time_ago_in_words(updated_at) %> ago
+               <%= follow_item("member",netfriend,{:refresh_panel => my_page}) unless hide_follows || netfriend == current_member %>
+              <%="#{'<span class="featured" style=""></span>'}" if obj.is_featured %>
+              </div>
+              <%=render :partial => 'reviews/network_activity_review', 
+                        :locals  => { :group => group, :review => obj, :hide_flags => review_hf, :show_flags => review_sf } %>
+            </div>
+
+          <% when "Comment": -%> <%#-- Comments -%>
+            <div class="activity_meaning"><%= link_to_member(netfriend) %> <span class="green">commented</span> on this <%= obj.commentable_type.downcase %> <%= time_ago_in_words(updated_at) %> ago
+             <%= follow_item("member",netfriend,{:refresh_panel => my_page}) unless hide_follows || netfriend == current_member %>
+            </div>
+            <div class="member_activity">
+            <%= render :partial => '/discussions/comments/profile_comments',
+                       :locals => { :comment => obj, :display_header => false, :hide_flags => comment_hf, :show_flags => comment_sf } %>
+            </div>
+          <%- else -%>
+             <div class="activity_meaning"><%= link_to_member(netfriend) %>
+             <%if netfriend.last_active_at %>
+             last <span class="green">visited</span> <%= time_ago_in_words(netfriend.last_active_at) %> ago
+             <% end -%>
+             <%= follow_item("member",netfriend,{:refresh_panel => my_page}) unless hide_follows || netfriend == current_member %>
+             </div>
+        <% end -%>
+    </div>
+  </div>
+</li>

@@ -1,0 +1,408 @@
+<% @title = "Bookmarklet" %>
+
+<style type="text/css" media="screen">
+	div.instructions
+	{
+		display: none;
+	}
+	ul.instructions
+	{
+		margin-top:0px;
+		padding-top:5px;		
+	}
+	.instructions li {
+		padding-bottom:10px;
+	}
+	.bookmarkletLink
+	{
+		font-size: 1.2em;
+	}
+	.subhead {
+		margin-bottom:0px;margin-top:12px;
+	}
+</style>
+
+<script language="JavaScript"><!--
+	
+	showBrowserInstructions = function()
+	{
+		var chooseBrowser="default";
+
+		var IE4=0, IE6=0, IE7=0, IE8=0, NS4=0, NS6=0, ver4=0, DOM=0, ff3Win=0, ff3Mac=0, isSafari=0, isSafari4=0, isMozilla=0, isFirefox=0, isFirefox3=0, isNetscape=0, isOpera=0, isMac=0, isIEmac=0, genericMozilla=0;
+		var nav="", useragent="";
+
+		if (location.href.search("!")!=-1) {
+			var args=location.href.split("!");
+			chooseBrowser=args[1].split("=")[1];
+			if (chooseBrowser=="ie") {
+				IE4=1;
+				IE8=1;
+			} else if (chooseBrowser=="safari") {
+				isSafari = 1; isSafari4=1;
+			} else if (chooseBrowser=="firefox") {
+				isFirefox=1; isFirefox3=1; ff3Win=1;
+			} else if (chooseBrowser=="opera") {
+				isOpera=1;
+			}
+		}
+		if (IE4 + isSafari + isFirefox + isOpera == 0) {
+			IE4=(document.all)?1:0;
+			NS4=(document.layers)?1:0;
+			DOM=(document.getElementById)?1:0;
+			NS6=((DOM)&&(!IE4));
+			ver4=((IE4)||(NS6)||(NS4))?1:0;
+			nav=navigator.appVersion;
+			nav=nav.toLowerCase();
+			useragent=navigator.userAgent;
+			useragent=useragent.toLowerCase();
+			isMozilla=(useragent.indexOf("mozilla")!=-1)?1:0;
+			isFirefox=(useragent.indexOf("firefox")!=-1)?1:0;
+			isFirefox3=(useragent.indexOf("firefox/3")!=-1)?1:0;
+			isOpera=(useragent.indexOf("opera")!=-1)?1:0;
+			isNetscape=(useragent.indexOf("netscape")!=-1)?1:0;
+			isMac=(nav.indexOf("mac")!=-1)?1:0;
+			isSafari=(nav.indexOf("safari")!=-1)?1:0;
+			isIEmac=((document.all)&&(isMac))?1:0;
+			if (isSafari && isMac) {
+				isSafari4=(useragent.indexOf("version/4")!=-1)?1:0;
+			}
+			if (IE4 && !isMac) {
+				IE6=(useragent.indexOf("msie 6")!=-1)?1:0;
+				IE7=(useragent.indexOf("msie 7")!=-1)?1:0;
+				IE8=(useragent.indexOf("msie 8")!=-1)?1:0;
+				if (!IE6 && !IE7 && !IE8) { IE8=1 }
+			} else if (isFirefox3) {
+				if (isMac) {
+					ff3Mac=1
+				} else {
+					ff3Win=1
+				}
+			}
+			genericMozilla=(isMozilla && !isSafari && !isFirefox && !isNetscape && !isIEmac)?1:0;
+			if (isOpera && IE4) {
+				IE4=0;
+			}
+		}
+
+<%- if false #debug code-%>
+		document.write("nav: " + nav + "<BR>")
+		document.write("useragent: " + useragent + "<BR>")
+		document.write("IE4: " + IE4 + "<BR>")
+		document.write("IE7: " + IE7 + "<BR>")
+		document.write("IE8: " + IE8 + "<BR>")
+		document.write("ff3Mac: " + ff3Mac + "<BR>")
+		document.write("ff3Win: " + ff3Win + "<BR>")
+		document.write("NS4: " + NS4 + "<BR>")
+		document.write("DOM: " + DOM + "<BR>")
+		document.write("NS6: " + NS6 + "<BR>")
+		document.write("ver4: " + ver4 + "<BR>")
+		document.write("isMozilla: " + isMozilla + "<BR>")
+		document.write("isFirefox: " + isFirefox + "<BR>")
+		document.write("isFirefox3: " + isFirefox3 + "<BR>")
+		document.write("isOpera: " + isOpera + "<BR>")
+		document.write("isNetscape: " + isNetscape + "<BR>")
+		document.write("isMac: " + isMac + "<BR>")
+		document.write("isSafari: " + isSafari + "<BR>")
+		document.write("isSafari4: " + isSafari4 + "<BR>")
+		document.write("isIEmac: " + isIEmac + "<BR>")
+		document.write("genericMozilla: " + genericMozilla + "<BR>")
+<%- end -%>
+
+		var showPaneId = "notRecognized"
+		var linkPrompt = ""
+		var imgUrl = ""
+		var linkPrefs = ",dependent=no,modal=no"
+
+		if (isMac && IE4) showPaneId = "notSupported"
+		else if (IE6)
+		{
+			showPaneId = "ie6"
+			linkPrompt = "Right-click this link and choose Add to Favorites"
+			imgUrl = "/images/bookmarklet/ntbutton_ie.jpg"
+		}
+		else if (IE7)
+		{
+			showPaneId = "ie7"
+			linkPrompt = "Right-click this link and choose Add to Favorites"
+			imgUrl = "/images/bookmarklet/ntbutton_ie7.png"
+		}
+		else if (IE8)
+		{
+			showPaneId = "ie8"
+			linkPrompt = "Right-click this link and choose Add to Favorites"
+			imgUrl = "/images/bookmarklet/ntbutton_ie8.png"
+		}
+		else if (isSafari)
+		{
+			showPaneId = "safari"
+			linkPrompt = "Drag this link to your bookmarks bar..."
+			imgUrl = "/images/bookmarklet/ntbutton_safari.jpg"
+			if (isSafari4) imgUrl = "/images/bookmarklet/ntbutton_safari4.png"
+		}
+		else if (isFirefox) 
+		{
+			showPaneId = "firefox"
+			linkPrompt = "Drag this link to your bookmarks toolbar..."
+			imgUrl = "/images/bookmarklet/ntbutton_firefox.jpg"
+			if (isMac) linkPrefs = ",dependent=yes,modal=yes" // keep dependent=yes and modal=yes for Mac Firefox
+			if (ff3Mac) imgUrl = "/images/bookmarklet/ntbutton_firefox3_mac.png"
+			if (ff3Win) imgUrl = "/images/bookmarklet/ntbutton_firefox3_win.png"
+		}
+		else if (isOpera) 
+		{
+			showPaneId = "opera"
+			linkPrompt = "Drag this link to your Personal Bar, or right-click it and choose Bookmark link..."
+			imgUrl = "/images/bookmarklet/ntbutton_opera.jpg"
+		}
+
+		// assemble the bookmarklet code once only
+		var bookmarkletLink =
+			"<a href=\"javascript:void(w=window.open('<%= submit_story_url %>?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title)+'&bookmarklet=1'," +
+			"'<%=app_slug%>'+(new Date()).getMilliseconds()," +
+			"'scrollbars=yes,resizable=yes,alwaysRaised=yes,status=yes,directories=yes,menubar=yes,toolbar=yes,width=430,height=750" + linkPrefs + "'));w.focus();\" " +
+			"title=\"<%=app_name%>\" onclick=\"window.alert('" + linkPrompt + "');return false;\"><%=app_name%></a>"
+
+		// find all spans of class "bookmarkletLink", fill them with JS bookmarkletLink var
+		$('span.bookmarkletLink').html(bookmarkletLink + "&nbsp;");
+		
+		// NOW show appropriate instructions
+		if (showPaneId != "notRecognized" && showPaneId != "notSupported")
+		{
+			document.getElementById("demonstrate").src = imgUrl
+			document.getElementById("common").style.display = "block"
+		}
+		document.getElementById(showPaneId).style.display = "block"		
+	}
+	
+//--></script>
+
+<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div>
+	<div class="wrapper">
+		<div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+
+<h2>Bookmarklet</h2>
+
+<div style="margin-right:90px">
+	<div id="notSupported" class="instructions">
+		We're sorry, but the <%=app_name%> bookmarklet will not work with Internet Explorer on the Mac.
+		We suggest using either Safari or <a href="http://www.mozilla.com/firefox/" target="_blank">Firefox</a>.
+	</div>
+	
+	<div id="notRecognized" class="instructions">
+		Your browser is not recognized. You can take a look at <strong>Instructions for other browsers:</strong>
+		<a href="/tools/bookmarklet.htm&browser=ie">Internet Explorer</a>,
+		<a href="/tools/bookmarklet.htm&browser=firefox">Firefox</a>,
+		<a href="/tools/bookmarklet.htm&browser=safari">Safari</a>,
+		<a href="/tools/bookmarklet.htm&browser=opera">Opera</a>
+	</div>
+	
+	<div id="common" class="instructions">
+		<p class="subhead">Post and review stories quickly, from any Web page!</p>
+		<p class="subhead">What is the <%=app_name%> bookmarklet?</p>
+		<p>The <%=app_name%> Bookmarklet is a link you can add to your browser's bookmarks toolbar.
+			It lets you post and review stories in a popup window, wherever you are. It's easy to install, and is a real time saver.</p>
+		<img id="demonstrate">
+		<p class="subhead">What does it do?</p>
+		<p>The <%=app_name%> bookmarklet lets you post a news story to <%=app_name%> from its original web page.
+			Clicking the bookmarklet will bring up the "Story Edit" form with the story's title and URL already filled in, along with any other information our tools can gather about the story. If the story had been previously posted by another member, you will be taken directly to the Review form.</p>
+		<br>
+	</div>
+	
+	<div id="ie6" class="instructions">
+		<p class="subhead">How do I put the <%=app_name%> bookmarklet on my browser?</p>
+		<p>Follow the instructions for Internet Explorer (Windows):</p>
+			<ul class="instructions">
+				<li>Click on <b>View</b> at the top of this browser window.</li>
+				<li>Hover over <b>Toolbars</b> and make sure that <b>Links</b> is checked. If not, then select it to check it.</li>
+				<li>Right-click the following <%=app_name%> link and select <b>Add to Favorites</b>:<br/>
+					<span class="bookmarkletLink"></span></li>
+				<li>You may get a Security Alert window telling you that you are adding a favorite that may not be safe.
+					If so, press the <b>Yes</b> button to continue.</li>
+				<li>If you don't see a <b>Create in:</b> window below the <b>Name:</b> line, click on the <b>Create in &gt;&gt;</b> button.</li>
+				<li>Scroll through the list until you find the <b>Links</b> folder, click on it, and press the <b>OK</b> button.</li>
+				<li>The <%=app_name%> bookmarklet should now appear in the toolbar.</li>
+			</ul>
+		</p>
+
+		<p>If you've followed the above instructions and you don't see the bookmarklet you've added, or even the Links Toolbar, then follow the steps below:</p>
+		<p class="subhead">I can't find the Links Toolbar.</p>
+		<ul class="instructions">
+			<li>Click on <b>View</b> at the top of this browser window.</li>
+			<li>Hover over <b>Toolbars</b> and uncheck <b>Lock the Toolbars</b>.
+				(And while you're there, double-check to make sure that <b>links</b> is checked.)</li>
+			<li>Look at all the toolbars until you see one called <b>Links</b>. It may be on the far right.</li>
+			<li>Click and hold the <b>Links</b> divider bar and drag it all the way down.</li>
+			<li>Release the mouse button when it's as far down as it can go.</li>
+			<li>The <%=app_name%> bookmarklet should now be visible.</li>
+			<li>One last step. Again, click on <b>View</b> at the top of this browser window,
+				hover over <b>Toolbars</b> and check <b>Lock the Toolbars</b></li>
+		</ul>
+		<p class="subhead">I see the Links Toolbar but it's already filled with buttons and I can't find the <%=app_name%> bookmarklet.</p>
+		<ul class="instructions">
+			<li>The <%=app_name%> bookmarklet was added to the end of the row of buttons.
+				If you don't see it but you do see a <b>&gt;&gt;</b> button on the far right side, then click on this button.</li>
+			<li>Click and hold on the <%=app_name%> bookmarklet and drag it to where you want it to appear on the toolbar.</li>
+		</ul>
+		
+		<p><strong>Instructions for other browsers:</strong>
+			<a href="/tools/bookmarklet.htm&browser=firefox">Firefox</a>,
+			<a href="/tools/bookmarklet.htm&browser=safari">Safari</a>,
+			<a href="/tools/bookmarklet.htm&browser=opera">Opera</a>
+		</p>
+	</div>
+	
+	<div id="ie7" class="instructions">
+		<p class="subhead">How do I put the <%=app_name%> bookmarklet on my browser?</p>
+		<p>Follow the instructions for Internet Explorer 7 (Windows):</p>
+			<ul class="instructions">
+				<li>Click on <b>View</b> at the top of this browser window.</li>
+				<li>Hover over <b>Toolbars</b> and make sure that <b>Links</b> is checked. If not, then select it to check it.</li>
+				<li>Right-click the following <%=app_name%> link and select <b>Add to Favorites...</b><br/>
+					<span class="bookmarkletLink"></span></li>
+				<li>You may get a Security Alert window telling you that you are adding a favorite that may not be safe.
+					If so, press the <b>Yes</b> button to continue.</li>
+				<li>If you don't see a <b>Create in:</b> window below the <b>Name:</b> line, click on the <b>Create in &gt;&gt;</b> button.</li>
+				<li>Scroll through the list until you find the <b>Links</b> folder, click on it, and press the <b>Add</b> button.</li>
+				<li>The <%=app_name%> bookmarklet should now appear in the toolbar.</li>
+			</ul>
+		</p>
+
+		<p>If you've followed the above instructions and you don't see the bookmarklet you've added, or even the Links Toolbar, then follow the steps below:</p>
+		<p class="subhead">I can't find the Links Toolbar.</p>
+		<ul class="instructions">
+			<li>Click on <b>View</b> at the top of this browser window.</li>
+			<li>Hover over <b>Toolbars</b> and uncheck <b>Lock the Toolbars</b>.
+				(And while you're there, double-check to make sure that <b>Links</b> is checked.)</li>
+			<li>Look at all the toolbars until you see one called <b>Links</b>. It may be on the far right.</li>
+			<li>Click and hold the <b>Links</b> divider bar and drag it all the way down.</li>
+			<li>Release the mouse button when it's as far down as it can go.</li>
+			<li>The <%=app_name%> bookmarklet should now be visible.</li>
+			<li>One last step. Again, click on <b>View</b> at the top of this browser window,
+				hover over <b>Toolbars</b> and check <b>Lock the Toolbars</b></li>
+		</ul>
+		<p class="subhead">I see the Links Toolbar but it's already filled with buttons and I can't find the <%=app_name%> bookmarklet.</p>
+		<ul class="instructions">
+			<li>The <%=app_name%> bookmarklet was added to the end of the row of buttons.
+				If you don't see it but you do see a <b>&gt;&gt;</b> button on the far right side, then click on this button.</li>
+			<li>Click and hold on the <%=app_name%> bookmarklet and drag it to where you want it to appear on the toolbar.</li>
+		</ul>
+		
+		<p class="subhead">Using the <%=app_name%> bookmarklet.</p>
+		<p>When you're viewing a story you'd like to post to <%=app_name%>, click on the bookmarklet now installed in your Favorites Bar. A small pop-up window will appear where you can both edit the story's information and review it.</p>
+		
+		<p class="subhead">IE's Pop-up Blocker.</p>
+		<p>If you've turned on IE's pop-up blocker you won't be able to use the <%=app_name%> bookmarklet since it uses a pop-up. You will be given the option to temporarily allow pop-ups, always allow pop-ups from this site, or turn off the pop-up blocker. Disabling it with any of these options will also other pop-ups to appear until you've turned the blocker back on again. <em>You cannot keep the pop-up blocker enabled for a site and still use the <%=app_name%> bookmarklet for that site.</em> For more information about IE's pop-up blocker, <a href="http://windowshelp.microsoft.com/windows/en-us/help/6553df0e-c42b-4f47-8376-7e76950e8f241033.mspx" target="_blank">click here</a>.</p>
+
+		<p><strong>Instructions for other browsers:</strong>
+			<a href="/tools/bookmarklet.htm&browser=firefox">Firefox</a>,
+			<a href="/tools/bookmarklet.htm&browser=safari">Safari</a>,
+			<a href="/tools/bookmarklet.htm&browser=opera">Opera</a>
+		</p>
+	</div>
+
+	<div id="ie8" class="instructions">
+		<p class="subhead">How do I put the <%=app_name%> bookmarklet on my browser?</p>
+		<p>Follow the instructions for Internet Explorer 8 (Windows):</p>
+			<ul class="instructions">
+				<li>Click on <b>View</b> at the top of this browser window.</li>
+				<li>Hover over <b>Toolbars</b> and make sure that <b>Favorites Bar</b> is checked. If not, then select it to check it.</li>
+				<li>Right-click the following <%=app_name%> link and select <b>Add to Favorites...</b><br/>
+					<span class="bookmarkletLink"></span></li>
+				<li>You may get a Security Alert window telling you that you are adding a favorite that may not be safe.
+					If so, press the <b>Yes</b> button to continue.</li>
+				<li>If you don't see a <b>Create in:</b> window below the <b>Name:</b> line, click on the <b>Create in &gt;&gt;</b> button.</li>
+				<li>Scroll through the list until you find the folder, <b>Favorites Bar</b>, click on it, and press the <b>Add</b> button.</li>
+				<li>The <%=app_name%> bookmarklet should now appear in the toolbar.</li>
+			</ul>
+		</p>
+
+		<p>If you've followed the above instructions and you don't see the bookmarklet you've added, or even the Favorites Toolbar, then follow the steps below:</p>
+		<p class="subhead">I can't find the Favorites Toolbar.</p>
+		<ul class="instructions">
+			<li>Click on <b>View</b> at the top of this browser window.</li>
+			<li>Hover over <b>Toolbars</b> and uncheck <b>Lock the Toolbars</b>.
+				(And while you're there, double-check to make sure that <b>Favorites</b> is checked.)</li>
+			<li>Look at all the toolbars until you see one called <b>Favorites</b>. It may be on the far right.</li>
+			<li>Click and hold the <b>Favorites</b> divider bar and drag it all the way down.</li>
+			<li>Release the mouse button when it's as far down as it can go.</li>
+			<li>The <%=app_name%> bookmarklet should now be visible.</li>
+			<li>One last step. Again, click on <b>View</b> at the top of this browser window,
+				hover over <b>Toolbars</b> and check <b>Lock the Toolbars</b></li>
+		</ul>
+		<p class="subhead">I see the Favorites Toolbar but it's already filled with buttons and I can't find the <%=app_name%> bookmarklet.</p>
+		<ul class="instructions">
+			<li>The <%=app_name%> bookmarklet was added to the end of the row of buttons.
+				If you don't see it but you do see a <b>&gt;&gt;</b> button on the far right side, then click on this button.</li>
+			<li>Click and hold on the <%=app_name%> bookmarklet and drag it to where you want it to appear on the toolbar.</li>
+		</ul>
+		
+		<p class="subhead">Using the <%=app_name%> bookmarklet.</p>
+		<p>When you're viewing a story you'd like to post to <%=app_name%>, click on the bookmarklet now installed in your Favorites Bar. A small pop-up window will appear where you can both edit the story's information and review it.</p>
+		
+		<p class="subhead">IE's Pop-up Blocker.</p>
+		<p>If you've turned on IE's pop-up blocker you won't be able to use the <%=app_name%> bookmarklet since it uses a pop-up. You will be given the option to temporarily allow pop-ups, always allow pop-ups from this site, or turn off the pop-up blocker. Disabling it with any of these options will also other pop-ups to appear until you've turned the blocker back on again. <em>You cannot keep the pop-up blocker enabled for a site and still use the <%=app_name%> bookmarklet for that site.</em> For more information about IE's pop-up blocker, <a href="http://windowshelp.microsoft.com/windows/en-us/help/6553df0e-c42b-4f47-8376-7e76950e8f241033.mspx" target="_blank">click here</a>.</p>
+
+		<p><strong>Instructions for other browsers:</strong>
+			<a href="/tools/bookmarklet.htm&browser=firefox">Firefox</a>,
+			<a href="/tools/bookmarklet.htm&browser=safari">Safari</a>,
+			<a href="/tools/bookmarklet.htm&browser=opera">Opera</a>
+		</p>
+	</div>
+
+	<div id="safari" class="instructions">
+		<p class="subhead">How do I put the <%=app_name%> bookmarklet on my browser (Safari)?</p>
+		<p>Drag the following <%=app_name%> link up to your bookmarks bar:<br/>
+			<span class="bookmarkletLink"></span></p>
+		<p>If you don't see your bookmarks bar, click on <b>View</b> on the menu bar,
+			then select <b>bookmarks bar</b> to turn it on (or press Command-Shift-B).</p>
+		<p><strong>Instructions for other browsers:</strong>
+			<a href="/tools/bookmarklet.htm&browser=ie">Internet Explorer</a>,
+			<a href="/tools/bookmarklet.htm&browser=firefox">Firefox</a>,
+			<a href="/tools/bookmarklet.htm&browser=opera">Opera</a>
+		</p>
+	</div>
+	
+	<div id="firefox" class="instructions">
+		<p class="subhead">How do I put the <%=app_name%> bookmarklet on my browser (Firefox)?</p>
+		<p>Drag the following <%=app_name%> link up to your bookmarks bar:<br/>
+			<span class="bookmarkletLink"></span></p>
+		<p>If you don't see your Bookmarks Toolbar, click on <b>View</b> on the menu bar,
+			then select <b>Bookmarks Toolbar</b> to turn it on.</p>
+		<p><strong>Instructions for other browsers:</strong>
+			<a href="/tools/bookmarklet.htm&browser=ie">Internet Explorer</a>,
+			<a href="/tools/bookmarklet.htm&browser=safari">Safari</a>,
+			<a href="/tools/bookmarklet.htm&browser=opera">Opera</a>
+		</p>
+	</div>
+	
+	<div id="opera" class="instructions">
+		<p class="subhead">How do I put the <%=app_name%> bookmarklet on my browser (Opera)?</p>
+		<ul class="instructions">
+			<li>First, make sure the <b>Personal bar</b> is checked under <b>View: Toolbars</b>.</li>
+			<li>Drag the following <%=app_name%> link up to your bookmarks bar:<br/>
+				<span class="bookmarkletLink"></span></li>
+		</ul>
+		<b>Or...</b> if you're having trouble doing it that way, try this:
+		<ul class="instructions">
+			<li>Right-click (Mac: Control-click) on the following <%=app_name%> link:
+				<span class="bookmarkletLink"></span> and select <b>Bookmark link</b>.</li>
+			<li>In the dialog that pops up, press <b>Details &gt;&gt;</b>.</li>
+			<li>Check the box <b>Show in personal bar</b> and then press <b>OK</b>.</li>
+		</ul>
+		
+		<p><strong>Instructions for other browsers:</strong>
+			<a href="/tools/bookmarklet.htm&browser=ie">Internet Explorer</a>,
+			<a href="/tools/bookmarklet.htm&browser=firefox">Firefox</a>,
+			<a href="/tools/bookmarklet.htm&browser=safari">Safari</a>
+		</p>
+	</div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	showBrowserInstructions()
+</script>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>

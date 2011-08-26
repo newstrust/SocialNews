@@ -1,0 +1,72 @@
+<%- if (current_member && current_member.has_role_or_above?(:admin)) -%>
+	<-% @title = "Comments (for Admin only)" -%>
+	
+	<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div> 
+	<div class="wrapper">
+	<div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+	<h2 style="margin-bottom:15px"><%= @title %></h2>
+	<dl class="inline_list" style="clear:both;">
+		<dt>Show discussions about:</dt>
+		<dd><%= link_to('Anything', discussions_path(:filter_by => 'all')) %></dd>
+		<dd><%= link_to('Topics', discussions_path(:filter_by => 'topics')) %></dd>
+		<dd><%= link_to('Sources', discussions_path(:filter_by => 'sources')) %></dd>
+	</dl>
+	
+	<div style="clear:both;float:right;padding:20px;">
+		<%= will_paginate(@records, :params => @sticky_params) %>
+	</div>
+	
+		<table style="clear:both;width:600px;">
+			<thead>
+				<th>Comment Name</th>
+				<th style="text-align:center;width:100px;"># Comments</th>
+			</thead>
+	
+			<tbody>
+			<%- @records.each do |record| -%>
+				<tr class="<%= cycle('even', 'odd') %>">
+						<%- unless record.class == Comment -%>
+						<td><%= link_to_commentable_record(record) %></td>
+						<td style="text-align:center;width:100px;"><%= record.comments.count %></td>
+						<%- else -%>
+						<td><%= link_to(record.title, ['discussions',record]) %></td>
+						<td style="text-align:center;width:100px;"><%= record.all_visible_children.size %></td>
+						<%- end -%>
+				</tr>
+			<%- end -%>
+			</tbody>
+		</table>
+	
+	<div style="clear:both;float:right;padding:20px;">
+		<%= will_paginate(@records, :params => @sticky_params) %>
+	</div>
+				</div>
+	</div>
+	<div class="bottom"></div>
+	</div>
+<%- else -%>
+	<% @title = "Feedback on #{app_name}" %>
+	<% @meta_description = "#{app_name} helps people find good journalism online. Our non-profit, non-partisan project provides quality news feeds, news literacy tools and a trust network to help citizens make informed decisions about democracy. The free #{app_name} website features daily feeds of quality news and opinions, which are carefully rated by our members, using our unique review tools. We rate the news based on quality, not just popularity. #{app_name} reviewers evaluate each article against core journalistic principles such as fairness, evidence, sourcing and context." %>
+	<% @meta_keywords = @title %>
+	
+	<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div> 
+	<div class="wrapper">
+	<div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+	<h2>Feedback</h2><br />
+	
+	<p>What do you think of the <%=app_name%> site, so far? How can we improve it?</p>
+	<p>
+	Specifically, which parts off the review process work best for you? Which parts need more work?</p>
+	<p>
+	How can we enhance the site to make it more useful to you?</p>
+	<p>
+	<%= mail_to email_addr("feedback"), "We welcome your suggestions.", :subject => "#{app_name} Feedback", :encode => "javascript" %>
+	</p>
+	</div>
+	</div>
+	<div class="bottom"></div>
+	</div>
+
+<%- end -%>

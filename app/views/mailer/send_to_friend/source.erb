@@ -1,0 +1,23 @@
+<%= @body + "\n\n" unless @body.blank? -%>
+Check out this source on <%=app_name%>:
+
+__________________________________________
+
+<%= @record.name %>
+<%= humanize_token_direct("source_media", @record.primary_medium) %> | <%= humanize_token(@record, :ownership) %>
+
+<%= strip_tags StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(@record.source_text,300,400,true),72) if @record.source_text %>
+
+<%=app_name%> has reviewed <%= @record.story_reviews_count %> <%= @record.name %> stories since since January 2006.
+
+<%=app_name%> Rating: <%= sprintf("%.1f", @record.rating || 0.0) %> avg. from <%= plural(@record.story_reviews_count, "review") %>
+(Preliminary Data)
+
+Check our <%= @record.name %> source page at:
+<%= @page.gsub(/\?.*/, '') %>
+
+<%= render :partial => 'mailer/send_to_friend/footer' %>
+
+
+
+

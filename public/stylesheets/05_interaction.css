@@ -1,0 +1,583 @@
+/**
+* interaction.css
+*
+* styles for all interactive/ajax/jQuery-instantiated elements, plus misc server response boxes
+*/
+
+
+/**
+* TABS
+* see also jquery.tabbed_content.js
+*/
+
+div.tabHeader {
+	float: left;
+	width: 120px;
+	height: 24px;
+	
+	color: #666;
+	font-size: 13px; /* 12px? */
+	font-weight: bold;
+	
+	background: url('/images/ui/cont-tabs-none.gif') repeat-x;
+}
+  div.tabHeader div {
+  	margin-top: 5px;
+  }
+ul.tabs {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	
+}
+  ul.tabs li {
+  	float: left;
+  }
+    ul.tabs li a {
+      display: block;
+      font-size: 13px;
+      color: #333;
+    	text-decoration: none;
+    	font-weight: normal;
+    }
+    ul.tabs li a:hover,
+    ul.tabs li a:active {
+    	text-decoration: none;
+    	color: #333;
+    }
+    ul.tabs li a.sel {
+      color: #666;
+      font-weight: bold;
+    }
+    ul.tabs li span {
+      display: block;
+      width: 143px;
+      height: 23px;
+    }
+      ul.tabs li span small {
+      	font-size: 85%;
+      }
+
+/* all the background image management for three tab states with variable-width tabs. */
+ul.tabs li a { 
+	font-weight: bold; 
+	border-right: 1px solid #e5e5e5;
+	border-top: 1px solid #e5e5e5;
+	border-left: 1px solid #e5e5e5;
+	font-size: .92em;
+	color: #385AC8;
+	background-color: #f6f6f6;
+	border-bottom: 1px solid #bebebe;
+	
+	}
+ul.tabs li a span.lbar                 {  }
+ul.tabs li.firstTab a span.lbar        { background-position: -1px top }
+ul.tabs li a span.rbar                 { }
+
+ul.tabs li a:hover                     { background-position: left center }
+ul.tabs li a:hover span.lbar           { background-position: left center }
+ul.tabs li.firstTab a:hover span.lbar  { background-position: -1px center }
+ul.tabs li a:hover span.rbar           { background-position: right center }
+
+ul.tabs li a.sel:hover,
+ul.tabs li a.sel                       {}
+ul.tabs li a.sel:hover span.lbar,
+ul.tabs li a.sel span.lbar             { background-position: left bottom }
+ul.tabs li.firstTab a.sel:hover span.lbar,
+ul.tabs li.firstTab a.sel span.lbar    { background-position: -1px bottom }
+ul.tabs li a.sel:hover span.rbar,
+ul.tabs li a.sel span.rbar             { background-position: right bottom }
+
+ul.tabs li span.text                   { text-align: center; padding-top: 5px; height: 19px; }
+ul.tabs li a span.text                 { cursor: pointer; }
+ul.tabs li a.sel { 
+	font-weight: bold; 
+	border-left: 1px solid #bebebe;
+	border-right: 1px solid #bebebe;
+	border-top: 1px solid #bebebe;
+	font-size: .92em;
+	color: #3f3f3f;
+	background-color: #ffffff;
+	border-bottom: none;
+	height: 24px;
+	overflow: visible;
+	
+	}
+
+/* tabs */
+div.tab_num_2 ul.tabs li span          { width: 313px }
+div.tab_num_3 ul.tabs li span          { width: 208px }
+/*div.tab_num_3 ul.tabs li.firstTab span { width: 209px }*/
+div.tab_num_4 ul.tabs li span          { width: 155px }
+div.tab_num_4 ul.tabs li.firstTab span { width: 157px }
+div.tab_num_5 ul.tabs li span          { width: 110px }
+div.tab_num_6 ul.tabs li span          { width: 103px }
+/*div.tab_num_6 ul.tabs li.firstTab span { width: 90px }*/
+
+div.content {
+	padding: 10px;
+	clear: left;
+}
+div.tabbedContent {
+  display: none;
+}
+
+div.tabbedContent a {
+  font-weight: bold;
+  font-size: .92em;
+}
+
+div.tabbedContent a.small {
+  font-weight: bold;
+  font-size: .8em;
+}
+div.sel {
+  display: block;
+}
+
+/**
+* show_review_part
+*/
+
+/**
+* AUTOCOMPLETE 
+* Overrides for the tool in jquery.autocomplete.js
+*/
+
+.ac_input {
+}
+.ac_results, .mynews_ac_results {
+  padding: 0px;
+  border: 1px solid WindowFrame;
+  background-color: Window;
+  overflow: hidden;
+  z-index: 1500;
+}
+
+.ac_results ul, .mynews_ac_results ul {
+  width: 100%;
+  list-style-position: outside;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ac_results iframe, .mynews_ac_results iframe {
+  display:none;/*sorry for IE5*/
+  display/**/:block;/*sorry for IE5*/
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:-1;
+  filter:mask();
+  width:3000px;
+  height:3000px;
+}
+
+.ac_results li, .mynews_ac_results li {
+	border-top: 1px solid #ababab;
+  margin: 1px;
+  padding: 3px 10px;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  font: menu;
+  font-size: 12px;
+  overflow: hidden;
+}
+.ac_results strong, .mynews_ac_results strong {
+  background-color: #eee;
+}
+.ac_results .ac_over strong, .mynews_ac_results .ac_over strong {
+	background-color: #7783ef;
+}
+.ac_loading {
+  background: url('/images/ui/indicator.gif') right center no-repeat;
+}
+.ac_over {
+  background-color: #5561cf;
+  color: #eee;
+}
+
+
+/**
+* BATCH AUTOCOMPLETE
+* See also jquery.batch_autocomplete.js
+*/
+
+div.batch_autocomplete {
+  width: 238px;
+}
+  div.batch_autocomplete ul.selections {
+  	list-style: none;
+  	padding: 0;
+  	margin: 0;
+  	font-size: 110%;
+  }
+    div.batch_autocomplete ul.selections li {
+    	background-color: #f0f0f0;
+    	border: 1px solid #ccc;
+    	padding: 3px 8px;
+    	margin: 2px 0;
+    }
+    div.batch_autocomplete ul.selections li.del {
+    	background: #fdd url('/images/icons/cross.png') no-repeat 240px center;
+    	cursor: pointer;
+    	cursor: hand;
+    }
+    div.batch_autocomplete ul.selections li.in_taxonomy {
+    	font-weight: bold;
+    }
+  div.batch_autocomplete input {
+  	width: 205px;
+  }
+  div.batch_autocomplete div.add {
+  	float: right;
+  	margin-right: 2px;
+  	width: 16px;
+  	height: 22px;
+  	background: url('/images/icons/add.png') no-repeat left center;
+  	cursor: pointer;
+  	cursor: hand;
+  }
+
+
+/**
+* STORY LOOKUP
+* see app/views/stories/_lookup.html.erb & jquery.story_lookup.js
+*/
+.story_lookup input {
+	width: 290px;
+	font-size: 11px;
+}
+.story_lookup input.prompt {
+	color: #999;
+}
+
+
+/**
+* Status messages, now used outside story_lookup
+*/
+.status {
+	float: right;
+}
+  .status div {
+  	margin: 5px 5px 0 0;
+  	width: 16px;
+  	height: 16px;
+  }
+  .status .go {
+    background: url(/images/icons/bullet_go.png) no-repeat left top; 
+    cursor: pointer;
+  	cursor: hand;
+  }
+  .status .post {
+  	background: url(/images/ui/nav/nt_post_story_btn_post.png) no-repeat left top; 
+  	cursor: pointer;
+  	cursor: hand;
+  	height: 25px;
+	  width: 47px;
+  }
+  .status .loading {
+  	background: url('/images/ui/indicator.gif') no-repeat left top;
+  }
+  .status .done {
+  	background: url('/images/icons/tick.png') no-repeat left top;
+  }
+  .status .error {
+  	background: url('/images/icons/cross.png') no-repeat left top;
+  	/* zero out blueprint CSS... should prob just choose other classnames! */
+  	margin: 0;
+  	padding: 0;
+  	border: none;
+  }
+
+
+/**
+* RATING INPUT
+*
+* Clickable rollover chiclets so the user can review stories; also used for source reviews & metareviews.
+* Some styles depend on popup_form so that they only apply to the basic (story) review form case
+*
+* See also app/views/reviews/_rating_input.html.erb & jquery.rating_input.js
+*/
+
+.rating_input {
+/*  font-size: 90%;*/
+	padding: 5px;
+	clear: left;
+	margin: 0.2em 0;
+}
+div.rating_input_sel {
+	background-color: #F3F6FD;
+}
+  
+  /* question */
+  .rating_input .question {
+  	width: 230px;
+  	float: left;
+  	color: #333;
+  }
+    .rating_input .question label {
+    	font-weight: normal;
+    	margin: 0;
+    	width: 240px;
+    	padding-left: 0px;
+    }
+    .rating_input .question .subquestion {
+      font-size: 90%;
+    	height: 12px;
+    	padding-left: 5px;
+    }
+    
+    .rating_input select {
+    float: right;}
+  
+  /* input */
+  .rating_input .input {
+  	width: 100px;
+  	_width: 50px;
+  	float: left;
+  }
+    .rating_input .input .starselect {
+    	margin: 0;
+    	padding: 0;
+    }
+      .rating_input .input .starselect a {
+        display: block;
+        width: 16px;
+        height: 13px;
+        line-height: 13px; /* must be equal to height for IE6 */
+        float: left;
+        text-decoration: none;
+      }
+      .rating_input .input .starselect a.star {
+      	background: url('/images/ui/star-select.png') no-repeat left top;
+      	_background-image: url('/images/ui/star-select.gif');
+      }
+      /* and bullet selection like starselect above, for meta_reviews */
+      .rating_input .input .bulletselect a.star
+      {
+      	width: 10px;
+      	height: 9px;
+      	line-height: 9px; /* must be equal to height for IE6 */
+      	background: url('/images/ui/bullet-select.gif') no-repeat left top;
+      }
+      .rating_input .input .starselect a.sel {
+        background-position: left bottom;
+      }
+      .rating_input .input .starselect a.clear_stars {
+      	background: url('/images/ui/star-clear.png') no-repeat left top;
+      	_background-image: url('/images/ui/star-clear.gif');
+      }
+      .rating_input .input .starselect a.clear_stars:hover {
+      	background-position: left bottom
+      }
+    .rating_input .input .rating_labels {
+    	font-size: 85%;
+    	color: #666;
+    	width: 85px;
+    	text-align: center;
+    }
+      .rating_input .input .rating_labels span {
+      	display: none;
+      }
+  
+  /* description */
+  .rating_input .description {
+    font-size: 90%;
+  	clear: both;
+  	background-color: #F9FAFF;
+  	padding: 2px;
+  	color: #666;
+  	margin-top: 0.8em;
+  	display: none;
+  }
+
+
+/**
+* For member name ajax lookup on Sign Up form
+* See members.js
+*/
+#name_result {
+  padding: 0.6em 1.0em 0.6em 2.5em;
+  margin: 0.3em 0;
+  width: 145px;
+  *padding-top:5px;
+  *margin-top:-3px;
+}
+.name_available {
+  background: url('/images/icons/tick.png') 5px center no-repeat;
+  
+  border: 1px solid #b0ebb0;
+  background-color: #c8ffcb;    
+}
+.name_unavailable {
+  background: url('/images/icons/delete.png') 5px center no-repeat;
+  border: 1px solid #ebb0b0;
+  background-color: #ffc8c8;    
+}
+
+
+/**
+* FLASH
+* the Railsy pale boxes that show up at the top of the page after the user submits a form.
+*/
+.flash_notice, .flash_error, .flash_warning {
+  border: 1px solid #ebdfb0;
+  background-color: #fff4c8;
+  color: #000;
+  font-size: 1.14em;
+  text-align: center;
+  padding: 5px;
+  margin-bottom: 0.5em;
+}
+.flash_error {
+  -moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+background-color:#beff95;
+border:1px solid #CCCCCC;
+color:#666666;
+font-size:1.14em;
+font-weight:bold;
+text-transform:uppercase;
+  background-color: #ffc8c8;  
+  float: left;
+  width: 940px;
+  *margin-top:-50px;
+}
+.flash_notice {
+  -moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+    background-color: #BEFF95;
+    border: 1px solid #CCCCCC;
+    color: #666666;
+    font-size: 1.14em;
+    font-weight: bold;
+    margin-top: 2px;
+    position: absolute;
+    text-transform: uppercase;
+    width: 940px;
+    *margin-top:-35px;
+}
+.flash_warning {
+  -moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+    background-color: #fff4c8;
+    border: 1px solid #CCCCCC;
+    color: #666666;
+    font-size: 1.14em;
+    font-weight: bold;
+    margin-top: 2px;
+    position: absolute;
+    text-transform: uppercase;
+    width: 940px;
+    *margin-top:-50px;
+}
+
+
+.flash_notice a, .flash_error a, .flash_warning a {
+  color: #01a163;
+  border: none !important;
+}
+.flash_notice h2 {
+font-size:1.5em;
+font-weight:bold;
+}
+.popup_form .flash_notice,
+.popup_form .flash_error,
+.popup_form .flash_warning {
+	font-size: 1.2em;
+}
+
+.warning {
+  padding: 5px 8px 5px 8px;
+  margin-top: 6px;
+  margin-bottom: 0.5em;
+  -moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	background-color: #fff4c8;
+	border: 1px solid #CCCCCC;
+	color: #666666;
+	font-size: 1.0em;
+	font-weight: bold;
+}
+
+/**
+* Generic interaction
+* not sure how many of these are still being used...
+*/
+.error,
+.red {
+  color: #b50b05; /* #FF831F; */
+  font-weight: bold;
+}
+.alert {
+  font-weight: bold;
+	text-decoration: none;
+  color: #FF831F;
+}
+.guess,
+.updated {
+  background-color: #ffc;
+}
+.right_column_box .updated {
+	padding: 0;
+	border: none;
+}
+
+/**
+* Tooltips
+*/
+.tooltip {
+  display:none;
+  width:275px;
+  padding:10px;
+  color:#3f3f3f;
+  font-weight:normal;
+  font-size:1em;
+  opacity: 1.0;
+  filter: alpha(opacity=100);
+  z-index:500;
+  *z-index:500 !important;
+  border: 1px solid #adadad;
+  background-color: #ffffff;
+  -moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-webkit-box-shadow:3px 3px 3px #999999;
+	-moz-box-shadow:3px 3px 3px #999999;
+	box-shadow:3px 3px 3px #999999;
+	*overflow:visible;
+}
+
+.tooltip .tooltip_wrapper {
+    background: transparent url('/images/ui/toolbar/tooltip_arrow.png') no-repeat right center;
+    /*
+    *background: transparent url('/images/ui/toolbar/tooltip_arrow.png') no-repeat 295px center;*/
+    *background:none;
+    padding-right: 31px;
+    float:right;
+	margin:0 -20px 0 0;
+	*margin:0 -20px 0 0;
+	padding-right:20px;
+	*padding-right:20px;
+	*display:block;
+	*height:auto;
+	*overflow:visible;
+	*width: 275px;
+
+}
+
+.tooltip .tt_head {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+.tooltip .tt_subhead {
+	font-weight: bold;
+}
+
+#rating_inputs .form_header h3 {
+font-size:1.14em;
+font-weight:bold;
+padding-bottom:0;
+}

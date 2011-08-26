@@ -1,0 +1,30 @@
+<%#-- If more than 12 hours since this editorial space was updated, clear out the featured review id --%>
+<%- espace.update_attribute(:eb_arg, nil) if espace.updated_at < Time.now - 12.hours -%>
+<%- review_id = !espace.eb_arg.blank? ? espace.eb_arg.to_i : nil -%>
+<%- fr = Review.find_by_id(review_id) if review_id -%> <%#-- use find_by_id to prevent a RecordNotFound exception --%>
+<%- fr = Review.featured_review(@local_site, page_obj) if fr.nil? -%>
+
+<%- if fr -%>
+<div class="featured_review">
+  <div class="header">
+    <%= link_to_member(fr.member) %> <span class="green">reviewed</span> this story
+  </div>
+
+  <div class="story">
+    <%= render :partial => "/stories/story",
+               :object  => fr.story,
+               :locals  => { :hide_flags => { :type => true, :quote => true, :story_date => true, :share_icons => true, :submitted_by => true, :rating => true, :review_it => true, :edit_it => true, :reviews => true, :featured => true, :opinion => true},
+                             :show_flags => {:starred => true },
+                             :last => true 
+                           } %>
+  </div>
+
+  <div class="review">
+    <%= render :partial => '/reviews/review', 
+               :object => fr, 
+               :locals => { :hide_flags => { :add_review_comment => true, :is_featured => true, :like_it => true, :review_date => true, :reviewer_name => true, :reviewer_submission => true, :type => true, :comment => true, :excerpts => true, :links => true },
+                            :show_flags => { :see_all_reviews => true, :days_ago => true, :see_full_review_member_name => true, :bottom_review_button => true, :starred => true, :reviewer_label => true, :max_note_length => 300 } # 300 characters max for the note
+                          } %>
+  </div>
+</div>
+<%- end -%>

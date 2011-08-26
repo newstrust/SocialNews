@@ -1,0 +1,20 @@
+<div class="panel">
+	<div class="form_header">
+<%#--	  <h3 class="review_thanks" style="display:none;">Thanks for your review.</h3> --%>
+	  <p>Please <strong>sign up</strong> (or <a href="#" onclick="switch_popdown_form('log_in'); return false">log in</a>).</p>
+	  (Already have a <%=app_name%> account? <a href="#" onclick="switch_popdown_form('log_in'); return false"><strong>Log in</strong></a>)<br/>
+	  <%= render :partial => "members/toolbar_fb_connect" %>
+	</div>
+	
+	<% form_for :member, @member, :url => members_path, :html => {:autocomplete => "off"}  do |f| -%>
+	  <div class="longform_window">
+	    <div class="longform">
+	      <%= render :partial => 'members/new_members_form', :locals => { :f => f } %>
+	    </div>
+	  </div>
+	  
+	  <div class="button_footer">
+	    <%= submit_button "Sign up", :style => "font-size: 150%; margin: 0 25px" %>
+	  </div>
+</div>
+<% end -%>

@@ -1,0 +1,35 @@
+<%= "Hi #{first_name(@recipient)},\n\n" if @recipient -%>
+<%= @editor.display_name %> edited <%= @recipient.blank? ? "this" : "a" %> story<%= " you #{@recipient == @submitter ? 'posted' : 'last edited'}" if @recipient %> on <%=app_name%>:
+<%= story_url(@story, :only_path => false) %>
+
+Here's the edited story info:
+
+"<%= @story.title %>"
+<%= strip_tags link_to_sources(@story.sources) -%>
+<%= " - by #{@story.journalist_names}" unless @story.journalist_names.blank? %>
+<%= "#{@story.story_date.strftime('%b. %e, %Y')} " unless @story.story_date.blank? -%>
+<%= story_type_and_online_access(@story) %>
+
+<%= "(#{humanize_token(@story, :content_type)}) " unless @story.content_type.blank? -%>
+<%= "[#{@story.subtitle}]\n" unless @story.subtitle.blank? -%>
+<%= h(strip_tags(StringHelpers.linewrap_text(@story.excerpt.strip,72))) unless @story.excerpt.blank? %>
+
+Topics: <%= StringHelpers.linewrap_text((@story.subject_tags + @story.public_topics(@local_site)).map{|t| h(t.name)}.join(" | "),64) %>
+
+URL: <%= @story.url %>
+
+<%= h strip_tags(show_submitted_by(@story, {:via_credits => true, :prefix => "Posted by:", :for_newsletter => true})) %> <%= x=show_abbreviated_feed_attribution(@story, 1000, {}, true); x ? " - " + x : "" %>
+
+Status: <%= humanize_token_direct("story_status", @story.status) %> 
+
+Priority: <%= humanize_token(@story, :editorial_priority) %>
+
+<%= "Editorial Notes: #{@story.edit_notes}\n\n" unless @story.edit_notes.blank? -%>
+Rating: <%= @story.hide_rating ? "not enough reviews" : "#{sprintf("%.1f", @story.rating || 0.0)} from #{pluralize(@story.reviews_count, "review")}" -%>
+<%- confidence = confidence_rating(@story) -%>
+ (<%= confidence.length > 4 ? "confidence #{confidence}" : "#{confidence} confidence" %>)
+
+To edit this story info, click here:
+<%= edit_story_url(@story, :only_path => false) %>
+
+<%= render :partial => 'footer' if @recipient %>

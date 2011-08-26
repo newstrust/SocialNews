@@ -1,0 +1,11 @@
+<h1 class="use16columns inner_left">Edit: <%= h @group.name %> <%= @group.is_role? ? 'Role' : 'Group' %></h1>
+
+<%= error_messages_for :group %>
+
+<div class="use10columns inner_left">
+  <% form_for :group, :url => admin_groups_path do |f| -%>
+    <%= render :partial => 'form' , :locals => { :f => f }%>
+    <%= form_buttons("Create", admin_groups_path) %>
+  <% end -%>
+</div>
+

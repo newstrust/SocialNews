@@ -1,0 +1,12 @@
+(if clicking a web address in this message does not work, simply copy
+and paste it into your browser's address bar)
+
+<%= render :partial => 'mailer/about_site' %>
+_____________________
+
+ABOUT THIS EMAIL
+You are receiving this email because a <%=app_name%> member wanted to share
+this link with you.
+
+<%= render :partial => 'mailer/privacy_policy' %>
+Copyright (c) <%= Time.now.year %>, <%=app_name%> - All Rights Reserved.

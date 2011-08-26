@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  member_id: 11
+  membershipable_type: 'Group'
+  membershipable_id: 1
+  public: true
+
+two:
+  member_id: 11
+  membershipable_type: 'Group'
+  membershipable_id: 2
+  public: false
+
+trusted_member_is_editor:
+  member_id: 16
+  membershipable_type: 'Group'
+  membershipable_id: 3
+  public: false

@@ -1,0 +1,65 @@
+<%- @title = "#{@review.story.title} - " + (@review.member ? "reviewed by #{@review.member.display_name}" : "Guest Review") -%>
+<%- @login_overlay_header = "<p>Please login or #{link_to "<strong>sign up</strong>", new_member_path} to comment on reviews</p>" -%>
+
+<% if @review.member == current_member && current_member.status == 'guest' -%>
+	<% flash[:notice] = "<h2>Activate Your Account</h2>Check your email inbox and click on your activation link. For help, check our #{help_link('FAQ', 'activate')}." -%>
+<% end -%>
+
+<div class="story_listing_detail span-16">
+	<%#- story header in a partial now -%>
+	<%= render :partial => 'stories/header', :locals => {:story => @review.story, :show_story_links => true} %>
+	
+	<% tools_box :page_type => :member_review do -%>
+		<%= link_to_new_review(@review.story, "", :go => "review") %>
+		<%= link_to "View", @review.story.url, :class => "view", :title => "Open this story in a new window", :target => "_blank" %>
+	<% end -%>
+	
+	<%#- Review -%>
+  <div class="story_listing_reviews review_detail_part span-16">
+    <div class="top"></div>
+    <div class="wrapper span-16">
+      <div class="header"><h3>Review</h3></div>
+      <div class="reviews one">
+        <%= render :partial => 'review', :object => @review, :locals => {:full => true} %>
+      </div>
+    </div>
+    <div class="bottom_nav"></div>
+    <div class="bottom"></div>
+  </div>
+  <p style="font-weight:bold;font-size:1.25em;margin-left:2px;clear:both;">
+    <%= link_to "See All Reviews &raquo;", @review.story %>
+  </p>
+</div>
+
+<div class="span-8 last dark">
+	<% right_column_box :header => "#{@review.member ? first_name(@review.member) : "Guest Reviewer"}'s Rating" do -%>
+	  <% trustometer_img_options = (!@review.include_rating? ? {:color => :gray} :
+				(logged_in? and current_member == @review.member) ? {:color => :green} : {}) -%>
+	  
+	<div class="clearfix ratings_top">
+		<div class="headRating">
+			<div class="ratingLabel" style="padding-bottom:3px;white-space: nowrap">Overall</div>
+		</div>
+		<div class="trust_good" style="margin-left:10px">
+			<%= trustometer_img(@review.rating, {:size => :large}) %>
+			<br/>
+			<%= content_tag(:span, adjectival_rating(@review.rating).capitalize, :class => "very_good") %></span>
+		</div>
+		<div class="from_reviews" style="width:100px;">
+			from <%= plural(@review.num_answers, "answer") %>
+			<% if logged_in? and current_member.has_role_or_above?(:admin) %>
+				<span class="confidence">
+					<%- confidence = confidence_rating(@review) -%> <%#- len>4 is "not calculated" -%>
+					(<%= confidence.length > 4 ? "confidence #{confidence}" : "#{confidence} confidence" %>)
+				</span>
+			<% end %>
+		</div>
+	</div>
+
+		<%= ratings_box :processable => @review, :trustometer_img_options => trustometer_img_options %>
+		<span class="help_link" style="margin-top:10px;"><%= help_link "How our ratings work &raquo;", 'rating_weights', 'reviewer', :class => "" %></span>
+	<% end -%>
+</div>
+<%= javascript_include_tag('/javascripts/comments.js') %>
+<%= render :partial => "/shared/review_comments_js.html.erb" %>
+<%= render :partial => "/shared/login_overlay" %>

@@ -1,0 +1,535 @@
+<%#-- do not show page if the visitor is not logged in and:
+  a. EITHER the member chose to hide their page,
+  b. OR their member_level and validation_level < 2 (spam prevention) --%>
+<%- if !logged_in? && (!@member.has_public_profile? || (@member.rating < 2 && @member.validation_level < 2)) -%>
+	<%- @no_bots = true -%>
+  <%- if visitor_is_bot? -%>
+    <%#-- SSS: Hide login form from bots -- they fill up logs with errors! --%>
+		<%- flash[:error] = "You do not have access to this member's profile page." -%>
+  <%- else -%>
+    <%#-- Show the partial profile, and then the login form below --%>
+    <%= render :partial => "members/restricted_view", :locals => {:member => @member} -%>
+
+		<%- flash[:error] = @member.profile_visible_to_all_nt_members? ? "Please Sign Up or Log In to see this member's profile." : "Please Log In to see if this member had made his/her full profile visible to you." -%>
+    <%- @title = "Log In" -%>
+    <%- @fb_no_auto_reload = true -%>
+    <%- @auto_login = session[:fb_activated] || false -%>
+    <script type="text/javascript"> hide_fixup_notice = false </script>
+
+    <div class="span-16 white_box" style="margin-top:20px">
+      <div class="wrapper">
+        <div class="interior_content">
+          <%= content_tag(:h2, @title) unless params[:popup] -%>
+          <%= render :partial => "sessions/new" -%>
+        </div>
+      </div>
+      <div class="bottom"></div>
+    </div>
+	<%- end -%>
+<%- elsif !@member.full_profile_visible_to_visitor?(current_member) -%> <%#--- Restricted profile access ---%>
+  <%= render :partial => "members/restricted_view", :locals => {:member => @member} -%>
+<%- else -%> <%#--- The member's full profile page can be seen by the visitor ---%>
+
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'follows' -%>
+<%- end -%>
+
+<%- @title = @member.name -%>
+<%- widget_url = "/widgets?url=/members/#{@member.friendly_id}/" -%>
+<%- rss_listing_url = "/members/#{@member.friendly_id}/" -%>
+<%- show_content = @member.rating >=2 || @member.validation_level >=2 || (logged_in? and current_member.has_role_or_above?(:host)) -%>
+<%- mphoto_size = (!@member.about.blank? && s(@member.about).length >= 600) ? "large" : "medium" -%>
+<%- member_name = first_name(@member) + "'s" -%>
+<%- member_network = "Network" -%>
+<%- my_page = false -%>
+<%- if logged_in? && current_member == @member -%>
+  <%- my_page = true -%>
+  <%- member_name = "my" -%>
+  <%- member_network = "My Network" -%>
+<%- end -%>
+
+<div class="story_listing_detail span-16">
+  <div class="story clearfix" style="line-height:1.5em;">
+		<%- if @member.image and show_content -%>
+	    <%= link_to(image_tag(@member.image.public_filename(mphoto_size)), @member.image.public_filename, :class => "overview_image") -%>
+    <%- end -%>
+    <h2 class="bottom helvetica"><%= h @member.display_name %>
+  	<%- if @member.profile_status == "hide" -%>
+  		<span class="quiet small">(profile hidden - 
+  		<%= mail_to email_addr("help"), "Email us for more info", :subject => "Hidden Profile - #{@member.name}", :encode => "javascript" %>)</span>
+  	<%- end -%>
+  	</h2>
+
+  	<strong><%= display_member_status(@member) %></strong>
+  	<span class="body_black_small">(since <%= @member.created_at.strftime('%B %Y') %>)</span><br/>
+  	<%= list_member_groups(@member, :group_list => "host,newshound,editor,partners,advisors,staff,directors,donors", :badges => true) %>
+  	<%= help_icon("member_profile_roles", "member") %><br style="clear:left" />
+
+  	<%- if !@member.hosted_topics.empty? || !@member.hosted_sources.empty? -%>
+  		<div style="margin:4px 0 4px 0;"><strong>Hosting</strong>
+  		<%- unless @member.hosted_topics.empty? -%>
+  			<%= @member.hosted_topics.collect{|ht| link_to(ht.name, ht)}.join(", ") -%>
+  		<%- end -%>
+  		<%- unless @member.hosted_sources.empty? -%>
+  			<%= " | " unless @member.hosted_topics.empty? -%><%= @member.hosted_sources.collect{|hs| link_to(hs.name, hs)}.join(", ") -%>
+  		<%- end -%>
+  		<%= help_icon("what_is_a_host", "host") -%>
+  		</div>
+  	<%- end -%>
+
+		<div id="about_me" style="margin-top:10px;">
+			<p>
+			<%- if show_content -%>
+				<%= h @member.visible_attribute('about') -%>
+			<%- else -%>
+				<%- if my_page -%>
+					Additional profile information will be displayed once you have been validated by our staff. Until then, this page will not be visible by search engines.
+				<%- else -%>
+					Additional profile information will be displayed once this member has been validated by our staff.
+				<%- end -%>
+			<%- end -%>
+			</p>
+		</div>
+		<script type="text/javascript" charset="utf-8">
+			$('#about_me').truncate({max_length: 900});
+		</script>
+	</div>
+
+	<%- more_info_box do -%>
+		<%- profile_section "About #{first_name(@member)}",
+			:help_icon => help_icon("view_member_profile", "member"),
+			:force_display => true do -%>
+			<%- if show_content -%>
+				<%= profile_line @member, ["city", "state", "country"], :humanized_key => "Location",
+					:formatter => :format_member_location %>
+				<%= profile_line @member, ["job_title", "company"], :humanized_key => "Occupation" %>
+				<%= profile_line @member, "show_affiliations", :humanized_key => "Publications",
+					:formatter => :affiliated_sources %>
+				<%= profile_line @member, "interests" %>
+				<%= profile_line @member, "expertise" %>
+				<%= profile_line @member, "affiliations" %>
+			<%- end -%>
+		<%- end -%>
+		
+		
+		<%- host_str = @member.hosted_sources.empty? ? "topics" : @member.hosted_topics.empty? ? "sources" : "topics and sources" -%>
+		<%- profile_section "Host " + content_tag('span', "&nbsp;(#{first_name(@member)} hosts these #{host_str})", :class => 'explanation'),
+		 	:help_icon => help_icon("what_is_a_host", "host") do -%>
+			<%= profile_line @member, "show_favorites", :humanized_key => "Topics",
+				:formatter => :hosted_topics unless @member.hosted_topics.empty? %>
+			<%= profile_line @member, "show_favorites", :humanized_key => "Sources",
+				:formatter => :hosted_sources unless @member.hosted_sources.empty? %>
+		<%- end -%>
+
+
+		<%- profile_section "Background",
+		 	:help_icon => help_icon("member_profile_background", "member") do -%>
+			<%= profile_line @member, "journalism_experience", :humanized_key => "Journalism",
+				:humanize_token => true if @member.show_journalism_experience %>
+			<%= profile_line @member, "education_experience", :humanized_key => "Education",
+				:humanize_token => true if @member.show_education_experience %>
+			<%= profile_line @member, "news_experience", :humanized_key => "News",
+				:humanize_token => true if @member.show_news_experience %>
+			<%= profile_line @member, "internet_experience", :humanized_key => "Internet",
+				:humanize_token => true if @member.show_internet_experience %>
+			<%= profile_line @member, "languages", :humanize_token => true %>
+			<%= profile_line @member, "politics", :humanize_token => true %>
+			<%= profile_line @member, "age_group", :humanized_key => "Age", :humanize_token => true %>
+			<%= profile_line @member, "gender", :humanize_token => true %>
+			<%= profile_line @member, "income", :humanize_token => true %>
+		<%- end -%>
+		
+		<%- profile_section "Favorites",
+		 	:help_icon => help_icon("member_profile_favorites", "member") do -%>
+			<%- if show_content -%>
+				<%= profile_line @member, "show_favorites", :humanized_key => "Topics",
+					:formatter => :favorite_tags %>
+				<%= profile_line @member, "favorite_links", :humanized_key => "Links",
+					:formatter => :format_links %>
+			<%- end -%>
+		<%- end -%>
+
+		<%- profile_section "Contact Info",
+		 	:help_icon => help_icon("member_profile_contact_info", "member") do -%>
+			<%- if show_content -%>
+				<%= profile_line @member, "email", :formatter => :format_email if @member.show_email || (logged_in? and current_member.has_role_or_above?(:sysop)) %>
+				<%= profile_line @member, "home_page", :humanized_key => "Web Page", :formatter => :format_url %>
+				<%= profile_line @member, "fb_uid", :humanized_key => "Facebook", :formatter => :format_fb_profile_url if @member.fbc_linked? && @member.show_fb_profile_url %>
+				<%= profile_line @member, ["street_address", "street_address2", "city", "state", "zip_code", "country"],
+					:humanized_key => "Address",
+					:formatter => :format_filter_na %>
+				<%= profile_line @member, "phone" %>
+			<%- end -%>
+		<%- end -%>
+		
+		<%- profile_section "" , :force_display => true do -%>
+			<%= profile_line @member, "last_active_at", :humanized_key => "Last Visit",
+				:formatter => :format_date,
+				:if_empty_say => "Never" %>
+
+			<%= profile_line @member, "last_edited_at", :humanized_key => "Last Edit",
+				:formatter => :format_date,
+				:if_empty_say => "Never" %>
+		<%- end -%>
+
+		<%- if logged_in? and current_member.has_role_or_above?(:admin) -%>
+			<%- profile_section "Admin Info" do -%>
+				<%= profile_line @member, "id" %>
+				<%= profile_line @member, "rating", :humanized_key => "Member Level" %>
+				<%= profile_line @member, "invitation_code" %>
+				<%= profile_line @member, "validation_level" %>
+				<%= profile_line @member, "show_profile" %>
+				<%= profile_line @member, "last_validated_at", :humanized_key => "Last Validated",
+				:formatter => :format_date,
+				:if_empty_say => "Never" %>
+				<%= profile_line @member, "http_x_real_ip", :humanized_key => "Sign-up IP",
+				:if_empty_say => "none" %>
+				<%= profile_line @member, "http_user_agent", :humanized_key => "Browser",
+				:if_empty_say => "none" %>
+			<%- end -%>
+		<%- end -%>
+
+		<%- if @member.profile_status != "hide" -%>
+			<br />
+			<span class="editorial_gray" style="margin-left:20px">
+			<%- case @member.show_profile  -%>
+        <%- when Member::Visibility::PUBLIC -%>
+          This profile can be seen by everyone, including search engines.
+        <%- when Member::Visibility::MEMBERS -%>
+          This profile can only be seen by <%=app_name%> members.
+        <%- when Member::Visibility::GROUP -%>
+          This profile can only be seen by <%=app_name%> members who belong to a group you are part of.
+        <%- when Member::Visibility::PRIVATE -%>
+          This profile can only be seen by <%=app_name%> staff and the member whose page this is.
+			<%- end -%>
+			<%- if my_page -%>
+				(Go to <%= link_to "My Account", "/members/my_account#account" %> to change your settings.)
+			<%- end -%>
+			<%= help_icon("member_show_profile", "member") %></span>
+		<%- end -%>
+	<%- end -%>
+	
+	<%#- Tools -%>
+	<%- divider = "" -%>
+
+  <%- edit_privs = false ; edit_link = "" ; edit_title = "" -%>
+  <%- if logged_in? && !my_page && current_member.has_role_or_above?(:sysop) -%>
+    <%- edit_privs = true ; edit_link = edit_account_member_url(@member) ; edit_title = "Edit " + member_name + " account information" -%>     
+  <%- end -%>
+	<%- tools_box :page_type => :member_profile, :edit_privs => edit_privs, :edit_link => edit_link, :edit_title => edit_title do -%>
+    <%- if can_follow? -%>
+      <%- unless my_page -%>
+        <%- if current_member.followed_members.include?(@member) -%>
+          <a href="#" class="unfollow_member" onclick="return toggle_follow(this, {type: 'member', id: <%=@member.id%>})"></a>
+        <%- else -%>
+          <a href="#" class="follow_member" onclick="return toggle_follow(this, {type: 'member', id: <%=@member.id%>})"></a>
+        <%- end -%>
+  		<%- end -%>
+		<%- end -%>
+		<div style="float:left;margin-top:4px;margin-right:4px;display:inline;">
+      <%- if @local_site.nil? -%>
+        <%= link_to "", mynews_url(@member), :title => "Visit " + member_name + " MyNews page", :class => "mynews", "rel" => "nofollow" %> | 
+      <%- end -%>
+      <%= link_to member_network, mynetwork_member_url(@member), :title => "Visit " + member_name + " Network page", :class => "network", "rel" => "nofollow" %>
+      <%- if @member.visible_attribute("home_page") && !@member.home_page.blank? && (show_content || (logged_in? and current_member.has_role_or_above?(:sysop))) -%>
+        | <%= link_to "Web Page", add_http(@member.home_page), :class => "view", :target => '_blank', :title => "Open " + member_name + " Web page in a new window" %>
+      <%- end -%>
+      <%- if @member.show_email && show_content || (logged_in? and current_member.has_role_or_above?(:sysop)) -%>
+        | <%= mail_to(@member.email, "Contact", :encode => "javascript", :class => "contact",
+                :title => my_page ? "Send myself an email" : "Send an email to " + first_name(@member) ) %>
+      <%- end -%>
+      <%- if my_page -%>
+         | <%= link_to "Edit", my_account_members_url, :class => "edit_text", :title => "Edit my Member Profile" %>
+      <%- end -%>
+      | 
+    </div>
+	<%- end -%>
+
+  <%- num_comments = @comments.size -%>
+  <%- num_reviews  = @reviews.total_entries -%>
+  <%- num_posts    = @submissions.size -%>
+  <%- num_starred  = @starred.size -%>
+	
+	<%#- Reviews box -%>
+	<div class="member_profile story_listing_reviews flat span-16">
+    <div class="top"></div>
+    <div class="wrapper span-16">
+      <div class="header activity"><h3>Activity</h3>
+			<div class="show_activity_part">
+				<%= link_to_function "Show all", "show_member_activity(null, this)", :class => "sel" %> |
+				<%= link_to_function_if !num_reviews.zero?, "Reviews", "show_member_activity('review', this)" %> |
+				<%= link_to_function_if !num_posts.zero?, "Posts", "show_member_activity('post', this)" %> |
+				<%= link_to_function_if !num_starred.zero?, "Starred", "show_member_activity('like', this)" %> |
+				<%= link_to_function_if !num_comments.zero?, "Comments", "show_member_activity('comment', this)" %>
+			</div>
+      </div>
+      <div style="border-top:2px solid #f2f2f2;float:left;">
+
+      <%- if my_page and @member.status == "guest" -%>
+				<div class="flash_notice"><%= help_link "Activate your account", "activate" %> to publish your reviews.</div>
+			<%- end -%>
+
+      <%- displayed_stories = {} -%>
+      <%- if @activity_entries.size > 0 -%>
+        <%- story_hf  = {:quote => true, :submitted_by => true, :rating => true, :review_it => true, :edit_it => true, :fb_share => true, :tw_share => true, :email => true, :reviews => true, :share => true} -%>
+        <%- story_sf  = {:see_all_reviews => true, :starred => true, :status_badges => true } -%>
+        <%- review_hf = {:review_date => true, :reviewer_photo => true, :reviewer_name => true, :reviewer_submission => true, :is_featured => true, :add_review_comment => true} -%>
+        <%- review_sf = {:starred => true, :status_badges => true} -%>
+        <%- comment_sf = {:starred => true, :status_badges => true} -%>
+        <%- comment_hf = {:fb_share => true, :tw_share => true, :email => true} -%>
+        <%- @activity_entries.each do |obj| -%>
+          <%- case obj.class.name
+            when "Save": -%> <%#-- Picks --%>
+              <%- starred_not_reviewed = !@story_flags[obj.story.id][:reviewed] && displayed_stories[obj.story.id].nil? -%>
+              <%- starred_after_review = @story_flags[obj.story.id][:reviewed] && displayed_stories[obj.story.id].nil? -%>
+              <%- if starred_after_review -%>
+                <%#-- Create a (duplicate) review object to be displayed in the all activity filter --%>
+                <div class="article member_activity all_activity">
+                  <%- review = @story_flags[obj.story.id][:reviewed] -%>
+                  <%="#{'<span class="featured" style="float:right;margin-top:10px;margin-right:20px"></span>'}" if review.is_featured %>
+                  <%=member_activity_line(obj, @member, @story_flags[obj.story.id])%>
+                  <%=render :partial => 'reviews/member_review', 
+                            :locals  => { :review => review, :hide_flags => review_hf, :show_flags => review_sf } %>
+                </div>
+              <%- end -%>
+              <div class="like article member_activity<%=' all_activity' if starred_not_reviewed%>">
+                <%=member_activity_line(obj, @member, @story_flags[obj.story.id])%>
+                <ul>
+                <%=render :partial => "stories/story",
+                          :object  => obj.story,
+                          :locals  => { :hide_flags => story_hf, :show_flags => story_sf} %>
+                </ul>
+              </div>
+              <%- displayed_stories[obj.story.id] = true -%>
+
+            <%- when "Story": -%> <%#-- Submissions --%>
+              <div class="post article member_activity<%=' all_activity' if displayed_stories[obj.id].nil?%>">
+                <%=member_activity_line(obj, @member, @story_flags[obj.id])%>
+                <ul>
+                <%=render :partial => "stories/story",
+                          :object  => obj,
+                          :locals  => { :hide_flags => story_hf, :show_flags => story_sf} %>
+                </ul>
+              </div>
+              <%- displayed_stories[obj.id] = true -%>
+              <%#-- Note that a story can never be posted after it has been reviewed, so we don't have the same situation 
+                    with posts & reviews as we have with starred items & reviews above! --%>
+
+            <%- when "Review": -%> <%#-- Reviews --%>
+              <div class="review article member_activity<%=' all_activity' if displayed_stories[obj.story.id].nil?%>">
+              	<%="#{'<span class="featured" style="float:right;margin-top:10px;margin-right:20px"></span>'}" if obj.is_featured %>
+                <%=member_activity_line(obj, @member, @story_flags[obj.story.id]) %>
+                <%=render :partial => 'reviews/member_review', 
+                          :locals  => { :review => obj, :hide_flags => review_hf, :show_flags => review_sf } %>
+              </div>
+              <%- displayed_stories[obj.story.id] = true -%>
+
+            <%- when "Comment": -%> <%#-- Comments -%>
+              <div class="comment article member_activity all_activity">
+		          <%= render :partial => '/discussions/comments/profile_comments', :locals => { :comment => obj, :hide_flags => comment_hf, :show_flags => comment_sf, :member_name => member_name } %>
+              </div>
+          <%- end -%>
+        <%- end -%>
+			<%- else -%>
+				<div class="empty_list">
+					No reviews, starred stories, posts or comments yet.
+				</div>
+			<%- end -%>
+		</div>
+   
+    <div class="bottom_nav">
+      <%#- Reviews links -%>
+      <div class="clearfix" style="margin-top:10px;">
+        <span class="read_more"><%= link_to "See all #{number_format(@reviews.total_entries)} reviews", reviews_member_path(@member) %></span>
+        <%= help_icon("member_story_reviews", "member") %>
+        <div class="categories">
+          <%- if @member.has_public_profile? -%>
+            <%= link_to("Get Widget", widget_url + "reviews" ) %> |
+            <%= link_to("RSS", rss_listing_url + "reviews.xml") %>
+            <%= member_rss_icon(rss_listing_url + "reviews.xml") %>
+          <%- end -%>
+        </div>
+      </div>
+
+      <%#- Picks links -%>
+      <%- if @all_starred_count>0 -%>
+      <div class="clearfix">
+        <span class="read_more"><%= link_to "See all #{number_format(@all_starred_count)} starred stories", picks_member_path(@member), :class => "small_bold" %></span>
+        <%= help_icon("member_picks", "member") %>
+        <div class="categories">
+          <%- if @member.has_public_profile? -%>
+            <%= link_to("Get Widget", widget_url + "picks" ) %> |
+            <%= link_to("RSS", rss_listing_url + "picks.xml") %>
+            <%= member_rss_icon(rss_listing_url + "picks.xml") %>
+          <%- end -%>
+        </div>
+      </div>
+      <%- end -%>
+
+      <%#- Submissions links -%>
+      <%- if @submissions.total_entries>0 -%>
+      <div class="clearfix">
+        <span class="read_more"><%= link_to "See all #{number_format(@submissions.total_entries)} posts", submissions_member_path(@member), :class => "small_bold" %></span>
+        <%= help_icon("member_submissions", "member") %>
+        <div class="categories">
+          <%- if @member.has_public_profile? -%>
+            <%= link_to("RSS", rss_listing_url + "submissions.xml") %>
+            <%= member_rss_icon(rss_listing_url + "submissions.xml") %>
+          <%- end -%>
+        </div>
+      </div>
+      <%- end -%>
+
+    <%- if (@member.can_comment? || (current_member && current_member.has_role_or_above?(:editor))) && @member.comments.count>0 -%>
+      <%#- Comments links -%>
+      <div class="clearfix">
+        <span class="read_more"><%=link_to "See all #{number_format(@member.comments.count)} comments", comments_member_path(@member), :class => "small_bold" %></span>
+      </div>
+    <%- end -%>
+    
+    <%- if my_page && !@member.has_public_profile? -%>
+      <div class="clearfix" style="margin:0 5px 10px 15px">
+      <span class="editorial_gray">Your widgets and RSS feeds are not available to the public because your profile is set to "Members Only". To change your privacy settings, go to <%= link_to "My Account", "/members/my_account#account" %>.</span></div>
+    <%- end -%>
+
+ 	</div>
+    </div>
+    <div class="bottom"></div>
+  </div>
+</div>
+</div>
+
+<div class="span-8 last">
+  <%#-- Display award badges at the top of the column! --%>
+  <%= @member.awards.split(",").collect { |i| image_tag("awards/#{i.strip.gsub(":", "/")}.png") } if !@member.awards.blank? -%>
+
+  <%- if ((@member == current_member) || (logged_in? && current_member.has_role_or_above?(:staff))) && !@member.social_groups.empty? -%>
+    <%- right_column_box(:header => "My Groups") do -%>
+      <%- @member.social_groups.each do |g| -%>
+        <div><%=link_to g.name, g%></div>
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+
+	<%- right_column_box :header => 'Levels &amp; Stats ', :id => "member_level",
+	 	:disclaimer_link => help_link('Beta', 'member_profile_ratings', 'member') do -%>
+		
+		<%#- Overall Rating + breakdown -%>
+		<%= ratings_box_line :rating_name => "Member Level",
+			:rating_value => @member.rating,
+			:heading_class => "headRating",
+			:help_icon => help_icon("member_profile_ratings", "member"),
+			:trustometer_img_options => {:shape => :bullet, :color => :green},
+			:note => "#{format_rating(@member.rating)} avg." %>
+		
+		<%- SocialNewsConfig["member_level_components"].sort.each do |component_info| -%>
+			<%= ratings_box_line :rating_name => component_info[1]["name"],
+				:rating_value => @member.processed_rating(component_info[0]),
+				:trustometer_img_options => {:shape => :bullet, :color => :green, :size => :small} %>
+		<%- end -%>
+		<br/>
+		
+		<%#-- My rating -%>
+		<%- if @current_member_rating -%>
+			<hr/>
+			<%= ratings_box_line :rating_name => "My Rating",
+				:rating_value => @current_member_rating,
+				:heading_class => "headRating",
+				:trustometer_img_options => {:shape => :bullet, :color => :green} %>
+			<br/>
+		<%- end -%>
+		
+		<!-- average_meta_review_by_member -->
+		<%#- Stats - only show for members -%>
+		<%- unless @member.status == 'guest' -%>
+			<%= ratings_box_line :rating_name => "Stats",
+				:heading_class => "subHeadRating",
+				:help_icon => help_icon("member_profile_stats", "member") %>
+			
+			<%- SocialNewsConfig["member_stats"].each_with_index do |component_info, i| -%>
+				<%= ratings_box_line :rating_name => component_info.values.first["name"],
+					:rating_value => @member.send(component_info.keys.first),
+					:integer_rating => true %>
+				
+			<%- end -%>
+		<%- end -%>
+
+	<%- end -%>
+  
+  <%#- Meta Reviews -%>
+  <%- right_column_box :id => "meta_reviews", :header => "Member Ratings" do -%>
+    <%#- Member Ratings tab -%>
+		<%- unless @member.status == 'guest' -%>			
+			<h4>
+				Ratings received by <%=first_name(@member)%>
+				<span class="editorial_gray">
+				<%- if @meta_reviews_received.total_entries <= @num_meta_reviews_to_show -%>
+					<%= "(#{number_format(@meta_reviews_received.total_entries)})" if @meta_reviews_received.total_entries >0 %>
+				<%- else -%>
+					<%= link_to "(see all " + number_format(@meta_reviews_received.total_entries) + ")", meta_reviews_received_member_url(@member) %>
+				<%- end -%>
+				</span>
+				<%= help_icon("member_review_rating", "member") %>
+			</h4>
+			<%- if @meta_reviews_received.total_entries.zero? -%>
+				<div class="empty_list">No ratings received yet.</div>
+			<%- else -%>
+				<%= render :partial => 'reviews/meta_review', :collection => @meta_reviews_received, :locals => {:given => false} %>
+			<%- end -%>
+			<%= "<div style=\"margin-top:5px; margin-bottom:0px;\">#{link_to "More ratings &raquo;", meta_reviews_received_member_url(@member)}</div>" if @meta_reviews_received.total_entries > @num_meta_reviews_to_show %>
+			<br/>
+			<hr/>
+			<h4>
+				Ratings given by <%=first_name(@member)%>
+				<span class="editorial_gray">
+				<%- if @meta_reviews_given.total_entries <= @num_meta_reviews_to_show -%>
+					<%= "(#{number_format(@meta_reviews_given.total_entries)})" if @meta_reviews_given.total_entries >0 %>
+				<%- else -%>
+					<%= link_to "(see all " + number_format(@meta_reviews_given.total_entries) + ")", meta_reviews_given_member_url(@member) %>
+				<%- end -%>
+				</span>
+				<%= help_icon("member_review_rating", "member") %>
+			</h4>
+			<%- if @meta_reviews_given.total_entries.zero? -%>
+				<div class="empty_list">No ratings given yet.</div>
+			<%- end -%>
+			<%- if my_page && current_member.rating < 3.0 -%>
+				To rate other member reviews, you need a Member Level of 3.0 or higher.
+				For more info, check our <%= help_link "FAQ", "rate_this_review", "report" %>.<br/>
+			<%- end -%>
+			<%- if !@meta_reviews_given.total_entries.zero? -%>
+				<%= render :partial => 'reviews/meta_review', :collection => @meta_reviews_given, :locals => {:given => true} %>
+			<%- end -%>
+			<%= "<div style=\"margin-top:5px; margin-bottom:0px;\">#{link_to "More ratings &raquo;", meta_reviews_given_member_url(@member)}</div>" if @meta_reviews_given.total_entries > @num_meta_reviews_to_show %>
+
+		<%- end -%>
+  <%- end -%>
+  
+  <%#- Widget -%>
+  <%- if @member.has_public_profile? || my_page -%>
+    <%- if member_name.length > 20 -%>
+      <%- member_name = "This Member's" -%>
+    <%- end -%>
+    <%- right_column_box :header => member_name.humanize + " Widget" do -%>
+      <%- if @member.has_public_profile? -%>
+        <%- if @reviews.total_entries >= 12 -%>
+          <script type="text/javascript"> 
+          _NTW_numStories = 3;
+          </script>
+          <script src="/members/<%= @member.friendly_id %>/reviews.json" type="text/javascript"></script>
+          <script src="/javascripts/widgets/formats/member_widget.json" type="text/javascript"></script>
+          <script src="/javascripts/render_widget.js" type="text/javascript"></script>
+          <a href="<%= widget_url %>reviews">Add this widget to your site <span class="more">&raquo;</span></a>
+        <%- else -%>
+          <a href="<%= widget_url %>reviews">See this member's widget <span class="more">&raquo;</span></a>
+        <%- end -%>
+      <%- else -%>
+        <span class="editorial_gray">
+        Your Member Widget is not available to the public because your profile is set to "Members Only". To change your privacy settings, go to <%= link_to "My Account", "/members/my_account#account" %>.</span>
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+  
+</div>
+
+<%- end -%>

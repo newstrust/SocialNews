@@ -1,0 +1,16 @@
+# SSS: IMPORTANT: Try to stagger the tasks so that you dont have multiple tasks starting off at periodic intervals.
+
+# Every morning at 9 am, send out truthsquad email digest
+0 9 * * * /data/socialnews/current/bin/run_rake_task.sh production socialnews:notifications:process_pending type=quote:link
+
+# Every 30 minutes, send out a review notification email digest
+12,42 * * * * /data/socialnews/current/bin/run_rake_task.sh production socialnews:notifications:process_pending type=review:new
+
+# Every day at 4:57 am PT, 8:57 am PT, 12:57 pm PT, and 4:57 pm PT, send out a summary of posted stories since last email
+57 4,8,12,16 * * * /data/socialnews/current/bin/run_rake_task.sh production socialnews:emails:send_site_activity_log
+
+## once an hour, recompute aggregate stats!
+37 * * * * /data/socialnews/current/bin/run_rake_task.sh production socialnews:refresh_stats
+
+# Every day at 11:50 pm, run the db clean-up task
+50 23 * * * /data/socialnews/current/bin/run_rake_task.sh production socialnews:cleanup_db

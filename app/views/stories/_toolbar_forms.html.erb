@@ -1,0 +1,39 @@
+<%#-- SSS: Hide all ajax forms from bots -- they fill up the logs with errors! ! --%>
+<%- if !visitor_is_bot? -%>
+<%#- Review (ratings & labels) -%>
+<div id="review_form" class="form">
+ <%= render :partial => 'reviews/review_form' %>
+</div>
+
+<%#- Info -%>
+<div id="info_form" class="form">
+  <%= render :partial => 'toolbar_info' %>
+</div>
+
+<%#- Edit -%>
+<div id="edit_form" class="clearfix form">
+  <%= render :partial => 'toolbar_edit' %>
+</div>
+
+<%# Log in -%>
+<div id="log_in_form" class="clearfix form">
+  <%= render :partial => 'toolbar_login' %>
+</div>
+
+<%# Sign Up -%>
+<div id="sign_up_form" class="clearfix form">
+  <%= render :partial => 'toolbar_signup' %>
+</div>
+
+<%# Story Actions -%>
+<div id="story_actions_form" class="form">
+  <%= render :partial => 'toolbar_story_actions' %>
+</div>
+
+<%# Thank you after edits! -%>
+<div id="edit_thanks_form" class="form">
+  <%= render :partial => 'toolbar_edit_thanks' %>
+</div>
+
+<%= render :partial => "shared/tools_icon_forms" %>
+<% end -%>

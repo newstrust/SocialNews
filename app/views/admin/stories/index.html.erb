@@ -1,0 +1,11 @@
+<% @title = "Stories Admin Interface" %>
+
+<h1> Stories Admin </h1>
+<ul>
+<li> <%=link_to "Merge duplicate stories", merge_tool_admin_stories_path %> </li>
+<% if logged_in? and current_member.has_role_or_above?(:editor) # only editors and above should have access to the queued stories %>
+<%#--	<li> <=link_to "See all queued stories (last 24 hours)", all_queued_stories_admin_stories_path > </li> --%>
+	<li> <%=link_to "Mass edit queued stories (last 24 hours)", mass_edit_queued_stories_admin_stories_path %> </li>
+<%#--	<li> <=link_to "Summary of auto-fetched feeds (last 24 hours)", autofetch_summary_admin_stories_path > </li> --%>
+<% end %>
+</ul>

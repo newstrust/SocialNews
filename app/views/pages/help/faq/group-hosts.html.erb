@@ -1,0 +1,168 @@
+<%- @title = "Group Hosts FAQ" -%>
+<%- app_domain = SocialNewsConfig["app"]["domain"] -%>
+
+<%= "<a name=\"top\"></a>" unless params[:popup] %>
+
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior">
+
+<%= content_tag(:h1, @title + " <span class=\"small\">(Frequently Asked Questions)</span>") unless params[:popup] %>
+
+<p>Here are some frequently asked questions for <%=app_name%> Group Hosts. Click on any question below to learn more about this service, which is now in early pilot stage. If you still have questions, <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+<ul>
+<li><a href="#about_faq" class="subhead_plain_bold">About this FAQ</a></li>
+<li><a href="#about_groups" class="subhead_plain_bold">About <%=app_name%> Group Hosts</a></li>
+</ul>
+</p>
+<hr size="1" />
+
+<h2 style="margin-bottom:8px;"><a name="about_faq"></a>About this FAQ</h2>
+<p><a name="what_is_faq"></a><span class="subhead_plain_bold">What is this FAQ?</span>
+<br />
+This FAQ answers questions for <%=app_name%> Group Hosts. If you would like more specific information about using <%=app_name%>, check our other FAQs:<br />
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for general questions about <em><%=app_name%> and our website</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'MyNews FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about your <em>MyNews</em> and <em>My Network</em> pages</td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Groups FAQ', "/help/faq/groups/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about using <em><%=app_name%> groups</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>submission forms</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr>
+</table>
+
+<p><a name="suggestion_problem"></a><span class="subhead_plain_bold">How can I make a suggestion or report a problem?</span>
+To help us improve our service, please click "Feedback" in the bottom navigation bar, anywhere on our site. To email us about issues that need to be fixed right away, email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>. Thanks for your patience during our beta phase.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="about_group_host"></a>About Group Hosts</h2>
+<p><a name="what_is_group_host"></a><span class="subhead_plain_bold">What is a Group Host?</span>
+  A group can have one or more hosts who can edit the preferences for their groups, validate new members, and moderate discussions. Hosts can also customize the content on a group page, feature relevant stories, create news comparisons, and select an image for the group.</p>
+  
+
+<p><a name="moderate_comments"></a><span class="subhead_plain_bold">How do I moderate comments on the group page?</span>
+You can remove offensive comments by clicking 'Remove' under any comment. For guidelines on how to identify offensive content, check our <%= link_to 'General FAQ', "/help/" + (params[:popup] ? "?popup=true" : "") %>. Members can flag comments they find inappropriate by clicking 'Flag' under any comment. To see the list of flagged comments in your group, click the "Edit Page" link in the blue info box at the top of the group page. This will take you to the edit panel for the group page. The flagged comments are listed below the "Group Info (Staff Only)" panel, above the second set of green "Update" and "Cancel" buttons.</p>
+
+<p><a name="how_edit"></a><span class="subhead_plain_bold">How do I edit a group page?</span>
+You can reach the edit panel for a group page you're hosting by clicking on the "Edit Page" link in the blue info box at the top of the group page.</p>
+
+<p><a name="what_edit"></a><span class="subhead_plain_bold">What can I edit on the group page?</span>
+A host can edit <a href="#info">group info</a>, including the group description and subtitle, link to a website, set group access and membership preferences, and designate other hosts. Hosts can also control the <a href="#layout">group page layout</a>, which includes the group image, featured story, the Story Grid, browsing tabs for the activity feed, News Comparisons, and any other customizable panel in the right sidebar.</p>
+
+<h2><a name="info"></a>Group Info:</h2>
+<em>The following questions refer to functions in the "Group Info" boxes at the top of the edit page, between the first two sets of green "Update" and "Cancel" buttons (except for "How do I add or remove group members?", which refers to a panel further down the page).</em>
+
+<p><a name="description"></a><span class="subhead_plain_bold">How do I set the group description and subtitle?</span>
+In the "Group Info (Hosts)" box at the top of the edit page, you can set a text description and group subtitle, which will appear in the blue info box at the top of the group page.</p>
+
+<p><a name="website"></a><span class="subhead_plain_bold">Should I link to a website in the "Website URL" field?</span>
+If your group has a website outside of <%=app_name%>, or has a relevant page elsewhere on <%=app_name%> (such as a topic page for a News Hunt), you can add a link in the "Website URL" field, which will appear in the blue info box at the top of the group page. If not, leave it blank.</p>
+
+<p><a name="access"></a><span class="subhead_plain_bold">How do I control access to the group page?</span>
+From the "Access" drop-down menu, you can designate whether the group should be visible to the public, to <%=app_name%> members only, or only to group members.</p>
+
+<p><a name="membership"></a><span class="subhead_plain_bold">How do stories, reviews, and story comments get posted to a group?</span>
+From the "Membership" drop-down menu, you can designate whether the group should be "Open to All," which creates a "Join this group" button on the group page, or "Invitation-Only." In both membership modes, you can add members manually using the <a href="#members">"Members" panel</a>, or email them a link to an invitation page provided to you by a <%=app_name%> staff member.</p>
+
+<p><a name="members"></a><span class="subhead_plain_bold">How do I add or remove group members?</span>
+The "Members" panel is located on the edit page just above the third set of green "Update" and "Cancel" buttons. To add a member, type his or her name into the box, and search results will pop up below. The search will only find finished words, so you have to completely type a name (e.g. "Fabr" will not work, but "Fabrice" will), but you can search by just first or last name, as well as by full name. Click on the name you want to add, and then click on the green "+" button when asked for confirmation. To remove a member from the group, click the red "-" sign next to their name on the list in the "Members" panel.</p>
+
+<p><a name="notes"></a><span class="subhead_plain_bold">What is the "Host notes" field for?</span>
+You can leave reminder notes for yourself or other hosts in this field; it does not show up on the group page.</p>
+
+<p><a name="add_host"></a><span class="subhead_plain_bold">How do I add another host?</span>
+In the "Group Info (Hosts)" box at the top of the edit page, type a member's name into the "Hosts:" field, and search results will pop up below. The search will only find finished words, so you have to completely type a name (e.g. "Fabr" will not work, but "Fabrice" will), but you can search by just first or last name, as well as by full name. Click on the name you want to add as a host, and then click on the green "+" button when asked for confirmation. To remove a host, click the red "-" sign next to their name on the list in the at the bottom of the "Group Info (Hosts)" panel.</p>
+
+<p><a name="save1"></a><span class="subhead_plain_bold">How do I save or cancel my changes?</span>
+You can click on any of the green "Update" buttons to save your changes, or click "Cancel" to revert to the last version.</p>
+
+<h2><a name="layout"></a>Group Page Layout:</h2>
+<em>The following questions refer to functions controlled by the layout control panels located between the second and third sets of green "Update" and "Cancel" buttons, as well as the advanced control panels toward the bottom of the page.</em>
+
+<p><a name="image"></a><span class="subhead_plain_bold">How do I set a group image?</span>
+In the "Group Image" box in the top right, under the second set of green "Update" and "Cancel" buttons, you can browse for an image and upload it from your computer. Be sure to fill out the "Credit" field, if you don't own the rights to the image, and add a link to the original page in the "Credit URL" field.</p>
+
+<p><a name="set_featured"></a><span class="subhead_plain_bold">How do I set a featured story?</span>
+First, check the "Show box?" button in the "Featured Story Box." This will open a panel of options.</p>
+<p>In the "Box title" field, you can set the title that will be displayed over the Featured Story box on the group page. By default, this is set to "Featured Story."</p>
+<p>In the "Story label" field, you can set a general headline, such as a topic name or other general description, that will be displayed in gray text above the story title. For example, if your story is about a ruling on freedom of speech in the Supreme Court, you can label the story "FREEDOM OF SPEECH" or "SUPREME COURT." <%=app_name%> protocol is to set story labels in all capital letters.</p>
+<p>The "Story" field is the most important part of the featured story controls. This is where you designate which story will be displayed. In another tab or window, find the story you want to feature somewhere on <%=app_name%> and click the blue "Reviews" button. This will take you to the <%=app_name%> story page, which will have a URL that looks like "http://<%=app_domain%>/stories/xxxxxxx," or "http://<%=app_domain%>/stories/xxxxxxx?=yzyzyzyz," where the X's are numbers. You don't need to worry about the "?" or anything after it. What you need is that "xxxxxxx" number. This is the <%=app_name%> story ID number. Copy that number and paste it into the "Story" field in the "Featured Story Box." When you update the page, your story will be featured.</p>
+<p>If your story has a photo attached, the photo will be displayed in the featured story box. If there is no photo, but you would like to display one, you can check the "Use topic photo?" box, which will load the photo from the story's primary topic page. You can feature a story without a photo. If you have a photo you would like to attach to the story, you can <%= mail_to email_addr("editors"), "email the editors", :subject => 'Group Host help request', :encode => "javascript" %> to ask for help, or you can <a href="#story_photo">do it yourself</a>.</p>
+
+<p><a name="story_photo"></a><span class="subhead_plain_bold">How do I add a photo to a story?</span>
+This is an advanced task, and if it's too difficult, you can <%= mail_to email_addr("editors"), "email the editors", :subject => 'Group Host help request', :encode => "javascript" %> to ask for help.</p>
+<p>To add a photo to a story, you have to go to its "advanced edit page." You can access this page by going to "http://<%=app_domain%>/xxxxxxx/edit," where those X's are the story's ID number. You can find this number by finding the story anywhere on <%=app_name%> and clicking the blue "Reviews" button. This will take you to the <%=app_name%> story page, which will have a URL that looks like "http://<%=app_domain%>/stories/xxxxxxx," or "http://<%=app_domain%>/stories/xxxxxxx?=yzyzyzyz," where the X's are numbers. You don't need to worry about the "?" or anything after it. Just delete anything that comes after the numbers, type "/edit" and press return. This will take you to a page with the header "Edit Story Info."</p>
+<p>From this page, click on the "Multimedia" tab. From there, you can browse for an image and upload it from your computer. Be sure to fill out the "Credit" field, if you don't own the rights to the image, and add a link to the original page in the "Credit URL" field. When you're done, scroll down to the bottom of the page and click the yellow 'Save' button. This picture will now show up in the featured story box when you feature the story on your group page.</p>
+
+<p><a name="video"></a><span class="subhead_plain_bold">Can I embed a video in a story?</span>
+Yes, but a <%=app_name%> staff member must set it up for you. <%= mail_to email_addr("editors"), "Email the editors", :subject => 'Group Host help request', :encode => "javascript" %> to ask for help embedding a video.</p>
+
+<p><a name="story_grid"></a><span class="subhead_plain_bold">What is the Story Grid, and how do I control it?</span>
+The Story Grid displays one or two rows of three stories in small capsules, just like on the <%=app_name%> homepage. It is set to update automatically by default, showing a recent mainstream news story in box 1, a recent independent news story in box 2, and a recent opinion story in box 3. You can control the stories in the story Grid in the box marked "Story Grid (3x2)."</p>
+<p>To hide or show the Story Grid, use the "Show box?" checkbox. Underneath that checkbox, you can set the title for the Story Grid in the "Box title" field. By default, this is set to "Top Stories."</p>
+<p>To hide or show a row of stories, use the "Show row1?" or "Show row2?" checkbox. Underneath that checkbox, you can set a title for the row, such as "Recent Stories," or "Most Trusted Stories," or you can leave this blank.</p>
+<p>In any of the story panels, you can change the kind of stories displayed automatically, or you can choose a story to display manually. Use the "Label" field to explain what kinds of stories are displayed in that panel. By default, these are set to "NEWS - Mainstream Media," "NEWS - Independent Media," and "OPINION - All Media."</p>
+<p>Under the "Listing" heading, you can control what kinds of story listings are displayed in the panel automatically. In the first drop-down menu, you can choose "Recent" for most recent stories, "Trusted" for most trusted stories, or "Worst" for least trusted stories. Don't use "Reviews" or "Picks" for now; these features have not yet been implemented, and the group page will not display if you select them. In the second drop-down menu, you can choose whether the stories listed in this panel are "News," "Opinion," or "All." In the third drop-down menu, you can choose whether the story is from "Mainstream" media, "Independent" media, or "Both." Choose and label whatever settings you want for each story panel, and they will update automatically on the group page.</p>
+<p>In the "Story" field, you can manually display a story of your choice. In another tab or window, find the story you want to display somewhere on <%=app_name%> and click the blue "Reviews" button. This will take you to the <%=app_name%> story page, which will have a URL that looks like "http://<%=app_domain%>/stories/xxxxxxx," or "http://<%=app_domain%>/stories/xxxxxxx?=yzyzyzyz," where the X's are numbers. You don't need to worry about the "?" or anything after it. What you need is that "xxxxxxx" number. This is the <%=app_name%> story ID number. Copy that number and paste it into the "Story" field in one of the Story Grid panels. When you update the page, that story will be displayed in that panel on the group page. This will override the settings on the "Listing" tabs until you clear the "Story" field.</p>
+
+<p><a name="listings"></a><span class="subhead_plain_bold">How do I control what shows up in the group story listings?</span>
+You can't control whether individual stories are included in the group story listings, because any story posted, reviewed, or starred by a group member will be added to the group automatically (see <%= link_to 'Groups FAQ', "/help/faq/groups#group_posting/" + (params[:popup] ? "?popup=true" : "") %>). You can, however, choose what tabs are available in the activity feed on the group page. People viewing the group use these tabs to browse the group story listings.</p>
+<p>From the "Story Listings" box above the third set of green "Update" and "Cancel" buttons, you can choose from the following tabs:
+<ul>
+<li>"Activity" will display all the recent posts, reviews, story comments, and stars by members of the group.</li>
+<li>"Most Recent" will display the most recent stories reviewed by members of the group.</li>
+<li>"Most Trusted" will display the highest rated recent stories reviewed by members of the group.</li>
+<li>"Least Trusted" will display the lowest rated recent stories reviewed by members of the group.</li>
+<li>"Feeds" will display stories imported automatically by our hundreds of <%=app_name%> Smart Feeds from around the web. These stories have not yet been posted on <%=app_name%>, but they have been culled from a wide range of trusted sources and are ready to be posted and reviewed. For more information on Smart Feeds, check our <%= link_to 'General FAQ', "/help/" + (params[:popup] ? "?popup=true" : "") %>.</li>
+<li>"Starred" will display stories recently starred as favorites by members of the group.</li>
+</ul></p>
+
+<p><a name="news_comparison"></a><span class="subhead_plain_bold">What is a News Comparison, and I do I control it?</span>
+A news comparison is a way to display three stories on the same topic. It creates a vertical box on the right side of the group page with links to the three stories under a descriptive prompt.</p>
+<p>To show or hide the news comparison box, use the "Show box?" checkbox in the "News Comparison Area" on the right side of the edit page. In the "Heading" field, you can set the title of the news comparison box. By default, this is set to "News Comparison," but you can change it to whatever you like, such as "Compare These Stories," or "Featured Today."</p>
+<p>In the "Subtopic" field, you can enter a topic for your news comparison, such as "Don't Ask, Don't Tell," or you can leave this field blank.</p>
+<p>In the "Topic description" field, enter a brief description of the news comparison, explaining the relationship between the three stories you've chosen. By default, this is set to "Compare these stories."</p>
+<p>Don't check the "Use topic listing?" box for now. This is a feature that only works on <%=app_name%> topic pages.</p>
+<p>In the "Story" fields, you designate which stories will be displayed in the first, second, and third positions. In another tab or window, find the story you want to feature somewhere on <%=app_name%> and click the blue "Reviews" button. This will take you to the <%=app_name%> story page, which will have a URL that looks like "http://<%=app_domain%>/stories/xxxxxxx," or "http://<%=app_domain%>/stories/xxxxxxx?=yzyzyzyz," where the X's are numbers. You don't need to worry about the "?" or anything after it. What you need is that "xxxxxxx" number. This is the <%=app_name%> story ID number. Copy that number and paste it into one of the "Story" fields in the "News Comparison Area." When you update the page, the story will be displayed in the news comparison.</p>
+<p>If you check the "Link stories?" box, the three stories in the news comparison will be linked, so that readers can easily get to the other stories in the comparison from one of the story pages.</p>
+<p>In the "Compare more stories" field, you can add a link to a <%=app_name%> topic page, such as "http://<%=app_domain%>/topics/immigration," where readers can find more relevant stories to review.</p>
+
+<p><a name="boxes"></a><span class="subhead_plain_bold">Can I add more elements to the group page?</span>
+Right sidebar boxes are code blocks you can use to display custom content on the right side of the group page. You can use right sidebar boxes to display text, links, or images relevant to your group. The "Members" box on the group page, which automatically displays the photos and names of the members in your group, is also created with a right sidebar box. Creating right sidebar boxes is an advanced task, and you should <%= mail_to email_addr("editors"), "email the editors", :subject => 'Group Host help request', :encode => "javascript" %> to ask for help creating and controlling custom boxes.
+
+<p><a name="save2"></a><span class="subhead_plain_bold">How do I save or cancel my changes?</span>
+You can click on any of the green "Update" buttons to save your changes, or click "Cancel" to revert to the last version.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span><p><a name="question_not_answered"></a><span class="subhead_plain_bold">You didn't answer my question in this FAQ! What now?</span>
+Please <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %> your additional questions, ideas and thoughts. We appreciate your interest in <%=app_name%> and your patience during this beta phase.<br />
+
+<br />If you already are a member or a host, and would like more information about using <%=app_name%>, check our other help FAQs:<br /><br />
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for general questions about <em><%=app_name%> and our website</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>submission forms</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr>
+</table>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<br />
+
+</div>
+
+</div>
+<div class="bottom"></div>
+</div>
+
+</div>

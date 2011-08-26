@@ -1,0 +1,133 @@
+<% @title = "Groups FAQ" %>
+<%= "<a name=\"top\"></a>" unless params[:popup] %>
+
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior">
+
+<%= content_tag(:h1, @title + " <span class=\"small\">(Frequently Asked Questions)</span>") unless params[:popup] %>
+
+<p>Here are some frequently asked questions about <%=app_name%> Groups. Click on any question below to learn more about this service, which is now in early pilot stage. If you still have questions, <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+<p><strong>If you are looking for FAQs for Group Hosts, check our <%= link_to 'Group Hosts FAQ', "/help/faq/group-hosts/" + (params[:popup] ? "?popup=true" : "") %>.</strong></p>
+<ul>
+<li><a href="#about_faq" class="subhead_plain_bold">About this FAQ</a></li>
+<li><a href="#about_groups" class="subhead_plain_bold">About <%=app_name%> Groups</a></li>
+</ul>
+</p>
+<hr size="1" />
+
+<h2 style="margin-bottom:8px;"><a name="about_faq"></a>About this FAQ</h2>
+<p><a name="what_is_faq"></a><span class="subhead_plain_bold">What is this FAQ?</span>
+<br />
+This FAQ answers questions about <%=app_name%> Groups. If you would like more specific information about using <%=app_name%>, check our other FAQs:<br />
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for general questions about <em><%=app_name%> and our website</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'MyNews FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about your <em>MyNews</em> and <em>My Network</em> pages</td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>submission forms</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr>
+</table>
+
+<p><a name="suggestion_problem"></a><span class="subhead_plain_bold">How can I make a suggestion or report a problem?</span>
+To help us improve our service, please click "Feedback" in the bottom navigation bar, anywhere on our site. To email us about issues that need to be fixed right away, email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>. Thanks for your patience during our beta phase.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="about_groups"></a>About <%=app_name%> Groups</h2>
+<p><a name="what_is_groups"></a><span class="subhead_plain_bold">What is a <%=app_name%> Group?</span>
+  <%=app_name%> Groups make it possible for communities of interest to find and share news and information on topics of their choice. The first release of our groups will support schools and educational partners, but over time we will support a wide range of different groups of members (e.g.: your friends, editors, journalists, political or affinity groups). Groups have their own page on <%=app_name%> where members can share their recommended stories. A group usually has one or more hosts who can curate news listings, edit group settings, validate new members, and moderate discussions. Hosts can decide whether group membership is open to all or invitations-only; they can also control whether or not to make their group pages public (accessible to anyone), only visible to <%=app_name%> members, or private (for group members only).</p>
+  <p>In future releases, groups will also have their own widgets (which members can share on their profiles or web pages), as well as their own own RSS feeds and email newsletters -- or special messaging capabilities. We also expect to provide tools to let you compare how different groups rated the same sources and stories.</p>
+  
+
+<p><a name="find_group"></a><span class="subhead_plain_bold">Where can I find a group?</span>
+During this early beta stage, we only have a few groups, for testing purposes. For now, you can view the group page for the <%= link_to 'Border News Project', "/groups/bordernews/" + (params[:popup] ? '" target="_blank' : "") %>, a collaboration between five U.S. universities and colleges participating in a two-month News Hunt on immigration. This was our first public <%=app_name%> Group. As we create more groups, we will list them on our <%= link_to 'groups overview page', "/groups/" + (params[:popup] ? '" target="_blank' : "") %>.</p>
+
+<p><a name="kinds_groups"></a><span class="subhead_plain_bold">What kinds of groups are there?</span>
+<%=app_name%> Groups will be released incrementally, starting with educational groups. We will gradually add more groups for other purposes, in these two categories:
+<ul>
+<li><em>social groups</em>: opt-in groups for friends, colleagues, etc., in the social network model. These groups will be created by <%=app_name%> hosts, who will invite other members. If a group is open to all, any <%=app_name%> member can join that group.</li>
+<li><em>statistical groups</em>: automated groups based on public member profile data. These will be created and hosted by <%=app_name%> staff. In our first release, they will be limited to political and experience-based groups (e.g. Republicans, Journalists, etc.).</li>
+</ul>
+Both kinds of groups will have group pages with story listings featuring group ratings, but they will be used for different purposes.</p>
+
+<p><a name="what_is_host"></a><span class="subhead_plain_bold">What is a group host?</span>
+A group host is both a content curator and a community organizer. A group can have one or more hosts who can edit the preferences for their groups, validate new members, and moderate discussions. Hosts can also customize the content on a group page, feature relevant stories, create news comparisons, and select an image for the group. For more information on Group Hosts, check our <%= link_to 'Group Hosts FAQ', "/help/faq/group-hosts/" + (params[:popup] ? "?popup=true" : "") %>.</p>
+
+<p><a name="join"></a><span class="subhead_plain_bold">How can I join a group?</span>
+If a group is open to all, you can join by clicking the green "Join this group" button in the bottom left corner of the blue info box at the top of the group page. If a group is invite-only, you must contact a group host. Hosts are listed in the info box at the top of the group page.</p>
+
+<p><a name="activity"></a><span class="subhead_plain_bold">What activity will be shown in a group?</span>
+Group pages display a "Top Stories" grid and an activity feed, just like other <%=app_name%> pages, except only the activity of group members will show up on the group page. The activity feed displays the most recent stories, reviews, and comments on <%=app_name%> stories posted, reviewed, or starred by members of the group. The group host can choose to display other tabs on the activity feed, so you can browse the group's most recent, most trusted, least trusted, and starred stories.</p>
+
+<p>In addition to the automated feeds, a group host can create a "Featured Story" box, which will display one story in detail, including a text excerpt, and can include a photo or embedded video. Hosts can also manually feature more stories in the "Top Stories" grid, as well as on the right sidebar. The right sidebar can also be used for a "News Comparison," which compares three stories on the same topic side by side. The group page can also display widgets, graphics, text excerpts, or links on the sidebar. A group page is a fully customizable social news site.</p>
+
+<p><a name="group_ratings"></a><span class="subhead_plain_bold">What are Group Ratings?</span>
+Group pages display Group Ratings for stories, shown with blue Trust-O-Meters, rather than the usual green Trust-O-Meter for a story's site-wide rating. Group Ratings only factor in ratings from group members, so you can see how a particular group rates a story and compare it to other groups or <%=app_name%> members in general. The story's <%=app_name%> rating is displayed in numerals next to the Group Trust-O-Meter for comparison.</p>
+
+<p>For more information on how ratings are calculated on <%=app_name%>, check our <%= link_to 'General FAQ', "/help/" + (params[:popup] ? "?popup=true" : "") %>.</p>
+
+<p><a name="group_posting"></a><span class="subhead_plain_bold">How do stories, reviews, and story comments get posted to a group?</span>
+When group members post, review, or star a story on <%=app_name%>, that story will be added to the group automatically. Then any review, star, or comment on that story by a group member will be posted to the group's activity feed, and the story's Group Rating will be calculated.
+<ul>
+<li>A story will only appear on a group activity or story listing if it has been reviewed, posted or starred by a group member.</li>
+<li>If a group member comments on a story on our site, this story will NOT appear in groups they belong to, unless it has been posted, reviewed, or starred by a group member.</li>
+<li>If a member leaves a group, all stories reviewed, posted, or starred by that member are removed as well.</li>
+</ul></p>
+
+<p><a name="see_activity"></a><span class="subhead_plain_bold">Who will see the activity in a group?</span>
+Groups can either be visible to the public, visible only to <%=app_name%> members, or private for group members only. These preferences are set by a group host or <%=app_name%> staff member. You can check a group's access settings at the top of your group page, in the 'Group Status' line.</p>
+
+<p><a name="comment_how"></a><span class="subhead_plain_bold">How do I comment on a group page?</span>
+The "Comments" field is at the bottom of the page. You can click on the "Comments" link in the blue info box at the top of the page to jump down to the first comment. You can then click "Add a Comment" to jump down to the comment entry field, or scroll down and read the previous comments. Underneath any comment, you can 'Like' a comment or 'Flag' it for offensive content. If you flag a comment, group hosts and <%=app_name%> staff will be notified.</p>
+
+<p><a name="comment_shown"></a><span class="subhead_plain_bold">Will comments I add to a group page be shown in my profile?</span>
+<ul>
+<li>If a group's access setting is "Public," your comments will be published on your profile page, where they can be seen by anyone (even if they are not a <%=app_name%> member or group member).</li>
+<li>If a group's access setting is "Only <%=app_name%> members can see this page," your comments will be published on your profile page, but only <%=app_name%> members can see them.</li>
+<li>If a group's access setting is "Only Group members can see this page," your comments will NOT be published on your profile page.
+If a group's status is set to "Hidden" by <%=app_name%> staff, your comments will NOT be published on your profile page.</li>
+  <ul><li>(you can check a group's access settings at the top of your group page, in the 'Group Status' line.)</li></ul>
+</ul></p>
+
+<p><a name="comment_member"></a><span class="subhead_plain_bold">Can any group member comment on a group page they belong to?</span>
+<ul>
+<li>If a group is private, all group members can comment. (even if they don’t have a member level of 2 or more)</li>
+<li>If a group is Invitation-Only (hosts-subscribe-members), all group members can comment. (even if they don’t have a member level of 2 or more)</li>
+<li>For all other groups, only group members with a member level of 2 or more can comment.</li>
+</ul></p>
+
+<p><a name="review_shown"></a><span class="subhead_plain_bold">Will story reviews I add to a group page be shown in my profile?</span>
+Any story reviews you add to a group page will be published on your profile page, where they can be seen by anyone visiting our site. Story reviews are always considered public, whether they take place on a public or private group page -- or anywhere else on our site. Similarly, any story you post or star will be public. Any comment you add to someone's story review will also public. One exception to this rule is comments you add to a private group page, as stated above.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span><p><a name="question_not_answered"></a><span class="subhead_plain_bold">You didn't answer my question in this FAQ! What now?</span>
+Please <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %> your additional questions, ideas and thoughts. We appreciate your interest in <%=app_name%> and your patience during this beta phase.<br />
+
+<br />If you already are a member or a host, and would like more information about using <%=app_name%>, check our other help FAQs:<br /><br />
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for general questions about <em><%=app_name%> and our website</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>submission forms</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr>
+</table>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<br />
+
+</div>
+
+</div>
+<div class="bottom"></div>
+</div>
+
+</div>

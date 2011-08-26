@@ -1,0 +1,35 @@
+<%- no_header ||= false -%>
+<%- ac_id ||= nil -%>
+<div class="member_autocomplete"<%=" id='#{ac_id}'" if ac_id%>>
+  <input id="autocomplete" type="text" class="ac_input" autocomplete="off" />
+  <dl id="member_options" class="options" style="display:none">
+    <dt id="member_name"></dt>
+    <dd id="member_details"></dd>
+    <dd id="member_id" style="display:none;"></dd>
+    <dd id="member_actions">
+      <%= link_to image_tag('/images/icons/add.png'), add_url, :id =>'add_action' %>
+      <%= link_to(image_tag('/images/icons/cross.png'), '#', { :id => 'cancel_action' }) %>
+    </dd>
+  </dl>
+
+  <table class="use6columns inner_right" cellpadding="0" cellspacing="0">
+    <% if !no_header %><caption>Member List</caption> <% end %>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th><%= "Actions" if current_member.has_role_or_above?(:admin) %></th>
+      </tr>
+    </thead>
+    <tbody id="member_list">
+      <%- members.each_with_index do |member, i| -%>
+      <tr<%=" style='display:none;'" if i > 19%>>
+        <td><%= link_to member.name, member_path(member.id) %></td>
+        <td><%= link_to(image_tag('icons/delete.png'), delete_base_url.gsub(/\.js/, "/#{member.id}/leave"), :method => :delete) if current_member.has_role_or_above?(:admin) %></td>
+      </tr>
+      <%- if i == 19 && members.length > 20 -%>
+        <tr><td colspan="2"><a href="#" style="font-size:14px;font-weight:bold" onclick="$('#member_list tr').show();$(this).hide();return false;">See all members</a></td></tr>
+      <%- end -%>
+      <%- end -%>
+    </tbody>
+  </table>
+</div>

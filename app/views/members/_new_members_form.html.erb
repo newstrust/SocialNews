@@ -1,0 +1,57 @@
+<div class="signup_form">
+	
+</div>
+<div class="clearfix">
+  <div class="form_field leftalign">
+  	<%= f.label :name, "Full Name " + help_icon("why_full_name") + "<br/>" +
+  	 	help_link("Why we need it", "why_full_name", "", :class => "small", :style => "font-weight: normal") %>
+  	<div class="input" style="width: 185px">
+  		<%= f.text_field :name, :size => 24 %>
+  		<div id="name_result"></div>
+  	</div>
+  </div>
+
+  <div id="hidden_autocomplete" style="display:none !important;"></div>
+</div>
+
+<div class="form_field leftalign clearfix">
+	<%= f.label :email, "Email Address " + help_icon("why_email_address") %>
+  <%= f.text_field :email, :size => 24 %>
+</div>
+
+<div class="form_field leftalign clearfix">
+	<%= f.label :password, nil%>
+  <%= f.password_field :password, :size => 24 %>
+</div>
+
+<div class="form_field leftalign clearfix">
+	<%= f.label :password_confirmation, "Confirm Password" %>
+  <%= f.password_field :password_confirmation, :size => 24 %>
+</div>
+
+<div>
+  <%= render(:partial => 'optional_fields', :locals => { :f => f, :optional_fields => @invitation.additional_signup_fields }) if @invitation %>
+</div>
+
+<div class="form_field" style="height: 160px">
+	<label>Are you human?</label></br>
+	<%# bug in recaptcha plugin means it doesn't output the :display hash correctly, so we must do it ourselves here %>
+	<%# One day, might like to fully customize. See: http://recaptcha.net/apidocs/captcha/client.html %>
+	<script type="text/javascript">
+		var RecaptchaOptions = {theme: 'white'};
+	</script>
+	<div class="captcha_toolbarform">
+		<%= recaptcha_tags %>
+	</div>
+</div>
+<br/>
+
+<%= render :partial => 'members/newsletter_and_tos_signup', :locals => { :f => f } %>
+
+<script type="text/javascript" charset="utf-8">
+  formatted_login_available_members_path = '<%= login_available_members_url(:format => :js) %>';
+</script>
+
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'members'%>
+<%- end -%>

@@ -1,0 +1,57 @@
+<div class="userlinks">
+	<%- if logged_in? -%>
+    <%- member = current_member # avoiding repeated calls to the same method! -%>
+
+		<%-# photo -%>
+		<div class="photo">
+			<%- if fb_connected_and_linked -%>
+		  	<fb:profile-pic uid="<%=facebook_session.user.uid%>" facebook-logo="true" linked="false" size="square" width="40" height="40"> </fb:profile-pic>
+			<%- else -%>
+				<%= link_to(image_tag(member.image ? member.image.public_filename(:thumb) : "/images/ui/silhouette_sml.jpg", :size => "40x40"), member, :title => "Visit your Profile Page") %>
+			<% end -%>
+		</div>
+
+		<%-# basic user nav: name, log out -%>
+		<div class="header">
+			<%- unless member.display_name.blank? -%>
+			  Hello, <%= link_to_member member, :override_hidden => true, :class => "username", :title => "Visit your Profile Page" %> |
+			<%- end -%>
+			<%- if fb_connected_and_linked -%>
+			  <%-#- Facebook cannot issue a "DELETE" http request after logging you out of facebook.  Hence a "regular" GET url for deleting the session --%>
+			  <%-#-= fb_logout_link("Log Out", fb_session_delete_url) --%>
+		    <span class="logout"><%= link_to "Log Out", fb_logout_url + "?return_to=#{CGI.escape(request.url)}", :title => "Log Out from #{app_name} and Facebook" %></span>
+			<%- else -%>
+			  <span class="logout"><%= link_to "Log Out", sessions_path, :method => :delete, :title => "Log Out from #{app_name}" %></span>
+			<%- end -%>
+		  | <span class="logout">
+			<%- if fb_connected_and_linked -%>
+				<%= link_to "Not You?", fb_logout_url + "?return_to=#{CGI.escape(new_sessions_url)}", :title => "Log Out from #{app_name} and Facebook" %>
+			<%- elsif member.status == 'guest' %>
+				<%= help_link "Activate Your Account", "activate", "", :title => "Click the link in your activation email to Activate Your Account", :style => "color:#0B8734" %>
+			<%- elsif !member.display_name.blank? -%>
+				<span class="light_grey"><%= link_to "Not You?", sessions_path + "?return_to=#{CGI.escape(new_sessions_url)}", :method => :delete, :title => "Log Out from #{app_name}" %></span>
+			<%- end -%>
+			</span>      
+		</div>
+
+		<%-# small text line -%>
+		<div class="small">
+      <%- if @local_site.nil? -%>
+			  <%= link_to mynews_colors(), mynews_url(member), :title => "Visit your MyNews Page" %> |
+      <%- end -%>
+			<%= link_to "My Network", mynetwork_member_url(current_member), :title => "Visit your My Network Page" %> |
+			<%- unless member.display_name.blank? -%>
+			  <%= link_to_member member, :link_text => "My Profile", :override_hidden => true, :title => "Visit your Profile Page" %> |
+			<%- end -%>
+			<%= link_to "My Account", my_account_members_url, :title => "Edit your Member Profile"%>
+	  </div>
+	<%- else -%> <%-# not logged in -%>
+	  <div class="signed_out">
+      <%- if facebook_enabled? -%>
+        <%= fb_login_button("fbc_init_activation('', '')", :size=>"small", :v => "2") %> |
+      <%- end -%>
+	    <%= link_to "Sign Up", new_member_path, :title => "Create a new #{app_name} account" %> |
+	    <%= link_to "Log In", new_sessions_path, :title => "Log into #{app_name}" %>
+	  </div>
+	<%- end -%>
+</div>

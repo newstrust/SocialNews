@@ -1,0 +1,38 @@
+<%- current ||= "flag" %>
+<%- no_separator ||= false -%>
+
+<table class="listing" style="margin:20px;">
+  <caption style="text-align:left;font-weight:bold;font-size:1.17em"><%= current == "flag" ? "Flagged" : "Liked" -%> Comments</caption>
+  <thead>
+    <tr>
+      <th style="white-space:nowrap;">Date</th>
+      <th style="white-space:nowrap;">Reported By <small><span style="color:#888">(flags given)</span></small></th>
+      <th style="white-space:nowrap;">Link <small><span style="color:#888">(flags received)</span></small></th>
+      <th style="white-space:nowrap;">Author <small><span style="color:#888">(flags received)</span></small></th>
+      <th style="white-space:nowrap;">Type</th>
+      <th style="white-space:nowrap;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% flagged_comments.each do |flag| %>
+    <tr class="<%= cycle('even','odd') %>">
+      <%- unless flag.flaggable.hidden? -%>
+        <td><%= h flag.created_at.strftime("%b. %e, %Y - %I:%M %p") %></td>
+        <td><%= h flag.member.display_name %> <span class="comment_count">(<%=h flag.member.flags.count(:conditions => { :reason => @reason }) %>)</span></td>
+        <td><%= link_to(h("%s %i <span class=\"comment_count\">(#{Flag.count(:conditions => {:flaggable_type => flag.flaggable_type, :reason => @reason, :flaggable_id => flag.flaggable_id })})</span>" % [flag.flaggable_type, flag.flaggable_id]), comment_permalink_for(flag.flaggable)) %></td>
+        <td><%= link_to h("#{flag.owner.display_name} <span class=\"comment_count\">(#{flag.owner.flaggings.count(:conditions => { :reason => @reason })})</span>"), flag.owner %></td>
+        <td><%= h flag.reason.capitalize %></td>
+        <td>
+          <ul class="inline_list">
+          <li><%= link_to "Remove Flag", ['admin',flag], :method => :delete, :confirm => 'are you sure?' %> </li>
+          <li><%= " &nbsp;|&nbsp;" unless no_separator %><%= link_to "Hide Comment", ['admin',flag.flaggable], :method => :delete , :confirm => 'are you sure?' %>
+          </li>
+          </ul>
+        </td>
+      <%- else -%>
+        <td colspan="6"><%= link_to(h("%s %i was deleted" % [flag.flaggable_type, flag.flaggable_id]), comment_permalink_for(flag.flaggable)) %></td>
+      <%- end -%>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

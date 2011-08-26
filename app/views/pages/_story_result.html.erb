@@ -1,0 +1,19 @@
+<%- if result.is_visible? || (logged_in? && current_member.has_role_or_above?(:editor)) -%>
+<dl>
+  <dt class="title">
+  <%= link_to result.title, story_path(result) %>
+  <% unless result.is_public? %><%= display_status_badge(result.status) %><% end %>
+  </dt>
+  <%= link_to_sources(result.sources) %>
+
+	<span class="byline" style="text-transform:uppercase;">
+		<%= "<span style='text-transform:lowercase;'>by</span>  #{result.journalist_names}" if !result.journalist_names.blank? %>
+		<%= " #{result.story_date.strftime('%b. %e, %Y')}" if result.story_date %>
+	</span>
+	 <br/>
+  <%- if result.is_public? -%>
+	  <p><%= h StringHelpers.truncate_on_word_boundary(result.excerpt, 60, 220)  %></p>
+	<%- end -%>  
+	</dd>
+</dl>
+<%- end-%>

@@ -1,0 +1,110 @@
+<%- @title = "Buttons For Your Site" -%>
+<%- aname = app_name -%>
+<%- aslug = app_slug -%>
+
+<style type="text/css">
+<!--
+.head {font-family: Arial, Helvetica, sans-serif;
+color: #333333;
+font-size: 18px;
+font-style: normal;
+font-weight: bold;
+vertical-align: middle;}
+.style1 {font-size: 13px}
+
+table#page_table h2, table#page_table h3 { margin: 25px 0px 5px 0px; }
+table#buttons { width : 100%; }
+table#buttons td { padding: 5px 15px; }
+table#buttons td img { cursor: pointer; }
+#button_js_code_1, #button_js_code_2, #button_js_code_3 { margin: 20px 0px; font-size: 10px; padding: 5px; width: 100%; border: 1px solid black; background: #f7f7f7; overflow: none; }
+
+p { margin-bottom:12px;}
+
+#examples {
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+	border-collapse: collapse;
+	background-color: #f7f7f7;
+}
+#examples th, #examples td {
+	border-width: 1px;
+	padding: 4px;
+	border-style: solid;
+	border-color: black;
+}
+
+-->
+</style>
+<script type="text/javascript" language="JavaScript"><!--
+function updateButtonScript(imgUrl)
+{
+	var code;
+	var baseUrl = "<%= home_url %>";
+	
+	// Update the simple code
+	code  = "&lt;script type='text/javascript'&gt;\n";
+	code += "<%=aslug%>_icon = '" + imgUrl + "';\n";
+	code += "&lt;/script&gt;\n";
+	code += "&lt;script src=\"" + baseUrl + "js/submit_story.js\" type=\"text/javascript\"&gt;&lt;/script&gt;";
+	document.getElementById('button_js_code_2').innerHTML = code;
+
+}
+
+function selectCode(txtArea)
+{
+	txtArea.select();
+	txtArea.focus();
+}
+//--></script>
+
+<table width="600" border="0" id="page_table" >
+  <tr>
+    <td width="540" valign="top" class="style1"> <h1 class="head">Buttons</h1></td>
+    <td width="20"><img src="/images/ui/spacer.gif" width="10" height="1"></td>
+    <td align="center" valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+
+    <p> Put a <%=aname%> button on your site and get quality feedback from your readers!</p>
+
+    <p>
+    <%=aname%> buttons are simple graphics you can add to your own blog, web page or site.
+    Our buttons let your readers post and review stories to <%=aname%> from any page on your site.
+    </p>
+
+    <p>We offer a variety of buttons, which are all very easy to install. 
+    <%=aname%> Buttons are a great way to build trust with your readers and promote your site to the <%=aname%> community.</p>
+
+    <p><strong><img src="/images/<%=aslug%>.gif" align="left" hspace="5">&nbsp;
+    To add this button to your site copy the following code and paste it on your site wherever you want the button displayed:</strong><br>
+
+    <textarea onclick="selectCode(this)" id="button_js_code_1" readonly rows="1" cols="80">&lt;script src="<%= home_url %>js/submit_story.js" type="text/javascript"&gt;&lt;/script&gt;</textarea><br>
+  
+    This simple script above displays our standard "SN" square 16x16 graphic, which is commonly used for these purposes. 
+    </p>
+
+    <p>When the user clicks on the graphic, this script opens a separate <%=aname%> pop-up window, which insures that people stay on your site when submitting or reviewing their stories. In the window is our posting or review form &mdash; if your story URL has not yet been posted to <%=aname%>, we open our "Post a Story" form. If your story URL has already been posted to <%=aname%>, we take you directly to our "Review this Story" form.</p>
+
+    <h3 style="margin-bottom:0px;">Copy and paste the code below onto your site:</h3>
+
+    <textarea onclick="selectCode(this)" id="button_js_code_2" readonly rows="4" cols="80">&lt;script type='text/javascript'&gt;
+<%=aslug%>_icon = '<%= home_url %>images/<%=aslug%>.gif';
+&lt;/script&gt;
+&lt;script src="<%= home_url %>js/submit_story.js" type="text/javascript"&gt;&lt;/script&gt;</textarea>
+	 <p>This code will use the button you've selected.</p>
+	 <p><strong>For further customization and to pass additional parameters, see our page on <a href="/tools/buttons/advanced">Advanced Scripts</a>.</strong><p>
+	 <p><strong>Note: If you have a very high volume site, please <%= mail_to email_addr("partners"), "contact us", :subject => "#{aname} Partner Services", :encode => "javascript" %> for a custom script.</strong></p>
+
+    <p>Please <%= mail_to email_addr("help"), "email us", :subject => "#{aname} Info Request", :encode => "javascript" %> if you have any questions about <%=aname%> buttons, badges or bookmarklets.</p><br>
+    Thanks for your support of <%=aname%>!<br>
+    <br>
+    The <%=aname%> Team <br>      
+    </span></td>
+  </tr>
+ 
+  <tr>
+    <td height="20" colspan="3"><img src="/images/ui/spacer.gif" width="1" height="20"></td>
+  </tr>
+</table>

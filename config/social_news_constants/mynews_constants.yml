@@ -1,0 +1,70 @@
+#
+# MyNews settings
+#
+
+mynews:
+  stories_per_page:
+    - 1:  {name: 1}
+    - 3:  {name: 3}
+    - 5:  {name: 5}
+    - 10: {name: 10}
+    - 15: {name: 15}
+    - 20: {name: 20}
+    - 25: {name: 25}
+    - 30: {name: 30}
+  story_status:
+    - ""         : {name: All Stories}
+    - "posted"   : {name: Posted Stories}
+    - "reviewed" : {name: Reviewed Stories}
+    - "rated"    : {name: Rated Stories}
+    - "trusted"  : {name: Trusted Stories}
+  source_status:
+    - ""         : {name: All Sources}
+    - "listed"   : {name: Listed Sources}
+    - "rated"    : {name: Rated Sources}
+    - "trusted"  : {name: Trusted Sources}
+  max_stories_per_source:
+    - 0: {name: "no limit" }
+    - 1: {name: "atmost 1" }
+    - 2: {name: "atmost 2" }
+    - 3: {name: "atmost 3" }
+    - 4: {name: "atmost 4" }
+    - 5: {name: "atmost 5" }
+  min_matching_criteria:
+    - 1: {name: "1 or more" }
+    - 2: {name: "2 or more" }
+    - 3: {name: "3 or more" }
+  max_story_age:
+    - 1:  {name: "1 day ago" }
+    - 2:  {name: "2 days ago" }
+    - 3:  {name: "3 days ago" }
+    - 4:  {name: "4 days ago" }
+    - 5:  {name: "5 days ago" }
+    - 6:  {name: "6 days ago" }
+    - 7:  {name: "7 days ago" }
+    - 10: {name: "10 days ago" }
+    - 15: {name: "15 days ago" }
+#    - 30: {name: "30 days ago" }
+#    - 60: {name: "60 days ago" }
+#    - 90: {name: "90 days ago" }
+#    - 183: {name: "6 months ago" }
+#    - 273: {name: "9 months ago" }
+#    - 365: {name: "1 year ago" }
+  story_type:
+    - "":        {name: "All Content" }
+    - "news":    {name: "News" }
+    - "opinion": {name: "Opinion" }
+  media_type:
+    - "":          {name: "All Media Types" }
+    - "newspaper": {name: "Newspaper" }
+    - "magazine":  {name: "Magazine" }
+    - "online":    {name: "Online" }
+    - "blog":      {name: "Blog" }
+    - "tv":        {name: "TV" }
+    - "radio":     {name: "Radio" }
+    - "wire":      {name: "Wire Service" }
+    - "other":     {name: "Other" }
+  source_ownership:
+    - "":          {name: "All Sources" }
+    - "msm":       {name: "Mainstream" }
+    - "ind":       {name: "Independent" }

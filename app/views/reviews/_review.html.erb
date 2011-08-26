@@ -1,0 +1,202 @@
+<%- max_quotes = 1 -%>
+<%- max_links = 2 -%>
+<%- is_mine ||= false -%>
+<%- full ||= false -%>
+<%- hide_flags ||= {} -%>
+<%- show_flags ||= {} -%>
+<%- group ||= nil -%>
+
+<%- s_url = @url_tracking_key ? story_path(review.story, :ref => @url_tracking_key) : story_path(review.story) -%>
+<%- r_url = @url_tracking_key ? review_path(review.story, review, :ref => @url_tracking_key) : review_path(review.story, review) -%>
+<%- rating = review.story.group_rating(group) -%>
+<%- reviews_count = review.story.group_reviews_count(group) -%>
+<%- hide_rating = review.story.hide_rating(group) -%>
+
+<div class="review_divider clearfix <% if is_mine %>my_review<% end %>">
+	<div class="review_detail">
+    <%- unless hide_flags[:reviewer_photo] || !review.member -%>
+      <%= link_to_member_photo(review.member) %>
+    <%- end -%>
+    <div class="clearfix" style="margin:0px;padding:0px;_float:left;">
+      <%- if review.is_featured && !hide_flags[:is_featured] -%>
+        <span class="featured"></span>
+      <%- end -%>
+      <%- unless hide_flags[:trustometer] -%>
+        <%- if review.rating -%>
+          <%- if (hide_flags[:reviewer_photo] && review.member) || show_flags[:reviewer_label] %><span class="reviewer_label"><%=first_name(review.member)%>'s Rating</span> <% end -%>
+          <%- trustometer_img_options = review.include_rating? ? {:color => :green} : {:color => :gray} -%>
+          <%= link_to trustometer_img(review.rating, trustometer_img_options), r_url, :title => "Rating: #{"%.2f" % review.rating}" %>
+        <%- else -%>
+          <div class="trustometer">
+            <div class="no_rating">
+              <%= link_to "NO RATING", r_url, :class => "quiet" %>
+            </div>
+          </div>
+        <%- end -%>
+        <%- if show_flags[:nt_rating_trustometer] -%>
+          <div class="nt_rating_small">
+            (<%= nt_colors() %> Rating: <%=format_rating(review.story.rating)%>)
+          </div>
+        <%- end -%>
+        <span class="review_hidden"><%= review_hidden(review,"Review Hidden") %></span>
+      <%- end -%>
+  
+      <span class="author">
+        <%- unless hide_flags[:reviewer_name] -%>
+          <%= review.member ? (show_flags[:reviewed_by] ? "Reviewed by " : "by ") + link_to_member(review.member) : "Guest Review" %> -
+        <%- end -%>
+        <%- unless hide_flags[:review_date] -%>
+          <span title="<%= review.updated_at.strftime('%l:%M %p %Z') %>"><%= review.updated_at.strftime('%b. %e, %Y') %></span>
+        <%- end -%>
+      </span>
+    </div>
+
+    <%- unless hide_flags[:notes_comments_quotes_links] -%>
+      <%#- Notes -%>
+      <%- unless hide_flags[:note] || review.comment.blank? -%>
+        <div class="review_part notes clearfix">
+          <%= help_link('', 'story_note', 'reviewer', :class => "notes") %>
+          <p>
+            <%- unless full -%>
+              <%- max_note_length = show_flags[:max_note_length] || 750 -%>
+              <%= h StringHelpers.truncate_on_word_boundary(review.comment, 150, max_note_length, true, 0, true) { link_to("More&nbsp;&raquo;", r_url, :class => "more_url") } %>
+            <%- else -%>
+              <%= h @review.comment %>
+            <%- end -%>
+          </p>
+        </div>
+      <%- end -%>
+    
+      <%#- Comment -%>
+      <%- unless hide_flags[:comment] || review.personal_comment.blank? -%>
+        <div class="review_part comment clearfix">
+          <%= help_link('', 'story_comment', 'reviewer', :class => "comments") %>
+          <p>
+            <%- unless full -%>
+              <%= h StringHelpers.truncate_on_word_boundary(review.personal_comment, 150, 500, true, 0, true) { link_to("More&nbsp;&raquo;", r_url, :class => "more_url") } %>
+            <%- else -%>
+              <%= h @review.personal_comment %>
+            <%- end -%>
+          </p>
+        </div>
+      <%- end -%>
+    
+      <%#- Quotes -%>
+      <%- unless hide_flags[:excerpts] || review.excerpts.empty? -%>
+        <div class="review_part quotes clearfix">
+          <%= help_link("", 'story_quotes', 'reviewer', :class => "quotes") %>
+          <%- (full ? review.excerpts : review.excerpts.slice(0..max_quotes-1)).collect do |re| -%>
+            <p>
+              <%- quote = s(full ? re.body : StringHelpers.truncate_on_word_boundary(re.body, 130, 180, true)) -%>
+              <%= re.body.blank? ? "<i>(comment refers to full article)</i>" : quote %>
+              <%- unless full -%>
+                <%= more_link(r_url) %>
+              <%- else -%>
+                <%- unless re.comment.blank? -%>
+                  <div class="quote_comment">
+                    <%= h re.comment %>
+                  </div>
+                <%- end -%>
+              <%- end -%>
+            </p>
+          <%- end -%>
+        </div>
+      <%- end -%>
+    
+      <%#- Links -%>
+      <%- unless hide_flags[:links] -%>
+        <%- story_relations_by_member = review.story.story_relations.reject { |r|
+            r.related_story.nil? || (r.member != review.member) || (!r.related_story.is_public? && !(logged_in? and current_member.has_role_or_above?(:host))) }-%>
+        <%- if !story_relations_by_member.empty? -%>
+          <div class="review_part links clearfix">
+            <div>
+              <% link_label = story_relations_by_member.length > 1 ? "" : "" -%>
+              <%= help_link(link_label, 'story_links', 'reviewer', :class => "link") %>
+            </div>
+            <div class="links_alone">
+              <%- (full ? story_relations_by_member : story_relations_by_member.slice(0..max_links-1)).collect do |sr| -%>
+                <div>
+                  <%= link_to_new_review(sr.related_story, h(sr.related_story.title), :class => "external") %>
+                  <%- if !sr.related_story.is_public? -%>
+                    <span class="quiet small"<%= ' style="color:#888"' unless sr.related_story.status=="hide" %>>(<%= display_status(sr.related_story.status) %>)</span>
+                  <%- else -%>
+                    - <%= link_to(see_reviews_link_text(sr.related_story), sr.related_story, :class => "more_url", :style => "font-size:90%") %>
+                  <%- end -%>
+                  <%- if story_relations_by_member.length >= max_links and !full -%>
+                    <%= " ... #{more_link(r_url)}" %>
+                  <%- end -%>
+                </div>
+              <%- end -%>
+            </div>
+          </div>
+        <%- end -%>
+      <%- end -%>
+    <%- end -%>
+
+    <%#- Member info (disclosure, submitter) %>
+    <%- unless humanize_token(review, 'disclosure').blank? -%>
+      <div class="story_note">
+        <%- disclosure_type = humanize_token(review, 'disclosure') -%>
+        <%if review.member %> <b>Disclosure:</b> <%= first_name(review.member) %> is involved in this story<%= disclosure_type == "other" ? '' : ' as ' + disclosure_type %><% unless review.include_rating? %> (review not included in overall rating)<% end %>. <% end %>
+        <%= help_icon('story_disclosure', 'reviewer') %>
+      </div>
+    <%- end -%>
+
+    <%- unless hide_flags[:reviewer_submission] || review.member.nil? || (review.member.id != review.story.submitted_by_id) -%>
+      <div class="submitted">
+        <%= first_name(review.member) %> posted this story.
+      </div>
+    <%- end -%>
+  
+    <%#- Metareview -%>
+    <%- unless hide_flags[:meta_review_input] -%>
+      <%= render :partial => 'reviews/meta_review_input', :locals => {:meta_review => review.meta_review_by_member(current_member)} %>
+    <%- end -%>
+  
+    <%- unless full || hide_flags[:see_full_review] -%>
+    <div class="see_full_review">
+      <%= link_to "See #{show_flags[:see_full_review_member_name] ? first_name(review.member) + "'s " : ""}Full Review &raquo;", r_url, :class => "see_full_review" %>
+      <span class="editorial_gray">(<%= plural(review.num_answers, "answer") %>)</span>
+      </div>
+    <%- end -%>
+  
+    <%- if show_flags[:see_all_reviews] -%>
+      <div class="see_all_nt_reviews">
+      <%= link_to_toolbar(review.story, "", :go => "review", :ref => @url_tracking_key, :cached => @will_be_cached) if show_flags[:bottom_review_button] %>
+      <% if group && reviews_count > 0 -%>
+        <%= link_to(trustometer_img(rating, hide_rating ? {:color => "gray", :num_rating_class => "numeric_rating_gray", :group => group} : {:group => group}), s_url, :title => "#{group ? "Group " : ""}Rating: #{"%.2f" % rating}", :class => "#{popup_check}") %>
+      <%- end -%>
+      <%= nt_colors() %> Rating: <%= content_tag(:span, format_rating(review.story.rating), :class => "green") %> | <%= link_to "See All #{nt_colors()} Reviews &raquo;", s_url %>
+      </div>
+    <%- end -%>
+  
+    <%- unless hide_flags[:add_review_comment] -%>
+    <div review="<%= review.id %>" class="reviewComments">
+      <%= render :partial => 'reviews/comments', :locals => { :review => review } %>
+  
+      <div review='<%= review.id %>' class="reviewCommentFormContainer" style="clear:both;display:none;">
+        <%-
+          # I need to use the klass param for STI classes because rails expect the base class for some reason not the derived class. 
+          # Therefore pass klass as a local in the instances you want to add comments to a STI class
+        -%>
+        <%- comment_form_wrapper do -%>
+          <%- form_for(current_member.comments.build(:commentable_type => review.class.to_s, :commentable_id => review.id), { 
+            :url => discussions_comments_path, 
+            :html => { :id => "new_comment_review_#{review.id}", :class => 'comment_form' }
+          }) do |f| -%>
+  
+            <%- character_counter_id = "review_character_counter_#{review.id}" -%>
+            <%= render :partial => 'discussions/comments/form', :locals => { :character_counter_id => character_counter_id, :form_title => '', :f => f } %>
+            <div align="left" id="comment_submit_container_<%= character_counter_id %>" style="margin-top:5px;">
+              <%= image_tag('/images/ui/indicator.gif', :class => "creating_comment", :style => "display:none;float:left;") %>
+              <%= link_to('', '', :class => 'submit_btn submitReviewComment', :review => review.id, :style => 'float:left;') %>
+              <%= link_to('Cancel', '', :class => 'cancel_btn cancelReviewComment', :review => review.id) %>
+              <span class="civil_note">Please be civil (see our <%= pop_up_link('guidelines', tos_path + "#community_guidelines") %>). Comments can be edited for <%= pluralize(Comment.minutes_before_locked, 'minute')%> <%= help_icon("adding_comments", "reviewer") %></span>
+            </div>
+          <%- end -%>
+        <%- end -%>
+      </div>
+    </div>
+    <%- end -%>
+  </div>	
+</div>

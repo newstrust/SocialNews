@@ -1,0 +1,464 @@
+<%= render :partial => "shared/taxonomy_js_includes" %>
+<%= error_messages_for 'source', :header_message => nil, :message => nil %>
+
+<% form_for @source do |f| -%>
+	
+	<!-- Tabbed box -->
+	<% main_column_tabbed_box :tabs => ["Summary", "Editorial", "Tags", "Research"] do %>
+	
+		<!-- Summary tab -->
+		<% main_column_tab:anchor_class => "summary", :first_tab => true do %>
+
+			<div class="form_field">
+				<%= f.label :name, "Source Name " + help_icon('source_name', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', '(read-only ' + mail_to(email_addr("edits"), "email us", :encode => "javascript") + ' your edits)',
+							:class => 'explanation') %>
+				<%= f.text_field :name, :size => 55, :disabled => true %>
+				<br/>
+			</div>
+			<br/>
+		
+			<div class="form_field">
+				<%= f.label :slug, "Slug " + help_icon('source_slug', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', '(read-only)', :class => 'explanation')  %>
+				<%= f.text_field :slug, :size => 55, :disabled => true %>
+				<br />
+			</div>
+			<br/>
+
+			<div class="form_field">
+				<%= f.label :source_names_other, "Other Source Names " + help_icon('source_names_other', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', '(one per line)', :class => 'explanation') %>
+				<%= f.text_area :source_names_other, :size => '53x3' %>
+			<br/>
+			</div>
+			<br/>
+
+			<div class="form_field">
+				<%= f.label :url, "Web Address " + help_icon('source_url_main', 'host') + "&nbsp;&nbsp;" +
+				content_tag('span', 'Copy and paste home page URL', :class => 'explanation') %>
+				<%= f.text_field :url, :size => 55 %><br />
+				<span class="explanation">(Example: http://www.reuters.com - use home page)<%= " #{link_to("Check this link", @source.url, :class => "popup_link")}" unless @source.url.blank? %></span>
+			</div>
+			<br/>
+
+			<div class="form_field">
+				<%= f.label :domain, "Domain " + help_icon('source_domain', 'host') + "&nbsp;&nbsp;" +
+				content_tag('span', 'Just the "domain.com" portion of the Web address', :class => 'explanation') %>
+				<%= f.text_field :domain, :size => 55 %>
+			</div>
+			<br/>
+			
+			
+			<% if current_member.has_role_or_above?(:editor) %>
+			<div class="form_field" style="margin-top:8px">
+				<%= f.label 'source[source_media_attributes]', "Media " + help_icon('source_media_main', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', 'Check one primary media type and as many secondary as you like', :class => 'explanation') %>
+				<div id="source_media" style="margin-left:20px;margin-bottom:3px;">
+					<%= render :partial => 'source_medium', :collection => @source.source_media %>
+				</div>
+				<div style="margin-left:20px">
+					<%= link_to_function("Add source medium") do |page|
+								page.insert_html(:bottom, :source_media, :partial => 'source_medium', :object => SourceMedium.new)
+							end %>
+					<script type="text/javascript" charset="utf-8">
+						var remove_source_medium = function(sm) { // must define JS outside of partial
+							$(sm).parents('.source_medium').hide().find("input[name='source[source_media_attributes][][should_destroy]']").val(true);
+						}
+					</script>
+				</div>
+			<br/>
+			</div>
+			<br/>
+			<% end %>
+			
+			
+			<div class="form_field leftalign">
+				<%= f.label :ownership, "Ownership " + help_icon('source_ownership', 'host'), :style => "margin-top:4px;width: 110px" %>
+				<%= f.select :ownership, pull_down_menu("source_ownership"), :include_blank => "Select One:" %>
+			<br/>
+			</div>
+			<br/>
+
+			<div class="form_field leftalign">
+				<%= f.label :editorial_priority, "Editorial Priority ", :style => "margin-top:4px;width: 110px" %>
+				<%= f.text_field :editorial_priority %>
+			<br/>
+			</div>
+			
+			<div class="form_field leftalign">
+				<%= f.label :online_access, "Online Access " + help_icon('source_online_access', 'host'), :style => "margin-top:4px;width: 110px" %>
+				<%= f.select :online_access, pull_down_menu("source_access"), :include_blank => "Select One:" %>
+			<br/>
+			</div>
+			<br/>
+			
+			<div style="background: #eeeeee;padding:8px;border-color: #AAAAAA;border-width: 1px;border-style: solid; ">
+				<div class="form_field">
+					<%= f.label :source_text, "Description " + help_icon('source_description', 'host') + "&nbsp;&nbsp;" +
+							content_tag('span', 'Quote or write a short description for this source (max. 250 words).', :class => 'explanation') %>
+					<%= f.text_area :source_text, :size => '70x20', :style => "font-size: 11px;width:500px" %>
+				<br/>
+				</div>
+				<br/>
+					
+				<div class="form_field">
+					<%= f.label :description_link_address, "Description Link " + help_icon('description_link_address', 'host') + "&nbsp;&nbsp;" +
+					content_tag('span', '(if any)', :class => 'explanation') %>
+					<%= f.text_field :description_link_address, :size => 55, :style => "width:450px" %><br />
+					<span class="explanation">(Example: http://www.reuters.com/about.htm)</span>
+				</div>
+				<br/>
+	
+				<div class="form_field">
+					<%= f.label :description_link_source_name, "Description Link Publication " + help_icon('description_link_publication_name', 'host') + "&nbsp;&nbsp;" +
+					content_tag('span', '(above publication\'s name)', :class => 'explanation') %>
+					<%= f.text_field :description_link_source_name, :size => 55, :style => "width:450px" %><br />
+				</div>
+			</div>
+		
+		<% end %>
+
+		<!-- Editorial tab -->
+		<% main_column_tab :anchor_class => "editorial" do %>
+      <%= f.label :local_sites, "Local Sites (What sites should this source be listed on?)", :style => "margin-top:4px;width: 425px" %>
+			<div class="form_field leftalign">
+        <%- LocalSite.find(:all).each do |ls| %>
+          <%= check_box_tag("source[local_site_list][#{ls.id}]", "1", @source.local_sites.detect{|x| x == ls}) %>
+          <%= ls.name %><br />
+        <%- end -%>
+      </div>
+
+			<div class="form_field leftalign">
+				<%= f.label :status, "Status " + help_icon('source_report_options', 'host'), :style => "margin-top:4px;width: 115px" %>
+				<div class="input">
+					<%= f.select :status, pull_down_menu("source_status") %>
+				</div>
+			<br/>
+			</div>
+			<br/>
+
+<%#--
+  # Duplicate instance of this field!
+
+			<div class="form_field leftalign">
+				<= f.label :editorial_priority, "Editorial Priority " + help_icon('source_editorial_priority', 'host'), :style => "margin-top:4px;width: 115px" >
+				<= f.select :editorial_priority, pull_down_menu("source_editorial_priority"), :include_blank => "Select One:" >
+			<br/>
+			</div>
+			<br/>
+--%>
+			
+			<% if logged_in? and current_member.has_role_or_above?(:staff) %>
+				<div style="float:left"><%= f.check_box "contact_source_status", {}, "list", "hide" %></div>
+				<%= f.label :contact_source_status, "Contact this Source " + help_icon('source_contact_status', 'host') + "&nbsp;&nbsp;" +
+					content_tag('span', '(check to display Representative\'s contact info to hosts, uncheck to hide for all)', :class => 'explanation'), :style => "float:left" %><br /><br />
+
+				<div style="float:left"><%= f.check_box "is_framebuster", {}, 1, 0 %></div>
+				<%= f.label :is_framebuster, "Framebuster Site " + help_icon('source_is_framebuster', 'host') + "&nbsp;&nbsp;" +
+					content_tag('span', '(check to use pop-up review form instead of toolbar)', :class => 'explanation'), :style => "float:left" %><br /><br />
+			<% end %>
+
+			<% if logged_in? and current_member.has_role_or_above?(:editor) %>
+				<div style="float:left"><%= f.check_box "source_logo_status", {}, "list", "hide" %></div>
+				<%= f.label :source_logo_status, "Show Source's Logo " + help_icon('source_logo_status', 'host'), :style => "float:left" %><br /><br />
+				
+				<div class="form_field">
+					<%= f.label :discussion_description, "Comment Thread Description " + content_tag('span', 'Add any editorial description needed to set the appropriate context for the discussion.', :class => 'explanation') %>
+					<%= f.text_area :discussion_description, :size => '70x10', :style => "font-size: 11px;width:500px" %><br />
+				</div>
+
+				<div style="float:left"><%= f.check_box "allow_comments", {} %></div>
+				<%= f.label :allow_comments, "Discuss this Source " + help_icon('source_discuss_status', 'host') + "&nbsp;&nbsp;" +
+					content_tag('span', 'Check to allow comments for this source', :class => 'explanation'), :style => "float:left" %><br /><br />
+
+			<% end %>
+
+
+			<% unless @source.hosts.empty? %>
+				<strong>Hosted by</strong><%= help_icon('hosted_by', 'host') %>&nbsp;&nbsp;<%= @source.hosts.collect{|h| link_to(h.name, h)}.join(", ") %>
+				<br/>
+				<br/>
+			<% end %>
+
+			<% if @source.edited_by_member_id %>
+				<div class="remove_border" style="margin: 3px 0 0.5em -10px">
+					<% edited_by_link = help_icon('source_edited_by', 'host') + '&nbsp;&nbsp;' + link_to_member(@source.edited_by_member) %>
+					<% edited_by_link += '<span class="editorial_gray"> - ' +  format_date(@source.last_edited_at, "") + '</span>' %>
+					<%= profile_line_direct :humanized_key => "<strong>Edited by</strong>", 
+					:value => edited_by_link %>
+				</div>
+		
+			<% end %>
+
+			<div class="form_field">
+				<%= f.label :source_edit_notes, "Notes " + help_icon('story_editorial_notes', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', 'Add any editorial notes at the end of this shared notepad, with your initials.', :class => 'explanation') %>
+				<%= f.text_area :source_edit_notes, :size => '70x10', :style => "font-size: 11px;width:500px" %>
+			<br/>
+			</div>
+			<br/>
+			
+		<% end %>
+
+		<!-- Tags tab -->
+		<% main_column_tab :anchor_class => "tags" do %>
+
+			
+			<div class="form_field">
+				<%= f.label :journalist_names_featured, "Featured Authors " + help_icon('source_featured_authors', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', '(if any - separate each name with a comma)', :class => 'explanation') %>
+				<%= f.text_area :journalist_names_featured, :size => '70x5', :style => "font-size: 11px;width:500px" %>
+			<br/>
+			</div>
+			<br/>
+
+<%#--
+			<div class="form_field">
+				< reviewed_authors = @source.aggregate_author_info.blank? ? "None yet" : format_aggregate_info(@source.aggregate_author_info,"edit_form", 100, false) >
+				<= f.label :aggregate_author_info, "Reviewed Authors " + help_icon('source_reviewed_authors', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', '(from story reviews - read-only)', :class => 'explanation') >
+				<= f.text_area :aggregate_author_info, :value => reviewed_authors, :size => '70x10', :disabled => true, :style => "font-size: 11px;width:500px" >
+			<br/>
+			</div>
+			<br/>
+--%>
+
+			<div class="form_field">
+				<%= f.label :source_managers, "Managers " + help_icon('source_managers', 'host') + "&nbsp;&nbsp;" +
+					content_tag('span', '(if available)', :class => 'explanation') %>
+				<%= f.text_field :source_managers, :size => 55, :style => "width:450px" %><br />
+				</div>
+			<br/>
+
+			<div class="form_field">
+				<%= f.label :source_owners, "Owners " + help_icon('source_owners', 'host') + "&nbsp;&nbsp;" +
+					content_tag('span', '(if available)', :class => 'explanation') %>
+				<%= f.text_field :source_owners, :size => 55, :style => "width:450px" %><br />
+				</div>
+			<br/>
+
+			<div class="form_field leftalign">
+				<%= f.label :source_organization_type, "Organization Type " + help_icon('source_organization_type', 'host') + '<br /><span class="explanation">(if available)</span>', :style => "margin-top:4px;width: 130px" %>
+				<%= f.select :source_organization_type, pull_down_menu("source_source_organization_type"), :include_blank => "Select One:" %>
+			<br/>
+			</div>
+			<br/>
+
+			<div class="form_field leftalign">
+				<%= f.label :source_scope, "Scope " + help_icon('source_scope', 'host'), :style => "margin-top:4px;width: 130px" %>
+				<%= f.select :source_scope, pull_down_menu("source_source_scope"), :include_blank => "Select One:" %>
+			<br/>
+			</div>
+			<br/>
+		
+			<div class="form_field leftalign">
+				<%= f.label :source_audience_size, "Audience Size " + help_icon('source_audience_size', 'host'), :style => "margin-top:4px;width: 130px" %>
+				<%= f.select :source_audience_size, pull_down_menu("source_audience_size"), :include_blank => "Select One:" %>
+			<br/>
+			</div>
+			<br/>
+		
+			<div class="form_field leftalign">
+				<%= f.label :source_language, "Language " + help_icon('source_language', 'host'), :style => "margin-top:4px;width: 130px" %>
+				<%= f.select :source_language, pull_down_menu("source_language"), :include_blank => "Select One:" %>
+			<br/>
+			</div>
+			<br/>
+		
+			<div class="form_field leftalign">
+				<%= f.label :political_viewpoint, "Political Viewpoint&nbsp;" + help_icon('source_political_viewpoint', 'host'), :style => "margin-top:4px;width: 130px" %>
+				<%= f.select :political_viewpoint, pull_down_menu("source_political_viewpoint"), :include_blank => "Select One:" %>
+			<br/>
+			</div>
+			<br/>
+
+			<div class="form_field">
+				<%= f.label :source_other_tags, "Other Tags " + help_icon('source_other_tags', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', '(if any - separate each tag with a comma)', :class => 'explanation') %>
+				<%= f.text_area :source_other_tags, :size => '70x3', :style => "font-size: 11px;width:500px" %>
+			<br/>
+			</div>
+			<br/>
+
+		<% end %>
+
+		<!-- Research tab -->
+		<% main_column_tab :anchor_class => "research" do %>
+
+			<div class="form_field" style="width:450px;">
+				<%= f.label :source_relations_attributes, "Related Publications " + help_icon('source_related_publications', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', 'Add publications related to this source (e.g., partners, properties).', :class => 'explanation') %>
+				<%= batch_autocomplete 'source[source_relations_attributes]', @source.source_relations,
+					:taxonomy => source_taxonomy %>
+			<br/>
+			</div>
+			<br/>
+
+	  <div style="margin-bottom:20px; background: #eeeeee;padding:8px;border-color: #AAAAAA;border-width: 1px;border-style: solid; ">
+			<span class="subhead">Related Links</span><%= help_icon('source_related_links', 'host') %>
+			<span class="explanation">Find informative links about this source (see search sites below).</span><br /><br />
+			<span class="form_field"><b>Search Sites:</b></span> <span class="explanation">(if needed)</span>&nbsp;&nbsp;<%= research_sites(@source.name) %>
+			
+			<div class="form_field leftalign" style="margin-top:12px;">
+				<%= f.label :related_story_1_title, "Link 1 Title " + help_icon('source_related_link_title', 'host'), :style => "margin-top:4px;width: 100px" %>
+				<%= f.text_field :related_story_1_title, :size => 45, :style => "width:340px" %>
+			</div>
+			<div class="form_field leftalign" style="margin-top:5px;">
+				<%= f.label :related_story_1_url, "Link 1 URL " + help_icon('source_related_link_address', 'host'), :style => "margin-top:4px;width: 100px" %>
+				<%= f.text_field :related_story_1_url, :size => 45, :style => "width:340px" %><br />
+				<span class="explanation" style="margin-left:115px">(Example: http://www.reuters.com/source.htm)</span>
+			</div>
+			<div class="form_field leftalign" style="margin-top:5px;">
+				<%= f.label :related_story_1_source_name, "Link 1 Source " + help_icon('source_related_link_source_name', 'host'), :style => "margin-top:4px;width: 100px" %>
+				<%= f.text_field :related_story_1_source_name, :size => 45, :style => "width:340px" %>
+			</div>
+
+			<div class="form_field leftalign" style="margin-top:22px;">
+				<%= f.label :related_story_2_title, "Link 2 Title " + help_icon('source_related_link_title', 'host'), :style => "margin-top:4px;width: 100px" %>
+				<%= f.text_field :related_story_2_title, :size => 45, :style => "width:340px" %>
+			</div>
+			<div class="form_field leftalign" style="margin-top:5px;">
+				<%= f.label :related_story_2_url, "Link 2 URL " + help_icon('source_related_link_address', 'host'), :style => "margin-top:4px;width: 100px" %>
+				<%= f.text_field :related_story_2_url, :size => 45, :style => "width:340px" %><br />
+				<span class="explanation" style="margin-left:115px">(Example: http://www.reuters.com/source.htm)</span>
+			</div>
+			<div class="form_field leftalign" style="margin-top:5px;">
+				<%= f.label :related_story_2_source_name, "Link 2 Source " + help_icon('source_related_link_source_name', 'host'), :style => "margin-top:4px;width: 100px" %>
+				<%= f.text_field :related_story_2_source_name, :size => 45, :style => "width:340px" %>
+			</div>
+		</div>
+		
+		
+			<div class="form_field">
+				<%= f.label :source_duplicate_links, "Duplicate Links " + help_icon('source_duplicate_links', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', 'List any other websites for this source below (one per line):', :class => 'explanation') %>
+				<%= f.text_area :source_duplicate_links, :size => '70x3', :style => "font-size: 11px;width:500px" %>
+			<br/>
+			</div>
+			<br/>
+
+	  <div style="background: #eeeeee;padding:8px;border-color: #AAAAAA;border-width: 1px;border-style: solid; margin-bottom:0">
+			<span class="subhead">Source Contact Info</span><%= help_icon('source_contact_info', 'host') %>
+			<span class="explanation">Indicate how our members can contact this source.</span><br />
+
+			<div class="form_field" style="margin-top:12px;">
+				<%= f.label :source_web_contact_address, "Web Contact Address " + help_icon('source_web_contact_address', 'host') + "&nbsp;&nbsp;" +
+					content_tag('span', '(e.g., "contact us" form)', :class => 'explanation') %>
+				<%= f.text_field :source_web_contact_address, :size => 55, :style => "width:450px" %><br />
+				<span class="explanation">(Example: http://www.reuters.com/contact_us.htm)<%= " #{link_to("Check this link", @source.source_web_contact_address, :class => "popup_link")}" unless @source.source_web_contact_address.blank? %></span>
+			</div>
+			<br/>
+
+			<div class="form_field">
+				<%= f.label :source_public_email_address, "Public Email Address " + help_icon('source_public_email_address', 'host') + "&nbsp;&nbsp;" +
+					content_tag('span', '(as published by this source)', :class => 'explanation') %>
+				<%= f.text_field :source_public_email_address, :size => 55, :style => "width:450px" %><br />
+				<span class="explanation">(Example: editor@sourcename.com)<%= " #{mail_to(@source.source_public_email_address, "Email this Source", :encode => "javascript")}" unless @source.source_public_email_address.blank? %></span>
+			</div>
+			<br/>
+
+			<div class="form_field">
+				<%= f.label :source_public_phone_number, "Public Phone Number " + help_icon('source_public_phone_number', 'host') + "&nbsp;&nbsp;" +
+					content_tag('span', '(include area code and description)', :class => 'explanation') %>
+				<%= f.text_field :source_public_phone_number, :size => 55, :style => "width:450px" %><br />
+				</div>
+			<br/>
+
+			<span class="subhead">Location</span><%= help_icon('source_location', 'host') %>
+			<div style="margin:4px 0 0 20px;">
+				
+				<div class="form_field">
+					<%= f.label :source_address1, "Street Address 1 " + 
+					content_tag('span', '(optional)', :class => 'explanation') %>
+					<%= f.text_field :source_address1, :size => 55, :style => "width:430px" %>
+				<br/>
+				</div>
+				<br/>
+				
+				<div class="form_field">
+					<%= f.label :source_address2, "Street Address 2 " +
+					content_tag('span', '(optional)', :class => 'explanation') %>
+					<%= f.text_field :source_address2, :size => 55, :style => "width:430px" %>
+				<br/>
+				</div>
+				<br/>
+				
+				<div class="form_field">
+					<%= f.label :source_city, "City " +
+					content_tag('span', '(enter a city or other location)', :class => 'explanation') %>
+					<%= f.text_field :source_city, :size => 55, :style => "width:430px" %>
+				<br/>
+				</div>
+				<br/>
+				
+				<div class="form_field leftalign">
+					<%= f.label :source_state, "State", :style => "margin-top:4px;width: 80px" %>
+					<%= f.select :source_state, pull_down_menu("states"), :include_blank => "Select a State:" %>
+				<br/>
+				</div>
+				<br/>
+			
+				<div class="form_field leftalign">
+					<%= f.label :source_zip, 'Zip Code<br /><span class="explanation">(or country code)</span>', :style => "margin-top:4px;width: 80px" %>
+					<%= f.text_field :source_zip %>
+				<br/>
+				</div>
+
+			<div class="form_field leftalign" style="margin-top:8px">
+				<%= f.label :source_country, "Country", :style => "margin-top:4px;width: 80px" %>
+				<%= f.select :source_country, pull_down_menu("countries"), :include_blank => "Select a Country:" %>
+			<br/>
+			</div>
+			<br/>
+			<br/>
+	  </div>
+	  
+	  <%- @source.contact_source_status == "list" ? rep_contact_level = 'hosts' : rep_contact_level = 'staff' %>
+
+		<% if logged_in? and (current_member.has_role_or_above?(:staff) || @source.contact_source_status == "list") %>
+
+			<div style="margin-bottom:20px; background: #f4f4f4;padding:8px;border-color: #AAAAAA;border-width: 1px;border-style: solid; ">
+				<span class="subhead">Source Representative</span> <span class="explanation">(Only visible to <%=app_name%> <%= rep_contact_level %> and above)</span>
+				
+				<div class="form_field" style="margin-top:12px;">
+					<%= f.label :source_representative_name, "Representative Name " + help_icon('source_representative_name', 'host') + "&nbsp;&nbsp;" +
+						content_tag('span', '(if available)', :class => 'explanation') %>
+					<%= f.text_field :source_representative_name, :size => 55, :style => "width:450px" %><br />
+					<%= f.check_box("source_representative_member_check", {}, true, false) %>
+					<span class="editorial_gray">Representative is a <%=app_name%> member</span><%= help_icon("source_representative_name", "host") %>
+					<span class="explanation">(enter <%=app_name%> full member name above)</span>
+					</div>
+				<br/>
+	
+				<div class="form_field">
+					<%= f.label :source_representative_email, "Representative Email Address " + help_icon('source_representative_email', 'host') %>
+					<%= f.text_field :source_representative_email, :size => 55, :style => "width:450px" %><br />
+					<span class="explanation">(Example: representative@sourcename.com)<%= " #{mail_to(@source.source_representative_email, "Email this Source", :encode => "javascript")}" unless @source.source_representative_email.blank? %></span>
+				</div>
+				<br/>
+	
+				<div class="form_field">
+					<%= f.label :source_representative_phone, "Representative Phone Number " + help_icon('source_representative_phone', 'host') %>
+					<%= f.text_field :source_representative_phone, :size => 55, :style => "width:450px" %><br />
+				</div>
+
+			</div>
+		<% else %>
+			<span class="explanation">Note: Source Representative Contact Info is hidden</span>
+		<% end %>
+		</div>
+
+		<% end %>
+
+	<% end %>
+
+	<div align="right" style="margin-left: 110px"><a name="bottom"></a>
+		<%= submit_button "Submit", nil, :style => "float: right" %>
+		<%= cancel_button "Cancel", @source, :style => "float: right; margin-right: 10px" %>
+		<br/>
+	<br/>
+	</div>
+	<br/>
+	
+<% end -%>

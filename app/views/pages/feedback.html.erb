@@ -1,0 +1,22 @@
+<% @title = "Feedback on #{app_name}" %>
+<% @meta_description = "#{app_name} helps people find good journalism online. Our non-profit, non-partisan project provides quality news feeds, news literacy tools and a trust network to help citizens make informed decisions about democracy. The free #{app_name} website features daily feeds of quality news and opinions, which are carefully rated by our members, using our unique review tools. We rate the news based on quality, not just popularity. #{app_name} reviewers evaluate each article against core journalistic principles such as fairness, evidence, sourcing and context." %>
+<% @meta_keywords = @title %>
+
+<div class="span-16 white_box" style="margin-top:0px;">
+<div class="top"></div> 
+<div class="wrapper">
+<div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+<h2>Feedback</h2><br />
+
+<p>What do you think of the <%=app_name%> site, so far? How can we improve it?</p>
+<p>
+Specifically, which parts off the review process work best for you? Which parts need more work?</p>
+<p>
+How can we enhance the site to make it more useful to you?</p>
+<p>
+<%= mail_to email_addr("feedback"), "We welcome your suggestions.", :subject => "#{app_name} Feedback", :encode => "javascript" %>
+</p>
+	    </div>
+</div>
+<div class="bottom"></div>
+</div>

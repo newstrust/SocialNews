@@ -1,0 +1,17 @@
+# Review constants
+#
+
+review_disclosure:
+  - author: {name: the author, exclude_rating: true}
+  - editor: {name: an editor, exclude_rating: true}
+  - publisher: {name: a publisher, exclude_rating: true}
+  - subject: {name: the subject, exclude_rating: true}
+  - family: {name: a family member, exclude_rating: true}
+  - friend: {name: a friend, exclude_rating: true}
+  - coworker: {name: a co-worker, exclude_rating: true}
+  - other: {name: other, exclude_rating: true}
+
+review_status:
+  - hide:    {name: Hide}
+  - list:    {name: List}
+  - feature: {name: Feature}

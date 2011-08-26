@@ -1,0 +1,28 @@
+#NOTE: It is important that the subject, headers and footers be different from the templates in views/newsletter/text & views/newsletter/html
+#Some tests rely on this property
+
+daily_auto:
+  id    : 1
+  state : "auto"
+  freq  : "daily"
+  add_top_story_title_to_subject: false
+  dispatch_time : <%= Time.now.to_s :db %>
+  refreshed_at:  <%= Time.now.to_s :db %>
+  subject     : "DAILY: TEST SUBJECT"
+  text_header : "DAILY: Hello [MEMBER.FIRST_NAME], Test text header"
+  text_footer : "DAILY: Test text footer"
+  html_header : "DAILY: Hello [MEMBER.FIRST_NAME],<br> <strong>Test html header</strong>"
+  html_footer : "DAILY: <strong>Test html footer</strong>"
+
+weekly_ready:
+  id    : 2
+  state : "ready"
+  freq  : "weekly"
+  add_top_story_title_to_subject: false
+  dispatch_time : <%= Time.now.to_s :db %>
+  refreshed_at:  <%= Time.now.to_s :db %>
+  subject     : "WEEKLY: TEST SUBJECT"
+  text_header : "WEEKLY: Hello [MEMBER.FIRST_NAME], Test text header"
+  text_footer : "WEEKLY: Test text footer"
+  html_header : "WEEKLY: Hello [MEMBER.FIRST_NAME],<br> <strong>Test html header</strong>"
+  html_footer : "WEEKLY: <strong>Test html footer</strong>"

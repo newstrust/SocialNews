@@ -1,0 +1,66 @@
+<% show_flags ||= {} -%>
+<% hide_flags ||= {} -%>
+<% story_sf = {:see_all_reviews => false}.merge(show_flags) -%>
+<% story_hf = {:quote => true, :submitted_by => true, :rating => true, :review_it => true, :like_it => true, :edit_it => true, :reviews => true, :share => true}.merge(hide_flags) -%>
+<% review_sf = {:reviewed_by => true, :see_all_reviews => false, :nt_rating_trustometer => true}.merge(show_flags) -%>
+<% review_hf = {:quote => true, :submitted_by => true, :rating => true, :review_it => true, :like_it => true, :edit_it => true, :reviews => true, :share => true, :add_review_comment => true, :meta_review_input => true, :see_full_review => true}.merge(hide_flags) -%>
+<div id="comment_container_<%= comment.id %>" class="comment_container" comment_id ="<%= comment.id %>" >
+<div class="comment" id="comment_<%= comment.id %>">
+<% commenter = comment.member -%>
+  <%- if comment.commentable && !show_flags[:mynetwork_permalink] -%>
+    <div class="commentActions permalink"> <%= link_to 'permalink', comment_permalink_for(comment) %> </div>
+  <%- end -%>
+<% unless hide_flags[:display_header] -%>
+  <div class='activity_meaning'>
+    <%=first_name(commenter)%> <span class='green'>commented</span> on this <%= comment.commentable_type.downcase %> &ndash; <span style="font-size:90%"><%= comment.created_at.strftime("%b. %e, %Y") %></span>
+  <%- if current_member && current_member.has_role_or_above?(:editor) && (comment.hidden? || !commenter.can_comment?) -%>
+    <span id="hidden_comment_<%= comment.id %>" style="color:#ff0000;">(Removed)</span>
+  <%- end -%>
+  </div>
+<% end -%>
+
+   <!-- comment body -->
+  <div class="comment_detail">
+    <%- obj = comment.commentable -%>
+    <div style="clear:both;">
+      <%- if comment.commentable_type == "Story" -%>
+        <ul style="clear:both">
+        <%=render :partial => "stories/story",
+                  :object  => obj,
+                  :locals  => { :hide_flags => story_hf, :show_flags => {:see_all_reviews => true}.merge(show_flags)} %>
+        </ul>
+      <%- elsif comment.commentable_type == "Review" -%>
+        <div style="clear:both">
+          <%=render :partial => 'reviews/member_review', 
+                    :locals  => { :review => obj, :hide_flags => review_hf, :show_flags => review_sf } %>
+          <div class="commenter_name">
+            <%= comment.member.name.titleize %> Comment: <br />
+          </div>
+        </div>
+      <%- elsif comment.commentable_type == "Source" -%>
+        <%= link_to_source(obj) if obj -%>
+      <%- elsif comment.commentable_type == "Quote" -%>
+        <div class="member_quote">
+          <div class="quote_marks"><%= image_tag("/images/ui/truthsquad/quote.png") %></div><%= link_to(obj.quote,obj, :class => "quote_title") %>
+        </div>
+        <div class="commenter_name">
+          <%= comment.member.name.titleize %> Comment: <br />
+        </div>
+      <%- else -%>
+        <h4 class="bottom other" style="clear:both">
+        <%= link_to_commentable_type(comment,nil,false) if comment.commentable %></h4>
+      <%- end -%>
+    </div>
+    <div class="review_part comment clearfix">
+      <%- if comment.commentable && show_flags[:mynetwork_permalink] -%>
+        <div class="commentActions permalink"> <%= link_to('permalink', comment_permalink_for(comment), :class=> 'permalink') %> </div>
+      <%- end -%>
+      <div class="bubble"></div><div class="member_comment"><%= h StringHelpers.truncate_on_word_boundary(comment.body, 240, 300, true, 0, true) { more_url = comment.commentable.nil? ? '' : comment_permalink_for(comment); link_to("More&nbsp;&raquo;", more_url, :class => "more_url") } %></div>
+      <%- if comment.commentable_type == "Review" -%>
+        <div class="more_reviews"><%= link_to "More Reviews &amp; Comments&nbsp;&raquo;", obj.story %></div>
+      <%- end -%>
+    </div>
+  </div>
+  <!-- /comment body -->
+</div>
+</div>

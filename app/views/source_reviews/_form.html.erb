@@ -1,0 +1,50 @@
+<%- @source ||= nil -%>
+<%- is_ajax_request ||= false -%>
+<%- selected_topics = source_review.expertise_topics -%>
+
+<%- if is_ajax_request -%>
+  <script type="text/javascript">
+    init_selection = [ <%= selected_topics.collect { |t| "'#{t.name}'"} * ', ' %> ];
+  </script>
+<%- else -%>
+  <%- @inline_js ||= "" -%>
+  <%- @inline_js += capture do -%>
+  <script type="text/javascript">
+    var init_selection = [ <%= selected_topics.collect { |t| "'#{t.name}'"} * ', ' %> ];
+  </script>
+  <%- end -%>
+<%- end -%>
+
+<%- m = source_review.member -%>
+<div id="source_review_form" style="display:<%= show_form ? 'block' : 'none' %>">
+  <%- if m == current_member && source_review.hidden? -%>
+  <div class="warning"> Staff have hidden your review.  You will be able to update the review but ony staff can relist it. </div>
+  <%- end -%>
+
+  <div class="member_photo">
+    <%= link_to_member_photo(m) %>
+  </div>
+
+  <div class="review_this_source">
+    <h2>Review this source</h2>
+    <h3><%=source_review.source.name%></h3>
+    <%- if is_ajax_request && @source.nil? -%> <%#-- Don't display this on the source page --%>
+    <p class="editorial_gray"><%= link_to "See source profile", source_path(source_review.source), :target => "_blank"%></p>
+    <%- end -%>
+  </div>
+
+  <div class="source_review_form">
+    <%- if is_ajax_request -%>
+      <%- remote_form_for source_review, :url => source_review.new_record? ? source_reviews_path(:format => :js) : source_review_path(source_review, :format => :js),
+                                         :success => "handle_save_response(request, false)",
+                                         :failure => "handle_save_response(request, true)",
+                                         :datatype => :json do |f| -%>
+        <%= render :partial => "source_reviews/form_body", :locals => {:source_review => source_review, :f => f, :selected_topics => selected_topics, :is_ajax_request => true} %>
+      <%- end -%>
+    <%- else -%>
+      <%- form_for source_review do |f| -%>
+        <%= render :partial => "source_reviews/form_body", :locals => {:source_review => source_review, :f => f, :selected_topics => selected_topics, :is_ajax_request => false} %>
+      <%- end -%>
+    <%- end -%>
+  </div>
+</div>

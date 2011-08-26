@@ -1,0 +1,18 @@
+Members with validation level 1 can get posting credit for stories
+that already exist in our database which were fetched by our feed
+fetcher scripts (and which could be in pending or even listed status).
+
+* You can edit a story and save it which gives you posting credit
+* You can review a pending story that hasn't been reviewed yet, and
+  when your review is saved, you also get credit for posting the story.
+
+A member can run into such stories on (a) mynews page/email 
+(b) today's feed listing at the bottom of the home page 
+(c) today's feed listings (d) feed pages.
+
+We have these rules for giving posting credit so we dont have 
+"submitted by NewsTrust Bot" showing up and so real humans get posting credits.
+
+The primary reason for restricting posts by members with validation
+level 1 is to prevent spam, so, these ways of getting posting credit is
+a good thing.

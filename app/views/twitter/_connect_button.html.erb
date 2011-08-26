@@ -1,0 +1,6 @@
+<div style="text-align: right">
+ <%=link_to(image_tag("/images/ui/twitter_connect.png", :title => "Click to connect your #{app_name} and Twitter accounts"), 
+            "#", 
+            :onclick => "open_popup('#{twitter_authenticate_url}','', {height:400, width:780}); return false", 
+            :html => {"target" => "_blank"}) %>
+</div>

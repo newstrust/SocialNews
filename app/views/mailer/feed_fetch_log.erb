@@ -1,0 +1,15 @@
+Feed Fetching completed.
+
+<%=@num_feeds%> were fetched of which <%=@failed_fetches.size%> failed.  The list of failed fetches and the exception is listed below:
+<% @failed_fetches.each do |ff| -%>
+* Feed <%=ff[0] %>: <%=ff[1]%> failed with exception: <%=ff[2]%>
+<% end -%>
+
+Find below the list of queued stories:
+<% @queued_stories.each do |qs| -%>
+<% if qs.id -%>
+*  <%=story_url(qs, :ref => "fflog")%>; <%=qs.title%>; SOURCE: <%=qs.authorships.first.source.name if !qs.authorships.blank?%>;
+<% else -%>
+* [STORY SAVE FAILED] <%=qs.url%>; <%=qs.title%>; SOURCE: <%=qs.authorships.first.source.name if !qs.authorships.blank?%>;
+<% end -%>
+<% end -%>

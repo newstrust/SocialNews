@@ -1,0 +1,15 @@
+<h3>Welcome to <%=app_name%>!</h3>
+
+<p>Please complete your Account</p>
+
+<%= error_messages_for :member, :header_message => nil, :message => nil %>
+
+<div class="popup_form">
+<% form_for :member, @member, :url => accepting_invitation_members_path(:id => @member.activation_code), :method => :put,
+	:html => { :class => 'entry_form', :autocomplete => "off" }  do |f| -%>
+  <%= render :partial => 'new_members_form', :locals => { :f => f } %>
+  <%= f.hidden_field :activation_code %>
+
+  <%= submit_button 'Complete' %>
+<% end -%>
+</div>

@@ -1,0 +1,5 @@
+<% form_tag :action => "terminate_spammers", :method => 'post' do  -%>
+  <%= label_tag "", "Spammer IDs"%> (comma-separated member ids) <br/>
+  <%= text_field_tag "ids", params[:ids] || "", :size => 40 %> <br/><br/>
+  <%= submit_tag "Terminate!" %>
+<% end -%>

@@ -1,0 +1,15 @@
+<%- available_freqs = ([Newsletter::BALTIMORE_DAILY, Newsletter::BALTIMORE_WEEKLY] - Newsletter::DISABLED_NEWSLETTERS) -%>
+<%- if !available_freqs.empty? -%>
+  <h3>Baltimore Newsletters</h3>
+  <p style="margin-bottom:6px">We are hosting a <%= link_to( "local news pilot in Baltimore", "/baltimore") %> in early 2011.</p>
+  <p>You can manage your Baltimore email subscriptions below:</p>
+
+  <%- available_freqs.each do |freq| -%>
+    <%- humanized_freq = Newsletter.humanized_freq(freq) -%>
+    <%= check_box_tag "member[newsletter][#{freq}]", true, @member.has_newsletter_subscription?(freq) %>
+    <%= label_tag("member[newsletter][#{freq}]", humanized_freq, :style => "display: inline; font-weight:bold") %><br>
+    A <%=humanized_freq.sub(/Baltimore\s*/, '')%> selection of Baltimore news and opinions from our most trusted sources.
+    Includes Most Recent and Most Trusted stories about Baltimore. 
+    <%= Newsletter.humanized_dispatch_time(freq) %>. <br>
+  <%- end -%>
+<%- end -%>

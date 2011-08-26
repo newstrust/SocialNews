@@ -1,0 +1,18 @@
+<h1> TESTING feed: <%=link_to @feed.url,@feed.url %> </h1>
+
+<hr>
+
+<p><strong> 
+If you find a listing of stories below, fetching of the feed from this url succeeded!   If not, there was some error: the server is not responding, this url has changed, or, you have stumbled upon one of the newest mysteries of the Internet.
+</strong></p>
+
+<hr>
+
+<ul>
+<% @entries.each do |s| %>
+<li>
+<%= h(link_to(s.title, s.url)) %> - <%= h(s.date_published) %> <br>
+<%= h (s.description) %>
+</li>
+<% end %>
+</ul>

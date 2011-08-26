@@ -1,0 +1,145 @@
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'stories' %>
+<%- end -%>
+
+<%#-- Caching everything since nothing in here seems to be user-specific! --%>
+
+<% cache @cached_fragment_name do -%>
+<div class="span-24 story_listing_full">
+
+<h2 class="listing_title"><%= @listing_title %></h2>
+
+<p>
+Please review one of these stories<%if @topic-%> about <%=@topic.name%> - or visit our <%=link_to("topic page", @topic)%><% end-%><%if @subject-%> about <%=@subject.name%> - or visit our <%=link_to("subject page", @subject)%><% end-%>.
+To review any story, simply click on its title.
+To find more stories, click <em>Filter this list</em>.
+For help tips, check our <%= help_link('FAQ') %>.
+</p>
+
+<br/>
+
+<%#-- Set up a string time span value similar to the textual version being displayed so that we can set up the appropriate selector
+   -- For top-stories listing, there is no implicit date-window, we get news from all-time.  So handle this accordingly.  --%>
+<%- timebar_days = [7,30,365] -%>
+<%- sd = params[:start_date] || params[:review_start_date] -%>
+<%- ed = params[:end_date] || params[:review_end_date] -%>
+<%- if sd || ed -%>
+  <%- ts = params[:timespan] -%>
+  <%- if ts -%>
+    <%- ts_tmp = (ts == "day" ? 1 : (ts == "week" ? 7 : (ts == "month" ? 30 : (ts == "year" ? 365 : ts.to_i)))) -%>
+	 <%- sd ||= (Time.parse(ed) - ts_tmp.days).strftime("%Y-%m-%d") -%>
+	 <%- ed ||= (Time.parse(sd) + ts_tmp.days).strftime("%Y-%m-%d") -%>
+  <%- end -%>
+<%- else -%>
+  <%- page_obj = @topic || @subject || @group -%>
+  <%- ts = params[:timespan] || default_timespan(params[:listing_type], page_obj) -%>
+  <%- ts_num = (ts == "day" ? 1 : (ts == "week" ? 7 : (ts == "month" ? 30 : (ts == "year" ? 365 : ts.to_i)))) -%>
+  <%- timebar_days << ts_num if ts_num > 1 -%>
+<%- end -%>
+<div class="story_filters_form_top"></div>
+<%#-- Since we have disabled sessions for bots, when bots access this page, rails chokes on the form-tag 
+      because it cannot generate an authentiticy token for those bots.  Bots get a 500, and logs are
+		filled up error logs.  To get around that, disable forgery protection for this form because
+		this is a publicly accessible page -%>
+<%- StoriesController.allow_forgery_protection = false -%>
+<%- form_tag({:controller => :stories}, {:method => :post, :id => 'story_filters_form'}) do -%>
+<div class="filter_form_div filters_hidden">
+	<div class="time_selectors">
+		Dates: &nbsp;
+  <%- if sd || ed -%>
+		<span class="selected"> 
+		  <%=sd ? Time.parse(sd).strftime("%m/%d/%Y") : "start" %> --
+		  <%=ed ? Time.parse(ed).strftime("%m/%d/%Y")   : "today" %> |
+		</span>
+  <%-  end -%>
+		<span class="<%=ts_num == 1 ? "selected" : "timespan"%>" id="timespan_1">today</span> |
+  <%-  timebar_days.sort.uniq.each do |x| -%>
+		<span class="<%=ts_num == x ? "selected" : "timespan"%>" id="timespan_<%=x%>"><%=x%> days</span> |
+  <%-  end -%>
+		<span class="<%=ts == "all" ? "selected" : "timespan"%>" id="timespan_all">all time</span>
+	</div>
+
+  <div class="filter_header">Filter this list (<%=plural(@stories.total_entries, 'story') %>)</div>
+
+	<div id="all_filters">
+		<div class="filter">
+			<%= label_tag 'Listing:' %>
+			<%= select_tag 'listing_type', options_for_select([
+							["Most Recent", "most_recent"],
+							["Most Trusted", "most_trusted"],
+							["-------", ""],
+							["Least Trusted", "least_trusted"],
+							["For Review", "for_review"],
+              ["All Rated Stories", "all_rated_stories"],
+							["Recent Reviews", "recent_reviews"]
+						], params[:listing_type]) %>
+		</div>
+
+		<div class="filter">
+			<%- @story_type_opts = [["All Content", ""], ["News", "news"], ["Opinion", "opinion"]] -%>
+			<%- @story_type_opts += [["-------", ""], ["Other", "other"]] if @editorial_view -%>
+			<%= label_tag 'Content:' %>
+			<%= select_tag 'story_type', options_for_select(@story_type_opts, params[:story_type]) %>
+		</div>
+
+      <%#-- We'll not display the source filters if we are viewing stories from a specific source --%>
+    <%- if params[:source].blank? -%>
+		<div class="filter">
+			<%= label_tag 'Sources:' %>
+			<%= select_tag 'source_ownership', options_for_select([
+							["All Sources", ""],
+							["Mainstream", "mainstream"],
+							["Independent", "independent"],
+							["-------", ""],
+							["Trusted (3+)", "trusted"],
+							["Untrusted (<3)", "untrusted"],
+							["Rated", "rated"],
+							["Unrated", "unrated"],
+						], params[:source_ownership]) %>
+		</div>
+    <%- end -%>
+
+		<div class="filter">
+			<%= label_tag 'Media:' %>
+			<%= select_tag 'media_type', options_for_select([["All", ""]] + pull_down_menu("source_media"), params[:media_type]) %>
+		</div>
+
+		<div class="filter">
+			<%- @story_status_opts = [["All", ""], ["Featured", "feature"]] -%>
+			<%- @story_status_opts += [["Hidden", "hide"], ["Pending", "pending"]] if @editorial_view -%>
+			<%= label_tag 'Status:' %>
+			<%= select_tag 'story_status', options_for_select(@story_status_opts, params[:story_status]) %>
+		</div>
+		
+		<div class="filter_button">
+			<%= submit_button("Filter") %>
+		</div>
+	</div>
+</div>
+<div style="clear:both;height:0"></div>
+<%- end -%> <%#-- Filter Form --%>
+<% StoriesController.allow_forgery_protection = true -%>
+<div class="story_filters_form_bottom"></div>
+<div class="listing">
+	<div class="top"></div>
+	<div class="wrapper">
+	<ul class="head_row">
+		<li class="title"> Title </li>
+		<li class="source"> Source </li>
+		<li class="rating"> Rating </li>
+		<li class="date"> Date </li>
+	</ul>
+		
+	<%= @stories.collect{|s| render(:partial => "tabular_story", :locals => {:story => s, :group => @group})} %>
+	</div>
+	<div class="bottom"></div>
+</div>
+<br/>
+<div class="pagination_wrapper">
+<div class="center">
+<%= will_paginate @stories %>
+</div>
+</div>
+<br/>
+</div>
+<%- end -%>

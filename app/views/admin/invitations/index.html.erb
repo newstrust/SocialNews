@@ -1,0 +1,42 @@
+<h1>Invitations for <%= @partner.name %></h1>
+<div class="use16columns">
+  <div class="use16columns inner_left inner_right">
+    <div class="use8columns inner_right">
+      <%= will_paginate(@invitations) %>
+    </div>
+  </div>
+  
+  <div class="use8columns inner_right">
+    <table cellpadding="0" cellspacing="0">
+      
+      <caption>Invitations</caption>
+      
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <%- @invitations.each do |invitation| -%>
+        <tr>
+          <td><%= link_to invitation.name, admin_partner_invitation_path(@partner, invitation) %></td>
+          <td><%= edit_button(edit_admin_partner_invitation_path(@partner, invitation)) %>
+              <%= delete_button(admin_partner_invitation_path(@partner, invitation)) %>
+              <%= @partner.is_primary_invite(invitation) ? '<strong>PRIMARY INVITATION</strong>' : link_to('Make Primary Invite', make_primary_admin_partner_invitation_path(@partner, invitation)) -%> </td>
+           </td>
+        </tr>
+        <%- end -%>
+        <%= %{<tr>
+                <td colspan='2'>No invitations for this partner.</td>
+              </tr>
+        } if @invitations.empty? %>
+      </tbody>
+    </table>
+    <p><%= link_to "Create Invitation", new_admin_partner_invitation_path(@partner) %></p>
+  	<br />
+  	<br />
+  	<%= cancel_tag "/admin/partners" %>
+  </div>
+</div>

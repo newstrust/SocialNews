@@ -1,0 +1,6 @@
+   <%= render :partial => "newsletter/mynews/html/listing", 
+                 :locals => { :stories => @listing[:stories], 
+                              :scores  => @listing[:scores],
+                              :matches => @listing[:matches],
+                              :member => @member,
+                              :link_params => @link_params } %>

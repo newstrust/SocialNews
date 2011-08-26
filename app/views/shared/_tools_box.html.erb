@@ -1,0 +1,56 @@
+<%- span_size ||= 16 -%>
+<div class="actions <%= page_type %> span-<%= span_size %> clearfix">
+	<%= content %>
+
+<%#-- Dont show fb,twitter,email,addthis links to bots! They just lead to useless bit.ly calls! --%>
+<%- if !visitor_is_bot? -%>
+  <%#-- SSS: For some reason I cannot fathom yet, current_nt_url(request.request_uri) fails with message undefined method 'request'
+     -- even though the call to current_nt_url sets up the param to request.request_uri if nothing is passed in! --%>
+  <%- curr_url = (page_type == :story) ? story_url(object) : current_nt_url -%>
+  <%- comments_link ||= false -%>
+  <%- edit_privs ||= false -%>
+  <%- view_all_stories ||= "" -%>
+
+  <%= fb_like_iframe(curr_url, :layout => "button_count") %>
+  <div style="float:left; margin-top:4px;display:inline;">
+    <%= fb_share_link(curr_url) %> 
+    <%- if page_type == :story -%>
+      <%= tweet_story(object) %>
+      <%= email_page(object, :type => "#{page_type.to_s.humanize.downcase}") %>
+    <%- else -%>
+      <%= tweet_page(curr_url) -%>
+      <%= email_page("", :type => "#{page_type.to_s.humanize.downcase}") %>
+    <%- end -%>  
+    <%= addthis_page("") %>
+    <%- if edit_privs -%>
+      <%- if [:story].include?(page_type) -%>
+        <%= link_to "", edit_story_url(@story), :class => "edit", :title => "Edit this story" %>
+      <%- else -%>
+        <%= link_to "", edit_link, :class => "edit", :title => edit_title %>
+      <%- end -%>
+    <%- end %>
+    <%- if comments_link -%>
+      <%- comment_count = object.comments.count -%>
+      <%- comment_text = "Comments" + (comment_count > 0 ? " <span class=\"comment_count\"> (#{comment_count})</span>" : "") -%>
+      <%= "| #{link_to comment_text, '#comments', :class => 'new_discussion', :title => 'Jump to our comments' }" if comments_link -%>
+    <%- else -%>
+      &nbsp;
+    <%- end -%>
+  </div>
+<%- end -%>
+
+  <%- if [:topic, :subject].include?(page_type) -%>
+    <%- url_params = {:controller => :stories, :action => "index", :listing_type => :most_recent} -%>
+    <%- url_params[(page_type == :topic) ? :t_slug : :s_slug] = object.slug -%>
+    <div class="shareLinks">
+    <%= link_to("Get Widget", "/widgets?url=" + url_for(url_params.merge(:format => :json))) %>
+    <%= "| " + link_to("RSS", url_for(url_params.merge(:format => :xml))) %>
+    <%= "| " + link_to("Full Listing <span class=\"more\">&raquo;</span>", url_for(url_params)) %>
+    </div>
+  <%- end -%>
+</div>
+
+<%#-- No share links to bots! They just lead to useless bit.ly calls! --%>
+<%- if !visitor_is_bot? -%>
+  <%= render :partial => "shared/tools_icon_forms", :locals => {:page_type => page_type} %>
+<%- end -%>

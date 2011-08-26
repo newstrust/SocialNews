@@ -1,0 +1,4 @@
+<% if publishable_via_fb_connect -%>
+  <%= check_box_tag "post_on_facebook", "1", false, :class => "check", :style => "float:left" %>
+  <span class="share_option"><a id="facebook_button" href="#">Facebook</a></span>
+<% end -%>

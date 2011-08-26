@@ -1,0 +1,27 @@
+<h1>Local Sites</h1>
+
+<div class="use8columns inner_right">
+  <table cellpadding="0" cellspacing="0">
+    <tbody style="font-size:14px">
+      <%- @lsites.each do |local_site| -%>
+      <tr>
+        <td style="font-size:14px"><%= local_site.name %> </td>
+        <td><%= edit_button(edit_admin_local_site_path(local_site)) %> &nbsp;&nbsp;&nbsp; </td>
+        <td><%= link_to("Edit Home Page Layout", "#{local_site.home_page}#{admin_home_path}") %> &nbsp;&nbsp;&nbsp; </td>
+        <td><%= link_to("Preview", local_site.home_page) %> </td>
+      </tr>
+      <%- end -%>
+      <%= %{<tr>
+              <td colspan='2'>No Local Sites Yet.</td>
+            </tr>
+      } if @lsites.empty? %>
+    </tbody>
+
+  </table>
+</div>
+
+<div style="clear:both;font-size:14px;margin-top:75px;"> 
+<%- if current_member.has_role_or_above?(:editor) -%>
+<%= link_to 'New local site', new_admin_local_site_path %> <br/>
+<%- end -%>
+</div>

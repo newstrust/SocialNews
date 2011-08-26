@@ -1,0 +1,10 @@
+daylife:
+  api_key       : "key-here"
+  shared_secret : "secret-here"
+
+digg:
+  api_key : "key-here"
+
+bitly:
+  login   : "login-here"
+  api_key : "key-here"

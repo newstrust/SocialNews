@@ -1,0 +1,118 @@
+<%- spacer_row = "<tr><td colspan=\"3\"><img src=\"#{home_url}images/ui/spacer.gif\" alt=\"\" width=\"1\" height=\"12\"></td></tr>" -%>
+
+<tr>
+<td colspan=3>
+<%= link_to "Support #{app_name}", page_url(@link_params.merge(:section => "about")), :class=> "sub_head" %> <br>
+</td>
+</tr>
+
+<tr>
+<td colspan="3" class="story_quote">
+If you would like to help <%=app_name%>, there are many ways you can support our non-profit service. Here are some ideas to get you started.<br></td>
+</tr>
+
+<%=spacer_row%>
+
+<tr valign="top" >
+<td colspan="3" class="body_black">
+<%=link_to "&bull;&nbsp;Review often", url_for(@link_params.merge(:controller => :stories, :action => :index, :listing_type => "for_review")) %><br>
+<span class="story_quote">
+The more you review stories on our site, the smarter we get as a community. Simply click "Review It" next to a story title, anywhere on our site. Try to answer as many questions as you can, to make your ratings count more. For the latest stories, start on our <%=link_to "home page", home_url(@link_params) %>, in the 'For Review' section.<br></span>
+</td></tr>
+
+<%=spacer_row%>
+
+<tr valign="top" >
+<td colspan="3" class="body_black">
+<%= link_to "&bull;&nbsp;Focus on the journalism", faq_url(@link_params.merge(:path => "reviewer")) %><br>
+<span class="story_quote">
+Here at <%=app_name%>, we try to rate stories based on the quality of the journalism, not whether we agree with the views presented in these stories. If you haven't already, check our <%= link_to "Reviewer FAQ", faq_url(@link_params.merge(:path => "reviewer")) %> for guidelines on how to review stories on our site.<br></span>
+</td></tr>
+
+<%=spacer_row%>
+
+<tr valign="top" >
+<td colspan="3" class="body_black">
+<%= link_to "&bull;&nbsp;Fill in your profile", my_account_members_url(@link_params.merge(:anchor => "profile")) %><br>
+<span class="story_quote">
+Please take a moment to <%= link_to "update your member profile", my_account_members_url(@link_params.merge(:anchor => "profile")) %>, so that other members can find out more about you. Be sure to <%= link_to "add a picture", my_account_members_url(@link_params.merge(:anchor => "picture")) %> if you haven't already. The more you share about yourself, the higher your member level, and the more your ratings count.<br></span>
+</td></tr>
+
+<%=spacer_row%>
+
+<tr valign="top" >
+<td colspan="3" class="body_black">
+<%= link_to "&bull;&nbsp;Post a Story", submit_story_url(@link_params) %><br>
+<span class="story_quote">
+If you've come across a good story lately, please share it with us. Simply click on <%= link_to "Submit", submit_story_url(@link_params) %> anywhere on our site - or use our <%= link_to "Bookmarklet", page_url(@link_params.merge(:section => "tools", :path => "bookmarklet")) %> to quickly post stories from any web page.<br></span>
+</td>
+</tr>
+
+<%=spacer_row%>
+
+<tr valign="top" >
+<td colspan="3" class="body_black">
+<%= link_to "&bull;&nbsp;Invite a Friend", invite_members_url(@link_params) %><br>
+<span class="story_quote">
+Please invite your friends, family, or co-workers to join <%=app_name%>. Simply click on <%= link_to "Invite", invite_members_url(@link_params) %> at the bottom of any page to send them a personal invitation.<br></span>
+</td></tr>
+
+<%=spacer_row%>
+
+<tr valign="top" >
+<td colspan="3" class="body_black">
+<%= link_to "&bull;&nbsp;Tell us what you think", site_feedback_url(@link_params) %><br>
+<span class="story_quote">
+We'd love to hear your comments and suggestions about our site. Please post your recommendations on our <%= link_to "feedback", site_feedback_url(@link_params) %> page.<br>
+</span>
+</td></tr>
+
+<%=spacer_row%>
+
+<tr> <td colspan="3"> <hr> </td></tr>
+
+<%=spacer_row%>
+
+<tr>
+<td colspan=3>
+<%= link_to "About #{app_name}", page_url(@link_params.merge(:section => "about")), :class => "sub_head" %><br>
+</td>
+</tr>
+
+<tr>
+<td colspan="3" class="story_quote">
+<%=app_name%> helps people find good journalism online. Our free website features a daily feed of quality news and opinion from independent and mainstream sources, based on ratings from our reviewers:<br>
+<%= link_to home_url, home_url(@link_params) %><br><br>
+
+We rate the news based on quality, not just popularity. Our web review tools enable our members to evaluate fairness, evidence, sourcing and other core journalistic principles. <%=app_name%> is non-profit, non-partisan and encourages both news literacy and civic engagement. Our mission is to to help citizens make more informed decisions about our democracy.<br><br>
+
+It's a great way to get "news you can trust" all in one place. To find out more, check our <%= link_to "About Us page", page_url(@link_params.merge(:section => "about")) %>. <br></td>
+</tr>
+
+<%=spacer_row%>
+
+<tr> <td colspan="3"> <hr> </td></tr>
+
+<%=spacer_row%>
+
+<tr>
+<td colspan=3>
+<%= link_to "About this Email", email_settings_url({:freq => @newsletter.freq}.merge(@link_params)), :class => "sub_head" %><br>
+</td>
+</tr>
+
+<tr>
+<td colspan="3" class="story_quote">
+<% @time = @newsletter.dispatch_time -%>
+
+We're sending you this <%=@newsletter.freq.humanize%> news feed because you signed up as a <%=app_name%> member. This feed goes out every 
+<%- eastern = @time.in_time_zone('Eastern Time (US & Canada)') -%><%= @newsletter.is_daily? ? "day" : @time.strftime("%A")%> at about <%=@time.strftime("%I%p %Z").gsub(/^0/, '')%> (<%=eastern.strftime("%I%p %Z").gsub(/^0/, '')%>).<br>
+<br>
+To change your email settings, visit our <%= link_to "Email Feeds page", email_settings_url({:freq => @newsletter.freq}.merge(@link_params)) %>
+To <strong>IMMEDIATELY unsubscribe</strong> from our <%= @newsletter.freq.humanize %> news feed, <a href="[UNSUBSCRIBE_URL]">click here</a>.<br> <br>
+
+<%=app_name%> treats your contact information as private and confidential. We will not share it with anyone without your permission. To see our <strong>privacy policy</strong>, <%= link_to "click here", page_url(@link_params.merge(:section => "about", :path => "privacy")) %>.<br> <br>
+<span class="editorial"></span>
+<br><br><br>
+<span class="editorial_gray">Copyright (c) 2011, <%=app_name%> - All Rights Reserved.</span> </td>
+</tr>

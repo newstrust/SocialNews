@@ -1,0 +1,74 @@
+<style>
+h2 { font-size: 14px; }
+</style>
+
+<h1> Statistics Dashboard for <%=@member.name%></h1>
+
+<br/><br/>
+
+<div style="width:400px; float:left;">
+<h2> Review rating distribution <br/> &nbsp; </h2>
+<div id="rrd" style="float:left;width:300px;height:200px"></div>
+<div id="rrd_legend" style="float:left;"></div>
+<div clear="both"></div>
+</div>
+
+<div style="width:400px; float:left;">
+<h2> Story reviews <br/>(comparison by story type & source ownership)</h2>
+<div id="reviews_by_stype" style="float:left;width:300px;height:200px"></div>
+<div id="reviews_by_stype_legend" style="float:left;"></div>
+<div clear="both"></div>
+</div>
+
+<br/><br/>
+
+<div style="width:400px; float:left;">
+<h2> Review rating distribution <br/>(split by story type & source ownership)</h2>
+<div id="rrd_by_stype" style="float:left;width:300px;height:200px"></div>
+<div id="rrd_by_stype_legend" style="float:left;"></div>
+<div clear="both"></div>
+</div>
+
+<div style="width:400px; float:left;">
+<h2> Review rating distribution <br/>(comparison by story type & source ownership)</h2>
+<div id="rrd_by_stype_comp" style="float:left;width:300px;height:200px"></div>
+<div id="rrd_by_stype_comp_legend" style="float:left;"></div>
+<div clear="both"></div>
+</div>
+
+<script type="text/javascript" src="/js/jquery/jquery.flot.pack.js"> </script>
+<script type="text/javascript">
+
+  var opts = { xaxis: {ticks: [1,2,3,4,5]}}
+<%- @rrd_data.each_with_index do |da,i| -%>
+  var d_<%=i%> = <%=da.to_json%>;
+<%- end -%>
+  var data = [{ data: d_0, lines: { show: true, fill: false } }]
+  $.plot($("#rrd"), data, opts)
+
+  var stypes = { "1" : "msm_news", "2" : "ind_news", "3" : "msm_opinion", "4" : "ind_opinion" }
+  var opts = { legend : { container: $("#rrd_by_stype_legend") }, xaxis: {ticks: [1,2,3,4,5]}}
+<%- @rrd_by_stype_data.each_with_index do |da,i| -%>
+  var d_<%=i%> = <%=da.to_json%>;
+<%- end -%>
+  var data = [];
+  for (i = 0; i < 4; i++)
+    data[i] = { data: eval("d_" + i), label: "" + stypes[i+1], lines: { show: true, fill: false } }
+  $.plot($("#rrd_by_stype"), data, opts)
+
+  var opts = { legend : { container: $("#rrd_by_stype_comp_legend") }, xaxis: {ticks: [1,2,3,4,5]}}
+<%- @rrd_by_stype_comp_data.each_with_index do |da,i| -%>
+  var d_<%=i%> = <%=da.to_json%>;
+<%- end -%>
+  var data = [];
+  for (i = 0; i < 4; i++)
+    data[i] = { data: eval("d_" + i), label: "" + stypes[i+1], lines: { show: true, fill: false } }
+  $.plot($("#rrd_by_stype_comp"), data, opts)
+
+<%- @reviews_by_stype_data.each_with_index do |da,i| -%>
+  var d_<%=i%> = <%=da.to_json%>;
+<%- end -%>
+  var data = [{ data: d_0, bars: { show: true, barWidth:0.5, fill: true } }]
+  $.plot($("#reviews_by_stype"), data, {xaxis: {min: 0.5, max:5,  ticks: [[1.25, "msm_news"], [2.25, "ind_news"], [3.25, "msm_opinion"], [4.25, "ind_opinion"]]}})
+</script>
+</div>

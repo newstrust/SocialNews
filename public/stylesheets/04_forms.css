@@ -1,0 +1,774 @@
+/**
+* forms.css
+*
+* Basic form styles, popup form styles, buttons, error messages,
+* and a few specific form styles at the bottom.
+*/
+
+/**
+* Basic layout styles
+*/
+
+form input.title {
+	font-size: 125%;
+	font-weight: bold;
+}
+
+input.prompt {
+  color: #666;
+}
+div.sel div.content {
+	display: block;
+}
+
+.disclosable_content {
+	display: none;
+}
+
+.comment_form input {
+  margin:0 !important;
+}
+
+div.indent {
+  padding-left: 1em;
+  clear: left;
+}
+div.indent input {
+  float: left;
+}
+label.inline {
+  display: inline-block;
+  font-weight: normal;
+}
+div.floatleft {
+  font-weight: bold;
+  float: left;
+  width: 210px;
+}
+
+.edit_buttons {
+width: 100%;
+float: left;
+*margin-bottom:20px;
+margin-bottom:10px;
+margin-top: 15px;
+}
+/**
+* Blue/grey chrome buttons
+*/
+a.formButton {
+	display: block;
+	width: 120px;
+	height: 24px;
+	text-decoration: none;
+	color: #3a3a3a;
+}
+a.formButton:hover {
+  text-decoration: none;
+  color: #3a3a3a;
+}
+  a.formButton span
+  {
+  	display: block;
+  	width: 120px;
+  	height: 24px;
+  }
+  a.formButton span.text {
+  	text-align: center;
+    padding-top: 3px;
+    font-weight: bold;
+  	height: 19px;
+  	cursor: pointer;
+  }
+    /* make the actual 'submit' image practically invisible... */
+    /* see FormHelper.submit_button */
+    a.formButton span.text input {
+      width: 1px;
+      height: 1px;
+      border: none;
+      position: absolute;
+      top: -100px;
+    }
+
+a.formButtonProcessing,
+a.formButtonProcessing:hover {
+  color: #999;
+}
+a.formButton				        	{ background: url('/images/ui/btn-m.gif') repeat-x }
+a.formButton span.lbar			  { background: url('/images/ui/btn-l.gif') no-repeat left top }
+a.formButton span.rbar			  { background: url('/images/ui/btn-r.gif') no-repeat right top }
+a.formButtonProcessing,
+a.formButtonSecondary,
+a.formButton:hover				    { background-position: left bottom }
+a.formButtonProcessing span.lbar,
+a.formButtonSecondary span.lbar,
+a.formButton:hover span.lbar	{ background-position: left bottom }
+a.formButtonProcessing span.rbar,
+a.formButtonSecondary span.rbar,
+a.formButton:hover span.rbar	{ background-position: right bottom }
+
+/* search box too bigg... */
+div.topbar a.formButton       { width: 80px; }
+div.topbar a.formButton span  { width: 80px; }
+
+
+/**
+* Popup Forms
+*/
+
+div.popup_form {
+	width: 375px;
+	background-color: #ffffff;
+}
+div.form_field {
+  margin-bottom: 2px;
+/*  clear: left;*/
+}
+.form label {
+	font-weight: bold;
+	display: block;
+	margin: 3px 0;
+	color: #333;
+}
+
+.form label.story_url {
+float: left;
+}
+
+.form label.not_required {
+  font-weight: normal
+}
+  .form label span.explanation {
+  	margin-left: 3px;
+  }
+.leftalign {
+	padding: 5px;
+}
+  .leftalign label {
+  	width: 70px;
+  	float: left;
+  	margin-right: 10px;
+  }
+  .leftalign .input {
+  	clear: none;
+  	border: none;
+  	float: left;
+  	font-size: 100%;
+  	width: 220px;
+  }
+.shorteditlabel {
+	width: 70px;
+	float: left;
+	font-weight: bold;
+	display: block;
+	margin: 3px 4px 0;
+	color: #333;
+}
+label.newssub {
+	display:inline;
+	float:left;
+	margin-top:1px;
+	margin-bottom:7px;
+	width:113px;
+	font-weight:normal;
+	line-height: 1.4em;
+}
+div.span-14 label.newssub {
+	margin-top:-1px;
+	margin-bottom:9px;
+}
+
+/* entry_form - type of popup_form? */
+
+.entry_form input {
+  margin-left:0;
+}
+div.popup_form form.entry_form div.form_field {
+	height: 3em;
+}
+div.popup_form form.entry_form div.form_field label {
+	width: 125px;
+}
+div.popup_form form.entry_form div.form_field input {
+	width: 185px; /* should be 195px but IE6 is blowing that up */
+	font-size: 1.2em;
+	padding: 2px 1px;
+	margin: 0;
+}
+div.popup_form form.entry_form div.form_field input.check,
+input.check {
+	display: inline;
+	width: 1.5em;
+	border: none;
+	position:static;
+}
+
+.form textarea {
+	width: 300px;
+	height: 6em;
+	font-family: "Helvetica Neue",Arial,Helvetica,sans-serif !important;
+	font-size: 11px;
+}
+
+.form textarea#review_comment,
+.form textarea#review_personal_comment {
+height: 12em;
+}
+
+/* tabbed box in review form... override tab things */
+div.review_form_tabbed_box {
+background-color:#FFFFFF;
+display:block;
+float:left;
+margin-bottom:0.8em;
+padding-top:15px;
+width:auto;
+}
+  div.review_form_tabbed_box div.tab_num_4 ul.tabs li span          { width: 79px; }
+  div.review_form_tabbed_box div.tab_num_4 ul.tabs li.firstTab span { width: 78px; }
+  div.review_form_tabbed_box div.content {
+    border: solid 1px #bababa;
+    border-top: 0;
+  	padding: 3px;
+  	padding-top: 0px;
+  	width: 315px;
+  	background-color: #ffffff;
+  	margin-top: 0px;
+  }
+  div.review_form_tabbed_box div.bottom {
+  /*  background: url('/images/ui/form-col_btm.gif') no-repeat top;*/
+  /*  height: 4px;*/
+  /*  font-size: 4px;*/
+  }
+  div.review_form_tabbed_box textarea {
+  	width: 290px;
+  }
+
+div.popup_form div.story_relation,
+div.popup_form div.excerpt {
+	border-bottom: 1px solid #ccc;
+	padding: 5px;
+	margin-bottom: 3px;
+}
+div.popup_form div.review_form_tabbed_box div.sel {
+	background: none;
+}
+
+select#review_form_version,
+select#member_preferred_edit_form_version {
+  float: right;
+  width: 120px;
+  font-size: 80%;
+  margin-right: 5px;
+  margin-top: 8px;
+}
+
+/* the review form also has an overall rating which is controlled by an ajax call */
+div#overall_rating {
+	width: 106px;
+	height: 13px;
+	font-size: 10px;
+	color: #666;
+	float: right;
+	margin-right: 5px;
+}
+
+div.popup_form div#overall_rating {
+	margin-right: 20px;
+}
+.button_footer .help {
+  float: right;
+  font-weight: bold;
+  margin-top: 7px;
+}
+
+.button_footer .help a.quiet,
+.button_footer .help span.quiet {
+  color: #acacac;
+}
+
+
+/**
+* Login/signup
+*/
+
+div.other_login_option {
+  background-color: #F3F6FD;
+	margin: 15px 0px 0px 0px;
+	padding: 10px;
+	width: 330px;
+/*  margin-left: 10px;*/
+}
+div.other_login_option div.question {
+  width: 220px;
+  float: left;
+  line-height: 1.4em;
+}
+
+.login_btn {
+background: url(/images/ui/btn_login.png) no-repeat left top;
+_background: url(/images/ui/btn_login.gif) no-repeat left top;
+width:61px;
+height: 26px;
+margin:0px 0px 10px 5px;
+border: none;
+cursor: pointer;}
+
+.signup_btn {
+background: url(/images/ui/btn_signup.png) no-repeat left top;
+_background: url(/images/ui/btn_signup.gif) no-repeat left top;
+width:70px;
+height: 26px;
+margin:0px 0px 10px 5px;
+border: none;
+cursor: pointer;}
+
+.submit_btn {
+  display: block; 
+  background: url(/images/ui/toolbar/btn_save.png) no-repeat left top;
+  _background: url(/images/ui/toolbar/btn_save.gif) no-repeat left top;
+  width:51px;
+  height: 26px;
+  margin:0px 0px 10px 5px;
+  border: none;
+  cursor: pointer;
+  float: left;
+}
+
+.submit_btn:hover {
+  display: block; 
+  background: url(/images/ui/toolbar/btn_save.png) no-repeat left bottom;
+  _background: url(/images/ui/toolbar/btn_save.gif) no-repeat left bottom;
+  width:51px;
+  height: 26px;
+  margin:0px 0px 10px 5px;
+  border: none;
+  cursor: pointer;
+  float: left;
+}
+
+.update .submit_btn {
+  display: block; 
+  background: url(/images/ui/toolbar/btn_update.png) no-repeat left top;
+  _background: url(/images/ui/toolbar/btn_update.gif) no-repeat left top;
+  width:78px;
+  height: 26px;
+  margin:0px 0px 10px 5px;
+  border: none;
+  cursor: pointer;
+  float: left;
+}
+
+.update .submit_btn:hover {
+  display: block; 
+  background: url(/images/ui/toolbar/btn_update.png) no-repeat left bottom;
+  _background: url(/images/ui/toolbar/btn_update.gif) no-repeat left bottom;
+  width:78px;
+  height: 26px;
+  margin:0px 0px 10px 5px;
+  border: none;
+  cursor: pointer;
+  float: left;
+}
+
+.submit .submit_btn {
+  display: block; 
+  background: url(/images/ui/btn_submit.png) no-repeat left top;
+  _background: url(/images/ui/btn_submit.gif) no-repeat left top;
+  width:70px;
+  height: 26px;
+  margin:0px 0px 10px 5px;
+  border: none;
+  cursor: pointer;
+  float: left;
+}
+
+.submit .submit_btn:hover {
+  display: block; 
+  background: url(/images/ui/btn_submit.png) no-repeat left bottom;
+  _background: url(/images/ui/btn_submit.gif) no-repeat left bottom;
+  width:70px;
+  height: 26px;
+  margin:0px 0px 10px 5px;
+  border: none;
+  cursor: pointer;
+  float: left;
+}
+
+
+
+.new_member .submit_btn {
+  display: block; 
+  background: url(/images/ui/btn_signup.png) no-repeat left top;
+  _background: url(/images/ui/btn_signup.gif) no-repeat left top;
+  width:70px;
+  height: 26px;
+  margin:0px 0px 10px 5px;
+  border: none;
+  cursor: pointer;
+  float: none;
+}
+
+
+.donate_btn {
+background: url(/images/ui/btn_donate.png) no-repeat left top;
+_background: url(/images/ui/btn_donate.gif) no-repeat left top;
+width:78px;
+height: 26px;
+margin:0px 0px 10px 5px;
+border: none;
+cursor: pointer;
+display: block;
+}
+
+.donate_btn:hover {
+background: url(/images/ui/btn_donate.png) no-repeat left bottom;
+_background: url(/images/ui/btn_donate.gif) no-repeat left bottom;
+width:78px;
+height: 26px;
+margin:0px 0px 10px 5px;
+border: none;
+cursor: pointer;
+display: block;
+}
+
+
+/**
+* Submit form
+*/
+
+p.holster {
+	margin: 0;
+	padding: 0;
+}
+
+
+/**
+* tfoot?
+*/
+
+/*tfoot input {
+  margin-top: 1.5em;
+  padding: 0.425em;
+}
+tfoot input:hover, tfoot input:focus {
+  border: 0.1em solid #ccc;
+  background-color: #efefef;
+}*/
+
+
+/**
+* Rails Error Messages
+*/
+
+.fieldWithErrors input {
+  background-color: #fff3a4;
+}
+
+.errorExplanation {
+  display:block;
+	margin-top: 1em;
+	padding: 10px 10px 10px 35px;
+  background: #fff3a4 url('/images/icons/exclamation.png') no-repeat 10px 13px;
+  border: 1px solid #f8c945;
+	color: #b50b05;
+	font-weight: bold;
+}
+.errorExplanation h2 {
+  text-align: center;
+  margin-bottom:1.0em;
+}
+.errorExplanation p {
+  padding: 0 10px;
+  font-size: 1.1em;
+}
+.errorExplanation ul {
+  list-style:none;
+	margin: 0;
+	padding: 0;
+}
+.errorExplanation li {
+  padding:5px;
+}
+
+
+/**
+* Blueprint overrides
+*/
+.error, .notice, .success {
+  border-width: 1px;
+}
+.comment .notice {
+  border:none;
+  margin:0;
+padding:0;
+}
+p.loading {
+  margin: 50px;
+  font-size: 1.4em;
+  color: #999;
+}
+
+
+/**
+* Textile Explainations
+*/
+
+#textile_support {
+  width: 350px;
+  border: 1px solid #eaeaea;
+  background-color: #ffffcc;
+  margin: 0.5em 0;
+  padding:0.4em;
+}
+
+#textile_support_open td {
+  border: 1px solid #ffffcc;
+  border-top: 1px solid #333;
+  margin-top:0.5em;
+  padding-top:0.5em;
+}
+#textile_support_open .heading {
+  background-color: #eeeeaa;
+  text-align:center;
+  font-weight: bolder;
+}
+
+#textile_support_open .no_border {
+  border:none;
+}
+
+#textile_support_closed, #textile_support_open {
+  display: none;
+}
+
+#textile_support .open {
+  display: block;
+}
+
+
+/**
+* Send To Friend Form
+*/
+
+#send_to_friend_form {
+  background-color: #fff;
+  font-size:8pt;
+  position: absolute;
+  margin-top:5px;
+}
+#share_form #send_to_friend_form {
+  position: relative;
+}
+
+#send_to_friend_form #heading {
+font-size: 12px;
+padding-left: 10px;}
+
+#send_to_friend_form #title {
+font-size: 14px;
+padding:5px 10px 0px 10px;
+font-weight: bold;
+}
+
+#send_to_friend_form .wrapper,
+#send_to_friend_form #form_results {
+  display: none;
+}
+#share_form #send_to_friend_form .wrapper {
+  display: block;
+  _float:left;
+}
+
+#send_to_friend_form .wrapper {
+  padding: 10px 10px 40px 10px;
+  height: auto;
+  width:300px;
+}
+
+#send_to_friend_form #error_results,
+#send_to_friend_form #warning_results,
+#send_to_friend_form #notice_results {
+    cursor:pointer;
+    border: 1px solid #ebdfb0;
+    background-color: #fff4c8;
+    color: #000;
+    text-align: center;
+    padding: 2px;
+    display:none;
+    margin-bottom: 5px;
+}
+
+#send_to_friend_form #error_results {
+  border: 1px solid #ebb0b0;
+  background-color: #ffc8c8;  
+}
+
+#send_to_friend_form #notice_results {
+  border: 1px solid #b0ebb0;
+  background-color: #c8ffcb;
+}
+
+#send_to_friend_form input, #send_to_friend_form textarea {
+  border: 1px solid #bababa;
+  width:133px;
+}
+
+#send_to_friend_form textarea {
+  height:60px;
+  width: 250px;
+  margin:0px 0px 15px 0px;
+}
+
+#send_to_friend_form .row input,#send_to_friend_form .row textarea, #send_to_friend_form .row p {
+  float:left;
+  color: #3f3f3f;
+}
+
+#send_to_friend_form .note {
+	width:146px;
+	display:block;
+	clear:both;
+}
+#send_to_friend_form .note,
+#send_to_friend_form #send_to_friend_form_submit {
+  margin-left: 40px;
+  width: 250px;
+  margin-top: 0px;
+}
+
+#send_to_friend_form #send_to_friend_form_submit {width: 55px;}
+
+#send_to_friend_form #form_results {
+  cursor:pointer;     
+}
+#send_to_friend_form #form_results dt {
+  font-weight:bolder;
+  padding: 0 5px;
+}
+
+#send_to_friend_form .note, #send_to_friend_form #form_results {
+  background-color: #ffffcc;
+}
+
+#send_to_friend_form .row {
+  clear:both;
+}
+
+#send_to_friend_form .row a {
+margin-top: 5px;
+display: block;
+float: left;}
+
+#send_to_friend_form .label {
+  width: 40px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #acacac;
+  font-size: 1em;
+}
+
+
+/**
+* Edit Profile
+*/
+
+.form_profile_line {
+	padding-bottom: 1.2em;
+	clear: right;
+}
+  .form_profile_line .fields {
+  	margin-top: 6px;
+  	width: 380px;
+  	float: right;
+  	text-align: right;
+  }
+    .form_profile_line .fields input,
+    .form_profile_line .fields select {
+      margin-right: 65px;
+    }
+    .form_profile_line .fields .show_box input {
+      margin-right: 0;
+    }
+.edit_profile .tabSubHeader {
+  position: relative;
+  color: #333;
+  clear: both;
+}
+.show_box {
+  position: relative;
+  top: 4px;
+}
+  .edit_profile .tabSubHeader label,
+  .show_box label {
+    font-weight: normal;
+    color: #999;
+    position: absolute;
+    top: 0;
+    right: 22px;
+    _right: 27px;
+    font-size: 10px;
+  }
+  .edit_profile .tabSubHeader input,
+  .show_box input {
+    position: absolute;
+    right: 0;
+    _right: 5px;
+    top: -5px
+  }
+  .edit_profile .fields {
+    font-size: 0.9em;
+    color: #666;
+    padding-left: 10px;
+    margin-bottom: 2em;
+  }
+  .edit_profile .section {
+  	font-weight: bold;
+  	padding-left:0.25em;
+  }
+    .edit_profile .fields input.text,
+    .edit_profile .fields textarea {
+      width: 500px;
+    }
+    .edit_profile .split {
+      margin-bottom: 3.5em;
+    }
+      .edit_profile .split p {
+        float: left;
+        width: 300px;
+      }
+      .edit_profile .split select {
+        float: right;
+      }
+input#send_to_friend_form_submit {
+  background: url(/images/ui/toolbar/btn_send.png) no-repeat left top;
+  _background: url(/images/ui/toolbar/btn_send.gif) no-repeat left top;
+  width: 69px;
+  height: 26px;
+  border: none;
+  margin-bottom: 15px;
+  }
+input#send_to_friend_form_submit:hover {
+  background: url(/images/ui/toolbar/btn_send.png) no-repeat left bottom;
+  _background: url(/images/ui/toolbar/btn_send.gif) no-repeat left bottom;
+  width: 69px;
+  height: 26px;
+  border: none;
+  margin-bottom: 15px;
+  }
+
+.edit_story div.related_story { margin-bottom: 15px; }
+.edit_story div.related_story div { margin-left: 20px; }
+
+form.edit_subscription {
+	margin: 0 0 0 20px;
+}
+
+form.edit_subscription input[type="checkbox"], 
+form.edit_subscription input[type="radio"], 
+form.edit_subscription input.checkbox, 
+form.edit_subscription input.radio {
+    position: relative;
+    top: 0em;
+}
+

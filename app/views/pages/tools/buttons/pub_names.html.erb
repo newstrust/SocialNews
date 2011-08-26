@@ -1,0 +1,15 @@
+<% @title = "Publication Names" %>
+
+<%= content_tag(:h2, @title) unless params[:popup] %>
+
+<p>
+<p style="margin-bottom:0">Here's the current list of publications in the <%=app_name%> database. If you can find your publication on this list, then fill it into the <b><%=app_slug%>_publication_name</b> field.</p>
+<% Source.each_source_medium do |key, medium| %>
+  <div class="top_sources" style="width: 265px; margin: 0 10px 2px 20px; line-height: 1.8em; float: left">
+    <div class="category_sub_head" style="font-weight:bold;margin-top:0;"><%= link_to medium["name"], list_sources_url(:medium => key), :target => "_blank" %></div>
+    <% Source.list_all_by_medium(key).sort{|x, y| x["name"] <=> y["name"]}.each do |source| %>
+      <%= "<div>#{link_to_source(source, {:target => "_blank"})}</div>" %>
+    <%- end -%>
+  </div>
+<% end %>
+<br clear="all"/>

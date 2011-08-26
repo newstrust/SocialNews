@@ -1,0 +1,29 @@
+<%- unless logged_in? && current_member.has_role_or_above?(:sysop) -%>
+<script language="JavaScript">
+<!-- 
+{
+location.href = '/';
+}
+// -->
+</script>
+<%- else -%>
+<% @title = "MyNews Betatesters" %>
+<%- group = Group.find(:first, :conditions => {:name => "betatest"}) -%>
+	<table>
+	<tr><td><strong>Name</strong></td><td style="text-align:center"><strong>Topics</strong></td><td style="text-align:center"><strong>Sources</strong></td><td style="text-align:center"><strong>Members</strong></td><td style="text-align:center"><strong>Feeds</strong></td><td style="text-align:center"><strong>Total Follows</strong></td></tr>
+  <%- group.members.each do |member|-%>
+  	<tr><td>
+		<%= link_to member.name, mynews_url(member) %></td>
+		<%- if member.followed_items.blank? -%>
+			<td colspan="5">No Follows</td>
+		<%- else -%>
+			<td style="text-align:center"><%= member.followed_topics.count %></td>
+			<td style="text-align:center"><%= member.followed_sources.count %></td>
+			<td style="text-align:center"><%= member.followed_members.count %></td>
+			<td style="text-align:center"><%= member.followed_feeds.count %></td>
+			<td style="text-align:center"><%= member.followed_items.count %></td>
+		<%- end -%>
+		</tr>
+  <%-end -%>
+	</table>
+<%- end -%>

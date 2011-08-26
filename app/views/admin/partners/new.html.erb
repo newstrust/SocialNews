@@ -1,0 +1,10 @@
+<h1 class="use16columns inner_left">New Partner</h1>
+
+<%= error_messages_for :partner %>
+
+<div class="use10columns inner_left">
+  <% form_for :partner, :url => admin_partners_path do |f| -%>
+  <%= render :partial => 'form' , :locals => { :f => f }%>
+  <p><%= submit_tag 'Create' %> <%= cancel_tag "/admin/partners" %></p>
+  <% end -%>
+</div>

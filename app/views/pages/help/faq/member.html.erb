@@ -1,0 +1,543 @@
+<%- @title = "Member FAQ" -%>
+<%= "<a name=\"top\"></a>" unless params[:popup] %>
+
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior">
+
+<%= content_tag(:h1, @title + " <span class=\"small\">(Frequently Asked Questions)</span>") unless params[:popup] %>
+
+<p>Here are some frequently asked questions about our <%=app_name%> member profiles. If you still have questions after reading them, <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.
+
+<ul>
+<li><a href="#about_faq" class="subhead_plain_bold">About this FAQ</a></li>
+<li><a href="#view_member_profile" class="subhead_plain_bold">Viewing a Member Profile</a></li>
+<li><a href="#edit_member_profile" class="subhead_plain_bold">Editing your Profile</a></li>
+<li><a href="#trusted_member" class="subhead_plain_bold">Trusted Members</a></li>
+</ul>
+
+<p><hr size="1"></p>
+
+<h2 style="margin-bottom:8px;"><a name="about_faq"></a>About this FAQ</h2>
+
+<p> <p><a name="what_is_faq"></a><span class="subhead_plain_bold">What is this Member FAQ?</span>
+This FAQ is about viewing and editing our member profiles. It was last updated in October 2008. For more info, check our other help FAQs:
+</p>
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about <em>joining <%=app_name%></em> and <em>getting started</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to mynews_colors() +' FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about your <em>MyNews</em> and <em>My Network</em> pages</td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>posting forms</em></td></tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr></table>
+</p>
+
+<p><a name="what_is_member_profile"></a><span class="subhead_plain_bold">What is a member profile?</span>
+A member profile is a web page with information about a <%=app_name%> member. Profiles can be viewed by both members and visitors, though visitors are not able to view a member's email address.</p>
+
+<p><a name="how_to_find_member_profile"></a><span class="subhead_plain_bold">How do I find a member profile?</span>
+To see a member's profile, simply click on his or her name, anywhere on our site. This takes you to that member's profile page. To search for a member, type the member's name into the &quot;Search for&quot; box at the top right corner of the screen, then click &quot;Search&quot;. This will give you results for the name, which you can filter by members, sources or stories.</p>
+
+<p><a name="what_is_member_listing"></a><span class="subhead_plain_bold">Who is included in the member menu?</span>
+Clicking on &quot;Members&quot; in the blue top navbar will bring you to a listing of some of our featured members and recent reviewers. Featured members are those members who review frequently and thoroughly, and receive positive feedback from the <%=app_name%> community. If you think we should be featuring a particular member because of the quality of their reviews, the best way to bring them to our attention is to rate their story reviews.</p>
+
+<p><a name="member_rating_calculation"></a><span class="subhead_plain_bold">How are member levels calculated?</span>
+All members on the <%=app_name%> site are given a member level, indicated by one to five yellow bullets. Member levels are the average of all level values for a given member, and are based on member <em>activity</em>, overall <em>experience</em>, <em>transparency</em>,  <em>ratings</em>  from other members and profile <em>validation</em>. A one-bullet icon indicates a low member level and a four or five&ndash;bullet icon indicates a high member level. This member level is determined by five different sources: your site activity records (Activity and Transparency), your own self-assessment (Experience), ratings from other members (Ratings),  and <%=app_name%> staff (Validation). A detailed explanation of our member level system is provided below.</p>
+<p><em>BETA DISCLAIMER: All Member Levels on this beta site are based on preliminary data from a small number of reviewers. As such, they may not yet be accurate, and are shown here for demonstration purposes only. During this beta stage, member levels may be adjusted up or down independently of a member's performance, due to site-wide system corrections. Thank you for your patience and understanding during this testing period. Once we've tested our methodology and confirmed its reliability, we will finalize all member levels and remove this preliminary data disclaimer from our site. </em></p>
+
+<p><a name="how_to_become_a_member"></a><span class="subhead_plain_bold">How can I become a member?</span>
+If you are not yet a <%=app_name%> member, check the <%= link_to 'Sign Up and Log In', "/help/faq/" + (params[:popup] ? "?popup=true#sign_in_registration" : "#sign_in_registration") %> section of our General FAQ.</p>
+
+<p><a name="suggestions_problems"></a><span class="subhead_plain_bold">How can I make a suggestion or report a problem?</span>
+To help us improve our service, please click &quot;Suggestions&quot; on the left sidebar of our site, or at the bottom of any of our forms. To email us about problems that need to be fixed right away, email us at <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>, or click &quot;Report a Problem&quot; in our forms. Thanks for your patience during this beta phase.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2 style="margin-bottom:12px;"><a name="view_member_report" id="view_member_report"></a><a name="view_member_profile"></a>Viewing a Member Profile</></a></h2>
+
+<p><a name="member_profile"></a><span class="subhead_italic">Member Profile</span>
+Each Member Profile has four separate tabs:<br>
+<ul>
+<LI>&quot;<%= link_to( "Reviews", "#member_story_reviews" ) %>&quot; shows their story reviews
+<LI>&quot;<%= link_to( "Picks", "#member_picks" ) %>&quot; shows which stories they've starred
+<LI>&quot;<%= link_to( "Posts", "#member_submissions" ) %>&quot; all stories posted by that member
+<LI>&quot;<%= link_to( "Info", "#member_info" ) %>&quot; displays that member's basic information, such as occupation and interests, as well as their contact information
+<LI>&quot;<%= link_to( "Ratings", "#member_ratings" ) %>&quot; shows the ratings of their reviews and how they rated other members' reviews
+</ul>
+</p>
+<p>The toolbox on the right side of a member's profile contains the following four links:<br>
+<ul>
+<LI>"Web Page" opens a new window with the member's Web page
+<LI>"Email" lets you email the member directly from his or her profile using your <%=app_name%> log in email address
+<LI>"Contact" allows you reach the member from a separate email address
+<LI>"Share" lets you share the member's profile through another website
+</ul>
+
+Note that some members may have shared information about themselves for staff use only, even if it does not appear in their profile. Profiles can be viewed by both members and visitors, though visitors will not be able to view a member's email address and the "Contact" link will not be available.
+
+
+
+<p><a name="member_name"></a><span class="subhead_plain_bold">Member Name</span>
+Each Member Profile begins with the member's real name, at the top of the page. To insure the integrity of our service, we do not allow anonymous or pseudonymous members on our site. If you suspect that a member may be using a false identity, please <%= mail_to email_addr("editors"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+
+<p><a name="member_profile_status"></a><span class="subhead_plain_bold">Member Status</span>
+The membership status for each member is shown at the top of his or her profile. Options for this field include: Guest, Member, Reviewer, Founding Member, among others. The start date for this membership is also shown here.</p>
+
+<p><a name="member_roles_reviewer"></a><a name="member_roles_host"></a><a name="member_roles_advisor"></a><a name="member_roles_volunteer"></a><a name="member_roles_donor"></a><a name="member_roles_representative"></a><a name="member_roles_staff"></a><a name="member_roles_director"></a><a name="member_roles_partner"></a><a name="member_profile_roles"></a><span class="subhead_plain_bold">Roles</span>
+Roles played by each member are displayed in their Member Profile. Options include: Reviewer, Host, Advisor, Volunteer, Donor, Source Representative, Staff, Director and Partner. These roles are assigned by <%=app_name%> staff, based on member requests, contributions and qualifications. A member can play more than one role.</p>
+
+<p><a name="member_profile_about_me"></a><span class="subhead_plain_bold">About Me</span>
+Members are invited to write a short description about themselves and why they joined <%=app_name%>. This description aims to provide a general overview of this member's background and affinities. Due to space limitations, we only display the first couple hundred words of that description. A &quot;More&quot; button can display more, if needed.</p>
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+</p><p><a name="member_info"></a><span class="subhead_italic">Info</span>
+The Info section of a member profile holds their personal information, background, favorites and contact info:</p>
+
+<p><a name="member_profile_location"></a><span class="subhead_plain_bold">Location</span>
+Members are invited to include their location in their profile. Location info may include city, state and/or country tags. If no location info is available, this optional line is not shown in the member profile.</p>
+
+<p><a name="member_profile_occupation"></a><a name="member_profile_job_title"></a><span class="subhead_plain_bold">Occupation</span>
+Members are invited to include their occupation in their profile. Occupation info may include job title and organization name.</p>
+
+<p><a name="member_profile_publications"></a><span class="subhead_plain_bold">Publications</span>
+In the spirit of full disclosure, we ask all members to identify any publications reviewed by <%=app_name%> which they have worked with. If this member is a journalist, these may include their current or former employer, publications that have published their work, or a public blog that they are actively contributing to. If any of the cited publications is already up for review on <%=app_name%>, we include a link to its source profile.</p>
+
+<p><a name="member_profile_interests"></a><span class="subhead_plain_bold">Interests</span>
+Members are invited to include their interests in their profile. Interests may include news topics or sources which a member wants to find more about. If no interests is available, this optional line is not shown in the member profile.</p>
+
+<p><a name="member_profile_expertise"></a><span class="subhead_plain_bold">Expertise</span>
+Members are invited to include their expertise in their profile. Expertise may include any special knowledge or skills which could be helpful to our community. If no expertise info is available, this optional line is not shown in the member profile.</p>
+
+<p><a name="member_profile_affiliations"></a><span class="subhead_plain_bold">Affiliations</span>
+Members are invited to include their affiliations in their profile. Affiliations may include any organizations this member is affiliated with (e.g., professional, social, political, religious, etc.). If no affiliation is available, this optional line is not shown in the member profile.</p><td class="to_top">
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<p><a name="member_profile_background"></a><span class="subhead_italic">Background</span>
+The Background section of a member profile shows background information about this member, if available. We collect this background information in the spirit of transparency, which is a key objective of our social network. This information also lets us break down our member levels by viewpoint (e.g., favorite publications from left or right political viewpoints). This supports another important goal of this service, which is to help citizens compare a variety of viewpoints as part of a balanced news diet. In the same light, this background information is helpful to other members looking to better understand this member's point-of-view about the news.</p>
+<p> Note that members are under no obligation to fill any of these fields, nor are they required to show them once they fill them in. This background information is voluntarily provided by each member, on the honor system. <%=app_name%> does not verify that this information is correct, except as part of random validation checks, or if someone reports a problem about this member. In future versions of the service, we may invite other members to independently confirm a member's background, to enhance the accuracy of our news ratings. For more information on how this personal data is used, check our <%= link_to 'full privacy policy', "/about/privacy/", :class => "popup_link" %>.</p>
+<p>For tips about each background info item, click on the blue q, or keep reading. Background info items that have not been filled in are not shown in the profile. In future versions of this site, you may be able to click on any linked background tag to see top-rated news sources or stories from members who share that background tag.</p>
+
+<p><a name="member_profile_journalism_experience"></a><span class="subhead_plain_bold">Journalism</span>
+This field shows how much experience this member has as a journalist, if any. This information is voluntarily provided by members,  on the honor system. Options for this journalism field include: None, Less than 1 year, 1-4 years, 5-9 years, 10-20 years,  More than 20 years, Decline to state and Not sure. Note that this field is also used to calculate a member's experience level.</p>
+
+<p><a name="member_profile_education_experience"></a><span class="subhead_plain_bold">Education</span>
+This field shows the last year of schooling completed by this member, if provided. This information is voluntarily provided by members,  on the honor system. Options for this education field include: 1st-11th grade, High school graduate, Some college, College graduate, Post-graduate school and Decline to state. Note that this field is also used to calculate a member's experience level.</p>
+
+<p><a name="member_profile_news_experience"></a><span class="subhead_plain_bold">News</span>
+This field shows how often this member reads, watches or listens to the news, if provided. This information is voluntarily provided by members, on the honor system. Options for this news field include: Rarely or never, Less than 10 minutes per day, 10-30 minutes per day, 10-30 minutes per day, 30-60 minutes per day, 60-90 minutes per day, 90 minutes per day or more, Decline to state and Not sure. Note that this field is also used to calculate a member's experience level.</p>
+
+<p><a name="member_profile_internet_experience"></a><span class="subhead_plain_bold">Internet</span>
+This field shows how often this member uses the Internet, if provided. This information is voluntarily provided by members,  on the honor system. Options for this internet field include: Rarely or never, Less than 10 minutes per day, 10-30 minutes per day, 10-30 minutes per day, 30-60 minutes per day, 60-90 minutes per day, 90 minutes per day or more, Decline to state and Not sure. Note that this field is also used to calculate a member's experience level.</p>
+
+<p><a name="member_profile_language_main" id="member_profile_language_main"></a><a name="member_profile_languages"></a><span class="subhead_plain_bold">Languages</span>
+This field shows languages which this member speaks fluently, if provided. This information is voluntarily provided by members,  on the honor system. Options for this language field include: English-only, Chinese, French, German, Italian, Japanese, Korean, Portuguese, Russian, Spanish, Other and Decline to state.</p>
+
+<p><a name="member_profile_politics"></a><span class="subhead_plain_bold">Politics</span>
+This field shows this member's political viewpoint, if provided. This information is voluntarily provided by members,  on the honor system. Options for this political viewpoint field include: Neutral viewpoint, Far Left, Left, Center, Right, Far Right, Decline to state and Not sure. In future versions of this service, we will offer more nuanced ways for members to indicate their political viewpoints.</p>
+
+<p><a name="member_profile_age_group"></a><span class="subhead_plain_bold">Age</span>
+This field shows this member's age group, if provided. This information is voluntarily provided by members,  on the honor system. Options for this age group field include: 17 or under, 18-24, 25-34, 35-49, 50-64, 65 or over and Decline to state.</p>
+
+<p><a name="member_profile_gender"></a><span class="subhead_plain_bold">Gender</span>
+This field shows this member's gender, if provided. This information is voluntarily provided by members,  on the honor system. Options for this gender field include: female or male.</p>
+
+<p><a name="member_profile_income"></a><span class="subhead_plain_bold">Income</span>
+This field shows this member's total household income for last year, if provided. This information is voluntarily provided by members,  on the honor system. Options for this income field include: Less than $25K, $25K to $49K, $50k to $74K, $75K to $99K, $100K or more, Decline to state and Not sure.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<p><a name="member_profile_favorites"></a><span class="subhead_italic">Favorites</span>
+The Favorites section of a member profile shows at a glance some this member's favorite subjects and links, if available. These favorites are helpful to other members looking to find out more about this member. For tips about each type of favorite, click on the blue question marks<%= help_icon %>, or keep reading. Favorite items which are not filled in are not shown in the profile.</p>
+
+<p><a name="member_profile_subjects" id="member_profile_subjects"></a><a name="member_subject"></a><span class="subhead_plain_bold">Topics</span>
+Member profiles feature favorite topics. This can include standard news categories such as: World, U.S., Politics, Business, Sci/Tech, Health, etc. as well as a variety of specific news topics which are now being reviewed by our members.</p>
+
+<p><a name="member_profile_favorite_links"></a><span class="subhead_plain_bold">Favorite Links</span>
+Member profiles feature favorite links provided by our members. For example, a member may want to point to a reliable online reference or document which might help other members get a better understanding of the news. There is currently no limit to the number of links that can be included in this field.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="member_profile_contact_info"></a><span class="subhead_italic">Contact Info</span>
+The Contact Info section of a member profile shows how you can contact this member, if they have chosen to make that information available. This contact info can be helpful to other members looking to find out more about this member. For tips about each contact info item, click on the blue question marks<%= help_icon %>, or keep reading. Contact info items that have not been filled in are not shown in the profile.</p>
+
+<p><a name="member_profile_email_address"></a><span class="subhead_plain_bold">Email Address</span>
+If this member has chosen to show his or her email address, it is displayed here. Click on it to open an email window addressed to that user. For those members who do not wish to have their email address explicitly displayed on their profile, we offer a more private "Contact" feature. If you see a "Contact" link in the toolbox, you can click on it to send an email message to this member. Note that member email addresses and the "Contact" link are only visible to members, not to guests.</p>
+
+<p><a name="member_profile_web_address"></a><span class="subhead_plain_bold">Web Page</span>
+If this member has chosen to show his or her Web address, that full Web URL is displayed here. Click on it to open that Web page in a separate window.</p>
+
+<p><a name="member_profile_street_address"></a><span class="subhead_plain_bold">Address</span>
+If this member has chosen to show his or her street address, that full address is displayed here. For these members who do not wish to have their street address explicitly displayed on their profile, we offer a more private "Location" feature, which only lists their city, state and country.</p>
+
+<p><a name="member_profile_phone_number"></a><span class="subhead_plain_bold">Phone Number</span>
+If this member as chosen to show his or her phone number, that phone number is displayed here.</p>
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<p><a name="member_last_visit_date"></a><span class="subhead_plain_bold">Last Visit Date</span>
+Each time a member visits our site, this field is automatically updated with the date and time of this last visit.</p>
+
+<p><a name="member_last_edit_date"></a><span class="subhead_plain_bold">Last Edit Date</span>
+Each time the member profile is edited, this field is automatically updated with the date and time of this last edit.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="member_tools"></a><span class="subhead_italic">Tools</span>
+The Tools Box contains links to the member's <%= link_to( "Web Page", "#member_profile_my_web_page" ) %> and <%= link_to( "Contact", "#member_profile_contact_me" ) %> info, if enabled by the member. If it's your own profile page, there will also be an <%= link_to( "Edit", "#member_edit_my_profile_link" ) %> link to update your information.</p>
+
+<p><a name="member_profile_my_web_page"></a><span class="subhead_plain_bold">Web Page</span>
+Members are invited to provide a link to their own web page, if they have one. If a member has provided a Web page, a "Web Page" link will be shown in the toolbox of his or her profile. Clicking "Web Page" will open the member's Web page in a new window. If a member Web page does not seem to work, please contact that member, or email us at <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+
+<p><a name="member_profile_contact_me"></a><span class="subhead_plain_bold">Contact</span>
+Members are invited to allow other members to contact them by email. If a member has enabled this feature, a "Contact" link will be shown in the toolbox of his or her profile (only visible to members, not to visitors). Click on that link to send an email to that member. This should open a new email window, showing the member's email address. If a member's email address does not seem to work, please email us right away at <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>. A valid email address is required for all members, whether or not it is shared with other members.</p>
+
+<p><a name="member_edit_my_profile_link"></a><span class="subhead_plain_bold">Edit</span>
+When viewing your own profile, the toolbox includes an "Edit" link. Click on that link to edit your member profile (for more info, check our FAQ section on <a href="#edit_member_profile">Editing your Profile</a>).</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<p><a name="member_story_reviews"></a><span class="subhead_italic">Reviews</span>
+The Reviews section of a member profile shows at a glance the most recent story reviews from this member. We also feature the total number of stories reviewed to date. Click on any story title to see its reviews. For more info about story reviews, check our <%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>.</p>
+
+<p><a name="member_saved_stories"></a><a name="member_picks"></a><span class="subhead_italic">Picks</span>
+Members may pick stories they like, and show them as "Picks" on their profile page. To add a story to your Picks, click the star for that story (usually to the left of the story's title). To view your Picks, click the "Picks" tab in your member profile. To view another member's Picks, click the same tab in his or her member profile. To remove a story from your Picks, click on its yellow star.</p>
+
+<p><a name="member_submissions"></a><span class="subhead_italic">Posts</span>
+When a member posts a story to <%=app_name%>, it will appear in this list. This includes stories posted via a <%= link_to 'Bookmarklet', "/tools/bookmarklet/" + (params[:popup] ? '" target="_blank' : "") %>, the Post button, or from the <%=app_name%> button on another website. Also included on this list are any stories added in the review form's Link tab under Related Stories. These will be marked with a "Pending" label until they have been fully posted by filling in the rest of their information.</p>
+
+<p><a name="member_ratings"></a><span class="subhead_italic">Ratings</span>
+The Ratings tab allows you to view ratings given to that member's story reviews and ratings that member has given to other members' reviews. For a detailed listing of how other members have rated a member's reviews, click on "More" below the ratings breakdown in the lower right column of a member's profile. This listing shows each member's name and individual ratings, along with reviewed story titles. Note that these member levels are solely based on story reviews, and not on the other criteria described above.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<p><a name="member_profile_ratings" id="member_profile_ratings"></a><a name="member_levels"></a><span class="subhead_italic">Member Levels</span>
+The Levels section of a member profile shows that member's standing at a glance. Member level is determined by five different sources: your site activity records (Activity and Transparency), your own self-assessment (Experience), ratings from other members (Ratings), and <%=app_name%> staff (Validation). Detailed explanations of our member levels are provided below.</p>
+<p><em>BETA DISCLAIMER: All Member Levels on this beta site are based on preliminary data from a small number of reviewers. As such, they may not yet be accurate, and are shown here for demonstration purposes only. During this beta stage, member levels may be adjusted up or down independently of a member's performance, due to site-wide system corrections. Thank you for your patience and understanding during this testing period.</em>
+</p>
+
+<p><a name="my_rating_of_this_member"></a><span class="subhead_plain_bold">My Rating</span>
+If you have already rated a story review from this member, your average rating for that member is shown as a green rating icon in that member's profile. This score is called "Ratings" in our level breakdowns. Note that you can change your ratings at any time, by going back to the stories you have reviewed, and clicking on "Review this Story."</p>
+
+<p><a name="member_activity_rating"></a><span class="subhead_plain_bold">Activity</span>
+The Activity level provides a snapshot of this member's activity to date. It is based on the total number of story reviews and total answers provided in these reviews. We divide this total by a coefficient based on average number of answers provided by other members (this coefficient will be periodically adjusted based on actual data). This level is meant to indicate whether this member is an active participant in our community: a high level indicates active participation, whereas a low level indicates limited participation to date. This level is automatically calculated based on each member's activity records.</p>
+
+<p><a name="member_experience_rating"></a><span class="subhead_plain_bold">Experience</span>				   
+The Experience level provides a snapshot of this member's overall experience. It is an average of this member's self-evaluations for these criteria: journalism, education, news and online usage, as well as topic knowledge. This level is intended to measure how much experience this member can draw upon to evaluate the journalistic quality of a news story or source: a high level indicates extensive experience, whereas a low level indicates limited experience.</p>
+
+<p><a name="member_review_rating"></a><span class="subhead_plain_bold">Ratings</span>				   
+The Ratings level is based on how other members value this member's story reviews. We invite our members to rate story reviews, based on whether or not they find these reviews helpful. All these review ratings are then averaged together for each member. This rating is meant to indicate whether our community thinks this member is making helpful contributions: a high rating level indicates valued contributions, whereas a low rating level indicates contributions with limited value.</p>
+
+<p><a name="member_transparency_rating"></a><span class="subhead_plain_bold">Transparency</span>
+The Transparency level provides a snapshot of this member's openness in sharing information about him or herself. To encourage transparency in our community, we invite members to share as much personal information as they are comfortable with (e.g., occupation, location, journalistic experience, political viewpoint, etc.). This makes it possible to break down our ratings in many useful ways (e.g., top-rated sources by political viewpoint, top-rated stories by journalistic experience). It also makes it harder for malicious users to conceal their true identity in order to &quot;game the system.&quot; To that end, we calculate a transparency level, which is based on the total number of information items this member has chosen to show in their profile, divided by the total number of items that can be shown (this formula will be periodically adjusted based on actual data). The more information a member chooses to fill in and/or show in their profile, the higher their transparency level, and the more their votes will count. This level is automatically calculated based on each member's profile records.</p>
+
+<p><a name="member_profile_validation_rating"></a><span class="subhead_plain_bold">Validation</span> 
+The Validation level is based on random checks conducted by <%=app_name%> staff to validate member accounts. This is done to guarantee the reliability of our ratings, which is based on the quality of information provided by our members. From time to time, we verify that members are providing accurate information about themselves, and spot-check the following items: full name,  email, web page, expertise, occupation, politics, references, etc. As part of this validation process, we also track any problems reported by other members. If these problems appear serious, we conduct an extensive validation of that member's activity and background. All these validation checks are then averaged together for each member. This validation level is meant to indicate whether this member is providing accurate information and honoring our terms of service: a high level indicates this member has been fully validated, whereas a low level indicates errors or problems preventing us from fully validating that member. We only provide a validation level if we have sufficient information to support it. As a result, this level is sometimes left blank, until we have enough information to make a definitive validation.</p>
+
+<p><a name="member_profile_why_validation"></a><span class="subhead_plain_bold">Why is a validation required for posting comments or stories?</span> 
+To prevent spam on <%=app_name%>, we require all members to have their accounts validated by our staff before they can post comments or stories on our site. To have your account validated, please review two stories on our site, then <%= mail_to email_addr("community"), "email us", :subject => "#{app_name} validation request", :encode => "javascript" %> (be sure to include notes in your reviews, so we can evaluate both your ratings and written observations). To speed up your validation, we also encourage you to <%= link_to "fill in your profile", "#{my_account_members_path}#profile"%>, if you haven't already. We typically respond within one business day from your request for validation. To learn more about validation and member levels, read the section above.
+
+<p><a name="member_weight_value"></a><a name="member_average_rating"></a><span class="subhead_plain_bold">Level</span>
+The overall level for a member is based on a standard average of all levels described above (e.g., activity, experience, ratings, validation). This final member level is shown in large yellow bullets next to the member name in his or her member profile.</p>
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<p><a name="member_profile_stats" id="member_profile_stats"></a><a name="member_stats"></a><span class="subhead_italic">Member Stats</span>
+The Stats section of a member profile shows at a glance some useful statistics based on that member's activity. For example, we show the number of reviews and answers from a given member, or the number of members who have rated his or her story reviews.</p>
+<p>
+For info about each stat, click on the blue question marks<%= help_icon %>, or keep reading. Stat questions with no data are not shown in the profile.</p>
+
+<p><a name="member_profile_number_of_reviews"></a><span class="subhead_plain_bold">Story Reviews</span>				   
+This stat shows the total number of story reviews from this member since joining the service.</p>
+
+<p><a name="member_profile_number_of_answers"></a><span class="subhead_plain_bold">Story Answers</span>
+This stat shows the total number of answers provided by this member in story reviews. An answer can be a story rating, a comment, a tag or link. All answers from all reviews are counted since that member joined the service.</p>
+
+<p><a name="member_profile_number_of_ratings"></a><span class="subhead_plain_bold">Ratings Given</span>
+This stat shows the total number of ratings this member has given to other members.</p>
+
+<p><a name="member_profile_number_of_raters"></a><span class="subhead_plain_bold">Ratings Received</span>
+This stat shows the total number of other members which have rated reviews from this member.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="edit_member_profile"></a>Editing Your Profile</h2>
+
+<p><a name="how_to_edit_member"></a><span class="subhead_plain_bold">How do I edit my member profile?</span>
+Each <%=app_name%> member has a profile where they can share information about themselves. Member profiles are what make <%=app_name%> a community of unique members, rather than a collection of anonymous users. We encourage you to fill out your profile with as much information as you feel comfortable. The more information you share, the higher your overall rating will be and the more weight your reviews will have. For detailed help about any information provided in a profile, click on the blue question marks<%= help_icon %>, or keep reading this FAQ.</p>
+<p>To edit your member profile, click "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" in the upper right corner of any page, or click "Edit" on your own profile page. This will take you to an edit form, where you can edit information in each of six tabs: "<%= link_to "Account", "#member_account_tab" %>", "<%= link_to "Profile", "#member_profile_tab" %>", "<%= link_to "Emails", "#member_emails_tab" %>", "<%= link_to "Background", "#member_background_tab" %>", "<%= link_to "Picture", "#member_picture_tab" %>", and "<%= link_to "Contact Info", "#member_contact_info_tab" %>". Click on any of these tabs to edit the information in that category.</p>
+<p>Check "Show" next to each information item you wish to show in your profile. Any information left unchecked will remain private (see our <%= link_to 'Privacy Policy', "/about/privacy/", :class => "popup_link" %>). Required questions are marked with an asterisk (*), all others are optional. For edit tips, click on the blue question marks<%= help_icon %> in your edit form (or keep reading). If you're not sure how to fill in your member profile, check this example of a <a href="/members/fabrice-florin" target="_blank">fully edited profile</a>.</p>
+
+<p><a name="view_my_profile_edit"></a><span class="subhead_plain_bold">How can I view my profile?</span>
+To see your own member profile, simply click on  &quot;View My Profile&quot; at the top of your edit form, next to your name. This will open your profile in a new window.</p>
+<p>You can also view your profile anywhere on our site by clicking on your member name in the upper right corner of the page.</p>
+
+<p><a name="show_member_info"></a><span class="subhead_plain_bold">Show</span>
+Please check &quot;Show&quot; next to each information item you wish to show in your profile. The more information you share, the more your ratings will count. Any information left unchecked will remain private, except for your full name (see our <%= link_to 'Privacy Policy', "/about/privacy/", :class => "popup_link" %>).</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="member_account_tab"></a><span class="subhead_italic">Account</span>
+This tab includes your name, email address, and where you can change your password. It also includes membership information that is automatically included in your member profile and updated by <%=app_name%> staff as well as your main preferences for this site, such as allowing other members to contact you, listing your name in our member directory, or allowing your profile to be seen by non-members.</p>
+<p>Your preference settings will only be used for purposes you specifically authorize (see our <%= link_to 'Privacy Policy', "/about/privacy/", :class => "popup_link" %>). If you have any questions about your preferences, your account, or to suggest a correction please email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+
+<p><a name="member_real_name"></a><span class="subhead_plain_bold">Full Name*</span>
+Your name appears at the top of the page, as provided during registration. Please make sure this is your full name. This is a required field. To insure the integrity of our service, we do not allow anonymous or pseudonymous members on our site at this time. Your full name (or email address) is also required to log in on our beta site.</p>
+<p>If by chance your full name is already taken by another member, a number may be automatically be added at the end of your last name. If you prefer, you can delete that number and add your middle name, initial or nickname between your first and last name.</p>
+<p>Your full name will appear in each of your reviews and comment posts. If you do not want your full name to be used, and would like to cancel your account, please email us at <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+
+<p><a name="member_email_address"></a><span class="subhead_plain_bold">Email Address*</span>
+Your email address appears at the top of the page, as provided during registration. Please make sure this is your correct address. This is a required field. Your email (or full name) is also required to log in on our beta site.</p>
+<p>If you need to update your email address, please do it right away. If your new email address is not accepted, you may have entered it incorrectly  (correct format: myname@mysite.com). If you have another account on <%=app_name%> with the same email address, you cannot use it for both accounts. Make sure your email is valid, as it is our only way to contact you. If you have any questions about your email,  please email us at <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+<p>Your email address will only be used for purposes you specifically authorize (see our <%= link_to 'Privacy Policy', "/about/privacy/", :class => "popup_link" %>). If you are a registered member, your email address will be used for identification purposes during the sign-in process, and to inform you about any changes to your account or new developments at <%=app_name%>. All members are included in our general mailing list, but you can unsubscribe from our general mailings by unchecking "Weekly Newsletter" in the My Membership section of your Profile Edit Form (see below).</p>
+<p>If you wish to show your email address in your profile, check &quot;Show&quot; next to your email. If you do not wish to show your email in your profile, but would like to allow other members to contact you, uncheck &quot;Show&quot; next to your email, then check &quot;Contact Me&quot; in the Preferences section (see below). Note that elect to show your email address, it will only be visible to other members, not to guests.</p>
+
+<p><a name="member_change_password"></a><span class="subhead_plain_bold">Change Password</span>
+To change your password, simply type your <em>new</em> password in both of the provided text boxes. In case you ever forget it, you can use the "Forgot your Password?" link below the Log In button on the Log In page.</p>
+
+<p><a name="member_show_profile"></a><span class="subhead_plain_bold">Who Can See My Profile?</span>
+This controls who can visit your member profile page. There are two levels of access:
+<ul>
+	<li>Everyone (public) &ndash; Your profile page, RSS feeds and member widgets are avaliable to non-<%=app_name%> members as well as search engines. If you do not want non-members and search engines to view your profile page and feeds, then select Members Only. (This is the default setting. To check your setting, click "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>.")</li>
+	<li>Members Only &ndash; Only <%=app_name%> members can visit your page, and they have to be logged in to gain access. Your member RSS feeds and widgets will not be available to anyone.</li>
+</ul>
+</p>
+
+<p><a name="member_list_me"></a><span class="subhead_plain_bold">List Me</span>
+Checking the "List Me" box allows your name to be listed in the member directory of our beta site. This also allows <%=app_name%> staff to feature your name in the member section or <%=app_name%> home page, to reward your great work. If you do not wish to be listed or featured on our beta site, simply uncheck "List Me."</p>
+
+<p><a name="member_status"></a><span class="subhead_plain_bold">Member Status</span>
+Your membership status is shown under your name on your profile page. This status is either automatically updated by our system, or manually adjusted by <%=app_name%> staff to reflect changes in your membership. If you have any questions about your account status, or to suggest a correction, please email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>.</a></p>
+
+<p><a name="member_roles_reviewer"></a><a name="member_roles_host"></a><a name="member_roles_advisor"></a><a name="member_roles_volunteer"></a><a name="member_roles_donor"></a><a name="member_roles_representative"></a><a name="member_roles_staff"></a><a name="member_roles_director"></a><a name="member_roles_partner"></a><a name="member_roles"></a><span class="subhead_plain_bold">Member Roles</span>
+Your <%=app_name%> member roles are shown here, as well as in your Member Profile. Options include: Reviewer, Host, Advisor, Volunteer, Donor, Source Representative, Staff, Director and Partner. These roles are assigned by <%=app_name%> staff, based on member requests, contributions and qualifications. A member can play more than one role. Members may be listed under these categories in <%=app_name%> member listings. Over time, we expect to offer a variety of other member roles. If you have any questions about your roles, to sign up for a new role or to suggest a correction, please <%= mail_to email_addr("editors"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+
+<p><a name="member_start_date"></a><span class="subhead_plain_bold">Member Start Date</span>
+The start date for your membership is shown here. This is the date when you originally signed up with <%=app_name%>.</p>
+
+<p><a name="member_last_visit_date"></a><span class="subhead_plain_bold">Last Visit Date</span>
+Each time you visit our site, this field is automatically updated with the date and time of your last visit.</p>
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="member_profile_tab"></a><span class="subhead_italic">Profile</span>
+This tab includes personal information that you'd like displayed on your member profile page, including an About Me section, your occupation, affiliations, interests, expertise, and favorite links and topics.</p>
+<p>All fields below are optional. For tips about each profile info item, click on the blue question marks<%= help_icon %>, or keep reading. If you wish to show any profile info item in your profile, check "Show" next to that item. Profile info items that have not been filled in and checked are not shown in your profile and are only available to <%=app_name%> staff. You're under no obligation to fill any of these fields, nor are you required to show them once you fill them in.</p>
+<p>For more information on how this personal data is used, check our <%= link_to 'full privacy policy', "/about/privacy/", :class => "popup_link" %>. If you have any questions about your preferences, your account, or to suggest a correction please email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+
+<p><a name="member_about_me"></a><span class="subhead_plain_bold">About Me</span>
+Write a short description about yourself &ndash; and why you joined <%=app_name%> (max 250 words). This description is intended to provide a general overview of your background and affinities.</p>
+
+<p><a name="member_web_address"></a><span class="subhead_plain_bold">Web Page</span>
+If you have your own Web page or blog, enter it here. Copy your complete Web address or URL from your web browser and paste it here. Some browsers let you drag a page URL directly from the address bar to this field.</p>
+<p>Once you have filled in your Web address, a "Web Page" link will be shown in the toolbox on your profile page and the full URL will be displayed in the Contact Info section. Other members can click on either of these links to open your Web page in a new window. Be sure  "Show" is checked or your Web page link won't be displayed.</p>
+<p>If you have any questions, email us at <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+
+<p><a name="member_facebook_profile"></a><span class="subhead_plain_bold">Facebook Public Profile URL</span>
+If you have linked your <%=app_name%> and Facebook accounts together, a link to your Facebook Public Profile will be displayed
+on your <%=app_name%> member profile page. If you prefer not to display this link, uncheck the "Show" box (found under your Profile tab of your My Accounts page).</p>
+
+<p>To link your <%=app_name%> and Facebook accounts, click the Facebook Connect button on your My Accounts page, or on the <%=app_name%> Log In page.</p> 
+</p>
+
+<p><a name="member_occupation"></a><a name="member_job_title"></a><span class="subhead_plain_bold">Occupation</span>
+Please enter your occupation or job title. For example, if you're a journalist, your occupation could be: Writer, Reporter, Host, Photographer, Editor, etc.</p>
+
+<p><a name="member_company"></a><span class="subhead_plain_bold">Organization</span>
+Please enter your company or organization name. If you are a student, enter your school name. If you are self-employed, you do not need to fill in this field.</p>
+
+<p><a name="member_publications"></a><span class="subhead_plain_bold">Affiliated Sources</span>
+In the spirit of full disclosure, please identify any publications reviewed by <%=app_name%> which you have worked with. If you are a journalist, this may include your current or former employer, publications that have published your work, or a public blog that you are actively contributing to.</p>
+<p>As you type in the name of a publication, those sources in the <%=app_name%> database will be suggested in a drop-down menu. If your publication does not appear in the drop-down menu, you can type it manually, then press Enter or click the <%= image_tag('icons/add.png', :alt => 'Add', :size => '13x13') %> symbol when you're done. To remove an affiliated source, click the <%= image_tag('icons/delete.png', :alt => 'Delete', :size => '13x13') %> to the right of the source you want to remove.</p>
+
+<p><a name="member_affiliations"></a><span class="subhead_plain_bold">Other Affiliations</span>
+List any organizations you're affiliated with (e.g., professional, social, political, religious, etc.).</p>
+
+<p><a name="member_interests"></a><span class="subhead_plain_bold">Interests</span>
+List news topics or sources which interest you most (separate each item with a comma). Interests may include news topics or publications which you would like to find more about.</p>
+
+<p><a name="member_expertise"></a><span class="subhead_plain_bold">Expertise</span>
+List any special areas of expertise (separate each item with a comma). Expertise may include any special knowledge or skills which could be helpful to our community.</p>
+
+<p><a name="member_favorite_links"></a><a name="member_favorites"></a><span class="subhead_plain_bold">Favorite Links</span>
+Share your favorite links with other members. For example, a you may want to point to a reliable online reference or document which might help other members get a better understanding of the news.</p>
+<p>To enter the link, first type the URL, followed by a space, and then the name and an optional description of the website. Enter one link per line. For example:
+<div style="margin:5px 0 10px 15px">
+http://www.wikipedia.com Wikipedia - a great resource<br>
+http://google.com A great search engine
+</div>
+These would then appear on your profile page as:
+<div style="margin:5px 0 10px 15px">
+<%= link_to "Wikipedia - a great resource", "http://www.wikipedia.com", :target => "_blank" %><br>
+<%= link_to "Google", "http://google.com", :target => "_blank" %><br>
+</div>
+
+There is currently no limit to the number of links that can be included in this field.</p>
+
+<p><a name="member_topics"></a><span class="subhead_plain_bold">Favorite Topics</span>
+Share some of your favorite topics with other members. This is helpful to other members looking to find out more about you.</p>
+<p>These topics can include standard news categories such as: World, U.S., Politics, Business, Sci/Tech, Health, etc. as well as a variety of specific news topics which are now being reviewed by our members. As you type in a topic, current <%=app_name%> topics will be suggested in a drop-down menu.</p>
+<p>If your favorite topic does not appear in the drop-down menu, you can type it manually, then press Enter or click the <%= image_tag('icons/add.png', :alt => 'Add', :size => '13x13') %> symbol when you're done. To remove a topic, click the <%= image_tag('icons/delete.png', :alt => 'Delete', :size => '13x13') %> to the right of the topic you want to remove.</p>
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="member_emails_tab"></a><span class="subhead_italic">Emails</span>
+This tab includes settings for receiving our daily and weekly newsletters and which email notifications you want to receive. If you have any questions about your preferences, your account, or to suggest a correction please email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+
+<p><a name="member_email_subscriptions"></a><span class="subhead_plain_bold">Email Subscriptions</span>
+<p>This section allows you to change your subscriptions to our daily, weekly and special notices newsletters.
+</p>
+
+<p><a name="member_mynews_newsletter"></a><span class="subhead_plain_bold">MyNews Daily Email</span>
+Checking the "MyNews Daily Email" box allows <%=app_name%> to send you a daily selection of news and opinions compiled from the topics, sources, members and feeds you're following on your MyNews page. It is sent every day at about <%= Newsletter.delivery_time(Newsletter::MYNEWS) %>. If you do not wish to receive the MyNews Daily Email, simply uncheck "MyNews Daily Email."</p>
+
+<p><a name="member_daily_newsletter"></a><span class="subhead_plain_bold">Daily Newsletter</span>
+Checking the "Daily Newsletter" box allows <%=app_name%> to send you a daily selection of news and opinions from our most trusted sources. Includes today's Most Recent and Most Trusted stories and is sent every day at about <%= Newsletter.delivery_time(Newsletter::DAILY) %>. If you do not wish to receive the Daily Newsletter, simply uncheck "Daily Newsletter."</p>
+
+<p><a name="member_weekly_newsletter"></a><span class="subhead_plain_bold">Weekly Newsletter</span>
+Checking the "Weekly Newsletter" box allows <%=app_name%> to send you a weekly selection of quality news and opinions, based on ratings from members like you. Includes this week's Most Recent and Most Trusted stories, as well as helpful tips and news about <%=app_name%>. <%= Newsletter.humanized_dispatch_time(Newsletter::WEEKLY)%>. We highly recommend this option, so you can stay up-to-date. If you do not wish to receive the Weekly Newsletter, simply uncheck "Weekly Newsletter."</p>
+
+<p><a name="member_additional_email"></a><span class="subhead_plain_bold">Special Notices</span>
+From time to time, we may send out additional emails to you with helpful tips and news about <%=app_name%>. If you do not wish to receive these notices, simply uncheck this box.</p>
+
+<p><a name="member_email_format"></a><span class="subhead_plain_bold">Email Format</span>
+If you prefer to receive your <%=app_name%> Daily Newsletter and/or Weekly Newsletter with HTML formatting (which includes clickable links, styled text, and graphical ratings), then click on "HTML" (recommended). If you prefer to read it as plain text with no images, click on "Plain text".</p>
+
+<p><a name="member_email_notifications"></a><span class="subhead_plain_bold">Email Notifications</span>
+<p><%=app_name%> sends you an email so you can be informed when another member reviews a story you've reviewed, posted, or starred; edits a story you posted or edited; or replies to a comment you made, replied to, or 'like'. There are currently eight types of notifications; we will send you an email when someone:
+<ul>
+<li><strong>reviews a story you posted</strong> &ndash; you will receive an email each time another member reviews a story you posted, even if that review has no notes, comments, quotes or links.</li>
+<li><strong>edits a story you posted or edited</strong> &ndash; you will receive an email each time another member edits a story (e.g., adds more topics or other story info) you posted or last made changes on.</li>
+<li><strong>reviews a story you have also reviewed</strong> &ndash; you will receive an email if another member reviews a story you previously reviewed, but only if their review includes notes, comments, links, or quotes.</li>
+<li><strong>reviews a story you starred</strong> &ndash; you will receive an email if another member reviews a story you've starred (by clicking the star, usually to the left of the story's title), but only if their review includes notes, comments, links, or quotes.</li>
+<li><strong>replies to a comment you made</strong> &ndash; you will receive an email if another member replies to a comment you made on a story or topic page.</li>
+<li><strong>replies to a comment you replied to</strong> &ndash; you will receive an email if another member replies to a comment you previously replied to.</li>
+<li><strong>'likes' a comment you made</strong> &ndash; you will receive an email if another member clicks 'like' on a comment you made.</li>
+<li><strong>replies to a comment you 'like'</strong> &ndash; if you click 'like' on a comment and another member replies to that comment, you will receive an email.</li>
+</ul>
+The email notifications will include any notes or comments from that member. If the notification is for a story review or comment it will include <%=app_name%>'s rating if that story has <%= SocialNewsConfig["min_reviews_for_story_rating"] %> or more reviews. If the notification is for a review it will also include the member's overall rating.</p>
+
+<p>If you don't want to receive any of these notifications, unncheck the box next to that option in the <%= link_to 'Emails tab', "/members/my_account/" + (params[:popup] ? '#emails" target="_blank' : "#emails") %> of your account. Be sure to click on the "Save" button to save your changes.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="member_background_tab"></a><span class="subhead_italic">Background</span>
+The Background section includes demographic and other background information, for statistical evaluation purposes. We collect this background information in the spirit of transparency, which is a key objective of our social network. This information also lets us break down our member levels by viewpoint (e.g., favorite publications from left or right political viewpoints). In future versions of this site, you may be able to click on any linked background tag to see top-rated news sources or stories from members who share that background tag. This supports another important goal of this service, which is to help citizens compare a variety of viewpoints, as part of a balanced news diet. In the same light, this background information is also helpful to other members looking to better understand your point-of-view about the news.</p>
+<p>All fields below are optional. For tips about each background info item, click on the blue question marks<%= help_icon %>, or keep reading. If you wish to show any background info item in your profile, check "Show" next to that item. Background info items that have not been filled in and checked are not shown in your profile and are only available to <%=app_name%> staff. You're under no obligation to fill any of these fields, nor are you required to show them once you fill them in. This background information is voluntarily provided you, on the honor system. <%=app_name%> does not verify that this information is correct, except as part of random validation checks, or if someone reports a problem about a member. In future versions of the service, we may invite other members to independently confirm a member's background, to enhance the accuracy of our news ratings. For more information on how this personal data is used, check our <%= link_to 'full privacy policy', "/about/privacy/", :class => "popup_link" %>.</p>
+
+<p><a name="member_news_experience"></a><span class="subhead_plain_bold">News</span>
+<em>How often do you read, watch or listen to the news?</em><br>
+Select how often you read, watch or listen to the news, on an average day. Options for this news field include: Rarely or never, Less than 10 minutes per day, 10-30 minutes per day, 10-30 minutes per day, 30-60 minutes per day, 60-90 minutes per day, 90 minutes per day or more, Decline to state and Not sure. Note that this field is also used to calculate a member's experience level.</p>
+
+<p><a name="member_internet_experience"></a><span class="subhead_plain_bold">Internet</span>
+<em>How often do you use the Internet?</em><br>
+Select how often you use the Internet, on an average day. Options for this Internet field include: Rarely or never, Less than 10 minutes per day, 10-30 minutes per day, 10-30 minutes per day, 30-60 minutes per day, 60-90 minutes per day, 90 minutes per day or more, Decline to state and Not sure. Note that this field is also used to calculate a member's experience level.</p>
+
+<p><a name="member_education_experience"></a><span class="subhead_plain_bold">Education</span>
+<em>What is the last year of schooling that you completed?</em><br>
+Select the last year of schooling you completed. Options for this education field include: 1st-11th grade, High school graduate, Some college, College graduate, Post-graduate school and Decline to state. Note that this field is also used to calculate a member's experience level.</p>
+
+<p><a name="member_journalism_experience"></a><span class="subhead_plain_bold">Journalism</span>
+<em>How much experience do you have as a journalist? (if any)</em><br>
+Select much experience you have as a journalist, if any. Options for this journalism field include: None, Less than 1 year, 1-4 years, 5-9 years, 10-20 years,  More than 20 years, Decline to state and Not sure. Note that this field is also used to calculate a member's experience level.</p>
+
+<p><a name="member_language_main" id="member_language_main"></a><a name="member_languages"></a><span class="subhead_plain_bold">Languages</span>
+<em>Besides English, what language do you speak fluently (if any)?</em><br>
+Select which languages you speak fluently, besides English. Options for this language field include: English-only, Chinese, French, German, Italian, Japanese, Korean, Portuguese, Russian, Spanish, Other and Decline to state.</p>
+
+<p><a name="member_politics"></a><span class="subhead_plain_bold">Politics</span>
+<em>What are your political views? (if any)</em><br>
+Select your overall political viewpoint, if any. Options for this political viewpoint field include: Neutral viewpoint, Far Left, Left, Center, Right, Far Right, Decline to state and Not sure. In future versions of this service, we will offer more nuanced ways for members to indicate their political viewpoints.</p>
+
+<p><a name="member_age_group"></a><span class="subhead_plain_bold">Age</span>
+<em>What is your age group?</em><br>
+Select your age group, if provided. Options for this age group field include: 17 or under, 18-24, 25-34, 35-49, 50-64, 65 or over and Decline to state.</p>
+
+<p><a name="member_gender"></a><span class="subhead_plain_bold">Gender</span>
+<em>What is your gender?</em><br>
+Select your gender: female or male or Decline to state.</p>
+
+<p><a name="member_income"></a><span class="subhead_plain_bold">Income</span>
+<em>Last year, what was your total household income?</em><br>
+Select your total household income for last year. Options for this income field include: Less than $25K, $25K to $49K, $50k to $74K, $75K to $99K, $100K or more, Decline to state and Not sure.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="member_picture_tab"></a><a name="member_my_picture"></a><span class="subhead_italic">Picture</span>
+If you like, you may upload your picture to appear in your member profile. Note that the image must be smaller than 500KB (it will get resized to a maximum of 200x250 in your member profile). Please do not post offensive pictures, as requested in our terms of service.</p>
+<p>If you've linked your <%=app_name%> and Facebook accounts via <%= link_to 'Facebook Connect', "/help/" + (params[:popup] ? '?popup=true#facebook' : "#facebook") %>, you can import your Facebook profile picture with a <%= link_to 'single click', "/help/" + (params[:popup] ? '?popup=true#facebook_import_picture' : "#facebook_import_picture") %>.
+
+<p>To remove your profile picture, click the <%= image_tag('icons/delete.png', :alt => 'Delete') %> above your picture.
+</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<p><a name="member_contact_info_tab"></a><span class="subhead_italic">Contact Info</span>
+The Contact Info tab tells <%=app_name%> staff how to contact you. Some general contact info, such as your city and state, could also be helpful to other members looking to find out more about you. For tips about each contact info item, click on the blue question marks<%= help_icon %>, or keep reading.</p>
+<p>If you wish to show any contact info item in your profile, check "Show" next to that item. Contact info items that have not been filled in and checked are not shown in your profile and are only available to <%=app_name%> staff. Your contact info will only be used for purposes you specifically authorize (see our <%= link_to 'Privacy Policy', "/about/privacy/", :class => "popup_link" %>).</p>
+
+<p><a name="member_zip_code" id="member_zip_code"></a><a name="member_street_address2" id="member_street_address2"></a><a name="member_street_address"></a><span class="subhead_plain_bold">Street Address and Zip Code</span>
+You are welcome to include your street address and zip code here, if you like. This optional field is for future use, in case we need to mail you any materials related to <%=app_name%>. If you do not wish to share your street address, we recommend that you provide a general location (city, state and country), so we know where you're based. If you wish to show any contact info item in your profile, check &quot;Show&quot; next to that item. Contact info items that have not been filled in and checked are not shown in your profile.</p>
+
+<p><a name="member_country" id="member_country"></a><a name="member_state" id="member_state"></a><a name="member_city"></a><span class="subhead_plain_bold">City, State and Country</span>
+Where are you based? Select your country, state, city or other location. If you wish to show any contact info item in your profile, check &quot;Show&quot; next to that item. Contact info items that have not been filled in and checked are not shown in your profile.</p>
+
+<p><a name="member_phone_number"></a><span class="subhead_plain_bold">Phone Number</span>
+If you are a regular contributor to <%=app_name%>, you may want to include your phone number here, so our staff may reach you in a pinch. If you wish to show any contact info item in your profile, check &quot;Show&quot; next to that item. Contact info items that have not been filled in and checked are not shown in your profile.</p><span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="sign_in_registration"></a>Sign Up and Log In</h2>
+
+<p><a name="join"></a><span class="subhead_plain_bold">How can I join <%=app_name%>?</span>
+To join <%=app_name%> as a member, simply click <%= link_to 'here', "/members/new/" + (params[:popup] ? '" target="_blank' : "") %> to sign up. If you have already received an invitation, click on the link in your email invitation and follow the instructions on our welcome page. This invitation link can only be used once, so please sign up right away and do not forward it to anyone.</p>
+
+<p><a name="invitation_expired"></a><span class="subhead_plain_bold">What if my invitation expired?</span>
+Your invitation link to join <%=app_name%> can only be used once. Once it has been used to activate a member account, it automatically expires. If you clicked your invitation link a second time, you will see a message that your invitation has expired. If you've already signed up, click on "Log In" in the upper right corner of the page. If you were not able to log in, please email us at <%= mail_to email_addr("invite"), email_addr("invite"), :subject => "#{app_name} help request", :encode => "javascript" %> to request another invitation. Be sure to include your pre-approved member name and email address from our first invitation, so we can validate your request.</p>
+
+<p><a name="register"></a><span class="subhead_plain_bold">How do I sign up on <%=app_name%>?</span>
+If you received an email invitation asking you to sign up on our site, go to the link in your invitation, and click on the "Sign Up" link at the top of the left sidebar, right below the log in link. Then enter your full name, your email address and a password of your choice. If you've already signed up before, you do not need to sign up again; click on "Log In" instead. If you did not receive an invitation, simply click <%= link_to 'here', "/members/new/" + (params[:popup] ? '" target="_blank' : "") %> to sign up.</p>
+
+<p><a name="sign_in"></a><span class="subhead_plain_bold">How do I log in to <%=app_name%>?</span>
+To log in to <%=app_name%>, click on the "Log In" link in the upper right corner of the page. Then enter your or email address and password. If you're already logged in, your member name will be displayed, along with a link to change your account settings and profile. If you haven't signed up as a <%=app_name%> member yet, read the above paragraph.</p>
+
+<p><a name="sign_out"></a><span class="subhead_plain_bold">How do I log out from <%=app_name%>?</span>
+To log out from <%=app_name%>, click on the "Log Out" link in the upper right corner of the page. If you are using a public computer, we recommend you always log out at the end of a session, to protect your privacy. You can log in again using the same procedure as above.</p>
+
+<p><a name="lost_password"></a><span class="subhead_plain_bold">What if I forgot my password?</span>
+If you forget your password at anytime, click on "Forgot Your Password?" at the bottom of the Log in form. A new password will be emailed to the address you gave us earlier.</p>
+
+<p><a name="privacy_policy"></a><span class="subhead_plain_bold">What is your privacy policy?</span>
+<%=app_name%> treats your contact information as private and confidential. We will not provide your contact information to any other organization without your permission. We treat your ratings and comments as public information. We may, for example, make your comments available to the public, along with your state and country, but without ever disclosing your name, email address, or other personal information, unless you specifically authorize us to do so. For more information, check our <%= link_to 'full privacy policy', "/about/privacy/", :class => "popup_link" %>.</p>
+
+<p><a name="cancel_my_account"></a><span class="subhead_plain_bold">How do I cancel or delete my account?</span>
+To cancel or delete your beta site account, please <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>. We will delete your member account within 24 hours from your request. You will no longer have access this beta site.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2 style="margin-bottom:12px;"><a name="trusted_member"></a>Trusted Members</></a></h2>
+<p><a name="how_to_edit_member"></a><span class="subhead_plain_bold">What is a Trusted Member?</span>
+
+A Trusted Member is a reviewer on <%=app_name%> who has a member level of 3.0 or higher. Trusted Members typically participate often on the site, have received favorable ratings from other members, have filled out their member profile with information about themselves, and have received a validation score of 3.0 or more from <%=app_name%> staff. 
+
+<p><a name="trusted_member_benefits"></a><span class="subhead_plain_bold">What is the benefit of being a Trusted Member?</span>
+Trusted Members have led by example in our <%=app_name%> community, and we reward their efforts with special privileges. Trusted Members can:
+<ul>
+<li>Host a topic</li>
+<li>Host a discussion on a topic or story</li>
+<li>Be featured on our "Members" page</li>
+</ul></p>
+
+<p><a name="how_to_become_a_trusted_member"></a><span class="subhead_plain_bold">How do I become a Trusted Member?</span>
+There are several things you can do to increase your member level to a 3.0 or more:
+<ul>
+<li>Review frequently and thoroughly. The more often you review stories on <%=app_name%>, the more confidence we'll have in our ratings &ndash; and you'll increase your "Activity" score in the process. If your reviews are thoughtful and detailed, you'll receive high ratings from other <%=app_name%> members and staff.</li>
+<li>Fill out your member profile. We honor transparency. Help make our community more open and increase your "Transparency" and "Experience" scores by telling others about yourself.</li>
+<li>Post stories to the site. This will help diversify our story listings and help elevate your presence on the site.</li>
+</ul>
+Shortly after you've reviewed 10 or more stories, a <%=app_name%> staff member will evaluate your activity on the site and give you a "Validation" rating. If you've done some of the things listed above, you'll receive a 3.0 or more. If we want to see more of you, we'll send you an email with tips on how to boost your participation on the site, and reevaluate you when you've reviewed 50 stories.</p>
+
+<p><a name="commenting_on_story"></a><span class="subhead_plain_bold">How can I comment on a story?</span>
+To comment on a story, you must have a <%= link_to 'validation level', "#member_profile_validation_rating" %> of <%= SocialNewsConfig["min_validation_level_for_comments"] %> or more. We restrict commenting to these members out of a desire to keep the conversation civil, productive and fair. <%= link_to 'Read more about this policy', "#member_profile_why_validation" %>.</p>
+
+<p>Not a Trusted Member? <Click here> <%= link_to( "Click here", "#trusted_member" ) %> to learn how to become one.</p>
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<p><a name="question_not_answered"></a><span class="subhead_plain_bold">You didn't answer my question in this FAQ! What now?</span>
+Please send your additional questions, ideas and thoughts to <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>. We appreciate your interest in <%=app_name%> and your patience during this beta phase.</p>
+
+<p>
+To read about other aspects of our service, check our other help FAQs:<br>
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about <em>joining <%=app_name%></em> and <em>getting started</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to mynews_colors() +' FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about your <em>MyNews</em> and <em>My Network</em> pages</td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>posting forms</em></td></tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr></table>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<br />
+
+</div>
+
+</div>
+<div class="bottom"></div>
+</div>
+
+</div>

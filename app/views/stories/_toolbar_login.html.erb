@@ -1,0 +1,22 @@
+<div class="panel">
+<%#--	<h3 class="review_thanks" style="display:none;">Thanks for your review.</h3> --%>
+	<p>Please <strong>log in</strong> (or <a href="#" onclick="switch_popdown_form('sign_up'); return false">sign up</a>).</p>
+	
+	<p class="error hide"></p>
+	<p class="notice hide"></p>
+	
+	<%= render :partial => "members/toolbar_fb_connect" %>
+	
+	<% form_remote_tag :url => sessions_path(:format => :js),
+	  :success => "toolbar_form_response(request)",
+	  :failure => "toolbar_form_response(request, true)",
+	  :datatype => :json do -%>
+	  
+	  <div class="longform_window">
+	    <div class="longform">
+	      <%= render :partial => "sessions/log_in" %>
+	    </div>
+	  </div>
+</div>
+  
+<% end -%>

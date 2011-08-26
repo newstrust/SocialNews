@@ -1,0 +1,11 @@
+"<%=@feed.name%>" feed has been fetched successfully!
+<%if @bj_job -%>
+<%#-- NOTE: This task is still running, and hence finished_at value will not be ready, which is why we are using Time.now --%>
+It was submitted for fetch at <%=@bj_job.submitted_at%>.
+The fetch started at <%=@bj_job.started_at%> and ended at <%=Time.now%>. 
+<% end -%>
+
+You can view the feed page at <%=show_feed_url(@feed)%>.
+If you want to process the stories en masse, please visit the admin page at <%= url_for(:controller => "admin/feeds", :action => "show_recently_fetched_stories", :id => @feed.id, :only_path => false) %>
+
+- From your feed fetching friend!

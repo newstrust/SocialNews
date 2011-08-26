@@ -1,0 +1,10 @@
+<%- if !@member.follows_twitter_newsfeed? && (@member.validation_level >= 2) -%>
+<a name="twitter_feed_panel"></a>
+<div class="friends_box">
+  <div class="twitter_error_msg" id="twitter_unconnected">
+    <%=link_to(image_tag("/images/ui/twitter_connect.png", :title => "Click to connect your #{app_name} and Twitter accounts", :style => "float:left;padding-right:5px;"), "#", :onclick => "open_popup('#{twitter_authenticate_url}','', {height:400, width:780}); return false", :html => {"target" => "_blank"})%> Your <%=app_name%> and Twitter accounts are not yet connected. Click on the Twitter connect button and retry after that.
+    <%#= link_to_function "Cancel", "return fb_close_follow_friends_form()", :style => "float:right;margin-left:20px;" %>
+  </div>
+  <a href="#" onclick="return add_twitter_newsfeed(this)" class="twitter_feed" title="Add a feed of newslinks from your Twitter feed"></a>
+</div>
+<%- end -%>

@@ -1,0 +1,32 @@
+  <div class="span-16 white_box" style="clear:both">
+  <div class="top"></div>
+   <div class="wrapper comments" style="padding-bottom:15px;">
+    <div id="comment_thread" style="border-top:none;">
+        <%= javascript_include_tag('/javascripts/comments.js') %>
+    <div class="comments_permalink_nav">
+        <%- if @comment.parent -%>
+          <%= link_to_commentable_type(@comment.root,"Return To First Comment") %> <%= "or #{link_to_commentable_type(@comment)}" unless link_to_commentable_type(@comment).blank? %>
+          <div class="parent">
+            <%= render :partial => 'comment', :locals => { :comment => @comment.parent ,:hostable => nil } %>
+          </div>
+        <%- else -%>
+          <%= link_to 'Return to discussions list', discussions_comments_path %> <%= "or #{link_to_commentable_type(@comment)}" unless link_to_commentable_type(@comment).blank? %>
+        <%- end -%>
+   </div>  
+        <%= render :partial => 'comment', :locals => { :comment => @comment, :hostable => nil } %>
+        <%- content_tag :div, :id=> "comment_#{@comment.id}_thread", :index => '0' do -%>
+          <%= comment_thread_for(@comment.children) %>
+        <%- end -%>
+
+        <script type="text/javascript" charset="utf-8">
+            $(document).ready(function() {
+                assignFlags("<%= flags_url(:format => 'json') %>");
+                render_comment_thread();
+                toggleAllReplies();
+            });
+        </script>
+  
+      </div>
+     </div> 
+    <div class="bottom"></div>
+  </div>

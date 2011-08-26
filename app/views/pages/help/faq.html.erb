@@ -1,0 +1,564 @@
+<%- aname = app_name -%>
+<%- aslug = app_slug -%>
+
+<%- @title = "General FAQ" -%>
+<%= "<a name=\"top\"></a>" unless params[:popup] -%>
+
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior">
+
+<%= content_tag(:h1, @title + " <span class=\"small\">(Frequently Asked Questions)</span>") unless params[:popup] %>
+
+<p>Here are some frequently asked questions about <%=aname%>. Click on any question below to learn more about our service. If you still have questions, <%= mail_to email_addr("help"), "email us", :subject => "#{aname} help request", :encode => "javascript" %>.</p>
+<ul>
+<li><a href="#about_faq" class="subhead_plain_bold">About this FAQ</a></li>
+<li><a href="#about_us" class="subhead_plain_bold">About <%=aname%></a></li>
+<li><a href="#about_this_site" class="subhead_plain_bold">About this Site</a></li>
+<li><a href="#getting_started" class="subhead_plain_bold">Getting Started</a></li>
+<li><a href="#sign_in_registration" class="subhead_plain_bold">Sign Up and Log In</a></li>
+<li><a href="#facebook" class="subhead_plain_bold">Connect with Facebook</a> <span class="explanation">(Sign Up/Log In via Facebook)</span></li>
+<li><a href="#twitter" class="subhead_plain_bold">Linking to Twitter</a></li>
+<li><a href="#story_pages" class="subhead_plain_bold">Story Pages</a></li>
+<li><a href="#source_member_pages" class="subhead_plain_bold">Source and Member Pages</a></li>
+<li><a href="#our_tools" class="subhead_plain_bold">About our Tools</a></li>
+<li><a href="#community_questions" class="subhead_plain_bold">Community Questions</a></li>
+<li><a href="#technical_questions" class="subhead_plain_bold">Technical Questions</a></li>
+<!--  <li><a href="#about_our_reports" class="subhead_plain_bold">About our Reports</a></li> -->
+<li><a href="#partnering_with_us" class="subhead_plain_bold">Working with <%=aname%></a></li>
+</ul>
+
+<hr size="1" />
+
+<h2 style="margin-bottom:8px;"><a name="about_faq"></a>About this FAQ</h2>
+<p><a name="what_is_faq"></a><span class="subhead_plain_bold">What is this FAQ?</span>
+<br />
+This FAQ answers general questions about <%=aname%> and describes some of the basic aspects of our website for our members. If you're a member and you're seeking more specific information about using <%=aname%>, check our other FAQs:<br />
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to mynews_colors() +' FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about your <em>MyNews</em> and <em>My Network</em> pages</td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>submission forms</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr>
+</table>
+
+<p><a name="suggestion_problem"></a><span class="subhead_plain_bold">How can I make a suggestion or report a problem?</span>
+To help us improve our service, please click "Feedback" in the bottom navigation bar, anywhere on our site. To email us about issues that need to be fixed right away, email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{aname} help request", :encode => "javascript" %>. Thanks for your patience during our beta phase.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+
+<h2><a name="about_us"></a>About <%=aname%></h2>
+
+<p><a name="what_is_<%=aslug%>"></a><span class="subhead_plain_bold">What is <%=aname%>?</span>
+<p>
+This <%=aname%> code base is an open source version of the <%= link_to "NewsTrust.net", "http://newstrust.net", :target => "_blank"%> platform. 
+</p><p>
+<%= link_to "NewsTrust", "http://newstrust.net", :target => "_blank"%>is a nonprofit organization that helps people find good journalism online, so they can make more informed decisions as citizens. Their social news site, <%= link_to "NewsTrust.net", "http://newstrust.net", :target => "_blank"%> features a daily feed of quality news and opinions from mainstream and independent sources, based on ratings from their reviewers. NewsTrust's web review tools enable the public to evaluate accuracy, fairness, context and other core journalistic principles -- and help people become more discerning news consumers in the process. To find out more about NewsTrust, visit <%= link_to "their site", "http://newstrust.net", :target => "_blank"%>.
+</p><p>
+NewsTrust also offers a range of consulting services to organizations that wish to help their communities become better informed and more engaged about public issues. For example, NewsTrust provides development services to help your organization adapt this SocialNews code to create your own social news site. To inquire about these partner services, email NewsTrust at <%= mail_to "partners@newstrust.net", "partners@newstrust.net", :encode => "javascript" %>.
+</p><p>
+<%- if SocialNewsConfig["app"]["blog_url"] -%>
+<%= link_to 'Check our blog', SocialNewsConfig["app"]["blog_url"] + (params[:popup] ? '" target="_blank' : "") %> to hear about our latest developments.
+<%- end -%>
+</p>
+
+<p><a name="why_<%=aslug%>"></a><span class="subhead_plain_bold">Why did you start this service?</span>
+The recent explosion of new media outlets on the Web, along with the consolidation of big media and the decline of public trust, are creating serious problems for democracy &ndash; information overload, misinformation, public mistrust and civic apathy among them. Every day, hundreds of thousands of news stories and opinions are released on the Internet by wire services, newspapers, TV, radio, magazines, blogs and websites. An increasingly frustrated public struggles daily to assess their credibility, without effective tools to filter the best reporting, evaluate information quality and share trusted content with other citizens.</p>
+<p>
+<%=aname%> offers a practical and sustainable solution to address these issues, by providing a unique set of information filters, news literacy tools and a trust network for civic engagement.
+</p>
+
+<p><a name="what_is_mission"></a><span class="subhead_plain_bold">What is your mission?</span>
+<%=aname%>'s mission is to help people find and share quality journalism online, so they can make more informed decisions as citizens. <%=aname%> will accomplish its mission by empowering an online community of citizens, journalists and content experts to collaboratively evaluate the quality of journalism. To that end, the <%=aname%> service will provide:</p>
+<ul>
+<LI>a daily feed of top rated local news and opinions 
+<LI>a set of news literacy tools for evaluating journalistic quality
+<LI>online guides for developing information evaluation skills 
+<LI>a reputation database of news providers, edited by professionals
+<LI>comparisons in news coverage from multiple media outlets 
+<LI>an online feedback loop between journalists and the public
+</ul>
+<p>By tracking the quality of news media, <%=aname%> offers a unique opportunity for citizens to search for verified and valuable information online. Our tools make it possible to do this through reasonable inquiry rather than ideology, impulse or blind faith.</p>
+<p>
+Vast changes in news media in the past decade have shaken people's trust in their news providers. We think this non-partisan, community-based online network can bring about broad scale social change by using the "wisdom of the crowds" to improve the relationship between news media and the public.
+</p>
+
+<p><a name="who_is_<%=aslug%>"></a><span class="subhead_plain_bold">Who is behind <%=aname%>?</span>
+To be filled out
+</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="about_this_site"></a>About this Site</h2>
+<p><a name="what_is_service"></a><span class="subhead_plain_bold">What does the <%=aname%> service offer?</span>
+The <%=aname%> service offers both a website and news feeds (in email, RSS and widget formats). This high-quality selection of news and opinion is constantly updated, fully searchable, with links to featured stories and their sources. Posted stories are carefully researched and rated for facts, fairness and sourcing by citizen reviewers, content experts, practicing journalists and students. Our collective ratings, reviews and tags are then featured in our news feed, for online distribution by our members and partners.</p>
+
+<p><a name="what_news"></a><span class="subhead_plain_bold">What kinds of news will I find here?</span>
+<%=aname%> features an assortment of news and opinion from both mainstream and independent sources. We welcome submissions from a wide range of publication types (e.g., blogs, newspapers, radio and TV) and story types (e.g., breaking news, news reports, news analysis, op-eds, blog posts and editorials). <%=aname%> members are invited to post any English-language news item that is available online and that concerns the public interest. In general, we discourage submissions that are primarily of an entertainment or sensational nature, such as celebrity coverage or tabloid news (except for the purposes of identifying bad journalism). Check our <%= link_to("topics page", "/topics" + (params[:popup] ? '" target="_blank' : "" )) %> for a list of subjects that we tend to cove the most.</p>
+
+<p><a name="find_topic"></a><span class="subhead_plain_bold">How do I find news about a particular topic?</span>
+Use our top navigation bar to browse for stories in our five general subjects: World, U.S., Politics, Business, and Sci/Tech. The subject pages include a sidebar list of related topics. You can also see our complete list of topics by clicking "<%= link_to 'All Topics', "/topics" + (params[:popup] ? '" target="_blank' : "") %>" in the site map on the bottom of any page on our site. We add new topics all the time, and you're welcome to email us at <%= mail_to email_addr("editors"), email_addr("editors"), :subject => "#{aname} topic request", :encode => "javascript" %> if you feel we're missing an important one.</p>
+
+<p><a name="find_source"></a><span class="subhead_plain_bold">How do I find news from a particular source?</span>
+Click on the <%= link_to 'Sources', "/sources" + (params[:popup] ? '" target="_blank' : "") %> link on the site map at the bottom of  any page. Here you will find our trusted publications for each source type (Blogs, Magazines, Online news, etc.). Click "More" in these short listings to get a full listing of sources for that category. You can also search for a particular source using the search box at the top right of any <%=aname%> page.</p>
+
+<p><a name="how_we_pick_stories"></a><a name="editor_picks"></a><a name="how_we_pick"></a><span class="subhead_plain_bold">How are stories listed on <%=aname%>?</span>
+<%=aname%> listings feature stories posted and reviewed by our members, which include professional journalists and content experts. Stories are typically ranked according to the ratings they receive collectively from our members. A story's rating is based on the quality of the journalism, not just its popularity.</p>
+<p>
+Our news listings and feeds can be accessed on our website, in our email newsletters, in our RSS feeds, or in our widgets. Our website listings are updated continuously, 24/7. Our RSS feeds and widgets are updated every hour, and our email feeds are updated daily at 4 p.m. Eastern time. Generally speaking, top-rated stories (or stories from top-rated sources) are more likely to appear at the top of our feeds.</p>
+<p>
+We offer different types of listings and feeds for each subject and topic on our site, as described below:
+</p>
+
+<div class="sect_indent" style="margin-bottom:25px">
+  <p><a name="most_recent"></a><span class="subhead_italic_med">Most Recent</span>
+  The <em>Most Recent</em> listings feature the latest news and opinions posted and reviewed on our site, and are typically the first listings you will see on our home page and topic pages. These listings are sorted first by story date, then by story rating. For each date, rated stories are listed first (stories with <%= SocialNewsConfig["min_reviews_for_story_rating"] %> or more reviews, indicated by a green rating icon), then unrated stories (indicated by a gray rating icon), ranked by editorial priority, popularity and source rating. <em>Most Recent</em> listings are also available for each of our topics and sources, as well as on their corresponding widgets.</p>
+  
+  <p><a name="most_trusted"></a><span class="subhead_italic_med">Most Trusted</span>
+  The <em>Most Trusted</em> listings feature the top rated news and opinions posted and reviewed on our site. These listings are ranked by story rating for a particular time period (e.g., 7 days, 14 days, 30 days, depending on each feed's settings). Stories must have received at least <%= SocialNewsConfig["min_reviews_for_story_rating"] %> reviews to appear in this list. <em>Most Trusted</em> listings are also available for each of our topics and sources, as well as on their corresponding widgets. On topic pages, you can click on the <em>Most Trusted</em> tab to access this listing.</p>
+  
+  <p><a name="least_trusted"></a><span class="subhead_italic_med">Least Trusted</span>
+  The <em>Least Trusted</em> listings are just like <em>Most Trusted</em> listings, but sorted in reverse order. They feature the lowest rated stories posted and reviewed on our site for a particular time period (e.g., 7 days, 14 days, 30 days). Stories must have received at least <%= SocialNewsConfig["min_reviews_for_story_rating"] %> reviews to appear in this list. <em>Least Trusted</em> listings are also available for each of our topics, as well as on their corresponding widgets. On topic pages, you can click on the <em>Least Trusted</em> tab to access this listing.</p>
+  
+  <p><a name="stories_for_review"></a><a name="for_review"></a><span class="subhead_italic_med">For Review</span>
+  The <em>For Review</em> listings feature newly posted stories that do not yet have enough reviews to receive a rating. This listing is sorted by editorial priority (set by our hosts, editors or staff), then by story date and source rating (indicated by gray rating icons).</p>
+  
+  <p><a name="todays_feeds"></a><span class="subhead_italic_med">Today's Feeds</span> 
+  These automated listings feature popular stories of the day that are recommended by the "<%= link_to( "Smart Feeds", "#smart_feeds" ) %>" we follow, but that have not yet been posted on our site. These listings are sorted first by date, then by source or feed rating. Stories in these feeds are typically identified by a gray "Pending" label, to indicate that they still need to be posted by one of our members.</p>
+
+  <p><a name="mynews_listings"></a><span class="subhead_italic_med"><%= mynews_colors() %></span> 
+  We provide personalized news listings with our <%= link_to "MyNews", "/mynews/" + (params[:popup] ? '" target="_blank' : "") %> filtering application. This free service from <%=aname%> lets you create your own news page by following your favorite topics, sources, friends and feeds &ndash; including people you follow on Facebook and Twitter. Read more on our <%= link_to 'MyNews FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>.</p>
+</div>
+
+<p><a name="how_we_pick_sources"></a><span class="subhead_plain_bold">How do you pick which sources to feature on the <%=aname%> site?</span>
+Our highest rated sources are featured more prominently on our site, based on ratings from our members.  In order to be listed on these pages, publications must have a source rating of 3.0 or more, and must also have a minimum number of rated stories, which varies by category. To find out more about how we pick these sources, check the methodology sections on these pages.</p>
+
+<p><a name="other_languages"></a><span class="subhead_plain_bold">Will <%=aname%> be available in other languages?</span>
+Though we are initially launching the service in the English-language for a US audience, we welcome international participation right from the start. Once we have established our English service in the US, we plan to adapt it for other languages and world regions. Over time, we hope to tap the wisdom of citizens from around the world to provide a global filter for "news you can trust."</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="getting_started"></a>Getting Started</h2>
+<p><a name="how_to_start"></a><span class="subhead_plain_bold">How do I get started?</span>
+<%=aname%> is now available in read-only format to visitors, and in read-write format to members. To become a <%=aname%> member (enabling review and commenting privileges), you first need to sign up (see Sign Up section below). Once you are signed up, start by reviewing some of the featured stories on the home page. Be sure to bookmark this site and come back often. 
+</p>
+
+<p><a name="how_to_read"></a><span class="subhead_plain_bold">How can I read the stories featured on this site?</span>
+To read any story listed on <%=aname%>, click on its story title or on its "Review" link. This will take you to the full story on the site where it originally appeared. If you clicked "Review", the Review form on the Toolbar will open (or it will be in a pop-up window on sites that won't work with our Toolbar).</p>
+
+<p><a name="how_to_read_reviews" id="how_to_read_reviews"></a><span class="subhead_plain_bold">How can I read the reviews for stories on this site?</span>
+To check story reviews on our site, click on "See Reviews" next to any story title, or on its rating icon. This will take you to that story's review page, which features our best reviews, as well as background info for that story.</p>
+
+<p><a name="how_to_search"></a><span class="subhead_plain_bold">How do I search for news on this site?</span>
+Enter the keywords you want to search for in the "Search for" box on the top right corner of any page on our site. Then press the Search button. You can search for stories, publications, topics or members.</p>
+
+<p><a name="favorite_source"></a><span class="subhead_plain_bold">What if I don't see my favorite news source in <%=aname%>?</span>
+If we're missing a news source that you think we should be covering, we encourage you to <%= link_to "post", "/post", :class => "popup_link" %> and review stories from that source. You are also free to email us at <%= mail_to email_addr("editors"), email_addr("editors"), :subject => "#{aname} source request", :encode => "javascript" %> sources that you feel should be on <%=aname%>. Once a news source has a sufficient number of reviews, it will start appearing in ranked order in its appropriate source listing. Be patient, as this process can take a while, and be sure to rate often.</p>
+
+<p><a name="how_to_start_rating"></a><span class="subhead_plain_bold">How do I start rating the news?</span>
+Start by <%= link_to 'logging in', "/sessions/new/" + (params[:popup] ? '" target="_blank' : "") %> and reviewing some of the stories on the home page. To review a story, click on the "Review" link next to any story title on our site. This will open the story on the news site, along with our toolbar and review form. (In some cases, the story and our review form will show in separate windows, for news sites that do not support our toolbar). To find out more, check our <%= link_to 'Quick Review Guide', "/guides/how-to-review" + (params[:popup] ? '" target="_blank' : "") %>.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="sign_in_registration"></a><a name="activate"></a>Sign Up and Log In</h2>
+
+<p><a name="join"></a><span class="subhead_plain_bold">How can I sign up on <%=aname%>?</span>
+To join <%=aname%> as a member, click "Sign Up" at the top right corner of any page, or simply <%= link_to 'sign up here', "/members/new/" + (params[:popup] ? '" target="_blank' : "") %>. After entering your name, password and other required information, you will receive an email invitation to activate your account. Click on the link in your email invitation &ndash; this will take you to your account page, where you may fill out your profile in more detail, or start reviewing stories on our home page. This invitation link can only be used once, so please activate your account right away and do not forward it to anyone.</p>
+<p>
+Note: If you are a Facebook member, we recommend you sign up with <%= link_to 'Facebook Connect','#facebook' %>, which lets you share your reviews with your friends on Facebook.</p> 
+
+<p><a name="register"></a><span class="subhead_plain_bold">How do I activate my account?</span>
+When you receive an email invitation asking you to activate your account, click on the link in your invitation, and follow the instructions on the next page. You will need to enter a password of your choice to activate your account. If you've already signed up before, you do not need to sign up again; click on "<%= link_to 'Log in', "/sessions/new/" + (params[:popup] ? '" target="_blank' : "") %>" instead.</p>
+<p>
+If you do not receive an email from <%=aname%> upon signing up, it may have been removed by your email provider's junk mail filter. Check your email's spam or junk mail folder for an email from <%=aname%>. If you need additional help, contact us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{aname} help request", :encode => "javascript" %>.</p>
+<p>
+Alternately, if you have a Facebook account, you can finish signing up using <%= link_to 'Facebook Connect','#facebook_log_in_member' %>.</p>
+
+<p><a name="invitation_expired"></a><span class="subhead_plain_bold">What if my invitation expired?</span>
+Your invitation link to join <%=aname%> can only be used once. Once it has been used to activate a member account, it automatically expires. If you clicked your invitation link a second time, you will see a message that your invitation has expired. If you've already activated your account, click on "Log In" at the top right corner of any page on our site. If you were not able to log in, please email us at  <%= mail_to email_addr("invites"), email_addr("invites"), :subject => "#{aname} Invite request", :encode => "javascript" %> to request another invitation.</p>
+
+<p><a name="sign_in"></a><span class="subhead_plain_bold">How do I log in to <%=aname%>?</span>
+Once you activate your account, you will be automatically logged in to <%=aname%>, as long as you use the same computer and JavaScript-enabled browser. To log in to <%=aname%> on a different computer or browser, click on the "<%= link_to 'Log In', "/sessions/new/" + (params[:popup] ? '" target="_blank' : "") %>" link at the top right corner of any <%=aname%> page. Then enter your email address and password. Once you log in, your member name will be displayed at the top right corner of each page (along with a link to <%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>, where you can set your personal preferences). If you aren't a <%=aname%> member yet, you first need to <%= link_to 'sign up', "/members/new/" + (params[:popup] ? '" target="_blank' : "") %> and activate your account, as described above.</a></p>
+<p>
+Note: If you are a Facebook member, we recommend you log in with <%= link_to 'Facebook Connect','#facebook' %>, which lets you share your reviews with your friends on Facebook.</p>
+
+<p><a name="sign_out"></a><span class="subhead_plain_bold">How do I log out from <%=aname%>?</span>
+To log out from <%=aname%>, click on the "Log Out" link at the top right corner of any <%=aname%> page, next to your member name and "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" links. If you are using a public computer, we recommend you always log out at the end of a session, to protect your privacy. Also, please log out if you see someone else's name at the top right corner of any <%=aname%> page. You can quickly log in again, anytime you like, by clicking on "Log In", as described above.</p>
+
+<p><a name="lost_password"></a><span class="subhead_plain_bold">What if I forgot my password?</span>
+If you forget your password, click on "<%= link_to 'Forgot Your Password?', "/sessions/forgot_password/" + (params[:popup] ? '" target="_blank' : "") %>" at the bottom of the Log in form. A new password will be emailed to the address you gave us earlier.</p>
+
+<td class="subhead_plain"><a name="why_full_name"></a><span class="subhead_plain_bold">Why do I have to give my full name?</span>
+To insure the integrity of our reviews, we ask that every member identify themselves with their real first and last name only. We do not allow anonymous or pseudonymous posts on <%=aname%> at this time. Please do not sign up or activate your account if you do not agree with this term of service.</p>
+
+<p><a name="why_email_address"></a><span class="subhead_plain_bold">How will my email address be used?</span>
+Your email address will only be used for purposes you specifically authorize (see our <%= link_to 'privacy policy', "/about/privacy/", :class => "popup_link" %>). If you are a registered member, your email address will be used for identification purposes during the sign-in process, and to inform you about any changes to your account or new developments at <%=aname%>.</p>
+
+<p>By default, your email address is kept private and is not shown on your member profile. If you wish to show your email address in your profile, click on "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" in the top navigation bar, then check "Show on Profile" next to your email address in "My Account" form. If you do not wish to show your email in your profile, uncheck "Show on Profile" next to your email.
+</p>
+
+
+<p><a name="manage_emails"></a><span class="subhead_plain_bold">How can I manage emails I receive from <%=aname%>?</span>
+All members are included in our general mailing list, and automatically receive our daily, weekly, and special notices email newsletter by default. To change your email settings, or unsubscribe from our general mailings, click on "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" at the top right of any page on our site and click on the Emails tab, or go directly to our <%= link_to 'Email Feeds page', "/email/" + (params[:popup] ? '" target="_blank' : "") %>. Then select the newsletter options of your choice and click "Save."</p>
+
+<p>You can select any or all of these types of emails from <%=aname%>:</p>
+<div class="sect_indent"> 
+  <p><a name="member_daily_newsletter"></a><span class="subhead_italic_med">Daily Newsletter</span>
+  Checking the "Daily Newsletter" box allows <%=aname%> to send you a daily selection of news and opinions from our most trusted sources. Includes today's Most Recent and Most Trusted stories and is sent <%=Newsletter.humanized_dispatch_time(Newsletter::DAILY, :no_sent => true)%>. If you do not wish to receive the Daily Newsletter, simply uncheck "Daily Newsletter."</p>
+  
+  <p><a name="member_mynews"></a><span class="subhead_italic_med"><%= mynews_colors() %> Daily Email</span>
+  Checking "<%= mynews_colors() %> Daily Email" will deliver your personalized news feed <%=Newsletter.humanized_dispatch_time(Newsletter::MYNEWS, :no_sent => true)%>. You must first set up your <%= link_to "MyNews page", "/mynews/" + (params[:popup] ? '" target="_blank' : "") %>, which only takes a minute. To learn more about MyNews, <%= link_to 'click here', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>.</p>
+  
+  <p><a name="member_weekly_newsletter"></a><span class="subhead_italic_med">Weekly Newsletter</span>
+  Checking the "Weekly Newsletter" box allows <%=aname%> to send you a weekly selection of quality news and opinions, based on ratings from members like you. Includes this week's Most Recent and Most Trusted stories, as well as helpful tips and news about <%=aname%>. <%=Newsletter.humanized_dispatch_time(Newsletter::WEEKLY)%>. We highly recommend this option, so you can stay up-to-date. If you do not wish to receive the Weekly Newsletter, simply uncheck "Weekly Newsletter."</p>
+  
+  <p><a name="member_additional_email"></a><span class="subhead_italic_med">Special Notices</span>
+  From time to time, we may send out additional emails to you with helpful tips and news about <%=aname%>. If you do not wish to receive these notices, simply uncheck this box.</p>
+</div>
+
+<p><a name="privacy_policy"></a><span class="subhead_plain_bold">What is your privacy policy?</span>
+<%=aname%> treats your contact information as private and confidential. We will not provide your contact information to any other organization without your permission. We treat your ratings and comments as public information. We may, for example, make your comments available to the public, along with your state and country, but without ever disclosing your name, email address, or other personal information, unless you specifically authorize us to do so. For more information, check our <%= link_to 'full privacy policy', "/about/privacy/", :class => "popup_link" %>.</p>
+
+<p><a name="change_name_email"></a><span class="subhead_plain_bold">How do I change my name, email address or password?</span>
+To change your email address or password, click on "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" at the top right corner of any <%=aname%> page. In "My Account," you can edit your name, email address and password, as well as change your personal information or account settings. For more instructions on editing your profile, check our <%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>.</p>
+
+<p><a name="edit_my_profile"></a><span class="subhead_plain_bold">How can I change the information on my profile?</span>
+To change the personal information on your profile, click on "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" at the top right corner of any <%=aname%> page. In "My Account," you can edit your personal information, name, email address and password, as well as change your account settings and preferences. For more instructions on editing your profile, check our <%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>.</p>
+
+<p><a name="cancel_my_account"></a><span class="subhead_plain_bold">How do I cancel or delete my account?</span>
+To cancel or delete your member account, please <%= mail_to email_addr("help"), "email us", :subject => "#{aname} help request", :encode => "javascript" %>. We will delete your member account within 24 hours from your request. You will no longer be able to review or post stories on our site.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="facebook"></a>Connect with Facebook</h2>
+
+<p><a name="facebook_what_is"></a><span class="subhead_plain_bold">How can I connect with Facebook?</span>
+If you already are a Facebook member, Facebook Connect is a great way for you to <%= link_to( "sign up", "#facebook_sign_up" ) %> (or <%= link_to( "log in", "#facebook_log_in" ) %>) on <%=aname%>, review stories on our site and <%= link_to( "share them", "#facebook_share_reviews" ) %> with their friends on Facebook. You can also meet other <%=aname%> members on our <%= link_to( "Facebook fan page", "#facebook_become_fan" ) %>.</p>
+
+<%- if SocialNewsConfig["app"]["fb_fan_page"] -%>
+<p><a name="facebook_become_fan"></a><span class="subhead_plain_bold">How can I meet <%=aname%> fans on Facebook?</span>
+To meet <%=aname%> members and fans on Facebook, log into Facebook and visit our <%= link_to( "fan page", SocialNewsConfig["app"]["fb_fan_page"], :target => "_blank" ) %>. Be sure to click "Become a fan of <%=aname%>" in the left column to get updates on Facebook about our top stories and featured topics, network with other friends of <%=aname%>, and learn about upcoming events on <%=aname%>.</p>
+<%- end -%>
+
+<p><a name="facebook_sign_up"></a><span class="subhead_plain_bold">How do I sign up through Facebook?</span>
+If you do not yet have a <%=aname%> account, go to our <%= link_to 'sign up page', "/members/new/" + (params[:popup] ? '" target="_blank' : "") %> and click the Facebook Connect button at the top of the page. (By clicking on this button you are allowing <%=aname%> to access information in your Facebook account, and agreeing to the Facebook and <%=aname%> terms of service.)</p>
+<p>
+If you are not already logged in to Facebook, a new window will appear in your browser. Enter your email address and password from your Facebook account and click the "Connect" button. The new window will close and the <%=aname%> window will refresh.</p>
+<p>
+You will then be asked to create a <%=aname%> account (or link to your existing account, if you already have one). Your Facebook name will be displayed in the "Full Name" field. (If an existing <%=aname%> member has the same name, you will be asked to add your middle initial to make it unique. If that's not enough, you can use your full middle name, or add a number after your name.)</p>
+<p>Next fill in your email address. You can also import your profile photo from Facebook.</p>
+<p>Click on the "Sign Up" button to complete the process. For more help tips, see our other FAQ items about <%= link_to( "sign up and log in", "#sign_in_registration" ) %>.</p>
+
+<p><a name="facebook_log_in_member"></a><span class="subhead_plain_bold">How do I log in through Facebook if I already have a <%=aname%> account?</span>
+If you already have a <%=aname%> account and you want to log in through Facebook, you will need to link it with your Facebook account. Go to our <%= link_to 'log in page', "/sessions/new/" + (params[:popup] ? '" target="_blank' : "") %> and click the Facebook Connect button at the top of the page. (By clicking on this button you are allowing <%=aname%> to access information in your Facebook account, and agreeing to the Facebook and <%=aname%> terms of service.)</p>
+<p>If you are not already logged in to Facebook a new window will appear in your browser. Enter your email address and password from your Facebook account and click the "Connect" button. The new window will close and the <%=aname%> window will refresh.</p>
+<p>
+To link your <%=aname%> and Facebook accounts, click on "Link it with Facebook!", then enter the email address and password for your existing <%=aname%> account.</p>
+<p>
+You can let <%=aname%> import your Facebook profile picture by checking the box that says "Import my photo from Facebook." Click the "Link" button, and you're done. (For more info, see our other FAQ item about <%= link_to( "importing your picture from Facebook", "#facebook_import_picture" ) %>.)</p>          
+
+<p><a name="facebook_log_in"></a><span class="subhead_plain_bold">How do I log in through Facebook after I've linked my <%=aname%> and Facebook accounts?</span>
+If you have already linked your <%=aname%> and Facebook accounts, logging in to <%=aname%> couldn't be easier. If you're already logged in to Facebook, you will automatically be logged in to <%=aname%> when you visit our site.</p>
+<p>If you're not logged in to Facebook, go to our <%= link_to 'log in page', "/sessions/new/" + (params[:popup] ? '" target="_blank' : "") %> and click the Facebook Connect button at the top of the page. A new window will appear in your browser. Enter your email address and password from your Facebook account and click the "Connect" button. The new window will close and the <%=aname%> window will show you are now logged in.</p>          
+
+<p><a name="facebook_link_accounts"></a><span class="subhead_plain_bold">How do I link my <%=aname%> and Facebook accounts?</span>
+If you're already logged in to <%=aname%> (with your <%=aname%> email and password), click on "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" in the top-right corner of any <%=aname%> page, then click the Facebook Connect button.</p>
+<p>
+If you are not already logged in to Facebook, a new window will appear in your browser. Enter your email address and password from your Facebook account and click the "Connect" button. The new window will close and the <%=aname%> window will refresh.</p>
+<p>
+You can let <%=aname%> import your Facebook profile picture by checking the box that says "Import my photo from Facebook." Click the "Link" button, and you're done. (For more info, see our other FAQ item about <%= link_to( "importing your picture from Facebook", "#facebook_import_picture" ) %>.)</p>
+
+<p><a name="facebook_log_out"></a><span class="subhead_plain_bold">How do I log out through Facebook?</span>
+To log out of both <%=aname%> and Facebook, click "Log Out" in the top-right corner of any page on <%=aname%>.</p>
+<p>
+To log out of Facebook only, go to your Facebook page and click "Logout" in the top-right corner of any page there. You will still be logged in to <%=aname%>, but you will no longer be using Facebook Connect features, like sharing <%=aname%> stories on Facebook.</p>
+
+<p><a name="facebook_unlink_accounts"></a><span class="subhead_plain_bold">How do I unlink my Facebook account?</span>
+You can unlink your Facebook and <%=aname%> accounts at any time. Click "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" in the top-right corner of any page on <%=aname%>, then click the link that says "Click here to unlink your Facebook account from <%=aname%>."</p>
+<p>
+IMPORTANT: if you originally signed up on <%=aname%> using your Facebook account, you will now need to enter a password to be able to log in to <%=aname%> in the future. Enter the same password in the "Password" and "Password Confirmation" fields and press the "Save" button.</p>
+
+<p><a name="facebook_log_in_unlinked"></a><span class="subhead_plain_bold">How do I log in if I'm unlinked from Facebook?</span>
+If you've unlinked your Facebook and <%=aname%> accounts, log in to <%=aname%> by entering the email address and password you provided <%=aname%> when you signed up on this site.</p>
+<p>
+If you originally signed up on <%=aname%> using your Facebook account, it's likely you never set a password for your <%=aname%> account. If that's the case, click on the "<%= link_to 'Forgot Your Password?', "/sessions/forgot_password/" + (params[:popup] ? '" target="_blank' : "") %>" link on the log in page and we will send you a new password.</p>
+<p>
+For more info, see our <%= link_to( "sign up and log in", "#sign_in_registration" ) %> FAQ items.</p>
+
+<p><a name="facebook_share_reviews"></a><span class="subhead_plain_bold">How can I share stories or reviews on Facebook?</span>
+You can share stories or reviews on Facebook in three different ways:</p>
+<ul>
+<li>Like a story (click on the "Like" button)</li>
+<li>Share a story (click on the <%= image_tag("/images/ui/mynews/facebook_favicon.png", :size=>"12x12") %> icon)</li>
+<li>Share your review (in "Expand your review")</li>
+</ul>
+
+<p>To share your reviews, you first need to link your Facebook and <%=aname%> accounts through <%= link_to 'Facebook Connect', "#facebook_log_in_member" %>, a one-time setting. Then click "Expand your review" at the bottom of the story review form, and check the Facebook box next to "Share your review." When you click "Save" on your review, you'll be asked on the following screen whether you want to publish your review to Facebook &ndash; if you want your story review to appear on your Facebook wall and on your friends' news feeds, click "Publish." If you don't, click "Skip."</p>
+
+<p>Checking the box that says "Always do this for <%=aname%>" will publish all your story reviews to Facebook without asking your permission each time (but only if you have checked the Facebook box next to "Share your review" on the review form).</p>
+
+<p>Note that only your first review of a story will be published. If you edit it later, a message will warn you that you may have already posted this review on Facebook. You're free to share again if you like.</p>
+
+<p><a name="facebook_stop_sharing_reviews"></a><span class="subhead_plain_bold">How can I stop automatically sharing my reviews on Facebook?</span>
+If you don't want to share a review on Facebook, do not check the box that says "Share my review on Facebook" in the bottom-right of the story review form.</p>
+<p>
+If you have previously authorized Facebook to automatically publish checked reviews on your feed, you will no longer get a pop up authorization form from Facebook each time you review stories on <%=aname%>. But if you prefer to always see the Facebook form pop up, you can follow these steps on Facebook:</p>
+<ol>
+<li>Go to your Facebook home page.</li>
+<li>Click on the "Applications" button on the bottom left navbar. It pops up a menu with your applications.</li>
+<li>Click on the "Edit" link at the top.</li>
+<li>From the "Show:" drop-down menu on the top-right, select "Authorized"</li>
+<li>Scroll down till you find <%=aname%></li>
+<li>Click on "Edit Settings" for <%=aname%></li>
+<li>Under the "Wall" tab, select "Prompt me before publishing any stories from <%=aname%>."</li>
+<li>Under the "Additional Permissions" tab, uncheck the box.</li>
+</ol>
+Note: You have to complete both steps 7 and 8 above.
+</p>
+
+<p><a name="facebook_start_sharing_reviews"></a><span class="subhead_plain_bold">How can I start sharing reviews again?</span>
+If you have previously told Facebook to never publish reviews on your feed, and you want to start publishing them again, you have to make this change on the Facebook end.</p>
+<ol>
+<li>Go to your Facebook home page.</li>
+<li>Click on the "Applications" button on the bottom left navbar. It pops up a menu with your applications.</li>
+<li>Click on the "Edit" link at the top.</li>
+<li>From the "Show:" drop-down menu on the top-right, select "Authorized"</li>
+<li>Scroll down till you find <%=aname%></li>
+<li>Click on "Edit Settings" for <%=aname%></li>
+<li>Under the "Wall" tab, select either "Allow <%=aname%> to publish specific story sizes automatically without prompting." or "Prompt me before publishing any stories from <%=aname%>."</li>
+</ol>
+</p>
+
+<p><a name="facebook_import_picture"></a><span class="subhead_plain_bold">How can I import my profile photo from Facebook?</span>
+To import your profile photo from Facebook at anytime, click on "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>"in the top-right corner of any <%=aname%> page, then click on the "Picture" tab. Next click on the link "Import my Facebook profile picture." Note that this will replace any picture you might have already uploaded to <%=aname%>.</p>
+<p>
+To update or remove your Facebook profile picture from <%=aname%>, click "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" in the upper right corner of any <%=aname%> page and go to the "Picture" tab. There you can change your picture by importing your current Facebook profile picture, uploading a new one from your computer, or deleting the picture by clicking on the <%= image_tag('icons/delete.png', :alt => 'Delete') %> (for more info, see our FAQ on <%= link_to 'changing your member picture', "/help/faq/member" + (params[:popup] ? '?popup=true#member_my_picture' : "#member_my_picture") %>).</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="twitter"></a><a name="activate"></a>Linking to Twitter</h2>
+
+<p><a name="twitter_link_accounts"></a><span class="subhead_plain_bold">How do I link my <%=aname%> and Twitter accounts?</span> 
+If you're already logged in to <%=aname%> (with your <%=aname%> email and password), click on "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" in the top-right corner of any <%=aname%> page, then click the Twitter Connect button.</p>
+
+<p>A new window will appear in your browser. If you are not already logged in to Twitter, enter your username or email address and password from your Twitter account and click the "Allow" button. The new window will close and the <%=aname%> window will refresh.</p>
+
+<p><a name="twitter_unlink_accounts"></a><span class="subhead_plain_bold">How do I unlink my Twitter account?</span> 
+You can unlink your Twitter and <%=aname%> accounts at any time. Click "<%= link_to 'My Account', "/members/my_account/" + (params[:popup] ? '" target="_blank' : "") %>" in the top-right corner of any page on <%=aname%>, then click the link that says "Click here to unlink your Twitter account from <%=aname%>."</p>
+
+<p><a name="twitter_share"></a><span class="subhead_plain_bold">How can I share stories or reviews on Twitter?</span>
+You can share stories or reviews on Twitter in two different ways:</p>
+<ul>
+<li>Share a story (click on the <%= image_tag("/images/ui/mynews/twitter_favicon.png", :size=>"12x12") %> icon)</li>
+<li>Share your review (in "Expand your review")</li>
+</ul>
+
+<p>To share your reviews, you first need to <%= link_to "link your Twitter and #{aname} accounts", "#twitter_link_accounts" %>, a one-time setting. Then click "Expand your review" at the bottom of the story review form, and check the Twitter box next to "Share your review." This will reveal a small text box with a default tweet and short URL, which you can edit before saving. When you click "Save" on your review, your update will be posted to Twitter</p>
+
+<p>Note that only your first review of a story will be published. If you edit it later, a message will warn you that you may have already posted this review on Twitter. You're free to share again if you like.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="story_pages"></a>Story Pages</h2>
+
+<p><a name="what_is_story_report"></a><span class="subhead_plain_bold">What is a story page?</span>
+Each story on our site has a story page, which is available to all members and can be read by clicking on the link for number of reviews next to the rating icon. The story page contains information about the story, its overall story rating, reviews and comments from our members.</p>
+
+<p>To view a story page, click on the story's rating icon (Trust-O-Meter) or on its "Reviews" link.</p>
+
+<p><a name="story_rating"></a><span class="subhead_plain_bold">What are story ratings?</span>
+The Ratings section of a story page shows at a glance what our members think about the journalistic quality of this story. Story ratings are inspired by important principles of journalism (e.g., fairness, accuracy), based on codes of ethics from respected news organizations. Using our review forms, our members evaluate each story for these different criteria, on a scale of 1 to 5 (e.g., Fairness: 1 = not fair at all >> 5 = very fair).</p>
+
+<p><a name="star_ratings"></a><span class="subhead_plain_bold">What do the rating icons mean?</span>
+The green rating icons (also called Trust-O-Meters) represent our community's assessment of a story's quality and trustworthiness. All stories on the <%=aname%> site are rated for journalistic quality, on a scale of one to five (represented by a horizontal bar in our Trust-O-Meter icons). A rating of one means low-quality journalism, and a five rating means high-quality journalism, according to our reviewers. A detailed explanation of our rating system is provided below.</p>
+
+<p><span class="subhead_plain_bold">How are story ratings calculated?</a></span>
+Story ratings are based on our collective answers to the questions in our review forms. Reviewers can choose to answer between one and 18 questions about the journalistic qualities of a particular story. Each question is evaluated on a scale of 1 to 5 (e.g., Fairness: 1 = not fair at all, versus 5 = very fair). Our <%=open_popup("default review form", "http://media.newstrust.net/images/help/short_review_form.jpg", 461, 394) %> for new members gives them a simpler choice between a positive or negative answer for each quality, while our <%=open_popup("rating form", "http://media.newstrust.net/images/help/short_rating_form.jpg", 461, 394) %> lets the reviewer rate each quality more precisely, on a 1 to 5 scale. (Clicking on a positive answer like "fair" in the default review form is the same as giving a 4 rating; and a negative answer like "unfair" is the same as a 2 rating.)</p>
+
+<p>All questions answered by a reviewer are first weighted based on the importance of each question for that type of news (see "<%= link_to 'How our ratings work', "/help/faq/reviewer" + (params[:popup] ? '?popup=true#rating_weights' : "#rating_weights") %>"). That first weighted average is then weighted again, taking into account each review's ratings and number of answers, as well as the reviewer's <%= link_to 'Member Level', "/help/faq/member" + (params[:popup] ? '?popup=true#member_rating_calculation' : "#member_rating_calculation") %>, to determine the overall rating for the reviewed story.</p>
+
+<p><a name="rating_confidence"></a><span class="subhead_plain_bold">What does rating confidence mean?</span>
+Our confidence level in a story's rating appears as a percentage next to the green rating icon on any story's page. This confidence indicator is tied to the number and depth of the reviews for that story, as well as the member levels of its reviewers. A story with reviews from only a few new members will receive a lower percentage, while a story with several reviews from trusted members will receive a higher percentage.</p>
+
+<p><a name="story_reviews"></a><span class="subhead_plain_bold">What are story reviews?</span>
+The Reviews section of a story page shows at a glance all our reviews for this story. Each review is summarized here, only showing key findings from each member. To see that member's full story review, click on "See Full Review" next to their name. To see that member's profile, click on their name. For details about story reviews, keep reading, or check our Reviewer FAQ. Note that we do not list reviews with no overall rating, or reviews that violate our terms of service.</p>
+
+<p><a name="story_featured_reviews"></a><span class="subhead_plain_bold">What is a featured review?</span>
+Our story pages often feature story reviews from our members, if available. We automatically feature reviews from trusted members who have answered a number of questions and have received high ratings from other members. They can also be selected by a <%=aname%> host or staff member. A member's story review is more likely to be featured if he or she has answered all or most questions in the review form; written insightful, articulate comments about the quality of the journalism; displayed expertise or thorough knowledge of the topic; and received high ratings from other members.</p>
+
+<p><a name="rate_this_review"></a><span class="subhead_plain_bold">How are reviews rated?</span>
+Trusted members of our community (with a member level of 3.0 or more) can rate another member's story review. If you are a trusted member, you can rate a review by clicking on the appropriate rating number next to "Rate this Review" (at the bottom of that member's review). Reviews are rated on the scale of 1 to 5, based on their overall helpfulness (1 = not helpful at all >> 5 = very helpful). A review's helpfulness is typically associated with the same basic journalistic principles we look for in news stories, as well as our own community guidelines. We're not asking if you agree with this review, but whether it is helpful, thoughtful, respectful and informative. Once a review has been rated, an overall review rating is shown to the right, along with the total number of members who rated this review. This overall review rating averages your own rating with other member ratings of this review. Please rate carefully, as these review ratings form an important part of a <%=aname%> member's average rating (see our member rating section for more information). If you find a review that is clearly offensive or otherwise violates our guidelines, please report it by clicking on "Report a Problem."</p>
+
+<p><a name="review_comments"></a><span class="subhead_plain_bold">How can I comment on another member's review?</span>
+Members with a <%= link_to 'level', "/help/faq/member" + (params[:popup] ? '?popup=true#member_rating_calculation' : "#member_rating_calculation") %> of 2 or more can comment on individual reviews. This enables members to respond to one another and share their views, and it allows Trusted Members to explain their rating of a review. Comments on a review should address the review itself, whereas general discussion of the story can be held <%= link_to 'at the bottom of the story page', "/help/faq/reviewer" + (params[:popup] ? '?popup=true#adding_comments' : "#adding_comments") %>.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+
+<h2><a name="source_member_pages"></a>Source and Member Pages</h2>
+
+<p><a name="what_is_source_report"></a><span class="subhead_plain_bold">What is a source page?</span>
+A source page (also called source profile) presents our findings about a news source (e.g., a news publication). This source page contains information about the source, its overall source rating, as well as some of its most recent or trusted stories. Most sources on our site have a source page, which you can read by clicking on their source name.</p>
+
+<p><a name="source_ratings"></a><span class="subhead_plain_bold">How are source ratings calculated?</span>
+<%=aname%> offers two different types of source ratings:
+<ul>
+<li> an overall rating from story reviews</li>
+<li> a quick rating from source reviews</li>
+</ul>
+
+Our overall source ratings are the average of all story ratings for a given news source. Our overall story ratings from all members are shown as green rating icons in the Ratings section of the source profile pages. These ratings are based on important principles of journalism (e.g., fairness, accuracy), as well as our separate reviews of that source's credibility. Using our story review forms, our members evaluate stories from that source for these different criteria, on a scale of 1 to 5 (e.g., Fairness: 1 = not fair at all &raquo; 5 = very fair). 
+Read more about story ratings in our <%=help_link "'Reviewing a story' FAQ", "review_form", "reviewer"%>.
+</p>
+<p>
+We also display a separate quick rating of source credibility, based on source reviews (instead of story reviews).Source reviews are intended as a quick way for our members to rate the credibility of a source, even if they don't have time to review its stories. 
+Read more about this quick rating in our <%=help_link 'Reviewing a Source FAQ', 'review_source', 'reviewer'%>.
+</p>
+
+<p><em><strong>BETA DISCLAIMER:</strong> All Source Ratings on this beta site are based on preliminary data from a small number of reviewers. As such, they may not yet be accurate, and are shown here for demonstration purposes only. Once we've tested our ratings methodology with a critical mass of members and confirmed its reliability, we will remove this disclaimer from our site.</em></p>
+
+<p><a name="source_ownership"></a><span class="subhead_plain_bold">How do you separate mainstream from independent sources?</span>
+<%=aname%> provides separate listings for "mainstream" and "independent" news sources, to address a growing public concern about the trend toward public ownership and consolidation of the news media &ndash; often referred to as "mainstream media" (or "MSM"). Many observers worry that such "mainstream media" companies are no longer tied to community, they were now beholden to the demands of Wall Street, where the value of the product a company makes is often purely a matter of money.</p>
+
+<p>For our purposes, a "mainstream" source is a large news provider that is primarily owned or subsidized by one or more conglomerates or mass media networks. The owners or backers of a "mainstream" source usually reach a large audience (1 million people or more), and invest considerable resources in their news operations (e.g., 1,000 employees or more, or $10 million yearly income or more). Mainstream media sources are often owned by publicly traded corporations, and commercial in nature, though not always. <%=aname%> tags certain large news providers as "mainstream" even if they are owned by religious, political, governmental or nonprofit organizations; we consider that such ownership can significantly influence their news coverage, and jeopardize their independence; and because of their sheer size, they can also be subject to the same market forces that influence commercial conglomerates.</p>
+
+<p>An "independent" source is a smaller news provider that is not a part of or a subsidiary of a larger mainstream conglomerate. For example, bloggers, alternative newspapers, community sites or nonprofit organizations would typically be viewed as "independent media" sources for our purposes. "Independent media" sources are often perceived as free from the influence of commercial interests, and more representative of individual viewpoints, or viewpoints from ethnic groups, affinity groups or sub-cultures. In practice, some independent media sources can sometimes be influenced by larger organizations, such as religious, political, governmental or cultural groups. But as long as they are not primarily owned or subsidized by such large organizations, we consider them to be "independent."</p>
+
+<p><a name="what_is_member_page"></a><span class="subhead_plain_bold">What is a member page?</span>
+A member page (also called member profile) contains information about a member, his or her member level, as well as some of its most recent story posts, reviews, comments or stars. Read more about our member pages in the <%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>.</p>
+
+<p><a name="member_ratings"></a><span class="subhead_plain_bold">How are member levels calculated?</span>
+All members on the <%=aname%> site are given a Member Level, indicated by a one to five green bullets. This member level is the average level of five different categories: site activity records (Activity and Transparency), self-assessment (Experience), ratings from other members (Ratings), and a <%=aname%> staff evaluation (Validation). A detailed explanation of our member level system is provided below. All member levels during this beta stage are PRELIMINARY, as explained in our disclaimer below.</p>
+
+<p><em><strong>BETA DISCLAIMER:</strong> All Member Ratings on this beta site are based on preliminary data from a limited number of reviewers. Once we've tested our ratings methodology with a critical mass of members and confirmed its reliability, we will remove this preliminary data disclaimer from our site. During this beta stage, source ratings and member levels may be adjusted up or down from time to time, as part of site-wide system corrections. Thank you for your patience and understanding during our beta phase.</em></a></span></p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+
+<h2><a name="our_tools"></a>About our Tools</h2>
+
+<p><a name="what_tools"></a><span class="subhead_plain_bold">What tools does <%=aname%> offer?</span>
+<%=aname%> offers a wide range of tools to help you find and share good journalism. Our primary tools are the <%=aname%> toolbar, our review forms, bookmarklets and posting tool, as well as MyNews and our <%= link_to( "Smart Feeds", "#smart_feeds" ) %>. We also provide a variety of other tools, ranging from email and RSS feeds to thousands of widgets, a Google Gadget, as well as review buttons and badges. Read more about our tools and try them out on our <%= link_to 'Tools page', "/tools" + (params[:popup] ? '" target="_blank' : "") %>.</p>
+
+<p><a name="toolbar"<a name="what_is_toolbar"></a><span class="subhead_plain_bold">What is the <%=aname%> Toolbar?</span>
+The <%=aname%> Toolbar makes it easy to review a story, check its rating, edit its info, and share it with others, from any page on the web.</p>
+
+<p>When you click on a story for review, you will automatically go to that story's original page, and the <%=aname%> Toolbar will appear at the top of that page. If you clicked on the Review button for a story, our Review Form will then drop down from the right side of the Toolbar. After you're done with your review, click "Save" on the review form. You can then edit or share your review, or see other members' reviews of the story.</p>
+
+<p>For more info on our toolbar, check our <%= link_to 'Visual Guide', "/guides/toolbar-guide" + (params[:popup] ? '" target="_blank' : "") %>.</p>
+
+<p><a name="how_to_use_toolbar"></a><span class="subhead_plain_bold">How do I use the <%=aname%> Toolbar?</span>
+You can use the <%=aname%> Toolbar in a variety of ways:</p>
+<ul>
+<li>to see our reviews for this story, click on "Reviews &raquo;" </li>
+<li>to review a story, click on the "Review" tab, fill in the review form, then click "Save"</li>
+<li>to close the review form, click on the "Review" tab or the "Close this panel" link</li>
+<li>to view more information about a story, click on the "Info" tab</li>
+<li>to edit info for a story you posted, click on the "Info" tab, then click "Edit this story"</li>
+<li>to share a story on Facebook, Twitter or by email, click on their share icons</li>
+<li>to star (or unstar) a story, click on the star button next to the story title</li>
+<li>to close the toolbar, click the "X" button at the right</li>
+<li>to return to our site, click on the <%=aname%> logo</li>
+</ul>
+<p>For more info on our toolbar, check our <%= link_to 'Visual Guide', "/guides/toolbar-guide" + (params[:popup] ? '" target="_blank' : "") %>.</p>
+
+<p><a name="smart_feeds"></a><a name="what_are_smart_feeds"></a><span class="subhead_plain_bold">What are Smart Feeds?</span>
+<%= link_to 'Smart Feeds', "/feeds/today" + (params[:popup] ? '" target="_blank' : "") %> is a unique service from <%=aname%> that continuously surfaces interesting news stories recommended by hundreds of trusted sources and social news sites &ndash; as well as some of the greatest minds in "link journalism." We collect news-related links from respected Twitter members like NYU journalism professor Jay Rosen and Wall Street Journal editor Alan Murray. We also gather the most popular news stories from social sites like Digg and trusted news providers like Aljazeera, BBC, Huffington Post and NPR. Smart Feeds tap the collective intelligence of thousands of professionals and citizens from around the web. Their recommendations are listed on our site around the clock, and are ready for your review on our <%= link_to "Today's Feeds page", "/feeds/today" + (params[:popup] ? '" target="_blank' : "") %>.</p>
+
+<p><a name="How_to_use_smart_feeds"></a><span class="subhead_plain_bold">How do I use Smart Feeds?</span>
+<%= link_to 'Smart Feeds', "/feeds/today" + (params[:popup] ? '" target="_blank' : "") %> are easy to use. Scroll to the bottom of our home page and click on "<%= link_to "Today's Feeds", "/feeds/today" + (params[:popup] ? '" target="_blank' : "") %>." This continuously updated page lists the most popular stories recommended by our trusted feeds. Click on Review next to any story title to review it. You can also browse feeds by subject, topic, author or publication, in the sidebar of that page.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="community_questions%22"></a><a name="community_questions"></a>Community Questions</h2>
+
+<p><a name="community_guidelines"></a><span class="subhead_plain_bold">What are your community guidelines?</span>
+Our community guidelines are simple: treat each other with respect, only share information that adds value to our community, do not harass other members or news sources, and adhere to our terms of service.</p>
+
+<p><a name="terms_of_service"></a><span class="subhead_plain_bold">What are your terms of service?</span>
+By registering as a member of <%=aname%>, you agree to our terms of service and community guidelines. Our terms of service ask that you be courteous, respect others' privacy, and provide your full name and a valid email address, and prohibit disruptive or offensive behavior, solicitation, plagiarism and copyright infringement. If you are involved in a story, our terms also require that you disclose any potential conflict of interest. For more information, check our full <%= link_to 'terms of service', "/about/terms/" + (params[:popup] ? "?popup=true" : "") %>. Thanks for your patience and understanding during this beta phase.
+</p>
+
+<p><a name="what_is_host"></a><span class="subhead_plain_bold">What is a host?</span>
+A host is an active and trusted member of our community who has been selected by <%=aname%> staff to help edit our site and moderate topics on <%=aname%>. Hosts are responsible for leading new members by example, reviewing frequently and posting stories for their topics, as well as checking the information in story reviews and editing it as needed.</p>
+
+<p><a name="host_signup"></a><span class="subhead_plain_bold">How can I become a host?</span>
+If you would like to help edit our site and/or host a news topic or comments about specific news sources, we would love to hear from you. To become a host you must have reviewed at least 10 stories in the past month, and have a member validation score of four or more. You should be familiar with our site (for general hosts) and have some fluency in the topic you're interested in hosting (for topic hosts). Hosts typically spend a couple hours each week to help edit our site and moderate your topic, on a volunteer basis. To apply as a host, email  <%= mail_to email_addr("hosts"), email_addr("hosts"), :subject => "#{aname} Host Request", :encode => "javascript" %>.</p>
+
+<p><a name="invite_a_friend"></a><span class="subhead_plain_bold">Can I invite friends to join <%=aname%>?</span>
+If you have a friend, colleague or relative that you think would be interested in participating in <%=aname%>, and you're already a <%=aname%> member, click "<%= link_to 'Invite', "/members/invite/" + (params[:popup] ? '" target="_blank' : "") %>" in our bottom navbar.</p>
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="technical_questions"></a>Technical Questions</h2>
+<p><a name="report_a_problem"></a><span class="subhead_plain_bold">How can I report a problem?</span>
+To report a problem you can email us anytime at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{aname} help request", :encode => "javascript" %>. Please write in the subject of your email the type of problem you are reporting (technical bug, duplicate story, factual error, incomplete review, offensive comment, abusive member, or questions about your account). Then describe your problem in as much detail as possible. To help us better serve you, please include in your email message the full web address of the page where you found this problem.</p>
+
+<p><a name="my_computer"></a><span class="subhead_plain_bold">Can I use <%=aname%> with my computer?</span>
+You should be able to use <%=aname%> on any recent personal computer with an online connection and a web browser that supports cookies and Javascript. Simply point your web browser to <%= link_to home_url, "/" + (params[:popup] ? '" target="_blank' : "") %> and sign-in under your member name and password. <%=aname%> works on many types of personal computers, including Windows, Mac and Linux operating systems. As a rule of thumb, our service works best with fast connections, large screens, recent operating systems and new browsers. See below for specific technical requirements.</p>
+
+<p><a name="technical_requirements"></a><span class="subhead_plain_bold">What are your technical requirements?</span> 
+Most recent computers will allow you to use <%=aname%> and all its tools. Just make sure you have an online connection and a Web browser that supports cookies and Javascript.</p>
+<ul>
+<li><strong>Online connection:</strong> 56Kb modem connection or faster <em>(recommended: cable,  DSL or T1)</em></li>
+<li><strong>Internet Explorer 7</strong> or newer (Windows)</li>
+<li><strong>Firefox 3.5</strong> or newer (Windows, Mac, Linux)</li>
+<li><strong>Safari 4.0</strong> or newer (Mac)</li>
+<li><strong>Chrome 5.0</strong> or newer</li>
+<li><strong>JavaScript enabled</strong></li>
+<li><strong>Cookies enabled</strong></li>
+</ul>
+
+<p><a name="browser_settings"></a><span class="subhead_plain_bold">What browser settings are required to use <%=aname%>?</span>
+Our site requires JavaScript and cookies &ndash; please make sure that JavaScript is turned on in your browser. If your browser is older, or if you're using a browser not listed in our technical requirements, consider upgrading to one of those listed above to get the best experience using <%=aname%>. If you are using someone else's computer, or a public computer, be sure to sign out when you're done.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="partnering_with_us"></a>Working with <%=aname%></h2>
+<p><a name="displaying_ratings"></a><span class="subhead_plain_bold">How do I install <%=aname%> widgets on my site?</span>
+We offer hundreds of Web widgets, featuring quality news and opinions on important topics, from U.S. Congress to the war in Iraq. Anyone can add our widgets to their site in just minutes. Our widgets are updated hourly and come in many different sizes and formats, to fit any web style. <%=aname%> widgets are free to individuals and nonprofit organizations. To find out more, check our <%= link_to 'widgets page', "/widgets" + (params[:popup] ? '" target="_blank' : "") %>.</p>
+
+<p><a name="writing_about_<%=aslug%>"></a><span class="subhead_plain_bold">I am a journalist and would like to write about <%=aname%>. Who do I talk to?</span>
+If you are a journalist and would like to blog or write about this project, please email us at <%= mail_to email_addr("press"), email_addr("press"), :subject => "#{aname} press request", :encode => "javascript" %>.</p>
+
+<p><a name="our_content_on_<%=aslug%>"></a><span class="subhead_plain_bold">I work for a news organization. Who do I talk to about our news content on <%=aname%>?</span>
+Please email us at <%= mail_to email_addr("sources"), email_addr("sources"), :subject => "#{aname} source request", :encode => "javascript" %>. We're pleased to work with individual publishers to ensure your content is appropriately represented in <%=aname%>.</p>
+
+<p><a name="media_partnerships"></a><span class="subhead_plain_bold">Is <%=aname%> interested in partnerships with other media companies?</span>
+Absolutely. Our business model is to license our news rating services to a wide range of partners, so they may offer <%=aname%> to their own customers. To find out more, check our <%= link_to 'partner page', "/partners/" + (params[:popup] ? '" target="_blank' : "") %> or email us at <%= mail_to email_addr("partners"), email_addr("partners"), :subject => "#{aname} partner request", :encode => "javascript" %>. We'd love to hear from you.</p>
+
+<p><a name="school_partnerships"></a><span class="subhead_plain_bold">Can my school use <%=aname%> for educational purposes?</span>
+Yes, we'd love to have your school use <%=aname%>. We are starting to partner with a few good journalism schools to integrate <%=aname%> into their educational experience. If you are an educator and would like to use <%=aname%> to teach journalism in your school, please email us at <%= mail_to email_addr("partners"), email_addr("partners"), :subject => "#{aname} education request", :encode => "javascript" %>. We believe our service can help propagate journalistic "best practices" and high standards to the next generation of news professionals.</p>
+
+<p><a name="suggestions"></a><span class="subhead_plain_bold">I have suggestions for how <%=aname%> can be improved. Who can I tell?</span>
+We're always interested in hearing suggestions from our members about improving <%=aname%>. So please let us know what you think in our Feedback page, which you can join at anytime by clicking "Feedback" in the bottom navbar. Or you can email us at <%= mail_to email_addr("suggestions"), email_addr("suggestions"), :subject => "#{aname} Improvement Suggestion", :encode => "javascript" %>.</p>
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span><p><a name="question_not_answered"></a><span class="subhead_plain_bold">You didn't answer my question in this FAQ! What now?</span>
+Please <%= mail_to email_addr("help"), "email us", :subject => "#{aname} help request", :encode => "javascript" %> your additional questions, ideas and thoughts. We appreciate your interest in <%=aname%> and your patience during this beta phase.<br />
+
+<br />If you already are a member or a host, and would like more information about using <%=aname%>, check our other help FAQs:<br /><br />
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to mynews_colors() +' FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about your <em>MyNews</em> and <em>My Network</em> pages</td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Reviewer FAQ', "/help/faq/reviewer/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story <em>review</em> and <em>submission forms</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr>
+</table>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<br />
+
+</div>
+
+</div>
+<div class="bottom"></div>
+</div>
+
+</div>

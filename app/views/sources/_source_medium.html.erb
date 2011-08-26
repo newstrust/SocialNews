@@ -1,0 +1,11 @@
+<div class="source_medium" style="font-weight:normal">
+	<% fields_for "source[source_media_attributes][]", source_medium do |smf| %>
+		<%= smf.hidden_field(:id, :index => nil) unless source_medium.new_record? %>
+		<%= smf.hidden_field :should_destroy, :index => nil, :value => "false" %>
+		<%= smf.select :medium, pull_down_menu("source_media"), {:include_blank => "Select One:"}, :index => nil %>
+		<%# can't use normal check_box helper... de-rails this whole batch_association pattern %>
+		<%= check_box_tag 'source[source_media_attributes][][main]', "1", source_medium.main %> primary
+		<%= check_box_tag 'source[source_media_attributes][][main_inverse]', "1", !source_medium.main %> secondary
+		<%= link_to_function("remove", "remove_source_medium(this)", :class=>"small") %>
+	<% end %>
+</div>

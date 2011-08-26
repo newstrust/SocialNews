@@ -1,0 +1,12 @@
+app:
+  name: SocialNews
+  slug: socialnews
+  twitter: @SocialNews
+  domain: socialnews.com
+  twitter_acct: SocialNews
+  fb_acct: SocialNews
+  logo_path: "/images/logos/socialnews-logo_195x38px_trans.png"
+  mini_logo_path: "/images/logos/socialnews-logo_20px.png"
+  blog_url: # Leave empty or or enter the url of your blog here
+  fb_fan_page: # enter the FB fab page url here.  Leave empty or remove this if you dont have a fan page
+  main_subject_slugs: ["world", "us", "politics", "business", "scitech"] # enter the list of slugs of subjects that you want profiled on the homepage

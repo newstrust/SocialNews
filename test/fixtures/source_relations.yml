@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  source_id: 1
+  related_source_id: 1
+
+two:
+  source_id: 1
+  related_source_id: 1

@@ -1,0 +1,33 @@
+<% @title = "Unsubscribed from #{freq_name(@freq)} Newsletter" %>
+
+<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div>
+	<div class="wrapper">
+		<div class="interior_content" style="font-size:1.14em;line-height:1.25em;">
+
+<h2>Email Newsletter Unsubscribe</h2>
+
+<div style="margin:20px 0; line-height:20px; font-size:14px; font-weight:bold;">
+<%= h @m.name %> &lt;<%=@m.email%>&gt; has been unsubscribed from the <%="#{app_name} #{freq_name(@freq).titleize}"%> Email Newsletter.<br>
+</div>
+
+<h3>Current Newsletter Subscriptions:</h3>
+
+<table style="margin: 10px; line-height:18px;">
+<tr><td><strong><%= mynews_colors() %> Daily Email:</strong> </td><td> <%= @m.has_newsletter_subscription?(Newsletter::MYNEWS) ? "subscribed" : "unsubscribed"%> </td></tr>
+<%- (Newsletter::VALID_NEWSLETTER_TYPES - [Newsletter::MYNEWS]).each do |nl_freq| -%>
+<tr><td><strong><%=nl_freq.humanize.titleize%> Newsletter:</strong> </td><td> <%= @m.has_newsletter_subscription?(nl_freq) ? "subscribed" : "unsubscribed"%> </td></tr>
+<%- end -%>
+<tr><td><strong>Special Notices:</strong> </td><td> <%= @m.bulk_email ? "subscribed" : "unsubscribed"%> </td></tr>
+<tr><td><strong>Email Format:</strong> </td><td> <%= @m.newsletter_format %> </td></tr>
+</table>
+
+<%= link_to "Manage your other #{app_name} Newsletters here", "/email/" %>
+<br><br>
+
+If have any questions about our email newsletters, please email us at <%= link_to SocialNewsConfig["email_addrs"]["help"], "mailto:#{SocialNewsConfig["email_addrs"]["help"]}", :encode => "javascript" %>
+<br><br>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>

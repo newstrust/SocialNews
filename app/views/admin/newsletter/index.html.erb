@@ -1,0 +1,31 @@
+<% @title = "Newsletter Admin page" %>
+
+<h1> Newsletter Setup </h1>
+
+<ul>
+<%- @newsletter_freqs.each do |nl_freq| -%>
+  <li>
+    <strong><%=nl_freq.humanize%></strong>
+    <%- nl = Newsletter.find(:first, :conditions => ["freq = ? AND state != 'sent'", nl_freq]) %>
+    <%- if nl && nl.state == Newsletter::IN_TRANSIT -%>
+      <div style="margin:10px 0 30px 0; font-size:12px;">
+      The newsletter is currently being emailed to all subscribers ... Please check again in a little while to set up a new one.
+      </div>
+    <%- else -%>
+      &nbsp;&nbsp; <%= link_to "Set up", nl_setup_url(:freq => nl_freq) %>
+      &nbsp;&nbsp; <%= link_to "Preview", nl_preview_url(:freq => nl_freq) %>
+	    <div style="margin:10px 0 30px 0; font-size:12px;">
+      <%- if nl -%>
+        The newsletter is in the queue scheduled to go out at: <strong> <%= nl.dispatch_time.strftime("%a %B %d %Y, %H:%M %Z") %> </strong> <br/>
+        The newsletter (or its stories) was last updated at: <strong> <%= nl.updated_at.strftime("%a %B %d %Y, %H:%M %Z") %> </strong> <br/>
+        NOTE: The newsletter stories will be automatically refreshed before dispatch, if at dispatch time, the newsletter has not been edited/updated within the last <strong><%=SocialNewsConfig["newsletter"]["max_stale_stories_age_in_mins"]%> minutes</strong>
+        <br/><br/>
+        <%= link_to "Send now instead of the regularly scheduled time", nl_send_now_url(:freq => nl_freq), :confirm => "Are you sure you want to send the newsletter now instead of the regularly scheduled time?", :style => "color:#f00;text-decoration:underline;" %>
+      <%- else -%>
+	      There is no <%=nl_freq.humanize%> newsletter scheduled currently.  Please use the 'Set up' link above to create a newsletter and schedule it.
+      <% end -%>
+      </div>
+    <%- end -%>
+  </li>
+<%- end -%>
+</ul>

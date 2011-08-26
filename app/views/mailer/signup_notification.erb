@@ -1,0 +1,43 @@
+<%= @member.invitation.invite_message if @member.invitation %>
+Hello <%= @member.name.split(' ').first %>!
+
+Thanks for joining <%=app_name%>, our nonprofit social news network.
+
+To activate your account, click here:
+
+<%= @url %>
+
+(please do not forward this personal activation link)
+
+Be sure to activate your account right away, so you can review stories
+and get full access to our site.
+
+Thanks!
+
+
+The <%=app_name%> Team
+<%=SocialNewsConfig["email_addrs"]["help"]%>
+
+
+P.S. To log in to <%=app_name%> in the future, please use this email address
+and the password you provided when you signed up.
+
+Email: <%= @member.email %>
+
+You can change your email or password anytime, by clicking on 
+'My Account' at the top of any page on our site.
+
+_____________________
+
+ABOUT THIS EMAIL
+We're sending you this email because you signed up as a <%=app_name%>
+member.
+
+If you need help about becoming a member, please check our FAQ:
+<%=home_url%>help/
+
+If you received this message in error, or if you would like to remove
+your email address from our list, please reply to this email with
+"unsubscribe" in the subject line.
+
+<%= render :partial => 'mailer/privacy_policy' %>

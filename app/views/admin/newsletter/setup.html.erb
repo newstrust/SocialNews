@@ -1,0 +1,41 @@
+<% nlfreq = @newsletter.humanized_name %>
+<% @title = "Set up #{nlfreq} Email Newsletter" %>
+
+<h1>Set Up <%=nlfreq%> News Feed</h1>
+
+<ul>
+<li> <%= link_to "Preview Newsletter", nl_preview_url(:freq => @newsletter.freq) %> </li>
+</ul>
+
+<h2> Newsletter settings </h2>
+
+<p style="margin:0 10px 20px 10px">
+If you want to start from scratch, you can <%= link_to "regenerate headers & footers", nl_reset_template_url(:freq => @newsletter.freq) %>.  The subject, headers, and footers you see below will be replaced by template text from a much older newsletter.
+<br><br>
+Use [MEMBER.FIRST_NAME], [MEMBER.NAME], [MEMBER.EMAIL], and [UNSUBSCRIBE_URL] where you want these values to appear in the message.
+</p>
+
+<% form_for @newsletter, :method => :post, :url => {:controller => :newsletter, :action => "update", :freq => @newsletter.freq} do |n| -%>
+
+<%= n.hidden_field :id, :value => @newsletter.id %>
+
+<div> <label for="subject"><b><%=nlfreq%> Subject:</b></label> </div>
+<%= n.text_field :subject, :size => 60 %>
+
+<p> <%=check_box("newsletter", "add_top_story_title_to_subject", {}, "true", "false")%> <strong>Append top story title to subject</strong> </p>
+
+<div> <label for="text_header"><b><%=nlfreq%> Plain Text Message Header:</b></label> </div>
+<%= n.text_area :text_header, :cols => 80, :rows => 15 %>
+
+<div> <label for="text_header"><b><%=nlfreq%> Plain Text Message Footer:</b></label> </div>
+<%= n.text_area :text_footer, :cols => 80, :rows => 15 %>
+
+<div> <label for="html_header"><b><%=nlfreq%> HTML Message Header:</b></label> </div>
+<%= n.text_area :html_header, :cols => 80, :rows => 15 %>
+
+<div> <label for="html_header"><b><%=nlfreq%> HTML Message Footer:</b></label> </div>
+<%= n.text_area :html_footer, :cols => 80, :rows => 15 %>
+
+<p> <%= submit_tag 'Update Newsletter'%> <%= cancel_tag "/admin/newsletter" %></p>
+
+<% end -%>

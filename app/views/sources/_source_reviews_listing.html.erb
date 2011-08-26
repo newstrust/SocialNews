@@ -1,0 +1,33 @@
+<%- rating_stats = @local_site ? @source.source_stats.find_by_local_site_id(@local_site.id) : @source -%>
+
+<div class="span-16"><div class="flat"><div class="wrapper">
+  <%- msr = @member_source_review -%>
+  <%- if logged_in? -%>
+    <%- show_form = msr.incomplete? -%>
+    <%= render :partial => "source_reviews/form", :locals => {:source_review => msr, :show_form => show_form, :is_ajax_request => @is_ajax_listing } %>
+  <%- end -%>
+  <div class="source_reviews">
+    <div id="source_review_rating" class="clearfix ratings_top" style="<%='display:none;' if show_form%>">
+      <div class="headRating"> <div class="ratingLabel">Quick Rating:</div> </div>
+      <div class="trust_good">
+        <%= trustometer_img(rating_stats.review_rating, {:size => :large}) %>
+        
+        <%= content_tag(:span, adjectival_rating(rating_stats.rating).capitalize, :class => "very_good") %></span>
+      </div>
+      <div class="from_reviews">
+        from <%= plural(rating_stats.source_reviews_count, "source review") %> | 
+        <span class="help_link">
+          <%= help_link "How source reviews work", 'review_source', 'reviewer', :class => "popup_link info_popup" %>
+          <%= help_icon("review_source", "reviewer") %>
+        </span>
+      </div>
+      <span class="review_link"> <%= link_to_function "Review this source &raquo", "" %> </span>
+    </div>
+    <ul>
+      <%= render(:partial => "source_review", :object => msr) if logged_in? -%>
+      <%= render :partial => "source_review", :collection => @source_reviews %>
+    </ul>
+    <%= link_to "More Reviews &raquo;", source_reviews_source_path(@source), :class => "more" %>
+  </div>
+</div></div></div>
+<%= render :partial => "shared/login_overlay" %>

@@ -1,0 +1,22 @@
+<style>
+ * { font-size: 15px; }
+</style>
+
+<h2> Comparison of story rating distributions between topics</h2>
+
+<div id="distribution" style="float:left;width:500px;height:250px"></div>
+<div id="legend" style="float:left;"></div>
+
+<script type="text/javascript" src="/js/jquery/jquery.flot.pack.js"> </script>
+<script type="text/javascript">
+  var tags = <%= @tags.collect { |t| t.name }.to_json %>;
+  var opts = { legend : { container: $("#legend") } }
+<%- @flot_data_array.each_with_index do |da,i| -%>
+  var d_<%=i%> = <%=da.to_json%>;
+<%- end -%>
+  var data = [];
+  for (i = 0; i < <%=@tags.length%>; i++)
+    data[i] = { data: eval("d_" + i), label: "" + tags[i], lines: { show: true, fill: false } }
+  $.plot($("#distribution"), data, opts)
+</script>
+</div>

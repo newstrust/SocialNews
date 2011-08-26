@@ -1,0 +1,11 @@
+pledgie:
+  id: 1
+  name: Pledgie
+  description: This is the pledgie partnership
+  memberships_count: 0
+
+moveon:
+  id: 2
+  name: MoveOn.org
+  description: MoveOn.org Partnership
+  memberships_count: 0

@@ -1,0 +1,40 @@
+<div class="batch_autocomplete" id="<%= div_id %>">
+  <%#-- These 4 hidden buttons are hooks for external popups to insert items and refresh this listing! --%>
+  <a style="display:none" href="#" id="add_item_hook"></a>
+  <a style="display:none" href="#" id="remove_item_hook"></a>
+  <a style="display:none" href="#" id="refresh_listing_hook"></a>
+  <a style="display:none" href="#" id="clear_follow_filters_hook"></a>
+
+	<ul class="selections"></ul>
+
+  <%#-- FB & Twitter only for the member's own pages --%> 
+  <%- if @member == current_member -%>
+    <%- if follow_type == "feed" -%>
+      <div>
+        <%= render :partial => "/mynews/follow_fb_user_stream" %>
+        <%= render :partial => "/mynews/follow_twitter_home_timeline" %>
+      </div>
+    <%- elsif follow_type == "member" -%>
+      <div>
+        <%= render :partial => "/mynews/follow_facebook_friends" %>
+        <%= render :partial => "/mynews/follow_twitter_friends" %>
+      </div>
+    <%- end -%>
+  <%- end -%>
+
+  <%= link_to("", featured_link, :class => "popup_link #{featured_class}") unless featured_class.nil? %>
+  <span class="mynews_prompt"><%= followed_items.empty? ? empty_prompt : nonempty_prompt %></span>
+  <%= help_icon(help_link, 'mynews') %>
+  <br/>
+	<input type="text">
+  <div class="mynews_adding_msg" id="adding_msg">Adding...</div>
+</div>
+
+<% listing_refresh_fn ||= "''" -%>
+<% follow_filter_fn ||= "''" -%>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('div#<%=div_id%>').follows_autocomplete(<%=@member == current_member ? 'null': @member.id%>, '<%=follow_type%>', <%=followed_items.to_json%>, <%=taxonomy%>, <%=query_url%>, <%=listing_refresh_fn%>, <%=follow_filter_fn%>)
+	});
+</script>

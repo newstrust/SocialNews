@@ -1,0 +1,96 @@
+<% signup_login_notice ||= "" -%>
+<%= error_messages_for 'review', :header_message => nil, :message => nil %>
+
+<%- if !logged_in? -%>
+  <div class="not_loggedin_notice">
+    <p class="notice">You must be logged in to review this story.<br/>
+    <span>
+    <a href="#" onclick="set_form_transition('review', 'review'); switch_popdown_form('sign_up'); return false">Sign Up</a> or
+    <a href="#" onclick="set_form_transition('review', 'review'); switch_popdown_form('log_in'); return false">Log In</a>
+    </span>
+    </p>
+  </div>
+
+  <div class="not_loggedin_overlay">
+  </div>
+<%- end -%>
+
+<%- #-- SSS: Hide all ajax forms from bots -- they fill up the logs with errors! ! --%>
+<%- if !visitor_is_bot? -%>
+<div class="panel">
+  <%- remote_form_for @review, :url => @review.new_record? ? reviews_path(@review.story, :format => :js) : review_path(@story, @review, :format => :js),
+                               :success => "toolbar_form_response(request)",
+                               :failure => "toolbar_form_response(request, true)",
+                               :datatype => :json do |f| -%>
+    <% if !params[:ref].blank?%><input type="hidden" name="ref" value="<%=params[:ref]%>"><% end %>
+    <%= f.hidden_field :story_id %>
+
+    <div class="form_header">
+     <%= link_to_function "", "show_popdown_form()", :class => "close_panel", :title => "Minimize the Review form - this will not save your review" if !params[:popup] %>
+      <%#-- Rails 2.3 has helpers for doing this, but since we are on Rails 2.1 right now, no good for us! --%>
+      <select id="review_form_version" name="review[form_version]">
+        <optgroup label="--- Rating Forms ---"></optgroup>
+        <%= review_form_options("rating", @review.form_version) %>
+        <optgroup label="--- Button Forms ---"></optgroup>
+        <%= review_form_options("review", @review.form_version) %>
+      </select>
+
+      <div id="labels_header">
+        <div class="review_question">
+          <h3>Review this story</h3>
+          <p>Click on labels that describe this story.</p>
+        </div>
+       
+      </div>
+
+      <div id="ratings_header">
+        <h3>Rate this
+          <%- case humanize_token_direct("story_story_type", @review.story.story_type, "group") -%>
+          <%- when "news" -%>
+            news story:
+          <%- when "opinion" -%>
+            opinion:
+          <%- else -%>
+            story:
+          <%- end -%>
+          <%= link_to(help_icon('','','How to review a story'), '/guides/how-to-review', :target => "_blank", :class => "help") %></h3>
+        
+        <p class="error hide"></p>
+        <%- unless logged_in? -%>
+          You'll have to
+          <a href="#" onclick="set_form_transition('review', 'review'); switch_popdown_form('sign_up'); return false">Sign Up</a> or
+          <a href="#" onclick="set_form_transition('review', 'review'); switch_popdown_form('log_in'); return false">Log In</a>
+          before or after reviewing this story.
+        <%- end -%>
+      </div>
+    </div>
+
+    <div class="longform_window">
+    <div class="longform">
+      <%= render :partial => "reviews/review_labels" %> <%#---- This is the labels version of the review form ---%>
+      <%= render :partial => "reviews/rating_inputs" %> <%#---- This is the ratings version of the review form ---%>
+      <div class="my_overall_rating" style="clear:both">
+        <div id="overall_rating"><div><%= trustometer_img(@review.rating || 0, :color => :green, :size => :medium) %></div></div>
+        <b>My overall rating: <%= help_icon('my_average_rating', 'reviewer') %></b>
+      </div>
+      <%= render :partial => "reviews/review_extended_fields", :locals => {:f => f} %>
+    </div>
+    </div>
+
+	  <%- # submit buttons -%>
+		<div class="button_footer">
+	    <div class="processing_form_msg">Saving ...</div>
+      <span>
+        <%= submit_tag "", :class => "save_button", :onclick => "deactivateSubmit(this);" %> 
+        <div class="help quiet">
+          <span class="quiet"> <%= link_to("How to review &raquo;", '/guides/how-to-review', :class => "quiet", :target => "_blank", :title => "Read our guide on how to review a story") %> &nbsp;|&nbsp; <%= mail_to email_addr("feedback"), "Feedback?", :subject => "Feedback about Reviewing on #{app_name}", :class => "quiet", :encode => "javascript", :title => "Send feedback to #{app_name}" %>
+          </span>
+        </div>
+       	<%= close_this_panel(:title => "Minimize the Review form - this will not save your review") %>
+      </span>
+		</div>
+  <%- end -%>
+	
+  <div class="clearfix"></div>    
+</div>
+<% end -%>

@@ -1,0 +1,105 @@
+# Source constants
+#
+
+source_ownership:
+ - msm: {name: Mainstream}
+ - ind: {name: Independent}
+
+source_status:
+ - pending: {name: Pending}
+ - hide:    {name: Hide}
+ - list:    {name: List}
+ - feature: {name: Feature}
+
+source_media:
+ - newspaper:
+    name: Newspaper
+    listing_options: {min_story_reviews: 3, min_stories: 1} # increase this as more stories enter the system (used to be 120 & 35)
+ - magazine:
+    name: Magazine
+    listing_options: {min_story_reviews: 3, min_stories: 1} # increase this as more stories enter the system (used to be 70 & 20)
+ - online:
+    name: Online
+    listing_options: {min_story_reviews: 3, min_stories: 1} # increase this as more stories enter the system (used to be 65 & 20)
+ - blog:
+    name: Blog
+    listing_options: {min_story_reviews: 3, min_stories: 1} # increase this as more stories enter the system (used to be 20 & 10)
+ - tv:
+    name: TV
+    listing_options: {min_story_reviews: 3, min_stories: 1} # increase this as more stories enter the system (used to be 50 & 15)
+ - radio:
+    name: Radio
+    listing_options: {min_story_reviews: 3, min_stories: 1} # increase this as more stories enter the system (used to be 35 & 10)
+ - wire:
+    name: Wire Service
+    listing_options: {min_story_reviews: 3, min_stories: 1} # increase this as more stories enter the system (used to be 50 & 20)
+ - other:
+    name: Other
+    listing_options: {}
+
+source_access:
+ - full_access:       {name: Full online access}
+ - limited_access:    {name: Limited online access}
+ - free_subscription: {name: Free subscription required}
+ - paid_subscription: {name: Paid subscription required}
+ - no_access:         {name: No online access}
+
+source_audience_size:
+ - very_small:  {name: Very small audience (10K or less)}
+ - small:       {name: Small audience (10-100K)}
+ - medium:      {name: Medium audience (100-500K)}
+ - large:       {name: Large audience (500K-1M)}
+ - very_large:  {name: Very large audience (1M or more)}
+
+
+source_source_organization_type:
+ - individual:                 {name: Individual}
+ - sole_proprietorship:        {name: Sole Proprietorship}
+ - partnership:                {name: Partnership}
+ - private_corporation:        {name: Private Corporation}
+ - public_corporation:         {name: Public Corporation}
+ - nonprofit_organization:     {name: Nonprofit Organization}
+ - political_action_committee: {name: Political Action Committee}
+ - government:                 {name: Government}
+ - other:                      {name: Other, group: ---}
+ - not_applicable:             {name: Not Applicable, group: ---}
+ - not_sure:                   {name: Not sure, group: ---}
+
+
+source_source_scope:
+ - local:          {name: Local}
+ - state:          {name: State}
+ - regional:       {name: Regional}
+ - national:       {name: National}
+ - international:  {name: International}
+ - not_applicable: {name: Not Applicable, group: other}
+
+source_editorial_priority:
+ - "1": {name: Very Low}
+ - "2": {name: Low}
+ - "3": {name: Medium}
+ - "4": {name: High}
+ - "5": {name: Very High}
+ - "0": {name: Not Sure, group: other}
+
+source_political_viewpoint:
+  - neutral:           {name: Neutral viewpoint}
+  - far_left:          {name: Far Left}
+  - left:              {name: Left}
+  - center:            {name: Center}
+  - right:             {name: Right}
+  - far_right:         {name: Far Right}
+  - not_applicable:    {name: Not Applicable}
+
+source_language:
+  - english:          {name: English}
+  - arabic:           {name: Arabic}
+  - chinese:          {name: Chinese}
+  - french:           {name: French}
+  - german:           {name: German}
+  - italian:          {name: Italian}
+  - japanese:         {name: Japanese}
+  - korean:           {name: Korean}
+  - portuguese:       {name: Portuguese}
+  - russian:          {name: Russian}
+  - spanish:          {name: Spanish}

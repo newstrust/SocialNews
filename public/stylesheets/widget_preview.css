@@ -1,0 +1,19 @@
+.inline { display:inline; }
+p                       { margin: 5px 5px 15px 0; }
+table#widget_options    { width: 100%; margin:0 0 20px 0; padding:0; }
+table#widget_options td { vertical-align: top; margin:0; padding: 0; }
+td#widget_opts_cell     { width:30%; }
+td#widget_preview_cell  { 
+width:70%;  
+background:transparent url(/images/ui/nt_stage_divider.png) repeat-y scroll left top;}
+div.widget_opt_section  { margin: 0 5px 15px 0; }
+div#preview_div         { margin-left: 20px; }
+h2.header               { font-size:14px; padding: 2px 5px 10px 2px; font-weight: bold; }
+div.widget_param input.input_box { float:right; margin-top: -15px; font-size:11px; border:1px solid black; }
+div.widget_param select { margin : 5px 5px 0 0; font-size: 11px; }
+div.widget_param div.param { font-size: 12px; font-weight: bold; margin: 5px 0 0 0; }
+div#js_checkboxes div input { clear: both; float: left; padding: 0; margin: 0; }
+div#js_checkboxes div div   { width:85%; float: left; padding: 0 0 0 2px; margin: 2px; }
+div#js_checkboxes span.subtext { font-size: 10px; color: #666; }
+div#size div.radio      { margin : 10px 5px 5px 0; }
+div#topic               { display: block; }

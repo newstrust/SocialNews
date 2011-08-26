@@ -1,0 +1,16 @@
+feedback_discussion:
+  id: 1
+  member_id: 1
+  lft: 1
+  rgt: 2
+  title: 'Tell us what you think: any suggestions?'
+  body: "What do you think of the beta site, so far? How can we improve it?
+  
+  
+    Specifically, which parts off the review process work best for you? Which parts need more work?
+    
+    
+    How we can enhance the site to make it more useful to you?
+    
+    
+    We welcome your suggestions."

@@ -1,0 +1,81 @@
+* For a story 's',
+  Let R(s) = { r_1, r_2, .. r_n } be the n reviews of the story (only public, and only those without conflict of interest)
+  Let Q(s) = quality rating of the story
+  Let P(s) = popularity rating of the story
+  Let O(s) = overall rating of the story
+  Let C(s) = confidence in the story rating
+
+  The equations below give you computations of Q, P, O, and C
+
+  Q(s) = SUM(i=1..n) [ Q(r_i) * C(r_i) ] / SUM(i=1..n) [ C(r_i) ]
+  P(s) = SUM(i=1..n) [ P(r_i) * C(r_i) ] / SUM(i=1..n) [ C(r_i) ]
+
+  Q(s) and P(s) are basically weighted averages of the individual review popularity & quality ratings
+  where the weights are identical with the confidence in the individual reviews
+
+  O(s) = (w_q * Q(s) + w_p * P(s)) / (w_q + w_p) is the weighted rating of quality & popularity
+  (Right now, w_q = 0.8 and w_p = 0.2)
+
+  Let M be the minimum # of reviews required for increased confidence in a story's rating quality
+  C(s) = SUM(i=1..n) [ C(r_i) ] / M if n <= M
+  C(s) = SUM(i=1..n) [ C(r_i) ] / n if n > M
+
+  So, right now, ignoring the M factor, the confidence in a story's rating is the average confidence ratings of its reviews.
+  So, with a couple of low-confidence reviews, the overall story confidence gets pulled down.  One review with confidence
+  of 0.1 among 5 reviews is sufficient to reduce overall confidence by 0.18.  Since none of the other's reviews will have
+  a confidence of 1, it is likely most stories thus end up with low overall confidence because of this averaging.
+
+  This averaging is the reason why a large number of stories have low confidence levels even though individual review confidence
+  levels have already been accounted for in the overall rating.  So, confidence in a story rating cannot be computed as a simple
+  average of the confidence values of the individual stories.  That is double accounting of individual review confidence levels:
+  once to compute the overall story rating, and another time to compute the overall story confidence level.  The confidence level
+  in a story rating has to be based on other factors, I think.  # of reviews, completeness of reviews, ratio of reviews that are
+  from trusted members vs. untrusted members, etc.
+
+* For a review r,
+  Let MR(r)  = { mr_1, mr_2, .. mr_k } be the set of meta reviews for the review
+  Let Q(r)   = quality rating from the review
+  Let P(r)   = popularity rating from the review
+  Let O(r)   = overall rating of the review
+  Let C(r)   = confidence in the review
+  Let OMR(r) = overall meta-rating of the review (weighted average of all meta-reviews)
+
+  Q(r) = weighted average of individual quality metric ratings (details omitted)
+  P(r) = weighted average of individual popularity metric ratings (details omitted)
+  O(r) = (w_q * Q(r) + w_p * P(r)) / (w_q + w_p) is the weighted rating of quality & popularity
+  (Right now, w_q = 0.8 and w_p = 0.2)
+
+  OMR(r) = SUM(i=1..k) [ rating(mr_i) * member_rating(mr_i)^w_ml ] / SUM(i=1..k) [ member_rating(mr_i)^w_ml ]
+  where: rating(mr_i)        = rating that the member assigned with the meta review.
+         member_rating(mr_i) = rating of the member doing the meta review.
+         w_ml                = member level boost exponent
+  Because of w_ml, meta reviews from trusted members count more than meta reviews from untrusted members
+
+  C(r) = [ member_rating(mr) ^ w_ml * w_r + completeness(r) * w_c + knowledge_rating(r) * w_k + OMR(r) * w_mr ] / (w_r + w_c + w_k + w_mr)
+  where: member_rating(mr) = rating of the member doing the meta review.
+         w_ml              = member level boost exponent
+         ...
+
+  Right now, w_r = 0.6; w_c = 0.2; w_k = 0.04; w_mr = 0.16
+  Once again, because of w_ml, there is higher confidence in reviews from trusted members when compared to untrusted members.
+
+* A different way of computing overall story rating is as follows:
+
+  Let {t_i_1, .. t_i_k} be the individual ratings for a review r_i
+
+  Then, we compute the individual components for a story S as:
+    t_S_j = SUM(i=1..n) [ t_i_j * C(r_i) ] / SUM(i=1..n) C(r_i)
+
+  Then Q(s) = weighted average of individual quality metric ratings (subset of t_S_j above)
+              (will be identical to: SUM(i=1..n) [ Q(r_i) * C(r_i) ] / SUM(i=1..n) [ C(r_i) ] as per 1st method above)
+       P(s) = weighted average of individual popularity metric ratings (subset of t_S_j above)
+              (will be identical to: SUM(i=1..n) [ P(r_i) * C(r_i) ] / SUM(i=1..n) [ C(r_i) ] as per 1st method above)
+       O(s) = (w_q * Q(s) + w_p * P(s)) / (w_q + w_p)
+
+CAVEATS in all equations above:
+
+* If any individual component in an equation is missing, the current code ignores the weighting component too.
+* So, for a review, if there are no meta-reviews and there is no knowledge rating C(r) becomes:
+    (member_rating(r) ^ w_ml * w_r + completeness(r) * w_c) / (w_r + w_c)
+  Or, for a story, if there are no quality ratings, the overall story rating O(s) = P(s)
+

@@ -1,0 +1,9 @@
+<h1 style="margin-bottom:10px;">New Comment For <%= commentable_type_name_for(@comment) %></h1>
+<%= error_messages_for :comment %>
+
+<%- form_for(@comment, :url => discussions_comments_path, :html => { :class => 'comment_form' }) do |f| -%>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <div align="left" style="margin-top:5px;">
+          <%= submit_button "Save", nil, :style => "float: left"  %> <span class="civil_note">Please be civil (see our <%= pop_up_link('guidelines', tos_path + "#community_guidelines") %>). Comments can be edited for <%= pluralize(Comment.minutes_before_locked, 'minute')%>  <%= help_icon("adding_comments", "reviewer") %></span>
+        </div>
+<%- end -%>

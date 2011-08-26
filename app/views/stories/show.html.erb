@@ -1,0 +1,251 @@
+<%- @no_bots = true unless @story.is_public? -%>
+<%- edit_privs = logged_in? && current_member.has_story_edit_privileges?(@story) -%>
+<%- edit_msg = "" -%>
+<%- @title = @story.title -%>
+<%- RAILS_DEFAULT_LOGGER.error "Empty sources for story #{@story.id}; status: #{@story.status}; url: #{story_url(@story)}" if @story.sources.blank? -%>
+<%- RAILS_DEFAULT_LOGGER.error "Empty title for story #{@story.id}; status: #{@story.status}; url: #{story_url(@story)}" if @story.title.blank? -%>
+<%- @meta_description = "Reviews on ''" + (@story.title || "") + "'' from " + (s(link_to_sources(@story.sources)) || "") + "." -%>
+<%- @meta_keywords = @title -%>
+<%#-- Specify a facebook OG meta-tag to let FB know what image to pick when someone likes the page %>
+<%- @og_meta_tags = { "og:image" => @story.image.public_filename(:thumb) } if @story.image -%> 
+<%- @login_overlay_header = "<p>Please login or #{link_to "<strong>sign up</strong>", new_member_path} to add your comment.</p>" -%>
+<%- belongs_to_site = @story.belongs_to_site?(@local_site) -%>
+
+<div class="story_listing_detail span-16">
+  <%= render :partial => 'header', :locals => {:story => @story, :show_story_links => false} %>
+  <%#-- More Info --%>
+  
+  <%- more_info_box do -%>
+    <%- profile_section "Tags", :help_icon => help_icon("story_tags", "report") do -%>
+      <%- if !belongs_to_site -%>
+        <%#-- All stories always belong to the national site, so if we get here, we are on a local site --%>
+        <%= profile_line_direct :humanized_key => "Subjects",
+          :value => @story.subjects(@local_site).collect{ |s| link_to(h(s.name), "#{LocalSite.national_site}#{subject_path(s)}")}.join(", ") %>
+        <%= profile_line_direct :humanized_key => "Topics",
+          :value => @story.topics(@local_site).collect{ |t| t.is_public? ? link_to(h(t.name), "#{LocalSite.national_site}#{topic_path(t)}") : t.name }.join(", ") %>
+        <div class='content'>Note: Clicking on the topics above will take you to our national site.</div>
+      <%- else -%>
+        <%= profile_line_direct :humanized_key => "Subjects",
+          :value => @story.subjects(@local_site).collect{ |s| link_to(h(s.name), s)}.join(", ") %>
+        <%= profile_line_direct :humanized_key => "Topics",
+          :value => @story.topics(@local_site).collect{ |t| t.is_public? ? link_to(h(t.name), t) : t.name }.join(", ") %>
+      <%- end -%>
+      <%= profile_line_direct :humanized_key => "Member Tags", 
+        :value => @story.member_tags.collect{|t| h(t.name)}.join(", ") %>
+    <%- end -%>
+    
+    <%- profile_section "Stats", :help_icon => help_icon("story_stats", "report"), :extra_class => "stats" do -%>
+      <%- Story.stat_count_attributes.each do |stat_attribute| -%>
+        <%= profile_line_direct :humanized_key => stat_attribute.humanize, 
+          :value => humanize_token_direct("story_stat_count", @story.send(stat_attribute.to_sym)),
+          :section => stat_attribute,
+          :faq => "report" %>
+      <%- end -%>
+
+      <%- Story.stat_word_count_attributes.each do |stat_attribute| -%>
+        <%= profile_line_direct :humanized_key => stat_attribute.humanize, 
+          :value => humanize_token_direct("story_stat_word_count", @story.send(stat_attribute.to_sym)),
+          :section => stat_attribute,
+          :faq => "report" %>
+      <%- end -%>
+        <%#---- Special code to display # diggs and # tweets---%>
+      <%- nd = @story.num_diggs; nt = @story.num_tweets; ndut = @story.metadata_update_time(:digg); ntut = @story.metadata_update_time(:tweetmeme)-%>
+      <%- if nd && ndut -%>
+        <%= profile_line_direct(:humanized_key => "# Diggs", :value => nd.to_s + "<span class='small light_gray'> (as of #{ndut.to_date})</span>", :section => "num_diggs")%>
+      <%- end -%>
+      <%- if nt && ntut -%>
+        <%= profile_line_direct(:humanized_key => "# Tweets", :value => nt.to_s + "<span class='small light_gray'> (as of #{ntut.to_date})</span>", :section => "num_tweets")%>
+      <%- end -%>
+    <%- end %>
+    
+    <%- if logged_in? and current_member.has_role_or_above?(:host) -%>
+      <%- profile_section "Popularity Metrics", :extra_class => "stats" do -%>
+        <%- SocialNewsConfig["story_rating_popularity_components"].each do |key, component| -%>
+          <%= profile_line(@story, component["attribute"]) if component["type"] == "auto" %>
+        <%- end -%>
+      <%- end -%>
+    <%- end -%>
+    
+    <%- profile_section "Editorial", :help_icon => help_icon("story_editorial", "report") do -%>
+      <%= profile_line_direct :humanized_key => "Posted by".humanize, 
+        :value => "#{show_submitted_by(@story)} <span class='editorial_gray'> - #{format_date(@story.created_at, '')}</span>" %>
+
+      <%= profile_line_direct :humanized_key => "Reviewed by", 
+        :value => @story.reviews.collect{|r| "#{link_to_member(r.member) if r.member} #{link_to('(review)', review_url(@story, r), :class => 'editorial_gray')}" }.join(', ') %>
+      <%= profile_line_direct :humanized_key => "Content Type",
+        :value => humanize_token_direct("story_content_type", @story.content_type) %>
+      <%= profile_line_direct :humanized_key => "Edit Lock",
+        :value => @story.edit_lock? ? "This story cannot be edited except by Hosts and above" : "This story can be edited" %>
+
+      <%- if @story.edited_by_member -%>
+        <% edited_by_link = link_to_member(@story.edited_by_member) %>
+        <% edited_by_link += '<span class="editorial_gray"> - ' + format_date(@story.last_edited_at, "") + '</span>' %>
+        <%= profile_line_direct :humanized_key => "Edited by", :value => edited_by_link %>
+      <%- end -%>
+
+      <%- if logged_in? and current_member.has_role_or_above?(:host) # only hosts and above should see these notes and editorial priority setting -%>
+        <%= profile_line_direct :humanized_key => "Status",
+        :value => humanize_token_direct("story_status", @story.status) %>
+        <% if !@story.edit_notes.blank? %>
+          <%= profile_line_direct :humanized_key => "Edit Notes", 
+            :value => detextilize(@story.edit_notes) %>
+        <%- end -%>
+
+        <%= profile_line_direct :humanized_key => "Editorial Priority", 
+          :value => humanize_token(@story, :editorial_priority) %>
+      <%- end -%>
+    <%- end -%>
+    
+  <%- end -%>
+
+  <%- tools_box :page_type => :story, :object => @story, :edit_privs => edit_privs, :comments_link => true do -%>
+    <%= link_to_toolbar(@story, "", :go => "review", :ref => @url_tracking_key, :embedded_video_link => @story.has_embedded_video?) %>
+  <%- end -%>
+
+  <div class="related_comments">
+    <%= discuss_topics_for(@story) %>
+  </div>
+
+  <%#- re-jigger data for easy access -%>
+  <%- related_stories = (logged_in? and current_member.has_role_or_above?(:host)) ? @story.related_stories_reciprocal : @story.related_stories_reciprocal.reject{|s| s.status == 'hide'} -%>
+  <%- all_reviews_with_excerpts = @reviews.reject{|r| r.excerpts.empty?}.compact -%>
+  <%- all_reviews_with_comments = @reviews.reject{|r| r.personal_comment.blank?}.compact -%>
+  <%- num_links = related_stories.size -%>
+  <%- num_quotes = all_reviews_with_excerpts.map(&:excerpts).flatten.size -%>
+  <%- num_comments = all_reviews_with_comments.size -%>
+  <%- num_notes = @reviews.reject{|r| r.comment.blank?}.compact.size -%>
+
+  <%#-- Reviews --%>
+  <div class="story_listing_reviews span-16" style="margin-bottom:0px;">
+  <div class="top"></div>
+  <div class="wrapper span-16">
+    <div class="header"><h3>Reviews</h3>
+
+      <div class="show_activity_part" style='padding-left:50px;'><a href="#" class='toggleAllComments'>Show All Comments</a></div>
+
+      <div class="show_activity_part">
+        <%= link_to_function "Show All", "show_review_part(null, this)", :class => "sel" %> |
+        <%= link_to_function_if !num_notes.zero?, "Notes", "show_review_part('notes', this)" %> |
+        <%= link_to_function_if !num_comments.zero?, "Comments", "show_review_part('comment', this)" %> |
+        <%= link_to_function_if !num_quotes.zero?, "Quotes", "show_review_part('quotes', this)" %> |
+        <%= link_to_function_if !num_links.zero?, "Links", "show_review_part('links', this)" %>
+      </div>
+    </div>
+  <div class="reviews">
+    <%- unless @current_member_review.nil? -%>
+      <%= render :partial => 'reviews/review', :object => @current_member_review, :locals => {:is_mine => true} %>
+    <%- end -%>
+    <%= render :partial => 'reviews/review', :collection => @reviews - [@current_member_review] %>
+    
+    <%- if @reviews.empty? -%>
+      <div class="empty_list">
+        No reviews yet. Please <%= link_to_new_review(@story, "review this story") %>!
+      </div>
+    <%- end -%>
+    </div>  
+  </div>
+  <div class="bottom"></div>
+  </div>
+  <%- if @story.reviews_count >=3 -%>
+    <div class="actions span-16 clearfix" style="margin-top: 5px; margin-bottom: 0px">
+      <%= link_to_toolbar(@story, "", :go => "review") %>
+    </div>
+  <%- end -%>
+  <%- if @story.allow_comments? %>
+    <div class="span-16 white_box" style="clear:both"><a name="comments"></a>
+      <div class="top"></div>
+        <div class="wrapper comments">
+          <div class="header" style="border-bottom:none;">
+            <h3>Comments on this story
+            <%= "<span class=\"comment_count\"> (#{@story.comments.count})</span>" if @story.comments.count > 0 %><%= help_icon("adding_comments", "reviewer") %><span class="beta" style="float:right;padding-right:15px"> (BETA)</span></h3>
+          </div>    
+          <%= render :partial => '/discussions/comments/thread', :locals => { :record => @story, :commentable_klass => 'Story' } %>
+        </div>
+        <div class="bottom"></div>
+      </div>
+<%- end -%>
+</div>
+
+<div class="span-8 last dark">
+  <%#- Ratings -%>
+  <%- right_column_box :header => 'Ratings', :id => "ratings_box",
+    :tabs => ["NT Rating"] + (@current_member_review ? ["My Rating"] : []),
+    :deactivated_links => (@current_member_review ? [] : ["My Rating"]) do -%>
+
+     <div class="tabbedContent sel">
+       <div class="clearfix ratings_top">
+        <div class="trust_good">
+
+				<%- if @story.reviews_count > 0 -%>
+					<%- if @story.reviews_count >= SocialNewsConfig["min_reviews_for_story_rating"]  -%>
+						<%= trustometer_img(@story.rating, {:size => :large}) %>
+					<%- else -%>
+						<%= trustometer_img(@story.rating, {:size => :large, :color => "gray", :num_rating_class => "numeric_rating_gray"}) %>
+					<%- end -%>
+				<%- else -%>
+					<div class="trustometer">
+						<div class="no_rating" style="font-size:1.0em;width:86px;text-align:center;">
+							<span class="quiet">No Rating</span>
+						</div>
+					</div>
+				<%- end -%>
+          <br/>
+          <%= !@story.hide_rating ? content_tag(:span, adjectival_rating(@story.rating).capitalize, :class => "very_good") : 
+                content_tag(:span, "not enough reviews", :class => "very_good not_enough") %></span>
+        </div>
+        <div class="from_reviews">
+          from <%= pluralize(@story.reviews_count, "review") %>
+          <span class="confidence">
+            <%- confidence = confidence_rating(@story) -%> <%#- len>4 is "not calculated" -%>
+            (<%= confidence.length > 4 ? "confidence #{confidence}" : "#{confidence} confidence" %>)
+          </span>
+        </div>
+      </div>
+
+      <%#- Overall Rating + breakdown -%>
+      <%= ratings_box :processable => @story, :use_processed_ratings => true %>
+     </div>
+    
+    <%#- My rating -%>
+    <%- if @current_member_review -%>
+      <div class="tabbedContent">
+        <%= ratings_box :processable => @current_member_review,
+          :note => "from " + plural(@current_member_review.num_answers, "answer"),
+          :rating_name => "My Rating",
+          :trustometer_img_options => (humanize_token(@current_member_review, 'disclosure').blank? ? {:color => :green} : {:color => :gray}),
+          :id => "my_ratings" %>
+      </div>
+    <%- end -%>
+ 
+    <span class="help_link">
+    <%= help_link "How our ratings work &raquo;", 'rating_weights', 'reviewer', :class => "" %>
+    </span>
+  <%- end -%>
+
+  <%#- Topics -%>
+  <%- right_column_box :header => "Topics" do -%>
+     <div class="topics">
+      <%= show_topics(@story) %>
+      <%= content_tag(:div, link_to("Add a topic", edit_story_url(@story), :class => "add"), :style => "margin-top:10px;") if edit_privs %>
+    </div>
+  <%- end -%>
+
+  <%#- Links -%>
+  <%- right_column_box :header => "Links #{help_icon('story_links', 'reviewer')}", :disclaimer_link => "See these related stories." do -%>
+    <%- listed_relations = related_stories.reject {|sr| sr.status == "hide"} -%>
+    <%- if listed_relations.empty? -%>
+      <div class="empty_list" style="font-size:100%">
+        No links yet. Please <%= link_to_new_review(@story, "review this story") %> to add some!
+      </div>
+    <%- else -%>
+      <div class="stage_right">
+        <%= render :partial => "story", :collection => listed_relations, :locals => { :show_flags => { :starred => false } } %>
+      </div>
+      <div class="topics">
+        <%= link_to_new_review(@story, "Add a related link", :class => "add") %>
+      </div>
+    <%- end -%>
+  <%- end -%>
+</div>
+
+<%= render :partial => '/shared/review_comments_js.html.erb' %>

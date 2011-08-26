@@ -1,0 +1,11 @@
+<h1 class="use16columns inner_left">Edit: <%= @partner.name %></h1>
+
+<%- return_to = params[:return_to] %>
+<%= error_messages_for :group %>
+
+<div class="use10columns inner_left">
+  <% form_for :partner, :url => admin_partner_path(@partner), :html => { :method => :put } do |f| -%>
+  <%= render :partial => 'form' , :locals => { :f => f }%>
+  <p><%= submit_tag 'Update' %> <%= cancel_tag (return_to=="show" ? admin_partner_path(@partner) : admin_partners_path) %></p>
+  <% end -%>
+</div>

@@ -1,0 +1,10 @@
+<h1 class="use16columns inner_left">New Local Site</h1>
+
+<%= error_messages_for :local_site %>
+
+<div class="use10columns inner_left">
+  <% form_for :lsite, :url => admin_local_sites_path do |f| -%>
+    <%= render :partial => 'form' , :locals => { :f => f }%>
+    <%= form_buttons("Create", admin_local_sites_path) %>
+  <% end -%>
+</div>

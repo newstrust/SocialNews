@@ -1,0 +1,62 @@
+<% @title = "Preview of the Newsletter" %>
+
+<h1> Preview of <%= @newsletter.humanized_name%> Newsletter </h1>
+
+<%= link_to "[Back to the newsletter admin interface]", admin_newsletter_url %><br/>
+
+<% if @newsletter.state == Newsletter::IN_TRANSIT %>
+<p><strong> <%= @newsletter.humanized_name %> newsletter is in transit right now.  You can only preview the newsletter and cannot edit it any more!  Once the dispatch is complete, the next edition of the newsletter will be created for editing.</strong> </p>
+
+<div style="font-size:16px;margin:15px 0">
+<a href="#text_version">Text Version</a> &nbsp;&nbsp; <a href="#html_version">HTML Version</a>
+</div>
+<% else %>
+
+<br/>
+<strong> The newsletter (as it will go out to subscribers) is displayed below.  </strong>
+<ol>
+<li> <strong>The stories you see below are exactly the stories that will go out in the newsletter.</strong>  Newsletter stories are "frozen" when a newsletter is first created.  You can get the latest story listings by using the "Refresh stories" functionality </li>
+<li> <strong>HTML emails usually go out as multipart/alternative</strong> which means they have both text and HTML versions of the newsletter, so that if HTML is turned off in the email client, the text version is displayed instead.  So, what you see below is the text version first, and the html version further down (please scroll down to see the html version).
+</ol>
+
+<div style="font-size:16px;margin:15px 0">
+<a href="#text_version">Text Version</a> &nbsp;&nbsp; <a href="#html_version">HTML Version</a>
+</div>
+
+<a name="next_steps"></a>
+<h2> Next steps ... </h2>
+<ul>
+<li> <%= link_to "Refresh stories", nl_refresh_stories_url(:freq => @newsletter.freq) %> if you want to get the latest story listings. </li>
+<li> <%= link_to "Edit the newsletter", nl_setup_url(:freq => @newsletter.freq) %> if you are not happy with it. </li>
+<%# FIXME: Can we replace this JS code here with an abbreviated version -- depending on what JS framework is used %>
+<li> <%= link_to "Send test emails", "#next_steps", :onclick => "document.getElementById('send_form').style.display = 'block'" %></li>
+</ul>
+
+<%# HIDE FORM BY DEFAULT %>
+<div id='send_form' style="display:none; width:550px">
+<hr>
+<h2> Send out test emails ... </h2>
+<strong> Enter email ids OR member names one per line below.  If an email id or name you provide does not correspond to any existing member, the email is NOT sent!  An email is also not sent if the member you are trying to send to has disabled newsletter delivery. </strong> <br><br>
+
+<form method="POST" action="<%=nl_send_test_mail_url(:freq => @newsletter.freq)%>">
+<input name="authenticity_token" type="hidden" value=<%=form_authenticity_token.inspect%> />
+<textarea name="member_refs" cols="35" rows="3"></textarea>
+<br/>
+<input type="checkbox" name="to_myself" value="true" checked> Send to myself <br />
+<%# FIXME: Can we replace this JS code here with an abbreviated version -- depending on what JS framework is used %>
+<input type="button" name="hide" value="Hide Form" onclick="document.getElementById('send_form').style.display='none'">
+<input type="submit" name="send" value="Send Now" style="text-align:left">
+</form>
+</div>
+</ul>
+<% end %>
+
+<hr>
+
+<strong>From    </strong>: <%= h @tmail.from %> <br>
+<strong>To      </strong>: <%= h @tmail.to %> <br>
+<strong>Subject </strong>: <%= h @tmail.subject %> <br>
+
+<a name="text_version"></a>
+<%# -- HACK to get the multi-part newsletter to display properly --%>
+<%= "<pre>#{@tmail.body.gsub(/<html>/, "</pre><a name=\"html_version\"></a><html>")}" %>

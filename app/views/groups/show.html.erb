@@ -1,0 +1,30 @@
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'listings' if !@no_listings %>
+  <%= javascript_include_tag 'groups' %>
+  <%= javascript_include_tag 'mynews' if @group.has_listing?(:new_stories) %>
+<%- end -%>
+
+<%- if @is_ajax_listing -%>
+  <%= render :partial => 'shared/story_listing_js_includes' %>
+<%- end -%>
+<%- @title = "#{app_name} Group: " + @group.name -%>
+<%- @meta_description = "#{app_name} group, ''" + @group.name + "'' -- " + (@group.sg_attrs.subtitle.blank? ? "" : @group.sg_attrs.subtitle + " -- " + Hpricot(@group.description).inner_text) -%>
+<%- @meta_keywords = @title -%>
+
+<%- @group_activities ||= nil -%>
+<%- @group_activity_hash ||= nil -%>
+
+<% if @group.sg_attrs.hidden? %> <div style='color:red;font-weight:bold;font-size:16px'>(Hidden)</div> <% end %>
+<div class="groups">
+  <div class="story_listing_detail span-16">
+    <%= render :partial => 'shared/landing_pages/top_area', :locals => {:page_obj => @group} %>
+    <%- if !@group.no_listings? -%>
+      <%= render :partial => 'shared/landing_pages/listing_tabs', :locals => {:tabs => landing_page_tabs(@group, @group_activities, @group_activity_hash),
+                                                                              :page_obj => @group,
+                                                                              :listing_route => {:g_slug => @group.id} } %>
+    <%- end -%>
+    <%= render :partial => 'shared/landing_pages/comments', :locals => {:page_obj => @group} %>
+  </div>
+
+  <%= render :partial => 'shared/landing_pages/sidebar', :locals => {:page_obj => @group} %>
+</div>

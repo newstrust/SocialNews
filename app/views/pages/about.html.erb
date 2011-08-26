@@ -1,0 +1,36 @@
+<%- @title = "About #{app_name}" -%>
+<%- @meta_description = "#{app_name} offers a compelling new way to find and share good journalism online. This project provides quality news feeds, news literacy tools and a trust network to help citizens make informed decisions about democracy. Our free website features daily feeds of quality news and opinions, which are carefully rated by our members, using our unique review tools. We rate the news based on quality, not just popularity. #{app_name} reviewers evaluate each article against core journalistic principles such as fairness, evidence, sourcing and context." -%>
+<%- @meta_keywords = @title -%>
+
+<div class="span-16 white_box" style="margin-top:0px;">
+  <div class="top"></div>
+  <div class="wrapper">
+    <div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+      <h2>About Us</h2>
+<p>
+This <%=app_name%> code base is an open source version of the <%= link_to "NewsTrust.net", "http://newstrust.net", :target => "_blank"%> platform. 
+To find out more about this open source project, check this <%= link_to "blog post", "http://blog.newstrust.net/2011/08/open-source.html" %>.
+</p><p>
+<%= link_to "NewsTrust", "http://newstrust.net", :target => "_blank"%>is a nonprofit organization that helps people find good journalism online, so they can make more informed decisions as citizens. Their social news site, <%= link_to "NewsTrust.net", "http://newstrust.net", :target => "_blank"%> features a daily feed of quality news and opinions from mainstream and independent sources, based on ratings from their reviewers. NewsTrust's web review tools enable the public to evaluate accuracy, fairness, context and other core journalistic principles -- and help people become more discerning news consumers in the process. To find out more about NewsTrust, visit <%= link_to "their site", "http://newstrust.net", :target => "_blank"%>.
+</p><p>
+NewsTrust also offers a range of consulting services to organizations that wish to help their communities become better informed and more engaged about public issues. For example, NewsTrust provides development services to help your organization adapt this SocialNews code to create your own social news site. To inquire about these partner services, email NewsTrust at <%= mail_to "partners@newstrust.net", "partners@newstrust.net", :encode => "javascript" %>.
+</p>
+      <p>For more info, <%= mail_to email_addr("info"), "email us", :subject => 'info request', :encode => "javascript" %>.</p>
+    </ul>
+    </div>
+  </div>
+  <div class="bottom"></div>
+</div>
+<%= share_icons_box() %>
+<div class="right_column_box span-8 last">
+  <div class="top"></div>
+  <div class="wrapper">
+    <div class="header">
+      <h4><a href="/about/about_us#staff">Our Staff</a></h4>
+    </div>
+    <div class="content clearfix">
+       Staff listing here or anything else .. Remove this if you dont want this
+    </div>
+  </div>
+  <div class="bottom"></div>
+</div>

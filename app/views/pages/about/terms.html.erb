@@ -1,0 +1,61 @@
+<%- @title = "Terms of Service" -%>
+<%- help_addr = SocialNewsConfig["email_addrs"]["help"] -%>
+
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior" style="<%= params[:popup] ? "" : "font-size:1.17em;line-height:1.25em;" %>">
+
+<%= content_tag(:h2, @title, :style => "margin-bottom:8px") unless params[:popup] %>
+
+
+<p><%=app_name%> is an online community of citizens like you, who care about good journalism.</p>
+<p>
+Our community is governed by our terms of service and community guidelines below. Thanks observing them, to insure a quality service that best serves your needs and the public interest.</p>
+<p>
+If you have any questions about our terms of service or guidelines,
+<%= mail_to help_addr, "email us", :subject => "#{app_name} Terms of Service", :encode => "javascript" %>.</p>
+
+<hr size="1" class="editorial">
+
+<h3>Terms of Service <span class="body_gray">(Preliminary)</span></h3>
+<p>By registering as a member of <%=app_name%>, you agree to our terms of service and community guidelines, which include the following terms:</p>
+<ul>
+<li><strong>Courtesy:</strong> You will be courteous to every <%=app_name%> member, even those whose beliefs you do not share.</li>
+<li><strong>No Disruptive Behavior:</strong> You will not disrupt or interfere with <%=app_name%> ratings, discussions, or other community functions. You will not engage in hate speech, advocate violence, or attempt to convert another member's views.</li>
+<li><strong>No Offensive Material:</strong> You will not post any offensive material, whether it is insulting or derogative comments about newsmakers, journalists, publications featured on <%=app_name%> or other members, or any content of a sexually explicit or pornographic nature, or any materials that might reasonably be perceived as offensive by members of the public.</li>
+<li><strong>No Solicitation:</strong> You will not use this community site to advertise or solicit on behalf of commercial, political, religious, charitable or other organizations, causes, products or services.</li>
+<li><strong>No Copyrighted Material:</strong> You will not post on the <%=app_name%> sites any copyrighted material without the express permission of its owner. However, you may include in your posts or reviews the title of a news item you wish to share with other members, as well as its web address and a brief excerpt (max. 100 words).</li>
+<li><strong>No Copying: </strong>You will not reproduce material from <%=app_name%> (including member posts) without express written permission from <%=app_name%>.</li>
+<li><strong>Privacy: </strong>You will not collect or use information about members of this site without their express permission. (see our <%= link_to 'Privacy Policy', "/about/privacy" + (params[:popup] ? "?popup=true" : "") %>)</li>
+<li> <strong>Contact Information:</strong> You will provide your full name and a valid email address in your <%=app_name%> registration. Your email address will be hidden from other members, unless you choose to show it in your profile. However, <%=app_name%> staff must be able to contact you by email if necessary, to discuss your account. If the email address in your profile is not valid, or if you do not provide your full name, your posting privileges may be suspended.</li>
+<li><strong>Local Guidelines:</strong> You will observe all rules and guidelines posted in specific parts of the site, such as in review forms and discussions.</li>
+</ul>
+<br />
+<p><%=app_name%> is committed to protecting your freedom of expression, and to maintaining a welcoming and safe community in which that expression can flourish. We will not censor members for expressing an opinion, within the limits of our terms of service. But we will take action against any behavior that disrupts community on our site. <%=app_name%> has the right, but not the obligation, to remove or move any member-generated content for any reason, without notice. We have the right to suspend or terminate your membership for violation of the above rules. We have the right to reprint from the <%=app_name%> site any post or portion of a post (along with the name of the <%=app_name%> member who posted it) somewhere else on the site or in any other medium.</p>
+<p>We will post our full terms of service here very soon. Thanks for your patience and understanding during this beta phase.</p>
+
+<hr size="1" class="editorial">
+
+<h3><a name="community_guidelines"></a>Community Guidelines<span class="body_gray"> (Preliminary)</span></h3>
+
+<p>Our community guidelines are simple: we try to treat each other with respect, we only share information that adds value to our community, do not harass other members or news sources, and adhere to our terms of service. In particular, here are a few important guidelines which we encourage all our members to observe.</p>
+
+<ul>
+<li><strong>Be civil:</strong><br>
+When writing reviews or comments on our site, be civil, thoughtful, concise, and respectful of others. From time to time, you'll see a review you disagree with; try to respond in a way that is not offensive to other members. Please treat people with the same respect you would like them to show you.</li>
+<li><strong> Focus on the journalism:</strong><br>
+We aim to rate articles based on their journalistic quality, not whether we agree with the views presented in these articles. It's not always easy to separate the two, but it's worth a try: we often get the best information when we go past our pre-conceived ideas about an article, to look at how it was created.</li>
+<li><strong>Disclosure: Are you the author of a story? or personally involved in it?</strong><br>
+If you are the author, publisher or subject of a story (or otherwise personally involved in that story), please use our story review form's comment field to disclose any conflict of interest you might have as reviewer for this story. For example, if you are the author or publisher of this story, please identify yourself as such at the start of your comments. If you are a friend of the author, or work for the story's publication, please disclose the nature of your relationship in your comments. If you are featured in the story, or work for an organization that is related to this story, also disclose it in your comments. If you fit any of these cases, we ask that you rate these stories fairly, and refrain from manipulating our ratings for personal, ideological or commercial purposes. Deceptive, manipulative or offensive reviews may be removed at <%=app_name%>'s discretion and can lead to termination of your membership.</li>
+</ul>
+<br />
+<p>If you do not agree with these terms of service or community guidelines,  please do not register as a <%=app_name%> member. If you are already registered and wish to cancel your account, please email us at <%= mail_to help_addr, help_addr, :subject => "#{app_name} Terms of Service", :encode => "javascript" %>.</p>
+
+</div>
+</div>
+<div class="bottom"></div>
+</div>
+</div>
+

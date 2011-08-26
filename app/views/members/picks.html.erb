@@ -1,0 +1,29 @@
+<% if (!@member.has_public_profile? || (@member.rating < 2 && @member.validation_level < 2 )) && !logged_in? -%>
+	<% @no_bots = true -%>
+	<% if @member.profile_visible_to_all_nt_members? %>
+		<% flash[:error] = "Please #{link_to "Log In", "/sessions/new"} to see this member's picks." -%>
+	<% else %>
+		<% flash[:error] = "This page is unavailable." -%>
+	<% end %>
+<% else -%>
+
+<% @title = "#{@member.display_name}'s Picks" %>
+
+<div class="main_column">
+	<div class="main_column_box">
+		<h2>
+		<%=link_to_member(@member)%>'s Picks
+		<span class="body_black"> <%=@sub_heading%> (<%= number_format(@saved_stories.total_entries) %>)</span>
+		</h2>
+		<br/>
+
+		<ul class="stories">
+			<%= render :partial => 'stories/story', :collection => @saved_stories, :locals => {:stripes => true } %>
+		</ul>
+		<br/>
+		
+		<%= will_paginate @saved_stories %>
+	</div>
+</div>
+<br/>
+<%- end -%>

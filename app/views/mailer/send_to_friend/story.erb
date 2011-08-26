@@ -1,0 +1,20 @@
+<%= @body + "\n\n" unless @body.blank? -%>
+Check out this story on <%=app_name%>:
+
+__________________________________________
+
+<%= @record.title %>
+<%= strip_tags link_to_sources(@record.sources) -%>
+<%= " - by #{@record.journalist_names}" unless @record.journalist_names.blank? %>
+<%= "#{@record.story_date.strftime('%b. %e, %Y')}" unless @record.story_date.blank? -%>
+<%= " (#{humanize_token(@record, :story_type)})" if @record.story_type %>
+
+<%= strip_tags StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(@record.excerpt,300,400,true),72) %>
+
+<%#-- SSS FIXME: Bug for source pages on local sites!  This will use national site rating --%>
+<%=app_name%> Rating: <%= @record.hide_rating ? "not enough reviews" : "#{sprintf("%.1f", @record.rating || 0.0)} avg. from #{pluralize(@record.reviews_count, "review")}" %>
+
+Check this story at:
+<%= @page.gsub(/\?.*/, '') %>
+
+<%= render :partial => 'mailer/send_to_friend/footer' %>

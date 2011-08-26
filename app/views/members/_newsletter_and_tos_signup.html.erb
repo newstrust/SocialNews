@@ -1,0 +1,31 @@
+<%- newsletters = LocalSite.newsletter_frequencies(@local_site) -%>
+<%- if newsletters.length == 1 -%>
+  <div class="form_field clearfix">
+    <%- freq = newsletters.first -%>
+    <%= check_box_tag "member[newsletter][#{freq}]", true, true, :class => "check", :style => "float:left" %>
+    <%#- SSS FIXME: imitate Rails' weird hidden-field hack to ensure checkbox submission -%>
+    <%#--= hidden_field_tag "member[newsletter][#{freq}], :value => "0" --%>
+    <%= label_tag("member[newsletter][#{freq}]", "Get our #{Newsletter.humanized_freq(freq)} by email", :style => "display:inline; font-weight:normal")%>
+  </div>
+<%- else -%>
+  <div class="form_field leftalign clearfix">
+    <label style="width: 150px">Get our news by email <%= help_icon("member_email_subscriptions", "member") %></label>
+    <div class="input" style="width: 175px; line-height: 2em">
+      <%- newsletters.each do |freq| -%>
+        <%= check_box_tag "member[newsletter][#{freq}]", true, true, :class => "check", :style => "float:left" %>
+        <%#- SSS FIXME: imitate Rails' weird hidden-field hack to ensure checkbox submission -%>
+        <%#--= hidden_field_tag "member[newsletter][#{freq}], :value => "0" --%>
+        <%= label_tag("member[newsletter][#{freq}]", Newsletter.humanized_freq(freq), :class => "subhead_small_plain newssub")%>
+        <br style="clear:both"/>
+      <%- end -%>
+    </div>
+  </div>
+  <br style="clear:both"/>
+<%- end -%>
+
+<div class="form_field clearfix" style="height: 2em;float:left;top-margin:15px">
+	<%#- imitate Rails' weird hidden-field hack to ensure checkbox submission -%>
+	<%= f.hidden_field :terms_of_service, :value => "0" %>
+	<%= check_box_tag "member[terms_of_service]", "1", true, :class => "check" %>
+	<%= label_tag("member[terms_of_service]", "I accept the #{app_name} #{link_to "Terms of Service", "/about/terms", :class => "popup_link"}.", :style => "display: inline; font-weight:normal") %>
+</div>

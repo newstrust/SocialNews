@@ -1,0 +1,16 @@
+<h1 class="title use16columns"><%= h @source.name %><%= edit_button(edit_admin_source_path(@source) + "?return_to=show") %> <%= delete_button(admin_source_path(@source)) %></h1>
+<h3><%= link_to 'Preview Public Source Page', source_path(@source), :target => "_blank" %></h3>
+<h3><%= link_to 'Public Source Page Edit Form', edit_source_path(@source), :target => "_blank" %></h3>
+<h5>Source ID: <%= @source.id %></h5><br />
+<dl>
+  <dt>Image</dt>
+<%- if @source.image -%>
+  <dd><%= image_tag @source.image.public_filename(:column) %></dd>
+  </dd>
+<%- else -%>
+  <dd>(No Image)</dd>
+<%- end -%>
+</dl>
+<br />
+
+ <%= cancel_tag "/admin/sources/" %>

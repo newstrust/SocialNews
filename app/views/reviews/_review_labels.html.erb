@@ -1,0 +1,15 @@
+<div id="review_labels" class="hide">
+  <%- # quality labels -%>
+  <div class="review_labels">
+    <% Rating.quality_labels("form_#{@review.story.type_category}") do |form_level, metric, labels| -%>
+      <%= render :partial => "reviews/review_label", :locals => { :review => @review, :metric => metric, :labels => labels, :form_level => form_level} %>
+    <% end -%>
+  </div>
+
+  <%- # popularity questions (always shown across all forms?) -%>
+  <div class="review_labels">
+    <% Rating.popularity_questions do |form_level, metric, question| -%>
+      <%= render :partial => "reviews/popularity_question", :locals => { :review => @review, :metric => metric, :question => question, :form_level => form_level} %>
+    <% end -%>
+  </div>
+</div>

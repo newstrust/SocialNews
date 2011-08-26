@@ -1,0 +1,35 @@
+<%- srm = source_review.member -%>
+<%- my_review = logged_in? && srm == current_member -%>
+
+<li class="source_review<%= ' my_review' if my_review%>">
+  <div class="member_photo">
+    <%= link_to_member_photo(srm) %>
+  </div>
+  <div class="trustometer">
+    <%= trustometer_img(source_review.rating) %>
+  </div>
+  <div class="meta_info">
+    <% if source_review.hidden? %><span style="color:red">(HIDDEN)</span><%- end -%>
+    <span class="author"> by <%= link_to_member(srm) %> </span>
+    <%- t = source_review.updated_at %>
+    <%- if !t.nil? -%>
+      <span title="<%= t.strftime('%l:%M %p %Z') %>"> <%= t.strftime('%b. %e, %Y') %> </span>
+    <%- end -%>
+    <%- if my_review -%>
+      - <%= link_to_function "Edit your review", "$('#source_review_form').toggle(); return false" %>
+    <%- elsif logged_in? && current_member.has_role_or_above?(:admin) -%>
+      - <%= link_to "Edit", edit_source_review_path(source_review), :class => "edit", :title => "Edit Review" %>
+    <%- end -%>
+  </div>
+  <%- if !source_review.note.blank? -%>
+    <div class="review_part notes clearfix">
+      <%= h source_review.note %>
+    </div>
+  <%- end -%>
+  <%- if !source_review.expertise_topics.blank? -%>
+    <div class="review_part topics clearfix">
+      <%=source_review.member.first_name%> thinks this source is an expert on:
+      <%=source_review.expertise_topics.collect { |t| link_to t.name, t } * ', ' %>.
+    </div>
+  <%- end -%>
+</li>

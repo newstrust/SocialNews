@@ -1,0 +1,20 @@
+# SSS: IMPORTANT: Try to stagger the tasks so that you dont have multiple tasks starting off at periodic intervals.
+
+# Every 15 minutes, reindex the db
+# Run the indexer directly -- not the rake task (which loads up the entire rails environment and causes useless swapping!)
+2,17,32,47 * * * * /usr/bin/lockrun --lockfile=/tmp/sphinx-reindex_socialnews.lockrun -- /usr/bin/indexer --all --rotate --config /data/socialnews/current/config/production.sphinx.conf
+
+# Every 15 minutes, refresh the rails page cache (actually clear!)
+1,16,31,46 * * * * /usr/bin/lockrun --lockfile=/tmp/refresh_page_caches_socialnews.lockrun -- /data/socialnews/current/bin/refresh_page_caches.sh 
+
+# Every 15 minutes, clear the rails action cache
+3,19,33,49 * * * * /usr/bin/lockrun --lockfile=/tmp/clear_action_caches_socialnews.lockrun -- /data/socialnews/current/bin/clear_action_cache.sh 
+
+# @ 4:00 and 20:00, clear out the fragment cache
+0 4,20 * * * /usr/bin/lockrun --lockfile=/tmp/clear_fragment_cache_socialnews.lockrun -- /data/socialnews/current/bin/clear_fragment_cache.sh
+
+# Every morning at 6:05 am, regenerate topic and source taxonomy json files
+5 6 * * * /data/socialnews/current/bin/run_rake_task.sh production socialnews:gen_taxonomies
+
+# Every 1st day of the month at 12:03 am, process nginx access logs
+3 0 1 * * /usr/bin/ruby /data/socialnews/current/bin/process.logs.rb

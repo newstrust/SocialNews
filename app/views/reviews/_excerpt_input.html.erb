@@ -1,0 +1,13 @@
+<div class="excerpt">
+	<% fields_for "review[excerpts_attributes][]", excerpt do |ef| %>
+		<%= ef.hidden_field(:id, :index => nil) unless excerpt.new_record? %>
+		<%= ef.hidden_field :should_destroy, :index => nil, :value => "false" %>
+		
+		<%= ef.label :body, "Quote " + link_to_function("remove", "remove_excerpt(this)", :class=>"small"),
+			{:style => "font-size: 100%"} %>
+		<%= ef.text_area :body, :size => '39x2', :index => nil %>
+		
+		<%= ef.label :comment, "My comment", {:style => "font-size: 100%"} %>
+		<%= ef.text_area :comment, :size => '39x2', :index => nil %>
+	<% end %>
+</div>

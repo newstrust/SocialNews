@@ -1,0 +1,23 @@
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'follows' %>
+<%- end -%>
+
+<%# cache @cached_fragment_name do -%>
+<% @title = "Topics" -%>
+
+<div style="background-color:#fff">
+<p style="margin-top:8px;margin-bottom:10px">
+  Here are news topics reviewed by <%=app_name%> members, listed by subject and category. 
+  <%- unless params[:no_follows] -%>
+    To follow a topic, click on its <span class="follow_button"><img src="/images/ui/spacer.gif" width="15"></span> button. To unfollow it, click the <span class="unfollow_button"><img src="/images/ui/spacer.gif" width="15"></span> button. <%= link_to("See Featured Topics &raquo;", "/topics/featured", :class => "popup_link") %>
+  <%- end -%>
+</p>
+<%- TopicRelation.topic_subjects.each do |s| -%>
+  <%- subject = Subject.find_subject(s, @local_site) -%>
+  <div style="width: 235px; padding: 0 0 15px 15px;">
+    <div class="category_sub_head subhead" style="margin:0"><%= subject.name %></div>
+    <%= render :partial => 'subjects/topics_list', :locals => {:subject => subject, :no_follows => params[:no_follows] } %>
+  </div>
+<%- end -%>
+</div>
+<%# end -%>

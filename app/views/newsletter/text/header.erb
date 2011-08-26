@@ -1,0 +1,12 @@
+Hello [MEMBER.FIRST_NAME],
+
+This week's featured topic is <%=@topic.name%>. The rejection by
+Congress of a $700 billion bailout on Monday is having a dramatic impact
+on stock markets at home and abroad. Help us find quality journalism
+that explains the political causes and effects of this crisis, and
+review our recommended stories on the <%=@topic.name%> topic page:
+<%= (@topic.class == Topic ? topic_url(@topic) : subject_url(@topic)) %>
+
+Be sure to check our selection of top rated news and opinions below, and
+visit <%=app_name%> for live updates: <%= home_url %>
+

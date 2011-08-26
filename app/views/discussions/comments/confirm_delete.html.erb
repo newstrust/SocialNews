@@ -1,0 +1,12 @@
+<%= render :partial => 'comment' %>
+<% form_for(@comment, :url => discussions_comment_path(@comment), :html => { :class => 'comment_form', :method => :delete }) do |f| -%>
+
+<div align="left">
+	<%= cancel_button "Cancel", discussions_comment_path(@comment) , :style => "float: left; margin-right: 10px" %>
+	<%= submit_tag "Hide Comment", :style => "float: left"  %>
+	<br/>
+</div>
+	<br/>
+	<br/>
+
+<%- end -%>

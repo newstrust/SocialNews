@@ -1,0 +1,130 @@
+<%- @title = "#{app_name} Widgets - Unstyled Widget CSS Help" -%>
+
+<style>
+<!--
+.head {font-family: Arial, Helvetica, sans-serif; 
+	font-size: 15px; 
+	font-weight: bold;
+	color: #333333;}
+.subhead {font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;}
+.subhead_italic {font-family: Arial, Helvetica, sans-serif; 
+	font-size: 13px; 
+	font-weight: bold; 
+	font-style: italic; }
+.subhead_plain {font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;}
+.subhead_plain_bold {font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;}
+.body_black {font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;}
+.editorial {font-family: Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	color: #666666;
+	font-style: plain;}
+body { font-size: 11px; margin:5px 20px 20px 20px;}
+li { padding-bottom:5px; }
+-->
+</style>
+<div class="topbar">
+	<div class="logo">
+		<a href="/" onclick="restoreScreenDimensions(self);"><img src="/images/logos/<%=app_slug%>-logo_20px.gif" alt="<%=app_name%>" /></a>
+	</div>
+	<br clear="left"/><br/> <!-- important for layout! -->
+</div>
+
+<h2 class="head"> Widget HTML structure </h2>
+
+<p>
+The unstyled <%=app_name%> widget is generated as follows:
+<ul>
+<li> There are &lt;div&gt; elements for the main widget, the widget header, every story, and the widget footer.
+Each of these DIV elements is controlled by a corresponding CSS class -  nt_widget, nt_header, nt_story, nt_footer. </li>
+<li> All elements within the header, footer, and a story are rendered within &lt;span&gt; elements. Each element is controlled by
+a corresponding CSS class that is logically named (Ex: nt_header_listing_topic, nt_story_url, nt_story_rating, nt_footer_more_stories) </li>
+<li> For hyperlinked elements (Ex: story url, story rating), there is a nested &lt;a&gt; within the &lt;span&gt; which is not assigned
+any CSS class of its own. </li>
+</ul>
+</p>
+
+<h2 class="head"> List of CSS class names </h2>
+<p>
+So, you can tailor the look of the widget to your taste by assigning style settings to all or a subset of these CSS classes.
+The exhaustive list of CSS class names are:
+<ul>
+<li> <strong>Widget:</strong> nt_widget </li>
+<li> <strong>Header:</strong> nt_header </li>
+<li> <strong>Footer:</strong> nt_footer </li>
+<li> <strong>Story:</strong> nt_story </li>
+<li> <strong>Header Elements:</strong> nt_header_listing_topic, nt_header_listing_type, nt_header_content_type, nt_header_source_type </li>
+<li> <strong>Story Elements:</strong> nt_story_rating, nt_story_title, nt_story_source, nt_story_source, nt_story_date,
+nt_story_authors, nt_story_story_type, nt_story_quote, nt_story_num_reviews, nt_story_review_it, nt_story_save </li>
+<li> <strong>Footer Elements:</strong> nt_footer_help, nt_footer_more_stories, nt_footer_submit_story, nt_footer_get_widget </li>
+</ul>
+</p>
+
+<div style="margin: 10px 0">
+<h2 class="head"> Example </h2>
+An example widget styling is shown below for a subset of these classes.  The corresponding widget is shown further below.
+<table><tr><td>
+<pre style="border:1px solid black; font-size:10px; padding:5px; ">
+.nt_widget                { background:white;font-family:arial,helvetica,sans-serif;font-size:10px;color:#777;line-height:14px; }
+.nt_widget            img,
+.nt_widget          a.img {border: none;}
+.nt_story                 { margin:4px 5px; padding:2px 0px; }
+.nt_header                { margin:0 5px 5px 5px; padding:5px 0; border-bottom:1px solid #aaa;font-size:13px;font-weight: bold; }
+.nt_footer                { margin:5px 5px 0px 5px; padding:5px 0; border-top:1px solid #aaa;font-size:9px;font-weight: bold; }
+.nt_widget a              { text-decoration:none; }
+.nt_widget a:hover        { text-decoration:underline; color:#1a4 }
+.nt_header_listing_type a,
+.nt_header_content_type a,
+.nt_header_sources_type a,
+.nt_story_rating        a { text-decoration:none;font-size:11px;color:#399800;font-weight:bold; }
+.nt_story_title         a { text-decoration:none; font-weight:bold;font-size:11px; }
+.nt_story_source          { font-size:11px;font-weight:bold;margin-bottom:3px; }
+.nt_story_source        a { text-decoration:none;color:#777; }
+.nt_story_quote           { font-size:11px;margin-bottom:2px; }
+.nt_story_num_reviews   a { text-decoration:none;font-weight:bold; }
+.nt_story_review_it     a { text-decoration:none;color:#080; }
+.nt_story_save          a { text-decoration:none;font-weight:bold; }
+.nt_footer_help         a { font-weight:normal;text-decoration:none; color:#777; }
+</pre>
+</td></tr></table>
+</div>
+
+<p> The widget you see below is an unstyled widget that has been styled via the style settings above. </p>
+
+<style>
+.nt_widget                { background:white;font-family:arial,helvetica,sans-serif;font-size:10px;color:#777;line-height:14px; }
+.nt_widget            img,
+.nt_widget          a.img {border: none;}
+.nt_story                 { margin:4px 5px; padding:2px 0px; }
+.nt_header                { margin:0 5px 5px 5px; padding:5px 0; border-bottom:1px solid #aaa;font-size:13px;font-weight: bold; }
+.nt_footer                { margin:5px 5px 0px 5px; padding:5px 0; border-top:1px solid #aaa;font-size:9px;font-weight: bold; }
+.nt_widget a              { text-decoration:none; }
+.nt_widget a:hover        { text-decoration:underline; color:#1a4 }
+.nt_header_listing_type a,
+.nt_header_content_type a,
+.nt_header_sources_type a,
+.nt_story_rating        a { text-decoration:none;font-size:11px;color:#399800;font-weight:bold; }
+.nt_story_title         a { text-decoration:none;font-weight:bold;font-size:11px; }
+.nt_story_source          { font-size:11px;font-weight:bold;margin-bottom:3px; }
+.nt_story_source        a { text-decoration:none;color:#777; }
+.nt_story_quote           { font-size:11px;margin-bottom:2px; }
+.nt_story_num_reviews   a { text-decoration:none;font-weight:bold; }
+.nt_story_review_it     a { text-decoration:none;color:#080; }
+.nt_story_save          a { text-decoration:none;font-weight:bold; }
+.nt_footer_help         a { font-weight:normal;text-decoration:none; color:#777; }
+</style>
+<div style="width:300px; border: 1px solid black;">
+<script type="text/javascript">
+_NTW_numStories = 3;
+_NTW_hideElts = new Array();
+_NTW_hideElts['quote'] = true;
+</script>
+<script src="/stories/most_recent.json" type="text/javascript"></script>
+<script src="/javascripts/widgets/formats/default_unstyled.json" type="text/javascript"></script>
+<script src="/javascripts/render_widget.js" type="text/javascript"></script>
+</div>

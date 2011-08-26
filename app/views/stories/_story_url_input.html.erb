@@ -1,0 +1,9 @@
+<div class="story_url" style="width: 450px;">
+	<% fields_for "story[urls_attributes][]", story_url do |suf| %>
+		<%= suf.hidden_field(:id, :index => nil) unless story_url.new_record? %>
+		<%= suf.hidden_field :should_destroy, :index => nil, :value => "false" %>
+		
+		<%= suf.text_field :url, :index => nil, :style => "width: 385px" %>
+		<%= link_to_function("remove", "remove_story_url(this)", :class=>"small") %>
+	<% end %>
+</div>

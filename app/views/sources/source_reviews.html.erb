@@ -1,0 +1,13 @@
+<div class="span-16">
+  <div class="flat source_reviews_listing"><div class="wrapper">
+    <h2> Source Reviews for <%=@source.name%> </h2>
+    <span class="return"> <%= link_to "&laquo Return to Source Profile", source_path(@source) %> </span>
+    <div class="source_reviews">
+      <ul>
+        <%= render :partial => "source_review", :collection => @source_reviews %>
+      </ul>
+    </div>
+
+  </div></div>
+  <%= will_paginate(@source_reviews) %>
+</div>

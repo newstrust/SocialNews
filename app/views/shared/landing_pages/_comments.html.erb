@@ -1,0 +1,20 @@
+<%- if page_obj.allow_comments? %>
+  <div class="span-16 white_box" style="clear:both"><a name="comments"></a>
+    <div class="top"></div>
+    <div class="wrapper comments">
+      <div class="header">
+        <h3><span style="text-transform:uppercase;">Comments:</span> <%= page_obj.name %> <%= "<span class=\"comment_count\"> (#{page_obj.comments.count})</span>" if page_obj.comments.count > 0 %><%= help_icon("adding_comments", "reviewer") %></h3>
+      </div>
+      
+      <div class="comment_description"><%= page_obj.discussion_description.blank? ? page_obj.class.name == "Group" ? "Welcome to our discussion for the #{page_obj.name} group. Feel free to join in." : "Welcome to our discussion about #{page_obj.name}. Feel free to join in." : "#{page_obj.discussion_description}" %>
+        <%- ph = page_obj.hosts(@local_site) %>
+        <%- unless ph.empty? -%>
+          <p><strong>Hosted by</strong>
+          <%= ph.collect { |h| link_to(h.name, h) }.join(", ") %><%= help_icon("what_is_a_host", "host") %>
+        <%- end -%>
+      </div>
+      <%= render :partial => '/discussions/comments/thread', :locals => { :record => page_obj, :commentable_klass => page_obj.class.name } %>
+    </div>
+    <div class="bottom"></div>
+  </div>
+<% end -%>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+m11_daily:
+   member_id: 11
+   newsletter_type: daily
+
+m12_weekly:
+   member_id: 12
+   newsletter_type: weekly
+
+m14_daily:
+   member_id: 14
+   newsletter_type: daily
+
+m14_weekly:
+   member_id: 14
+   newsletter_type: weekly

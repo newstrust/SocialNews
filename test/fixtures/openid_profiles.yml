@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+quentin-myopenid:
+  id: 1
+  member_id: 11
+  openid_url: "http://quentintest.myopenid.com/"
+quentin-livejournal:
+  id: 2
+  member_id: 11
+  openid_url: "http://quentintest.livejournal.com/"

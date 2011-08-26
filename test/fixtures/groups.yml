@@ -1,0 +1,46 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+group_one:
+  id: 1
+  name: Group One
+  slug: g_one
+  description: "Only Group One's Allowed"
+  memberships_count: 0
+  is_protected: 0
+  context: 'role'
+
+admins:
+  id: 2
+  name: Admin
+  slug: admin
+  description: This group contains admins of the site.
+  memberships_count: 0
+  is_protected: 1
+  context: 'role'
+
+editors:
+  id: 3
+  name: Editor
+  slug: editors
+  description: This group contains editors of the site.
+  memberships_count: 0
+  is_protected: 1
+  context: 'role'
+
+hosts:
+  id: 4
+  name: Host
+  slug: hosts
+  description: This group contains hosts of the site.
+  memberships_count: 0
+  is_protected: 1
+  context: 'role'
+
+social_group:
+  id: 5
+  name: NT Editors
+  slug: social
+  description: This group contains editors of the site.
+  memberships_count: 0
+  is_protected: 1
+  context: 'social'

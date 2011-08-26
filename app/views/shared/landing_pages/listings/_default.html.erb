@@ -1,0 +1,53 @@
+<%- page_obj ||= nil -%>
+
+<%- if @is_ajax_listing -%>
+  <%= render :partial => 'shared/story_listing_js_includes' %>
+<%- end -%>
+
+<%- cache @cached_fragment_name do -%>
+  <%- t_slug ||= nil -%>
+  <%- story_listing = @stories -%>
+  <%#-- special case code for best_of_2008 topic --%>
+  <%- listing_route.merge!(:start_date => "2008.01.01", :end_date => "2008.12.31") if t_slug && t_slug == "best_of_2008" -%>
+  <%- listing_route[:controller] = :stories -%>
+  <%- listing_route[:listing_type] = listing_type.to_s -%>
+	<%- ["news", "opinion"].each do |story_type| -%>
+		<%- st_listing = story_listing[story_type] -%>
+		<%- listing_route[:story_type] = story_type -%>
+		<%- listing_route[:source_ownership] = nil -%>
+		<%- ["mainstream", "independent"].each do |source_ownership| -%>
+      <%- listing_route[:source_ownership] = source_ownership -%>
+      <%- listing_url = url_for(listing_route) -%>
+      <div class="category_sub_head">
+        <%- if listing_type == :most_recent || listing_type == :most_trusted -%>
+          <div class="timespan_links"><%=link_to "Full Listing", listing_url%></div>
+        <%- end -%>
+        <%= link_to subsection_title(page_obj, listing_type, story_type, source_ownership), listing_url %>
+        <%= help_icon listing_type.to_s %>
+      </div>
+      <div class="flat"><div class="wrapper">
+        <div class="article">
+          <ul>
+          <%= render :partial    => "stories/story",
+                     :collection => st_listing[source_ownership],
+                     :locals     => { :group         => page_obj.class == Group ? page_obj : nil,
+                                      :quote_max_len => 120, 
+                                      :hide_flags    => { :reviews => true,
+                                                          :no_rating => true }, 
+                                      :show_flags    => { :starred => true, :reviews_btn => true,
+                                                          :gray_trustometer => true } } %>
+          </ul>
+        </div>
+        <div class="clearfix">
+          <div class="category_sub_foot clearfix">
+            <div class="shareLinks">
+              <%= link_to("Get Widget", "/widgets?url=#{listing_url}") %> | <%= rss_link("RSS", listing_route) %> <%= rss_icon(listing_route) %>
+            </div>
+            <span class="read_more"><%= link_to "More #{source_ownership.humanize} #{story_type.humanize} &raquo;", listing_url -%></span>
+            <%= help_link "How we pick these stories", 'how_we_pick_stories', "", :class => "small_note" %>
+          </div>
+        </div>
+      </div></div>
+		<%- end -%>
+	<%- end -%>
+<%- end -%>

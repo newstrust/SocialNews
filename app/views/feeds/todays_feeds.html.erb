@@ -1,0 +1,72 @@
+<%- cache @cached_fragment_name do -%>
+<%- @title = "Today's Feeds (" + @subtitle + ")" -%>
+
+<div class="span-16">
+	<div class="main_column_box todays_feeds">
+	<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div> 
+	<div class="wrapper">
+	<div class="interior_content" style="font-size:1.17em;line-height:1.25em;">
+		<h2>Today's Feeds<%if params[:ts_slug]%><span class="subtitle"> - <%=@subtitle%></span><%end%><span class="beta"> (BETA)</span></h2>
+		<p class="light_gray">Here are today's most popular stories from our <%=link_to "<i>'smart feeds'</i>", feeds_url%>. 
+    They have not yet been reviewed by our editors, 
+    so please check that their story info is accurate and fill in any missing fields. 
+    This page has been filtered to surface a diverse mix of popular stories.
+    To see more stories from our feeds, click on any topic or feed name in the right column. 
+    Read more about our <%= link_to "feeds", feeds_url%>.
+    <br/><br/>
+    <strong><%= link_to("Today's Top Stories from All Feeds &raquo;	", todays_feeds_feeds_url) if params[:ts_slug]%></strong>
+    </p>
+
+  <%- if @msm_stories -%>
+    <%- [[@msm_stories, "Mainstream"], [@ind_stories, "Independent"]].each do |x| -%>
+    <h4>Top Stories - <%=x[1]%></h4>
+		<ul class="stories">
+      <%= render :partial    => "stories/story", 
+                 :collection => x[0],
+                 :locals     => { 
+                   :show_flags => { :abbreviated_feed_attribution => true, :popularity_stats => true },
+                   :hide_flags => { :quote => true, :authors => true, :story_date => true, :rating => true, :status => true, :reviews => true, :submitted_by => true } 
+                 } %>
+    </ul>
+    <br clear="both;" />
+    <%- end -%>
+  <%- else -%>
+		<h4>Recent Stories - <%=@subtitle%></h4>
+    <%= will_paginate @stories %><br/><br/>
+
+    <ul class="stories">
+    <%= render :partial    => "stories/story",
+               :collection => @stories, 
+               :locals     => {
+                 :show_flags => { :abbreviated_feed_attribution => true, :popularity_stats => true },
+                 :hide_flags => { :quote => true, :authors => true, :story_date => true, :rating => true, :status => true, :reviews => true, :submitted_by => true } 
+               } %>
+    </ul>
+
+    <br/><%= will_paginate @stories %><br/>
+  <%- end -%>
+  </div>
+</div>
+<div class="bottom"></div>
+</div>
+	</div>
+</div>
+<%- end -%>
+
+<div class="right_column span-8 last">
+ <div class="todays_feeds_image" style="margin-top:20px;"></div>
+<%- cache @cached_topics_sidebar do -%>
+  <%- [[Subject, @top_subjects], [Topic, @top50_topics]].each do |elt| -%>
+    <%- right_column_box :header => "#{elt[0].to_s} Feeds" do %>
+      <%- elt[1].each do |obj| -%>
+        <%= link_to(obj.name, todays_topic_feeds_feeds_url(:ts_slug => obj.slug)) + " <span class='small light_gray'>(#{obj.num_stories})</span>" %> <br/>
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+<%- end -%>
+
+<%- cache @cached_feeds_sidebar do -%>
+  <%= render :partial => "feeds/feeds_sidebar" %>
+<%- end -%>
+</div>

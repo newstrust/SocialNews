@@ -1,0 +1,33 @@
+<% @title = "Submit" %>
+
+<div style="color: #666; font-size: 11px; margin-top: 10px">
+	<% if @editing_pending %>
+		<div style="margin: 0.5em 0">
+			Please verify this story's information to review it.
+		</div>
+	<% end %>
+	For help, click on<%= help_icon %>.
+	To post faster, get our <a href="/tools/bookmarklet" target="_blank">Bookmarklet</a>.
+	<div id="fields_guessed" class="guess" style="margin: 0.5em 0; display: none; padding: 3px">
+		Some fields below have been automatically filled in. Please make sure they're correct.
+	</div>
+</div>
+
+<%= error_messages_for 'story', :header_message => nil, :message => nil %>
+
+<% form_for @story, :html => {:class => "edit_story"} do |f| -%>
+	<%= hidden_field_tag 'editing_pending', @editing_pending %>
+	<%= f.hidden_field :referred_by %>
+	
+	<%= render :partial => 'submit_form', :locals => {:f => f} %>
+	
+	<hr/>
+
+	<%#--= fb_publish_checkbox --%>
+
+	<div align="right" style="clear:both;">
+		<%= submit_button "Submit", nil, :style => "float: right" %>
+		<%= cancel_button "Cancel", home_url(:expand => true), :style => "float: right; margin-right: 10px" %>
+		<br/>
+	</div>
+<% end -%>

@@ -1,0 +1,15 @@
+# Every minute, check that bj is alive
+*/1 * * * * /usr/bin/lockrun --lockfile=/tmp/bj_socialnews.lockrun -- /usr/bin/bj run --forever --rails_env=staging --rails_root=/data/socialnews/current --log=/data/socialnews/shared/log/backgroundjob.log
+
+# Every 30 minutes, decay activity score for stories
+13,43 * * * * /usr/bin/ruby /data/socialnews/current/lib/tasks/decay_activity_score.rb
+
+# Every morning at 3:30 am, copy over images to media.socialnews.net
+#30 3 * * * /data/socialnews/current/lib/tasks/backup.images.sh 2> /data/socialnews/img.backup.errs 1> /data/socialnews/img.backup.out
+
+# Every Sunday at 10 pm, run the db clean-up task
+#0 22 * * sun /data/socialnews/current/bin/run_rake_task.sh staging socialnews:cleanup_db
+
+# Not relevant any more
+## Every Sunday at 11 pm, run the socialnews source aggregate info recalc task
+##0 23 * * sun /data/socialnews/current/bin/run_rake_task.sh staging socialnews:ratings:update_aggregate_source_info

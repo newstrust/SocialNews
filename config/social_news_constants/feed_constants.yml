@@ -1,0 +1,69 @@
+feed_fetcher:
+# parallel feed fetcher scripts
+  num_fetchers: 4
+
+# api_decay_factor decays the importance of a story belonging for each additional api it is found in
+# This prevents every additional api it is present in from overly boosting a story's importance.
+# If 'n' is the # of apis that a story belongs to, the api_popularity value is (1-api-decay_factor**n)/(1-api_decay_factor)
+# So,
+#  - with api_decay_factor of 0.75, and a story belonging to 3 apis, the api_popularity is set to 2.3 (rather than 3 without the decay)
+#  - if you want to further reduce influence of additional api sightings, decrease this value.
+#  - if you want to further increase influence of additional api sightings, increase this value.
+# The api_popularity score is capped at 1/(1-api_decay_factor).
+#  - For 0.90, this is 10
+#  - For 0.75, this is 4.  
+#  - For 0.50, this is 2.
+
+  api_decay_factor  : 0.75
+
+# Same reasoning for feed popularity as with api popularity
+# Max feed populiarty score is capped at 1/(1-feed_decay_factor)
+#  - For 0.900, this is 10
+#  - For 0.875, this is 8
+#  - For 0.800, this is 5
+
+  feed_decay_factor : 0.90
+
+# * num_diggs, num_tweets, fb_popularity, co-efficients are for the corresponding story scores.
+#   0.035 is a low enough value to not over-prefer dugg/tweeted/fb-shared stories, but high enough that it can push
+#   some stories over the min-score edge.
+#
+#   Right now, the num_diggs, num_tweets, fb_popularity, scores are dampened with a logarithm
+#   since some stories tend to have a lots of diggs / tweets / fb-shares and we don't want
+#   digg/twitter/facebook to have a heavy influence on what stories get listed.
+#
+#   Ex. a story with 1 digg will contribute 0.028 towards the total score
+#       a story with 10 diggs will contribute 0.096 towards the total score
+#       a story with 100 diggs will contribute 0.185 towards the total score
+#
+#   An alternative to using logarithm to control influence of diggs/tweets/fb-popularity
+#   is to use the decay factor  strategy.  There is a difference between the two.  Decay factor sets a cap
+#   on the maximum value, whereas logarithm simply dampens the effect without setting a cap on the maximum value.
+#   For now, we have chosen to use logarithm-based dampening.  If you want to change the strategy, this has to be
+#   done in code (lib/feed_fetcher.rb)
+#
+# * feed_popularity: This is the boost for a story's feed popularity, i.e. score of belonging to multiple feeds
+#   If you want to reduce feed popularity's influence on a story's score, reduce this value.
+#
+# * api_popularity: This is the boost for a story's api popularity, i.e. score of belonging to multiple apis
+#   If you want to reduce api popularity's influence on a story's score, reduce this value.
+#   NOTE that this is independent of the api_decay_factor above.  The decay factor decides how much influence
+#   each additional api has on a story's importance and caps the max api_popularity score.  But, the api_popularity
+#   coefficient decides how much importance we are giving the api_popularity score.  For example, with a value of zero,
+#   we are essentially saying that a story's presence in one or more api provider's database has no bearing on how
+#   important the story is.
+#
+# * source_quality: For every 0.1 rating that a source has over 3.25, its stories get an automatic boost of 0.03
+#                   => a story from a 4.50 rated source gets an automatic boost of 0.3
+#                   => a story from a 2.25 rated source (or no source or pending source) gets an automatic penalty of 0.3
+#
+# * missing_fields: Every missing metadata field in the story is penalized 0.02
+
+feed_fetcher_score_coefficients:
+  num_diggs           : +0.030
+  num_tweets          : +0.030
+  fb_popularity       : +0.030
+  feed_popularity     : +0.250
+  api_popularity      : +0.200
+  source_quality      : +0.300
+  missing_fields      : -0.020

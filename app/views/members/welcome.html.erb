@@ -1,0 +1,72 @@
+<%- @title = "Welcome" -%>
+
+<%#TODO - if person is not signed in, redirect to the sign in/sign up page %>
+<style type="text/css">
+<!--
+tr, td, th {vertical-align:top;padding:0px;margin:0px;}
+-->
+</style>
+
+	<h1 style="margin-bottom:10px; font-size:1.4em; font-weight:bold;">Welcome, <%= current_member.name.split[0] %>!</h1>
+			<p style="font-size:1.14em;">
+			Thanks for joining our social news network. 
+			<%if current_member.fbc_linked? %>
+			For help with Facebook Connect, check our <%= link_to "FAQ", "/help#facebook"%>.
+			<% else %>
+			Check your email inbox and click our confirmation link to activate your account. Until then, you can still explore the site and review stories (but they won't be published until you <%= help_link "activate your account", "activate", "" %>).
+			
+			<% end %>
+			</p>
+			<p class="subhead_plain"><strong>Here's how to get started, in 3 easy steps:</strong></p>
+			<div class="span-24 white_box_big" style="margin-top:0px;">
+	<div class="top"></div> 
+	<div class="wrapper">
+	<div class="interior_content" style="font-size:1.17em;line-height:1.25em;width:950px;">
+	
+						<div class="span-7" style="margin-right:30px;">
+						<a href="/" target="_blank"><img src="/images/ui/welcome/checkout.png" width="246" height="41" border="0" alt="Check our site."></a>
+						<p class="subhead_plain" style="margin-top:12px;">
+						We feature daily news and opinions, rated by members like you. We focus on information quality, not just popularity.</p>
+						<p>To get started, check our <strong><a href="/">home page</a></strong>, to get the lay of the land.</p>
+						</div>
+						
+					<div class="span-7" style="margin-right:30px;">
+					<a href="/" target="_blank"><img src="/images/ui/welcome/rate.png" width="193" height="41" border="0" alt="Rate a story"></a>
+					<p class="subhead_plain" style="margin-top:12px;">
+						Rating a story is quick and easy. When you're ready, go ahead and review one of our recently posted stories. 
+						</p>
+						<p><strong><a href="/" target="_blank">Review a recent story</a></strong>
+				  (click on <em>Review</em> in any story listing)
+</p>
+	        		</div>
+					<div class="span-7 last">
+				 <a href="/members/my_account#profile" target="_blank" class="subhead_plain"><img src="/images/ui/welcome/get.png" width="202" height="41" border="0" alt="Get Involved"></a>
+						<p class="subhead_plain" style="margin-top:12px;">
+					  If you like what you see, participate in our social news  network. Help us find the best journalism online, so we can all get more informed.</p>
+					
+								
+				  	<p>Take a moment to <strong><a href="/members/my_account#profile" target="_blank" class="subhead_plain">fill your profile</a></strong> and tell us a bit about yourself.</p>
+         			</div>
+         			<div style="width:880px; border-top:2px solid #f3f3f3;margin:10px 0px 20px 0px; float:left;"></div>
+			 <span class="subhead_plain" style="float:left; width:100%;">For more help, check our <a href="/help/">FAQ</a> or <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>. Enjoy!</span><a href="/" class="formButton continue" style="float: left;"></a> 
+			 </div>
+			 </div>
+			 <div class="bottom"></div>
+			 </div>
+			 
+			 <!-- Google Code for Registration Conversion Page -->
+<script language="JavaScript" type="text/javascript">
+<!--
+var google_conversion_id = 1065537764;
+var google_conversion_language = "en_US";
+var google_conversion_format = "1";
+var google_conversion_color = "ffffff";
+var google_conversion_label = "pgaTCKqARxDkoYv8Aw";
+//-->
+</script>
+<script language="JavaScript" src="http://www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+<img height="1" width="1" border="0" src="http://www.googleadservices.com/pagead/conversion/1065537764/?label=pgaTCKqARxDkoYv8Aw&amp;script=0">
+</noscript>
+

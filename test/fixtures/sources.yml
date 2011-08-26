@@ -1,0 +1,52 @@
+legacy_source:
+  id: 1
+  name: "New York Times"
+  slug: "new_york_times"
+  domain: "nytimes.com"
+  ownership: msm
+  rating : 3.1
+  authorships_count : 3
+
+wpost:
+  id: 2
+  name: "Washington Post"
+  slug: "washington_post"
+  domain: "washingtonpost.com"
+  ownership: msm
+  rating : 3.0
+  authorships_count : 2
+
+alternet:
+  id: 3
+  name: "AlterNet"
+  slug: "alternet"
+  domain: "alternet.org"
+  ownership: ind
+  rating : 3.0
+  authorships_count : 2
+
+multi_domain_source_1:
+  id: 4
+  name: "20/20"
+  slug: "20_20"
+  domain: "abcnews.go.com"
+  section: "/2020/"
+  ownership: msm
+  rating : 3.0
+
+multi_domain_source_2:
+  id: 5
+  name: "Good Morning America"
+  slug: "good_morning_america"
+  domain: "abcnews.go.com"
+  section: "/GMA/"
+  ownership: msm
+  rating : 3.0
+
+ap:
+  id: 6
+  name: "Associated Press"
+  slug: "associated_press"
+  domain: "ap.org"
+  ownership: msm
+  rating : 3.0

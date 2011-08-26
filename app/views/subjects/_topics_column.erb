@@ -1,0 +1,25 @@
+<%- right_column_box :header => "Other Topics in #{subject.name}" do -%>
+	<%- groupings = [{:none => nil}] + Subject.groupings_for(subject.slug) -%>
+  <%- subj_topic_groupings = subject.topics_by_grouping(@local_site) -%>
+	<%- groupings.each do |grouping| -%>
+		<%- grouping_key = grouping.keys.first -%>
+		<%- grouping_topics = subj_topic_groupings[grouping_key] || []-%>
+    <%- grouping_topics.reject! { |t| (@local_site ? AggregateStatistic.find_statistic(t, "taggings_count") : t.taggings_count) < 3 } -%>
+
+		<%- unless grouping_topics.blank? -%>
+			<%- unless grouping_key == :none -%>
+				<h4 class="bottom"><%= grouping.values.first["name"] %></h4>
+			<%- end -%>
+
+			<%- grouping_topics.each do |topic| -%>
+				<div <% unless grouping_key == :none %> style="padding-left: 0.5em"<% end %>>
+					<%= rss_icon({:listing_type => :most_recent, :t_slug => topic.slug}, {:style => "float: right"}) %>
+					<%= link_to topic.name, topic %>
+          <%= topic_taggings_count(topic, @local_site) %>
+				</div>
+			<%- end -%>
+
+			<%= "<br/>" unless grouping_topics.empty? or grouping == groupings.last %>
+		<%- end -%>
+	<%- end -%>
+<%- end -%>

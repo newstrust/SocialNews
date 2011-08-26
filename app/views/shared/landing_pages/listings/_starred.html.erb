@@ -1,0 +1,20 @@
+<% if @is_ajax_listing -%>
+  <%= render :partial => 'shared/story_listing_js_includes' %>
+<% end -%>
+
+<div class="flat"><div class="wrapper">
+  <div class="article">
+  <% if @stories.empty? -%>
+    <div class="empty_listing">You have not starred any stories from this <%=page_obj.class.name.downcase%>.</div>
+  <% else %>
+    <ul>
+    <%= render :partial    => "stories/story",
+               :collection => @stories,
+               :locals     => { :group         => page_obj.class == Group ? page_obj : nil,
+                                :quote_max_len => 120,
+                                :hide_flags    => { :reviews => true, :no_rating => true },
+                                :show_flags    => { :starred => true, :reviews_btn => true, :gray_trustometer => true }} %>
+    </ul>
+    <% end -%>
+  </div>
+</div></div>

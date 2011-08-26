@@ -1,0 +1,116 @@
+= ActsAsEavModel
+
+ActsAsEavModel allow for the Entity-attribute-value model (EAV), also 
+known as object-attribute-value model and open schema on any of your ActiveRecord
+models. 
+
+== What is Entity-attribute-value model?
+Entity-attribute-value model (EAV) is a data model that is used in circumstances 
+where the number of attributes (properties, parameters) that can be used to describe 
+a thing (an "entity" or "object") is potentially very vast, but the number that will 
+actually apply to a given entity is relatively modest.
+
+== Typical Problem
+A good example of this is where you need to store
+lots (possible hundreds) of optional attributes on an object. My typical
+reference example is when you have a User object. You want to store the
+user's preferences between sessions. Every search, sort, etc in your
+application you want to keep track of so when the user visits that section
+of the application again you can simply restore the display to how it was.
+
+So your controller might have:
+
+  Project.find :all, :conditions => current_user.project_search,
+    :order => current_user.project_order
+
+But there could be hundreds of these little attributes that you really don't
+want to store directly on the user object. It would make your table have too
+many columns so it would be too much of a pain to deal with. Also there might
+be performance problems. So instead you might do something like
+this:
+
+  class User < ActiveRecord::Base
+    has_many :preferences
+  end
+
+  class Preferences < ActiveRecord::Base
+    belongs_to :user
+  end
+
+Now simply give the Preference model a "name" and "value" column and you are
+set..... except this is now too complicated. To retrieve a attribute you will
+need to do something like:
+
+  Project.find :all,
+    :conditions => current_user.preferences.find_by_name('project_search').value,
+    :order => current_user.preferences.find_by_name('project_order').value
+
+Sure you could fix this through a few methods on your model. But what about
+saving?
+
+  current_user.preferences.create :name => 'project_search',
+    :value => "lastname LIKE 'jones%'"
+  current_user.preferences.create :name => 'project_order',
+    :value => "name"
+
+Again this seems to much. Again we could add some methods to our model to
+make this simpler but do we want to do this on every model. NO! So instead
+we use this plugin which does everything for us.
+
+== Capabilities
+
+The ActsAsEavModel plugin is capable of modeling this problem in a intuitive
+way. Instead of having to deal with a related model you treat all attributes
+(both on the model and related) as if they are all on the model. The plugin
+will try to save all attributes to the model (normal ActiveRecord behavior)
+but if there is no column for an attribute it will try to save it to a
+related model whose purpose is to store these many sparsely populated
+attributes.
+
+The main design goals are:
+
+* Have the eav attributes feel like normal attributes. Simple gets and sets
+  will add and remove records from the related model.
+* Allow for more than one related model. So for example on my User model I might
+  have some eav behavior going into a contact_info table while others are
+  going in a user_preferences table.
+* Allow a model to determine what a valid eav attribute is for a given
+  related model so our model still can generate a NoMethodError.
+
+== Example
+
+Will make the current class have eav behaviour.
+
+  class Post < ActiveRecord::Base
+    has_eav_behavior
+  end
+  post = Post.find_by_title 'hello world'
+  puts "My post intro is: #{post.intro}"
+  post.teaser = 'An awesome introduction to the blog'
+  post.save
+
+The above example should work even though "intro" and "teaser" are not
+attributes on the Post model.
+
+== Installation
+
+ ./script/plugin install git@github.com:dwg/acts_as_eav_model.git
+
+== RUNNING UNIT TESTS
+
+The unit tests are written in rspec so you need to
+ gem install rspec
+to run them.
+
+If you want to test coverage you'll also need to
+ gem intall rcov
+
+=== Running with Rake
+
+The easiest way to run the unit tests is through Rake.
+
+ rake spec
+ rake spec:rcov
+ rake spec:rcov:verify
+
+Copyright (c) 2008 Marcus Wyatt, released under the MIT license

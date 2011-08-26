@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+nytimes_top:
+  id: 1
+  url:  http://www.nytimes.com/services/xml/rss/nyt/pop_top.xml
+  auto_fetch: true
+  default_stype: news
+  default_topics: "environment,election_reform"
+
+memeorandum:
+  id: 2
+  url:  http://www.memeorandum.com/index.xml
+  auto_fetch: true

@@ -1,0 +1,47 @@
+=======================================================
+SocialNews Version 1.0
+
+General Information, License, and Credits
+
+Prepared by NewsTrust Communications on August 26, 2011
+=======================================================
+
+SocialNews
+----------
+The SocialNews code base is an open source version of the NewsTrust.net platform. 
+
+This open source code is licensed by NewsTrust Communications under the terms of the
+Berkeley Software Distribution ("BSD") license. 
+
+Please read LICENSE for the full text of the licensing terms.
+
+Please read docs/README_FOR_APP for setting up the app and deploying it.
+
+The file named CREDITS has information about the contributors to this project.
+
+About NewsTrust
+---------------
+NewsTrust Communications is a nonprofit organization that helps people find good
+journalism online, so they can make more informed decisions as citizens. 
+
+Our social news site, NewsTrust.net, features a daily feed of quality news and
+opinions from mainstream and independent sources, based on ratings from our reviewers.
+NewsTrust's web review tools enable the public to evaluate accuracy, fairness,
+context and other core journalistic principles -- and help people become more
+discerning news consumers in the process. To find out more about NewsTrust, visit
+our site: http://newstrust.net/about/
+
+NewsTrust also offers a range of consulting services to organizations that wish to
+help their communities become better informed and more engaged about public issues.
+For example, NewsTrust provides development services to help your organization adapt
+this SocialNews code to create your own social news site. 
+
+To inquire about our partner services, email us at <partners@newstrust.net>.
+
+For general feedback or to inquire about our technical issues, email us at
+<feedback@newstrust.net>.
+
+To find out more about this open source project, check this blog post:
+http://blog.newstrust.net/2011/08/open-source.html 
+
+From time to time, we will post updates on this page about this project. 

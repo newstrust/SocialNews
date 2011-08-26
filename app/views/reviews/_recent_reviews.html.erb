@@ -1,0 +1,18 @@
+<% hide_flags ||= {} -%>
+<% show_flags ||= {} -%>
+<div class="article member_detail">
+<ul>
+  <%= render :partial => "stories/story",
+             :object  => review.story,
+             :locals  => { :hide_flags => { :quote => true,
+                                            :submitted_by => true,
+                                            :rating => false,
+                                            :review_it => false,
+                                            :edit_it => false,
+                                            :reviews => false },
+                           :last => true } %>
+</ul>
+<div>
+  <%= render :partial => 'reviews/review', :object => review, :locals => {:hide_flags => hide_flags, :show_flags => show_flags} %>
+</div>
+</div>

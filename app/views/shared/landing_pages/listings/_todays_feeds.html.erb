@@ -1,0 +1,29 @@
+<% if @is_ajax_listing -%>
+  <%= render :partial => 'shared/story_listing_js_includes' %>
+<% end -%>
+
+<% tag = @topic || @subject -%>
+
+<%- cache @cached_fragment_name do -%>
+  <% listing_url = todays_topic_feeds_feeds_path(tag) -%>
+  <div class="category_sub_head">
+    <div class="timespan_links"><%=link_to "Full Listing", listing_url %></div>
+    <%= link_to "Todays Feeds - #{tag.name}", listing_url %>
+  </div>
+  <div class="flat"><div class="wrapper">
+    <div class="article">
+    <% if @stories.empty? -%>
+      <div class="empty_listing">There are no stories yet from todays feeds for this topic.  Please check back later.</div>
+    <% else %>
+      <ul>
+      <%= render :partial => "stories/story", :collection => @stories,
+            :locals => {:quote_max_len => 120, 
+                        :hide_flags => { :reviews => true,
+                                         :no_rating => true }, 
+                        :show_flags => { :reviews_btn => true,
+                                         :gray_trustometer => true }} %>
+      </ul>
+    <% end -%>
+    </div>
+  </div></div>
+<% end -%>

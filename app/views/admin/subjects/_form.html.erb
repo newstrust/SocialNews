@@ -1,0 +1,84 @@
+<div class="fieldset">
+  <div>
+    <p><%= f.label :name, "Name" %></p>
+    <%= f.text_field :name %>
+  </div>
+  <div>
+    <p><%= f.label :slug, "Slug" %></p>
+    Subject Slugs are not editable
+    <br/>
+  </div>
+  <div>
+    <p><%= f.label :intro, "Intro" %></p>
+    <%= render :partial => '/shared/textile_support' %>
+    <%= f.text_area :intro %>
+  </div>
+
+  <div>
+    <p><%= f.check_box :allow_comments %> Allow comments for this subject?</p>
+  </div>
+
+  <div>
+    <p><%= f.label :discussion_description, "Comment Description" %></p>
+    <div class="explanation">Add any editorial description needed to set the appropriate context for the comment thread.</div>
+    <%= render :partial => '/shared/textile_support' %>
+    <%= f.text_area :discussion_description %>
+  </div>
+
+  <div>
+    <p><%= f.label :status, "Status" %></p>
+    <%= f.select :status, pull_down_menu("topic_status") %>
+  </div>
+
+  <div>
+    <p><%= f.label :num_msm_stories, "Number of stories from Mainstream sources" %>
+    <div class="explanation">(In both news &amp; opinion listings on all tabs on the landing page, these many stories will be listed from MSM sources)</div>
+    </p>
+    <%= f.text_field :num_msm_stories %><br>
+  </div>
+  <div>
+    <p><%= f.label :num_ind_stories, "Number of stories from Independent sources" %>
+    <div class="explanation">(In both news &amp; opinion listings on all tabs on the landing page, these many stories will be listed from IND sources)</div>
+    </p>
+    <%= f.text_field :num_ind_stories %><br>
+  </div>
+  <div>
+    <p><%= f.label :topic_volume, "Topic Volume (# of days worth of stories to display)" %>
+    <div class="explanation">(Set to 30 or less to appear in Widgets pull-down list)</div>
+    </p>
+    <%= f.text_field :topic_volume %><br>
+  </div>
+
+  <hr/>
+
+  <div>
+    <p><%= f.label :hostings, "Hosts" %></p>
+    Hosts are not currently editable.
+    <br/>
+  </div>
+
+  <hr/>
+
+  <div class="image_form">
+    <%= f.label :image %>
+    
+    <%- if @subject.image -%>
+    <div>
+      <%= image_tag @subject.image.public_filename(:column) %>
+      <%= delete_button(destroy_image_admin_subject_path(@subject)) %>
+    </div>
+    <%- end -%>
+    
+    <% fields_for :image, @subject.image do |imgf| %>
+    <p><%= imgf.label :uploaded_data, "Picture" %><br/>
+    <%= imgf.file_field :uploaded_data %></p>
+    
+    <p><%= imgf.label :credit, "Credit" %><br/>
+    <%= imgf.text_field :credit %></p>
+    
+    <p><%= imgf.label :credit_url, "Credit URL" %><br/>
+    <%= imgf.text_field :credit_url %></p>
+    
+  <% end %>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<%- unless @followed_members.empty? -%>
+  <%- @followed_members_activity_entries.each_with_index do |ae, i| -%>
+    <% m = @followed_members[i] -%>
+    <% if ae.blank? -%>
+      <%= render :partial => 'activity_entry', :locals => { :obj => nil, :netfriend => m, :updated_at => nil, :my_page => @my_page } %>
+    <% else -%>
+      <%= render :partial => 'activity_entry', :locals => { :obj => @followed_members_activity_hash[ae.activity_type][ae.activity_id], :netfriend => m, :updated_at => ae.updated_at, :my_page => @my_page } %>
+    <% end -%>
+  <% end -%>
+<% else -%>
+  <h3>No members are being followed. <%= "" if @my_page && @followed_members.empty? %></h3>
+<% end -%>

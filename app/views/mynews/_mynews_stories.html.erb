@@ -1,0 +1,21 @@
+<% if @is_ajax_listing -%>
+  <%= render :partial => 'shared/story_listing_js_includes' %>
+<% end -%>
+
+<% story_hf = {:pending_quote => true, :submitted_by => true, :rating => false, :review_it => false, :edit_it => false, :reviews => true, :share => false, :no_rating => true, :type => true} -%>
+<% story_sf = {:my_news_info => true, :starred => true, :gray_trustometer => true, :days_ago => true, :num_reviews => true} -%>
+
+<script type="text/javascript">
+story_data = {
+<% @stories.each do |s| -%>
+   '<%=s.id%>': { rating: <%=s.rating%>, score: <%=@scores[s.id]%>, sdate: <%=s.story_date.to_i%>, num_matches: <%=@story_matches[s.id][:count]%> },
+<% end -%>
+  '0': {}
+}
+</script>
+
+<%= render :partial => "stories/story", :collection => @stories, :locals  => { :hide_flags => story_hf, :show_flags => story_sf, :followed => @followed_items } %>
+<li style="display:none;" id="num_stories_counter"><%=@stories.length%></li>
+
+<%#--- We need this placeholder li just once - dont render it each time we fetch new stories ---%>
+<% if params[:exclude_stories].blank? -%> <li style="display:none;" id="mynews_paging_placeholder"></li> <% end -%>

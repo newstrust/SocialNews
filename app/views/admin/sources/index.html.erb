@@ -1,0 +1,64 @@
+<dl class="use8columns inline_list inner_left">
+  <dt>Show: </dt>
+  <dd><%= link_to 'All', admin_sources_path %></dd>
+  <dd><%= link_to 'Pending', pending_admin_sources_path %></dd>
+  <dd><%= link_to 'Hidden', hidden_admin_sources_path %></dd>
+  <dd><%= link_to 'Listed', listed_admin_sources_path %></dd>
+  <dd><%= link_to 'Featured', featured_admin_sources_path %></dd>
+</dl>
+
+<div class="use8columns inner_right">
+  <label for="autocomplete">Search:</label>
+  <input id="autocomplete" type="text" class="ac_input" autocomplete="off" />
+  
+  <script type="text/javascript" charset="utf-8">
+    SEARCH_PATH = '<%= search_admin_sources_path(:format => :js) %>';
+    REDIRECT_PATH = '<%= admin_sources_path %>';
+  </script>
+  <%- content_for(:page_scripts) do -%>
+    <%= javascript_include_tag 'admin/sources'%>
+  <%- end -%>
+</div>
+
+<div class="use16columns">
+
+<div class="use16columns inner_left" style="font-size:14px; font-weight:bold">
+	<%= add_button(new_admin_source_path, 'New Source') %> &nbsp;&nbsp;
+	<%= link_to 'Merge Sources', merge_tool_admin_sources_url %>
+	<br/><br/>
+</div>
+
+  <div class="use16columns inner_left inner_right">
+    <div class="use8columns inner_right">
+      <%= will_paginate(@sources) %>
+    </div>
+  </div>
+  
+  <div class="use8columns inner_right">
+    <table cellpadding="0" cellspacing="0" width="200">
+      
+      <caption><%= @title || 'Sources' %></caption>
+      
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <%- @sources.each do |source| -%>
+        <tr>
+          <td><%= link_to source.name, admin_source_path(source) %></td>
+          <td><%= edit_button(edit_admin_source_path(source)) %>
+              <%= delete_button(admin_source_path(source)) %></td>
+        </tr>
+        <%- end -%>
+        <%= %{<tr>
+                <td colspan='2'>No Topics Yet.</td>
+              </tr>
+        } if @sources.empty? %>
+      </tbody>
+    </table>
+  </div>
+</div>

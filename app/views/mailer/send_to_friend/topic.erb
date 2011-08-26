@@ -1,0 +1,12 @@
+<%= @body + "\n\n" unless @body.blank? -%>
+Check out this page on <%=app_name%>:
+
+__________________________________________
+
+<%= @record.name %>
+
+Review our recommended stories on this topic:
+
+<%= @page.gsub(/\?.*/, '') %>
+
+<%= render :partial => 'mailer/send_to_friend/footer' %>

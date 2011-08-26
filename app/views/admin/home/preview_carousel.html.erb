@@ -1,0 +1,18 @@
+<script type="text/javascript">
+  // initialize scrollable
+  $(function() { 
+    $(".carousel").scrollable({
+      circular:true
+    }).navigator({ 
+      history: true 
+    }).autoscroll({ 
+      autoplay:true, interval:5000, autopause:true 
+    });
+  });
+</script>
+
+<div class="span-16">
+<div class="main_column_box span-16" style="background:none;">
+  <%= render :partial => "home/carousel" %>
+</div>
+</div>

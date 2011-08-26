@@ -1,0 +1,12 @@
+<div class="story_relation"><p style="margin: 0; padding: 0">
+	<% fields_for "story[story_relations_attributes][]", story_relation do |srf| -%>
+		<%= srf.hidden_field :related_story_id, :index => nil %>
+		<%= srf.hidden_field(:id, :index => nil) unless story_relation.new_record? %>
+		<%= srf.hidden_field :should_destroy, :index => nil, :value => "false" %>
+		<%= srf.hidden_field :member_id, :index => nil %>
+		<%= srf.label :url, "URL " + link_to_function("remove", "remove_story_relation(this)", :class => "small"), :style => "float:left;" %>
+		<%= render :partial => 'stories/lookup', :locals => {:url_field => srf.text_field(:url, :index => nil, :style => "width: 295px")} %>
+		<%= srf.label :title, nil, :style => "float:left;" %>
+		<%= srf.text_field :title, :index => nil, :size => 38, :style => "width: 295px" %>
+	<% end -%>
+</p></div>

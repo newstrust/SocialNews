@@ -1,0 +1,28 @@
+<%= @referring_member.name %> has invited you to join <%=app_name%>.
+
+Visit this URL to activate your account:
+
+<%= @url %>
+
+The <%=app_name%> Team
+<%=SocialNewsConfig["email_addrs"]["help"]%>
+
+
+P.S. Once you're logged in, visit our Get Started page for a quick overview:
+<%=home_url%>start/
+
+<%= render :partial => 'mailer/about_site' %>
+_____________________
+
+ABOUT THIS EMAIL
+We're sending you this email because <%= @referring_member.name %> has 
+invited you to join <%=app_name%> as a member.
+
+If you need help about becoming a member, please check our FAQ:
+<%=home_url%>help/
+
+If you received this message in error, or if you would like to remove
+your email address from our list, please reply to this email with
+"unsubscribe" in the subject line.
+
+<%= render :partial => 'mailer/privacy_policy' %>

@@ -1,0 +1,26 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+parent:
+  id: 1
+  title: parent
+  body: i am a parent
+  member_id: 11
+  lft: 1
+  rgt: 4
+  parent_id: 
+  hidden: false
+  hidden_through_muzzle: false
+child:
+  id: 2
+  lft: 2
+  rgt: 3
+  member_id: 12
+  hidden: false
+  parent_id: 1
+  hidden_through_muzzle: false
+hidden_parent:
+  id: 3
+  hidden: true
+  member_id: 11
+  hidden_through_muzzle: false
+  

@@ -1,0 +1,42 @@
+  		  <div class="column span-2">
+      		<h4><img src="/images/ui/nt_footer_about_us.png" alt="About Us"></h4>
+      		<%= link_to "About", page_path(:section => "about") %>
+          <%= link_to("Blog", SocialNewsConfig["app"]["blog_url"]) if !SocialNewsConfig["app"]["blog_url"].blank? %>
+      		<%= link_to "Donate", page_path(:section => "donate") %>
+          <%= link_to "Facebook", "http://facebook.com/#{SocialNewsConfig["app"]["fb_acct"]}" %>
+          <%= link_to "Twitter", "http://twitter.com/#{SocialNewsConfig["app"]["twitter_acct"]}" %>
+          <%= link_to "Members", members_path %>
+      	  <%= link_to "Partners", page_path(:section => "partners") %>
+          <%= link_to "Press", page_path(:section => "about", :path => "press") %>
+          <%= link_to "Sources", sources_path %>
+      	</div>
+
+      	<div class="column span-2">
+      		<h4><img src="/images/ui/nt_footer_tools.png" alt="Tools"></h4>
+      		<%= link_to "Bookmarklet", page_path(:section => "tools", :path => "bookmarklet") %>
+      		<%= link_to "Buttons", page_path(:section => "tools", :path => "buttons") %>
+      		<%= link_to "Feeds", feeds_path %>
+      		<%= link_to "Invite", invite_members_path %>
+      		<%= link_to "RSS", page_path(:section => "rss") %>
+      		<%= link_to "Widgets", page_path(:section => "widgets") %>
+      		<%= link_to "All Tools", page_path(:section => "tools") %>
+      	</div>
+
+      	<div class="column span-2">
+      		<h4><img src="/images/ui/nt_footer_topics.png" alt="Topics"></h4>
+      		<%= link_to "World", subject_path("world") %>
+      		<%= link_to "U.S.", subject_path("us") %>
+      		<%= link_to "Politics", subject_path("politics") %>
+      		<%= link_to "Business", subject_path("business") %>
+      		<%= link_to "Sci/Tech", subject_path("scitech") %>
+      		<%= link_to "Media", subject_path("media") %>
+      		<%= link_to "All Topics", topics_path %>
+      	</div>
+
+      	<div class="column span-2">
+      		<h4><img src="/images/ui/nt_footer_help.png" alt="Help"></h4>
+      		<%= link_to "FAQs", page_path(:section => "help") %>
+      		<%= link_to "Quick Guide", "http://newstrust.net/guides" %>
+      		<%= link_to "Get Started", welcome_path(:welcome_page => "start") %>
+      		<%= link_to "Feedback", site_feedback_path %>
+      	</div>

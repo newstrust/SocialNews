@@ -1,0 +1,947 @@
+<%#--- No need to reload page when fb login status changes.  The only time this happens is when a member
+   --- clicks on the fb-connect button and then logs in.  In that scenario, we want to go to a different
+   --- page, not reload page and stay here!--%>
+<%- @fb_no_auto_reload = true -%>
+
+<%-
+# When a member signs up through a partner invite the success page can be a template.
+# in these instances we actually wrap the edit page, since this is where the members are sent
+# once their account is activated. -MD
+-%>
+
+<%= render :partial => "shared/taxonomy_js_includes", :locals => { :national_site_taxonomy => true } %>
+
+<%- wrap_inside_success_page_template do -%>
+  <div class="span-16">
+
+    <h2 style="font-size:1.5em;font-weight:bold;text-transform:uppercase;">My Account<%= help_icon("edit_member_profile", "member") %> &ndash; <%= @member.name %></h2>
+    <p><%= link_to "(Back to My Profile)", @member %></p>
+
+    <%= error_messages_for 'member', :header_message => nil, :message => nil %>
+
+    <% form_for :member,
+      :url => @invitation ? "/partners/#{@partner.to_param}/#{@invitation.to_param}/members/#{@member.id}/update" : "/members/#{@member.to_param}",
+      :html => { :method => :put, :class => 'entry_form', :autocomplete => "off", :multipart => true }  do |f| -%>
+
+      <div style="margin-bottom:10px;">
+        Update your account below (* = required field), then click Save when you're done. The more information you share, the more your ratings will count.
+        <%= "(Some info will not be shown on your profile until you have been validated by our staff.)" if @member.rating < 2 && @member.validation_level < 2 %>
+        For help, click on the<%= help_icon("edit_member_profile", "member") %> help icons or check our <%= help_link("FAQ", "edit_member_profile", "member") %>.
+      </div>
+
+      <!-- Tabbed box -->
+      <% main_column_tabbed_box :tabs => ["Account", "Profile", "Emails", "Background", "Picture", "Contact Info"] do %>
+
+        <!-- Account tab -->
+        <% main_column_tab :anchor_class => "account membership", :first_tab => true do %>
+
+          <div class="edit_profile">
+            <p class="body_black_small">
+              If you have any questions about your membership, please <%= mail_to email_addr("help"), "email us", :encode => "javascript" %>.
+            </p>
+
+            <hr/>
+
+            <%#-- FACEBOOK CONNECT (either present option to connect or un-connect) --%>
+            <div class="other_login_option" style="width: 500px; margin-bottom:10px;">
+              <% if @member.fb_uid -%>
+                <div style="float:left; margin-right:10px;">
+                  <% if facebook_session -%>
+                    <fb:profile-pic size="square" uid="<%=facebook_session.user.uid%>" facebook-logo="true"> </fb:profile-pic>
+                  <% else %>
+                    <b>(You are signed out of Facebook)</b>
+                  <%- end -%>
+                </div>
+                <div style="float:left; margin-top: 5px;">
+                  Your <%=app_name%> account is linked to your Facebook account. <br/><br/>
+                  <%= link_to "Click here to unlink your Facebook account from #{app_name}.", fb_unlink_url %>  <%=help_icon("facebook_unlink_accounts", "")%>
+                </div>
+                <br clear="all"/>
+              <%- else -%>
+                <div class="question" style="width: 390px; padding-top: 5px">
+                  <strong>Got Facebook?</strong> Link your <%=app_name%> and Facebook accounts.
+                  <%=help_icon("facebook", "")%>
+                </div>
+                <div style="text-align: right">
+                  <% popup_param = params[:popup] ? "?popup=true" : "" %>
+                  <%= fb_login_button('window.location = "/fb_connect/activate' + popup_param + '";', :title => "Click to connect your #{app_name} and Facebook accounts" )%>
+                </div>
+              <%- end -%>
+            </div>
+             <div class="other_login_option" style="width: 500px; margin-bottom:20px;">
+               <%- if @member.twitter_connected? -%>
+                <div style="float:left; margin-top: 5px;">
+                  <%= image_tag("/images/ui/twitter_icon_50x50.png", :style => "float:left;margin-right:8px") %>
+                  Your <%=app_name%> account is linked to your Twitter account. <br/><br/>
+                  <%= link_to "Click here to unlink your Twitter account from #{app_name}.", twitter_unlink_path %>  <%#=help_icon("facebook_unlink_accounts", "")%>
+                </div>
+                <br clear="all"/>
+               <%- else -%>
+                 <div class="question" style="width: 390px; padding-top: 5px">
+                   <strong>Got Twitter?</strong> Link your <%=app_name%> and Twitter accounts. <%#=help_icon("", "")%>
+                 </div>
+                 <%= render :partial => "twitter/connect_button" %>
+               <%- end -%>
+            </div>
+
+            <hr/>
+            <br/>
+
+            <div class="tabSubHeader">
+              <%= label_tag nil, "ALWAYS SHOWN", :class => "editorial_gray" %>
+              Full Name <%= help_icon("member_real_name", "member") %>
+            </div>
+            <div class="fields">
+              <p>Type your real name below (first and last).</p>
+              <%= f.text_field :name, :class => "text", :size => 45 %>
+            </div>
+
+            <div class="tabSubHeader">
+              <%- if @member.educational_status != Member::EducationalStatus::HIGH_SCHOOL -%>
+              <%= f.label :show_email, "SHOW ON PROFILE", :class => "editorial_gray" %>
+              <%= f.check_box :show_email, :class => "check" %>
+              <%- else -%>
+              <%= f.label nil, "Not public -- only available to #{app_name} Staff", :class => "editorial_gray" %>
+              <%- end -%>
+              Email Address <%= help_icon("member_email_address", "member") %>
+            </div>
+            <div class="fields">
+              <%= f.text_field :email, :class => "text", :size => 45 %>
+            </div>
+
+            <% profile_section "Password", :force_display => true,
+               :help_icon => help_icon("member_change_password", "member") do end %>
+            <div class="fields">
+              Change your password by typing your <em>new</em> password in both boxes:
+              <p>
+                <div class="floatleft">Password:</div>
+                 <%= f.password_field(:password) %>
+              </p>
+              <p>
+                <div class="floatleft">Password Confirmation:</div>
+                 <%= f.password_field(:password_confirmation) %>
+              </p>
+            </div>
+
+            <%- profile_section "Privacy", :force_display => true do end -%>
+            <div class="fields">
+              <%- if @member.educational_status != Member::EducationalStatus::HIGH_SCHOOL -%>
+                <div style="margin-top:5px">
+                  <div class="floatleft" style="margin-top:5px">Who can see my profile? <%= help_icon("member_show_profile", "member") %></div>
+                  <%= f.select :show_profile, privacy_pull_down_menu(@member) %>
+                </div>
+                <% fields_for "member_attributes[public_mynews]", @member.raw_flex_attribute("public_mynews") do |faf| %>
+                  <div style="margin-top:5px">
+                    <div class="floatleft" style="margin-top:5px">Who can see my <%= mynews_colors() %> page? <%= help_icon("mynews_privacy", "mynews") %></div>
+                    <%= faf.select :value, pull_down_menu("member_privacy") %>
+                  </div>
+                <%- end -%>
+                <br />
+
+                <%= f.check_box("show_in_member_list", {:class => "check"}, true, false) %>
+                <span class="floatleft" style="font-weight:bold">List Me</span>&nbsp;
+                <%= help_icon("member_list_me", "member") %>
+                <span class="editorial_gray">(show my name in the <%=app_name%> member directory)</span>
+              <%- else -%>
+                <div style="margin-top:10px">
+                  <div class="floatleft">Who can see my profile? <%= help_icon("member_show_profile", "member") %></div>
+                  <div class="floatleft">Only Me</div>
+                  &nbsp;
+                </div>
+                <div style="margin-top:10px;clear:both;">
+                  <div class="floatleft">List Me? <%= help_icon("member_list_me", "member") %></div>
+                  <div class="floatleft" style="width:auto">No <span class="editorial_gray">(Your name is not shown in the <%=app_name%> member directory)</span></div>
+                  &nbsp;
+                </div>
+              <%- end -%>
+            </div>
+
+            <hr/>
+
+            <div style="background-color: #F3F6FD; padding: 10px">
+              <p>
+                <div class="floatleft">Status: <%= help_icon("member_status", "member") %></div>
+                <%= humanize_token(@member, :status) %>
+              </p>
+              <p>
+                <div class="floatleft">Roles: <%= help_icon("member_roles", "member") %></div>
+                <%= list_member_groups(@member, :group_list => "founding,host,newshound,editor,partners,advisors,staff,sysop,admin,directors,donors") %>
+              </p>
+              <p>
+                <div class="floatleft">Signed up on: <%= help_icon("member_start_date", "member") %></div>
+                <%= @member.created_at.strftime('%B %d, %Y  %H:%M:%S') %>
+              </p>
+              <p>
+                <div class="floatleft">Last Visit: <%= help_icon("member_last_visit_date", "member") %></div>
+                <%= @member.last_active_at ? @member.last_active_at.strftime('%B %d, %Y  %H:%M:%S') : "Never" %>
+              </p>
+            </div>
+
+            <%- if logged_in? and current_member.has_role_or_above?(:admin) -%>
+              <hr/>
+              <br/>
+              <table style="width: 100%; background: #F3F6FD">
+                <tr>
+                  <td colspan="2">
+                    <% profile_section "Account Management <span class=\"editorial_gray\">(#{app_name} administrators only)</span>",
+                       :force_display => true do %>
+                    <%- end -%>
+                  </td>
+                </tr>
+                <tr><td colspan="2">&nbsp;</td></tr>
+                <tr><td colspan="2" style="padding-bottom:5px;padding-top:5px;font-size:14px">
+                  <%= link_to "List all hidden reviews and story posts by this member", publish_reviews_and_posts_member_path(@member), :method => :post%>
+                </td></tr>
+                <tr>
+                  <td width="150" class="subhead_small_plain" valign="top" nowrap>Member Status:<%= help_icon("member_status", "member") %></td>
+                  <td width="350" valign="baseline" class="subhead_small_plain" nowrap>
+                    <%= f.select :status, pull_down_menu("member_status") %></td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom:7px" valign="top">
+                    <span class="subhead_small_plain">Member ID:</span>
+                  </td>
+                  <td class="body_black" valign="top"><%= @member.id %>
+                  </td>
+                </tr>
+                <tr><td colspan="2">&nbsp;</td></tr>
+                <tr>
+                  <td class="body_black"><%= f.check_box("valid_email", {:class => "check"}, true, false) %>
+                      &nbsp;&nbsp;<span class="subhead_small_plain">Valid email</span></td>
+                  <td><%= mail_to @member.email, "Email this Member", :encode => "javascript" %></td>
+                </tr>
+                <tr><td colspan="2">&nbsp;</td></tr>
+                <tr>
+                  <td nowrap valign="top"><span class="subhead_small_plain">Commenting Enabled:</span> 
+                      <%= help_icon("member_muzzle", "member") %> &nbsp; &nbsp;</td>
+                  <td class="subhead_small_plain" valign="top"><%= f.check_box('not_muzzled', { :class => 'check' }) %> This member can make comments.</td>
+                </tr>
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td nowrap valign="top"><span class="subhead_small_plain">Email Backup:</span> 
+                      <%= help_icon("member_email_backup", "member") %> &nbsp; &nbsp;</td>
+                  <td class="subhead_small_plain" valign="top"><%= @member.email_address_history %><!-- TODO: better display of list of emails -->
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+
+                <tr>
+                  <td width="100" class="subhead_small_plain" valign="top" nowrap>
+                    Educational Status:<%= help_icon("member_educational_status", "member") %>
+                  </td>
+                  <td valign="baseline" class="subhead_small_plain" nowrap>
+                    <%- fields_for "member_attributes[educational_status]", @member.raw_flex_attribute("educational_status") do |faf| -%>
+                      <%= faf.select :value, pull_down_menu("member_educational_status"), :include_blank => "Select One:"%>
+                    <% end -%>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+
+                <tr>
+                  <td nowrap valign="top"><span class="subhead_small_plain">Profile Status:</span> 
+                      <%= help_icon("member_profile_display", "member") %> &nbsp; &nbsp;</td>
+                  <td class="subhead_small_plain" valign="top">
+                    <table border="0" cellpadding="1" cellspacing="0">
+                      <tr>
+                      <%- Member::ProfileStatus::ALL.each do |ps| -%>
+                        <td width="25%" align="center" class="subhead_small_plain">&nbsp;<%=ps.humanize%>&nbsp;</td>
+                      <%- end -%>
+                      </tr>
+                      <tr>        
+                      <%- Member::ProfileStatus::ALL.each do |ps| -%>
+                        <td align="center"><%= f.radio_button :profile_status, ps %></td>
+                      <%- end -%>
+                      </tr>
+                     </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td width="100" class="subhead_small_plain" valign="top" nowrap>Member Priority:<%= help_icon("member_priority", "member") %></td>
+                  <td valign="baseline" class="subhead_small_plain" nowrap>
+                    <%= f.select :priority, pull_down_menu("member_priority") %></td>
+                </tr>
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                  <table style="background: #E3E6FD; padding:2px 4px 2px 4px; width: 100%">
+                    <tr>
+                      <td class="subhead_small_plain" valign="top" nowrap>Validation Rating:<%= help_icon("member_validation_rating", "host") %></td>
+                      <td valign="baseline" class="subhead_small_plain" nowrap>
+
+                        <%= f.select :validation_level, pull_down_menu("member_validation") %></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" nowrap>
+                        <%= f.check_box :force_update_validator %>
+                        <span class="body_black_small">Keep same value, force update</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td nowrap valign="top"><span class="subhead_small_plain">Last changed by:</span> 
+                          <%= help_icon("member_validation_rating", "host") %> &nbsp; &nbsp;</td>
+                      <td class="subhead_small_plain" valign="top"><%= !@member.validated_by_member.nil? ? link_to(@member.validated_by_member.name, @member.validated_by_member) : "No one" %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="10%" nowrap style="padding-bottom:7px" valign="top">
+                        <span class="subhead_small_plain">Last Changed:</span> 
+                      </td>
+                      <td style="padding-bottom:7px" valign="top"><span class="subhead_small_plain"><%= @member.last_validated_at || "Never" %></span></td>
+                    </tr>
+                  </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td nowrap valign="top"><span class="subhead_small_plain">Invited by:</span> 
+                      <%= help_icon("member_referred_by", "member") %> &nbsp; &nbsp;</td>
+                  <td class="subhead_small_plain" valign="top"><%= !@member.referring_member.nil? ? link_to(@member.referring_member.name, @member.referring_member) : "Unknown" %>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td nowrap valign="top"><span class="subhead_small_plain">Invitation Date 
+                      <%= help_icon("member_invitation_date", "member") %></span> &nbsp; &nbsp;</td>
+                  <td class="subhead_small_plain" valign="top">
+                    <%= @member.invitation_date || "no date" %>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap valign="middle"><span class="subhead_small_plain">Award Codes</span> 
+                      </td>
+                  <td class="subhead_small_plain" valign="top">
+                    <% fields_for "member_attributes[awards]", @member.raw_flex_attribute("awards") do |faf| %>
+                      <%= faf.text_field :value, :size => 30 %><br>
+                    <%- end -%>
+                    <span class="editorial_gray">(Separate multiple award codes with commas)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap valign="middle"><span class="subhead_small_plain">Invitation Code</span> 
+                      <%= help_icon("member_invitation_code", "member") %> &nbsp; &nbsp;</td>
+                  <td class="subhead_small_plain" valign="top">
+                    <% fields_for "member_attributes[invitation_code]", @member.raw_flex_attribute("invitation_code") do |faf| %>
+                      <%= faf.text_field :value, :size => 30 %><br>
+                    <%- end -%>
+                    <span class="editorial_gray">(Separate codes with commas.)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td nowrap valign="middle"><span class="subhead_small_plain">Survey Tracking Code</span> 
+                      </td>
+                  <td class="subhead_small_plain" valign="top">
+                    <% fields_for "member_attributes[survey_code]", @member.raw_flex_attribute("survey_code") do |faf| %>
+                      <%= faf.text_field :value, :size => 30 %><br>
+                    <%- end -%>
+                    <span class="editorial_gray">(Separate codes with commas.)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td valign="top"><span class="subhead_small_plain">How did you hear about <%=app_name%>?</span> 
+                      <%= help_icon("how_heard_about_us", "member") %> &nbsp; &nbsp;</td>
+                  <td class="subhead_small_plain" valign="top"><%= @member.how_heard_about_us || "Unknown" %>        
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="subhead_small_plain" valign="top"><span class="subhead_small_plain">Notes:</span> 
+                      <%= help_icon("member_edit_notes", "member") %> <span class="editorial_gray">Add any editorial notes at the end of this shared notepad, with your initials.</span><br>
+                      <%= f.text_area :edit_notes, :size => '53x4' %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td nowrap valign="top"><span class="subhead_small_plain">Edited by:</span> 
+                      <%= help_icon("member_edited_by", "member") %> &nbsp; &nbsp;</td>
+                  <td class="subhead_small_plain" valign="top"><%= !@member.edited_by_member.nil? ? link_to(@member.edited_by_member.name, @member.edited_by_member) : "never" %>        
+                  </td>
+                </tr>
+                <tr>
+                  <td width="10%" nowrap style="padding-bottom:7px" valign="top">
+                    <span class="subhead_small_plain">Last Edit Date:</span> 
+                      <%= help_icon("member_last_edit_date", "member") %> &nbsp;
+                  </td>
+                  <td style="padding-bottom:7px" valign="top"><span class="subhead_small_plain"><%= @member.updated_at.strftime('%B %d, %Y  %H:%M:%S') unless @member.updated_at.blank? %></span></td>
+                </tr>
+                <tr>
+                  <td width="10%" nowrap valign="top">
+                    <span class="subhead_small_plain">Sign-up IP:</span>
+                  </td>
+                  <td valign="top"><span class="subhead_small_plain"><%= @member.http_x_real_ip.blank? ? "none" : @member.http_x_real_ip %></span></td>
+                </tr>
+                <tr>
+                  <td width="10%" nowrap style="padding-bottom:7px" valign="top">
+                    <span class="subhead_small_plain">Browser:</span>
+                  </td>
+                  <td style="padding-bottom:7px" valign="top"><span class="subhead_small_plain"><%= @member.http_user_agent.blank? ? "none" : @member.http_user_agent %></span></td>
+                </tr>
+                <tr>
+                  <td colspan="2">&nbsp;</td>
+                </tr>
+
+              </table>
+            <%- end -%>
+          </div>
+        <%- end -%>
+
+        <!-- Profile tab -->
+        <%- main_column_tab :anchor_class => "profile" do -%>
+
+          <div class="body_black_small">
+            All sections are visible on your profile by default. To hide one, uncheck the "Show" checkbox to the right.<%= help_icon("show_member_info", "member") %>
+          </div>
+          <br/>
+
+          <div class="edit_profile">
+            <%- fields_for "member_attributes[about]", @member.raw_flex_attribute("about") do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                About Me <%= help_icon("member_about_me", "member") %>
+              </div>
+              <div class="fields">
+                <p>Write a short description about yourself - and why you joined <%=app_name%> (max 300 words).</p>
+                <%= faf.text_area :value, :class => "text", :size => '43x10' %>
+              </div>
+            <%- end -%>
+
+            <%- fields_for "member_attributes[home_page]", @member.raw_flex_attribute("home_page") do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Web Page <%= help_icon("member_web_address", "member") %>
+              </div>
+              <div class="fields">
+                <p>If you have a personal blog or web page, copy and paste its web address here.</p>
+                <%= faf.text_field :value, :class => "text", :size => 45 %>
+              </div>
+            <%- end -%>
+
+            <%- if fb_connected_and_linked -%>
+              <div class="tabSubHeader">
+                <%= f.label :show_fb_profile_url, "SHOW", :class => "editorial_gray" %>
+                <%= f.check_box :show_fb_profile_url, :class => "check" %>
+                Facebook Public Profile URL <%= help_icon("member_facebook_profile", "member") %>
+              </div>
+              <div class="fields">
+                http://www.facebook.com/profile.php?id=<%= @member.fb_uid %>
+              </div>
+            <%- end -%>
+
+            <%- fields_for "member_attributes[job_title]", @member.raw_flex_attribute("job_title") do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Occupation <%= help_icon("member_job_title", "member") %>
+              </div>
+              <div class="fields">
+                <p>Write your job title.</p>
+                <%= faf.text_field :value, :class => "text", :size => 45 %>
+              </div>
+            <%- end -%>
+
+            <%- fields_for "member_attributes[company]", @member.raw_flex_attribute("company") do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Organization <%= help_icon("member_company", "member") %>
+              </div>
+              <div class="fields">
+                <p>Enter your company, school or organization name.</p>
+                <%= faf.text_field :value, :class => "text", :size => 45 %>
+              </div>
+            <%- end -%>
+
+            <div class="tabSubHeader">
+              <%= f.label :show_affiliations, "SHOW", :class => "editorial_gray" %>
+              <%= f.check_box :show_affiliations, :class => "check" %>
+              Affiliated Sources <%= help_icon("member_publications", "member") %>
+            </div>
+            <div class="fields">
+              <p>If you have worked with media organizations reviewed by <%=app_name%>, please enter them below.</p>
+              <%= batch_autocomplete 'member[source_affiliations_attributes]', @member.source_affiliations,
+                :taxonomy => source_taxonomy %>
+            </div>
+
+            <%- fields_for "member_attributes[affiliations]", @member.raw_flex_attribute("affiliations") do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Other Affiliations <%= help_icon("member_affiliations", "member") %>
+              </div>
+              <div class="fields">
+                <p>List any organizations you're affiliated with (e.g., professional, social, political, religious, etc.).</p>
+                <%= faf.text_area :value, :size => '43x4' %>
+              </div>
+            <%- end -%>
+
+            <%- fields_for "member_attributes[interests]", @member.raw_flex_attribute("interests") do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Interests <%= help_icon("member_interests", "member") %>
+              </div>
+              <div class="fields">
+                <p>List news topics or sources which interest you most (separate each item with a comma).</p>
+                <%= faf.text_field :value, :class => "text", :size => 45 %>
+              </div>
+            <%- end -%>
+
+            <%- fields_for "member_attributes[expertise]", @member.raw_flex_attribute("expertise") do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Expertise <%= help_icon("member_expertise", "member") %>
+              </div>
+              <div class="fields">
+                <p>List any special areas of expertise (separate each item with a comma).</p>
+                <%= faf.text_field :value, :class => "text", :size => 45 %>
+              </div>
+            <%- end -%>
+
+            <%- fields_for "member_attributes[favorite_links]", @member.raw_flex_attribute("favorite_links") do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Favorite Links <%= help_icon("member_favorite_links", "member") %>
+              </div>
+              <div class="fields">
+                <p>Copy and paste your link URLs, one per line, followed by a space and a title.</p>
+                <%= faf.text_area :value, :size => '43x4' %>
+                <p>(Example: http://news.google.com Google News)</p>
+              </div>
+            <%- end -%>
+
+            <div class="tabSubHeader">
+              <%= f.label :show_favorites, "SHOW", :class => "editorial_gray" %>
+              <%= f.check_box :show_favorites, :class => "check" %>
+              Favorite Topics <%= help_icon("member_topics", "member") %>
+            </div>
+            <div class="fields">
+              <%= batch_autocomplete 'member[favorites_attributes]', @member.favorites,
+                :taxonomy => topic_taxonomy %>
+            </div>
+          </div>
+
+        <%- end -%>
+
+        <!-- Emails tab -->
+        <%- main_column_tab :anchor_class => "emails" do -%>
+          <div class="edit_profile">
+
+            <div class="tabSubHeader">
+              Email Subscriptions <%= help_icon("member_email_subscriptions", "member") %>
+            </div>
+             <div style="padding: 0 0 10px 10px;">
+              <span class="body_black_small">Subscribe to our free email feeds:</span>
+              <div style="margin:5px">
+                <%= f.check_box(:bulk_email, {:class => "check"}, true, false) %>
+                <%= f.label(:bulk_email, "Special Notices " + content_tag(:span, "Occasional project updates and helpful tips", :class => "editorial_gray") + help_icon("member_additional_email", "member"),
+                  :class => "subhead_small_plain", :style => "display: inline") %>
+                <br/>
+              <%- Newsletter::VALID_NEWSLETTER_TYPES.each do |freq| -%>
+                <%= check_box_tag "member[newsletter][#{freq}]", true, @member.has_newsletter_subscription?(freq), :class => "check" %>
+                <%= label_tag("member[newsletter][#{freq}]", "#{Newsletter.humanized_freq(freq)} " + content_tag(:span, Newsletter.humanized_dispatch_time(freq), :class => "editorial_gray") + help_icon("member_#{freq}_newsletter", "member"), :class => "subhead_small_plain", :style => "display: inline") %>
+                <br/>
+              <%- end -%>
+              </div>
+            </div>
+
+            <div class="tabSubHeader">
+              Email Format <%= help_icon("member_email_format", "member") %>
+            </div>
+            <div style="padding: 0 0 10px 10px">
+              <span class="body_black_small">I prefer to receive email feeds as:</span>
+              <div style="margin:5px">
+                <div><%= f.radio_button :newsletter_format, :html, :class => "check" %> <%= f.label :newsletter_format_html, "HTML", :style => "display: inline; font-weight: normal" %></div>
+                <div><%= f.radio_button :newsletter_format, :text, :class => "check" %> <%= f.label :newsletter_format_text, "Plain text", :style => "display: inline; font-weight: normal" %></div>
+              </div>
+            </div>
+
+            <div class="tabSubHeader">
+              Email Notifications <%= help_icon("member_email_notifications", "member") %>
+            </div>
+            <div class="email_notifications" style="padding: 0 0 10px 10px;">
+              <span class="body_black_small">Send me an email when someone:</span>
+              <div style="margin:5px">
+              <%- f.fields_for :email_notification_preferences, @member.email_notification_preferences do |enpf| -%>
+                <div>
+                  <%= enpf.check_box(:followed_member, {:class => "check"}, true, false) %>
+                  <%= enpf.label(:followed_member, "another member follows me", :class => "inline") %>
+                </div>
+
+                <div>
+                  <%= enpf.check_box(:submitted_story_reviewed, {:class => "check"}, true, false) %>
+                  <%= enpf.label(:submitted_story_reviewed, "reviews a story I posted", :class => "inline") %>
+                </div>
+
+                <div>
+                  <%= enpf.check_box(:story_edited, {:class => "check"}, true, false) %>
+                  <%= enpf.label(:story_edited, "edits a story I posted or edited", :class => "inline") %>
+                </div>
+
+                <div>
+                  <%= enpf.check_box(:reviewed_story_reviewed, {:class => "check"}, true, false) %>
+                  <%= enpf.label(:reviewed_story_reviewed, "reviews a story I have also reviewed", :class => "inline") %>
+                </div>
+
+                <div>
+                  <%= enpf.check_box(:liked_story_reviewed, {:class => "check"}, true, false) %>
+                  <%= enpf.label(:liked_story_reviewed, "reviews a story I starred", :class => "inline") %>
+                </div>
+
+                <div>
+                  <%= enpf.check_box(:review_commented_on, {:class => "check"}, true, false) %>
+                  <%= enpf.label(:review_commented_on, "comments on your story review", :class => "inline") %>
+                </div>
+
+                <div>
+                  <%= enpf.check_box(:comment_replied_to, {:class => "check"}, true, false) %>
+                  <%= enpf.label(:comment_replied_to, "replies to a comment I made", :class => "inline") %>
+                </div>
+
+                <div>
+                  <%= enpf.check_box(:replied_comment_replied_to, {:class => "check"}, true, false) %>
+                  <%= enpf.label(:replied_comment_replied_to, "replies to a comment I replied to", :class => "inline") %>
+                </div>
+
+                <div>
+                  <%= enpf.check_box(:comment_liked, {:class => "check"}, true, false) %>
+                  <%= enpf.label(:comment_liked, "'likes' a comment I made", :class => "inline") %>
+                </div>
+
+                <div>
+                  <%= enpf.check_box(:liked_comment_replied_to, {:class => "check"}, true, false) %>
+                  <%= enpf.label(:liked_comment_replied_to, "replies to a comment I 'like'", :class => "inline") %>
+                </div>
+
+                <br/>
+
+                <p class="body_black_small">
+                  <%= link_to_function "Check all", "$('.email_notifications input[type=checkbox]').attr('checked', true)", :style => "font-weight: normal" %> /
+                  <%= link_to_function "Uncheck all", "$('.email_notifications input[type=checkbox]').attr('checked', false)", :style => "font-weight: normal" %>
+                </p>
+              </div>
+            </div>
+            <%- end -%>
+
+          </div>
+        <%- end -%>
+
+        <!-- Background tab -->
+        <%- main_column_tab :anchor_class => "background" do -%>
+
+          <div style="margin-bottom:10px;" class="body_black_small">
+            Please tell us a bit more about yourself &ndash; and increase your transparency level so your ratings will count more. Uncheck "Show"<%= help_icon("show_member_info", "member") %> if you don't want that information to be shared with others. To find out more, check our <%= link_to "Privacy Policy", "/about/privacy", :class => "popup_link" %>.
+          </div>
+
+          <div class="edit_profile">
+
+            <div class="tabSubHeader">
+              <%= f.label :show_news_experience, "SHOW", :class => "editorial_gray" %>
+              <%= f.check_box :show_news_experience, :class => "check" %>
+              News <%= help_icon("member_news_experience", "member") %>
+            </div>
+            <div class="fields split">
+              <p>How often do you read, watch or listen to the news?</p>
+              <%= f.select :news_experience, pull_down_menu("member_news_experience"), :include_blank => "Select One:" %>
+            </div>
+            <br/>
+
+            <div class="tabSubHeader">
+              <%= f.label :show_internet_experience, "SHOW", :class => "editorial_gray" %>
+              <%= f.check_box :show_internet_experience, :class => "check" %>
+              Internet <%= help_icon("member_internet_experience", "member") %>
+            </div>
+            <div class="fields split">
+              <p>How often do you use the Internet?</p>
+              <%= f.select :internet_experience, pull_down_menu("member_internet_experience"), :include_blank => "Select One:" %>
+            </div>
+            <br/>
+
+            <div class="tabSubHeader">
+              <%= f.label :show_education_experience, "SHOW", :class => "editorial_gray" %>
+              <%= f.check_box :show_education_experience, :class => "check" %>
+              Education <%= help_icon("member_education_experience", "member") %>
+            </div>
+            <div class="fields split">
+              <p>What is the last year of schooling that you completed?</p>
+              <%= f.select :education_experience, pull_down_menu("member_education_experience"), :include_blank => "Select One:" %>
+            </div>
+            <br/>
+
+            <div class="tabSubHeader">
+              <%= f.label :show_journalism_experience, "SHOW", :class => "editorial_gray" %>
+              <%= f.check_box :show_journalism_experience, :class => "check" %>
+              Journalism <%= help_icon("member_journalism_experience", "member") %>
+            </div>
+            <div class="fields split">
+              <p>How much experience do you have as a journalist?</p>
+              <%= f.select :journalism_experience, pull_down_menu("member_journalism_experience"), :include_blank => "Select One:" %>
+            </div>
+            <br/>
+
+            <hr/>
+            <br/>
+
+            <%- fields_for "member_attributes[languages]", @member.raw_flex_attribute("languages",false) do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Languages <%= help_icon("member_languages", "member") %>
+              </div>
+              <div class="fields split">
+                <p>Besides English, what language do you speak fluently? (if any)</p>
+                <%= faf.select :value, pull_down_menu("member_languages"), :include_blank => "Select One:" %>
+              </div>
+            <%- end -%>
+            <br/>
+
+            <%- fields_for "member_attributes[politics]", @member.raw_flex_attribute("politics",false) do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Politics <%= help_icon("member_politics", "member") %>
+              </div>
+              <div class="fields split">
+                <p>What are your political views? (if any)</p>
+                <%= faf.select :value, pull_down_menu("member_politics"), :include_blank => "Select One:" %>
+              </div>
+            <%- end -%>
+            <br/>
+
+            <%- fields_for "member_attributes[age_group]", @member.raw_flex_attribute("age_group",false) do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Age <%= help_icon("member_age_group", "member") %>
+              </div>
+              <div class="fields split">
+                <p>What is your age group?</p>
+                <%= faf.select :value, pull_down_menu("member_age_group"), :include_blank => "Select One:" %>
+              </div>
+            <%- end -%>
+            <br/>
+
+            <%- fields_for "member_attributes[gender]", @member.raw_flex_attribute("gender",false) do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Gender <%= help_icon("member_gender", "member") %>
+              </div>
+              <div class="fields split">
+                <p>What is your gender?</p>
+                <%= faf.select :value, pull_down_menu("member_gender"), :include_blank => "Select One:" %>
+              </div>
+            <%- end -%>
+            <br/>
+
+            <%- fields_for "member_attributes[income]", @member.raw_flex_attribute("income",false) do |faf| -%>
+              <div class="tabSubHeader">
+                <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                <%= faf.check_box :visible, :class => "check" %>
+                Income <%= help_icon("member_income", "member") %>
+              </div>
+              <div class="fields split" style="_padding-bottom:15px;_margin-bottom:-10px;">
+                <p>Last year, what was your total household income?</p>
+                <%= faf.select :value, pull_down_menu("member_income"), :include_blank => "Select One:" %>
+              </div>
+            <%- end -%>
+            <br/>
+
+          </div>
+
+        <%- end -%>
+
+        <!-- Picture tab -->
+        <% main_column_tab :anchor_class => "picture" do %>
+
+          <% if fb_connected_and_linked -%>
+            <div style="padding-bottom: 10px; margin: 10px 0; border-bottom: 1px solid #aaa">
+            <%= link_to "Import my Facebook profile picture", fb_import_picture_path %> 
+              <span class="body_black_small"> (this will replace your existing profile picture) </span> <%=help_icon("facebook_import_picture", "") %>
+            <br/> 
+            </div>
+          <%- end -%>
+
+          <div class="body_black_small" style="margin-bottom:10px;">
+            You may upload a photograph of your self for your profile page. Click on the
+            <%- if client_browser_name == "Safari" -%>
+              <strong>Choose File</strong>
+            <%- elsif client_browser_name == "Opera" -%>
+              <strong>Choose</strong>
+            <%- else -%>
+              <strong>Browse</strong>
+            <%- end -%>
+            button, find the photo on your computer,
+            then click on the <strong>Save</strong> button. (Maximum image size is 500KB)<%=help_icon("member_my_picture", "member") %>
+          </div>
+          <% if @member.image %>
+            <div>
+              <strong>Current picture:</strong>
+              <span style="padding-left:50px;"><%= delete_button(destroy_image_member_url(@member),'',"Delete your profile picture") %></span>
+              <br/>
+              <%= image_tag @member.image.public_filename(:column) %>
+            </div>
+            <hr/>
+          <%- end -%>
+          <div style="margin-bottom:15px;">
+            <% fields_for :image, @member.image do |imgf| %>
+              <%= imgf.label :uploaded_data, "New picture" %>
+              <%= imgf.file_field :uploaded_data %>
+            <%- end -%>
+          </div>
+
+        <%- end -%>
+
+        <!-- Contact Info tab -->
+        <% main_column_tab :anchor_class => "contact" do %>
+
+          <div class="body_black_small" style="margin-bottom:10px;">
+            Please let us know where you are from and how to contact you.
+            Uncheck "Show"<%= help_icon("show_member_info", "member") %> if you don't want that information to be shared with others. 
+            We will not share this information with anyone without your permission.
+            To find out more, check our <%= link_to_in_popup "Privacy Policy", "/about/privacy" %>.
+          </div>
+
+          <div class="edit_profile">
+
+            <div class="form_profile_line" style="color: #333">
+              <% fields_for "member_attributes[street_address]", @member.raw_flex_attribute("street_address",false) do |faf| %>
+                <div class="fields">
+                  <div class="show_box">
+                     <%= faf.check_box :visible, :class => "check" %>
+                    <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                  </div>
+                  <%= faf.text_field :value %>
+                </div>
+                <%= faf.label :value, "Street Address:" + help_icon("member_street_address", "member") %>
+                <span class="editorial_gray">(optional)</span>
+              <%- end -%>
+            </div>
+
+            <div class="form_profile_line">
+              <% fields_for "member_attributes[street_address2]", @member.raw_flex_attribute("street_address2",false) do |faf| %>
+                <div class="fields">
+                  <div class="show_box">
+                     <%= faf.check_box :visible, :class => "check" %>
+                    <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                  </div>
+                  <%= faf.text_field :value %>
+                </div>
+                <%= faf.label :value, "Street Address 2" + help_icon("member_street_address", "member") %>
+                <span class="editorial_gray">(optional)</span>
+              <%- end -%>
+            </div>
+
+            <div class="form_profile_line">
+              <% fields_for "member_attributes[city]", @member.raw_flex_attribute("city") do |faf| %>
+                <div class="fields">
+                  <div class="show_box">
+                     <%= faf.check_box :visible, :class => "check" %>
+                    <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                  </div>
+                  <%= faf.text_field :value %>
+                </div>
+                <%= faf.label :value, "City:" + help_icon("member_city", "member") %>
+              <%- end -%>
+            </div>
+
+            <div class="form_profile_line">
+              <% fields_for "member_attributes[state]", @member.raw_flex_attribute("state") do |faf| %>
+                <div class="fields">
+                  <div class="show_box">
+                     <%= faf.check_box :visible, :class => "check" %>
+                    <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                  </div>
+                  <%= faf.select :value, pull_down_menu("states"), :include_blank => "Select a State:" %>
+                </div>
+                <%= faf.label :value, "State:" + help_icon("member_state", "member") %>
+              <%- end -%>
+            </div>
+
+            <div class="form_profile_line">
+              <% fields_for "member_attributes[zip_code]", @member.raw_flex_attribute("zip_code") do |faf| %>
+                <div class="fields">
+                  <div class="show_box">
+                     <%= faf.check_box :visible, :class => "check" %>
+                    <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                  </div>
+                  <%= faf.text_field :value %>
+                </div>
+                <%= faf.label :value, "Zip Code:" + help_icon("member_zip_code", "member") %>
+                <div class="editorial_gray">(U.S. only)</div>
+              <%- end -%>
+            </div>
+
+            <div class="form_profile_line">
+              <% fields_for "member_attributes[country]", @member.raw_flex_attribute("country") do |faf| %>
+                <div class="fields">
+                  <div class="show_box">
+                     <%= faf.check_box :visible, :class => "check" %>
+                    <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                  </div>
+                  <%= faf.select :value, pull_down_menu("countries"), :include_blank => "Select a Country:" %>
+                </div>
+                <%= faf.label :value, "Country:" + help_icon("member_country", "member") %>
+              <%- end -%>
+            </div>
+
+            <div class="form_profile_line">
+              <% fields_for "member_attributes[phone]", @member.raw_flex_attribute("phone",false) do |faf| %>
+                <div class="fields">
+                  <div class="show_box">
+                     <%= faf.check_box :visible, :class => "check" %>
+                    <%= faf.label :visible, "SHOW", :class => "editorial_gray" %>
+                  </div>
+                  <%= faf.text_field :value %>
+                </div>
+                <%= faf.label :value, "Phone Number:" + help_icon("member_phone_number", "member") %>
+              <%- end -%>
+            </div>
+
+          </div>
+
+          <br/>
+
+        <%- end -%>
+
+      <%- end -%>
+      <div class="edit_buttons" style="margin-top:0px;_padding-top:10px;_position:relative;">
+        <%= submit_button "Save", nil, :class => 'save' %>
+        <%= cancel_button "Cancel", @member, :style => "float: left; margin-top: 5px; margin-left:5px;" %>
+        <br/>
+      </div>
+
+    <%- end -%>
+
+  </div>
+  <br/>
+  <br/>
+
+<%- end -%>

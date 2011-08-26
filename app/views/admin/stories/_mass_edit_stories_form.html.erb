@@ -1,0 +1,198 @@
+<%= render :partial => "shared/taxonomy_js_includes" %>
+
+<% @additional_css_includes = ["05_interaction", "admin/mass_edit_stories" ] -%>
+
+<input type="submit" class="submit" name="submit" value="Submit All Changes">
+
+<br/>
+<p>
+The following fields are required: <strong>URL, Title, Date, Source, Story Quote, Story Type, Editorial Priority, Topics</strong>.  
+If any of them are empty, the story will continue to remain in pending status.  
+Also note that at this time, the mini-reviews will be added ONLY IF the story gets successfully listed. 
+</p>
+
+<br/>
+<% stories.each do |s| %>
+<div class="story<%=" dugg_tweeted" if (s.autolist_num_diggs.to_i+s.autolist_num_tweets.to_i > 100)%>">
+  <div class="entry autofilled"> 
+    <label> URL: </label> 
+    <div class="value"> 
+      <input type="text" name="stories[<%=s.id%>][url]" value="<%=s.url%>"> &nbsp;
+      <strong><%=link_to "SEE STORY", s.url, :target => "_blank"%> (Score: <%=sprintf("%0.2f", s.autolist_score || 0.0)%>) </strong><br/>
+    <%#--------- Display submitted by info ------------%>
+      <%= begin; show_feed_attribution(s); rescue Exception => e; "<b>Exception #{e.to_s} display posted by info</b>"; end %>
+    </div>
+  </div>
+  <div class="entry autofilled"> 
+    <label> Title: </label> 
+    <div class="value"> <textarea name="stories[<%=s.id%>][title]" cols="80" rows="2"><%=s.title%></textarea></div>
+  </div>
+<% disclosable :show_link_text => "Is there a subtitle?", :hide_link_text => "There is no subtitle", :show => false do -%>
+  <div class="entry"> 
+    <label> Subtitle: </label> 
+    <div class="value"> <textarea name="stories[<%=s.id%>][subtitle]" cols="80" rows="2"><%=s.subtitle%></textarea></div> 
+  </div>
+<% end -%>
+  <div class="entry <%= s.excerpt.blank? ? "alert" : "autofilled"%>"> 
+    <label> Story Quote: <%= "<br/> <span style='font-size:75%'>(From #{s.debug_excerpt.to_s})</span>" if !s.debug_excerpt.blank? %> </label> 
+    <div class="value"> <textarea name="stories[<%=s.id%>][excerpt]" cols="80" rows="4"><%=s.excerpt if s.excerpt %></textarea></div> 
+  </div>
+  <div class="two_columns">
+    <div class="column1">
+      <div class="entry <%= s.authorships.blank? ? "alert" : "autofilled"%>"> 
+        <label> Sources:</label> 
+        <div class="value"> <%= batch_autocomplete "stories[#{s.id}][authorships_attributes]", s.authorships, :taxonomy => source_taxonomy %> </div>
+      </div>
+      <div class="entry <%= s.topic_or_subject_taggings.blank? ? "alert" : "autofilled"%>"> 
+        <label> Topics:</label> 
+        <div class="value"> <%= batch_autocomplete "stories[#{s.id}][taggings_attributes]", s.topic_or_subject_taggings, :taxonomy => topic_taxonomy, :association_params => {:member_id => current_member.id} %> </div>
+      </div>
+  <%#--------- Related Stories ------------%>
+      <div class="entry"> 
+        <label> Related Stories:</label>&nbsp;&nbsp;
+        <%= link_to_function("Add story") do |page|
+              page.insert_html(:bottom,
+                               "more_story_relations_#{s.id}",
+                               :partial => 'admin/stories/mass_edit_story_relation', 
+                               :object => StoryRelation.new(:member => current_member),
+                               :locals => { :story_obj => "stories[#{s.id}]"})
+              page.call("(function() { init_story_relations('stories[#{s.id}]') })")
+            end %>
+        <%= render :partial => 'admin/stories/mass_edit_story_relation', :collection => s.story_relations.select {|sr| sr.member == current_member }, :locals => { :story_obj => "stories[#{s.id}]" } %>
+        <div id="more_story_relations_<%=s.id%>"></div>
+      </div>
+    </div>
+
+    <div class="column2">
+      <div class="entry autofilled"> 
+        <label>Date:</label> 
+        <div class="value"><input type="text" name="stories[<%=s.id%>][story_date]" value="<%=s.story_date.strftime("%m/%d/%Y") if s.story_date%>"></div> 
+      </div>
+      <div class="entry autofilled"> 
+        <label>Authors:</label> 
+        <div class="value"><input type="text" name="stories[<%=s.id%>][journalist_names]" value="<%=s.journalist_names if !s.journalist_names.blank?%>"></div> 
+      </div>
+      <div class="entry <%= s.story_type.blank? ? "alert" : "autofilled"%>"> 
+        <label>Story Type:</label> 
+        <div class="value"> 
+        <select size="1" name="stories[<%=s.id%>][story_type]">
+          <option value="" <%=s.story_type.blank? ? "selected" : ""%>>--- Select One ---</option>
+          <% pull_down_menu("story_story_type").each do |stype| -%>
+          <option <%=!s.story_type.blank? && s.story_type.downcase == stype[1] ? "selected": ""%> value="<%=stype[1]%>"> <%=stype[0]%> </option>
+          <% end -%>
+        </select>
+        </div> 
+      </div>
+      <div class="entry"> 
+        <label>Content Type:</label> 
+        <div class="value"> 
+        <select size="1" name="stories[<%=s.id%>][content_type]">
+          <% pull_down_menu("story_content_type").each do |ctype| -%>
+          <option <%= (ctype[0] == 'Article') ? "selected": ""%> value="<%=ctype[1]%>"> <%=ctype[0]%> </option>
+          <% end -%>
+        </select>
+        </div> 
+      </div>
+      <div class="entry"> 
+        <label>Edit. Priority:</label> 
+        <div class="value">
+        <select size="1" name="stories[<%=s.id%>][editorial_priority]">
+          <option value="" <%=s.editorial_priority ? "": "selected"%>>--- Select One ---</option>
+          <% pull_down_menu("story_editorial_priority").each do |ep| -%>
+          <option <%=s.editorial_priority && s.editorial_priority == ep[1] ? "selected": ""%> value="<%=ep[1]%>"> <%=ep[0]%> </option>
+          <% end -%>
+        </select>
+        </div> 
+      </div>
+    </div>
+  </div>
+
+  <br/><br/> <hr/>
+
+  <div class="entry">
+    <div class="selector">
+      Current Status: <span style="color:red"><%=humanize_token(s, :status) %> </span> &nbsp;&nbsp;&nbsp;
+      Change Status: 
+      <input type="radio" name="stories[<%=s.id%>][status]" <%='checked' if (s.status == Story::LIST)%> value="list"> List
+      <input type="radio" name="stories[<%=s.id%>][status]" <%='checked' if (s.status == Story::PENDING)%> value="pending"> Pending
+      <input type="radio" name="stories[<%=s.id%>][status]" value="delete"> Delete!
+    </div>
+  </div>
+
+  <hr/>
+
+  <%#--------- Mini Review ------------%>
+  <div class="entry">
+  <% r = current_member.story_review(s) -%>
+  <% if r.nil? -%>
+    <label>Mini Review:</label>
+    <div class="value">
+      <input type="hidden" name="stories[<%=s.id%>][review][rating_attributes][recommendation][criterion]" value="recommendation">
+      Add Review: <input type="checkbox" name="stories[<%=s.id%>][review][add_review]" value=""> &nbsp;&nbsp;&nbsp;
+      Recommendation: <%= select_tag "stories[#{s.id}][review][rating_attributes][recommendation][value]", options_for_select([1,2,3,4,5], 3) %> <br/>
+      Review Note: <textarea name="stories[<%=s.id%>][review][comment]" cols="80" rows="3"></textarea>
+    </div>
+  <% else -%>
+    <strong> <%= link_to "Edit Your Review", edit_review_url(r) %> </strong> 
+    <br/><br/>
+  <% end %>
+  </div>
+
+<%#--------- Display API info ------------%>
+  <div class="info_header hide"> 
+    <a class="info_toggle" href="#">Toggle API Metadata Display</a>
+    <div class="info">
+      <% MetadataFetcher::APIS.keys.each do |api| -%>
+        <% api_info = s.api_metadata(api) -%>
+        <% if !api_info.blank? -%>
+      <div class="entry">
+      <% begin -%>
+      <label>API INFO from <%=api.to_s%> </label><br/>
+          <% api_info.each do |k,v| -%> <%=k%> = <%=v.class==Array ? v.join(",") : v%> <br/> <% end %>
+      <% rescue Exception => e -%>
+      <b>Exception loading info from the db and displaying it!</b>
+      <% end -%>
+      </div>
+        <% end -%>
+      <% end -%>
+    </div>
+  </div>
+
+<%#--------- Display autolist info ------------%>
+  <div class="info_header hide"> 
+    <a class="info_toggle" href="#">Toggle Autolist Score Display</a>
+    <div class="info">
+      <div class="entry"> <label> AUTOLIST SCORE COMPONENTS </label><br/>
+      <% FeedFetcher::Score::SCORE_COEFFICIENTS.keys.each do |k| -%>
+        <%=k.to_s%> = <%=s.send("autolist_" + k.to_s)%> <br/>
+      <% end -%>
+      TOTAL SCORE: <%=s.autolist_score || "-NONE-"%>
+      </div>
+    </div>
+  </div>
+</div>
+<% end -%>
+
+<br/>
+<p>
+The following fields are required: <strong>URL, Title, Date, Source, Story Quote, Story Type, Editorial Priority, Topics</strong>.  
+If any of them are empty, the story will continue to remain in pending status.  
+Also note that at this time, the mini-reviews will be added ONLY IF the story gets successfully listed.
+</p>
+
+<br/>
+<input type="submit" class="submit" name="submit" value="Submit All Changes">
+
+<%#--------- Javascript ------------%>
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'mass_edit_stories' %>
+<%- end -%>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('a.info_toggle').click(function() { 
+    $(this).parent().toggleClass("hide").toggleClass("show"); 
+    return false;
+  })
+});
+</script>

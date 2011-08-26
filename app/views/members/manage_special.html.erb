@@ -1,0 +1,4 @@
+<%- this_freq = Newsletter::BULK -%>
+<%- header = "From time to time, we send out special notices on topics of interest to #{app_name} members.</p><p>Manage your email subscription to #{Newsletter.humanized_freq(this_freq)} below:" -%>
+<%- description = "Helpful tips, project updates and recommended stories that match your interests.<br>We only send out these notices occasionally." -%>
+<%= render :partial => "manage_subscription", :locals => {:this_freq => this_freq, :header => header, :description => description} -%>

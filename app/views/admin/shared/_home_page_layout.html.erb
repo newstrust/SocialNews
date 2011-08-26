@@ -1,0 +1,29 @@
+<%- content_for(:page_scripts) do -%>
+  <%= javascript_include_tag 'admin/landing_page_layout' %>
+<%- end -%>
+
+<div class="buttons">
+  <%= submit_tag 'Update' %> <%= cancel_tag "/admin" %>
+</div>
+
+<%= render :partial => "admin/shared/carousel_layout" %>
+
+<div class="buttons">
+  <%= submit_tag 'Update' %> <%= cancel_tag "/admin" %>
+</div>
+
+<%#-- Left column --%>
+<div class="col1">
+  <%= render :partial => "admin/shared/layout_settings", :locals => {:area => "staging", :clazz => "staging", :heading => "Staging Area" } %>
+  <%= render :partial => "admin/shared/layout_settings", :locals => {:area => "grid", :clazz => "grid", :heading => "Story Grid (3x2)"} %>
+</div>
+
+<%#-- Right column --%>
+<div class="col2">
+<%= render :partial => "admin/shared/layout_settings", :locals => {:area => "news_comparison", :clazz => "news_comparison", :heading => "News Comparison Area"} %>
+  <br style="clear:both" />
+</div>
+
+<div class="buttons">
+  <%= submit_tag 'Update' %> <%= cancel_tag "/admin" %>
+</div>

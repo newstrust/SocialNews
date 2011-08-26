@@ -1,0 +1,184 @@
+<script type="text/javascript">
+  // initialize scrollable
+  $(function() { 
+    $(".carousel").scrollable({
+      circular:true
+    }).navigator({ 
+      history: true 
+    }).autoscroll({ 
+      autoplay:false, interval:5000, autopause:true 
+    });
+  });
+</script>
+
+<div class="span-16">
+
+<%- cache @cached_staging_area do -%>
+<div class="main_column_box span-16" style="background:none;margin-bottom:5px;">
+
+  <%-#------ Render the carousel ------%>
+  <%= render :partial => "carousel" %>
+
+  <%- if !((@featured_reviews + @featured_blocks).compact.blank?) -%>
+    <div class="featured_story">
+    <div class="badges_reviews">
+      <%- (0..1).each do |i| -%>
+        <div class="<%= i == 0 ? "left" : "right"%>">
+        <%- if @featured_reviews[i] -%>
+          <%- review = @featured_reviews[i] -%>
+          <div class="review_wrapper">
+            <div class="review">
+              <%= link_to(image_tag(review.member.image.public_filename(:thumb), :size => "40x40", :style=> ""), review.member) if review.member.image %>
+              <div class="posted_by"><span class="posted"><%= link_to review.member.name, review.member %> rated it:</span>
+                <%= link_to(trustometer_img(review.rating), review_url(review.story, review), :style => "") %>
+              </div>
+              <div class="excerpt">
+                <%= StringHelpers.truncate_on_word_boundary(review.comment, 0, 130) %>
+              </div>
+              <span class="see_full">
+                <%= link_to "see full review &raquo;", review_url(review.story, review) %>
+              </span>
+            </div>
+          </div>
+        <%- elsif @featured_blocks[i] -%>
+          <%= render :inline => @featured_blocks[i].body %>
+        <% end -%>
+        </div>
+      <%- end -%>
+    </div>
+    </div>
+  <%- end -%>
+</div>
+<%- end -%>
+
+<%- cache @cached_grid_and_listings do -%>
+<div class="span-16" style="margin-top:5px;">
+  <%#- Top Stories module -%>
+  <div class="grid span-16">
+    <div class="top"></div>
+    <div class="wrapper span-16">
+    <div class="header top_stories" onclick="location.href='/stories/most_recent/';return true;"><h2>Top Stories &raquo;</h2></div>
+    <ul>
+    <%- @grid_stories.each_with_index do |s_info, i| -%>
+      <%- story, story_label = s_info %> <%# explode opaque array for readability -%>
+      <%- if story.nil? -%>
+        <% if i % 3 == 0 %> <div class="article"> <% end %>
+        <% if i % 3 == 2 %><hr> </div> <% end %>
+      <%- else -%>
+        <%- title_length = (story.title.length >= 60 ? 60 : story.title.length) -%>
+        <%#-- assumes 20 chars per title line --%>
+        <%- num_title_lines = (title_length+19)/20 -%> 
+        <%#-- assumes 2 sources or 1 source + 1 author will cause it spill over to 2 lines! --%>
+        <%- num_byline_lines = 1 + ((story.authorships.length > 1 || !story.journalist_names.blank?) ? 1 : 0) -%>
+        <%- content_type_length = (story.content_type || "").downcase != "article" ? story.content_type.length + 4 : 0 -%>
+        <%#-- assumes 29 chars per quote line --%>
+        <%- max_quote_len = (29 * (8 - num_title_lines - num_byline_lines) - content_type_length).constrain(0..180) -%>
+        <% if i % 3 == 0 %> <div class="article"> <% end %>
+          <%= render :partial => "stories/story", :object => story, :locals => {
+            :label => story_label,
+            :last => i % 3 == 2,
+            :title_max_length => 62,
+            :byline_max_length => 42,
+            :quote_max_len => max_quote_len,
+            :see_reviews_msg => "Reviews &raquo;",
+            :hide_flags => { :favicons => true, :opinion => true, :type => true, :story_date => true, :no_rating => true, :reviews => true},
+            :show_flags => { :gray_trustometer => true, :row2_starred => true, :reviews_btn => true }} %>
+        <% if i % 3 == 2 %><hr> </div> <% end %>
+      <% end -%>
+    <%- end -%>
+    </ul>
+    <div class="bottom_nav">
+      <%- listing_route_opts = {:controller => :stories, :action => :index, :listing_type => :most_recent} -%>
+      <span class="read_more"><%= link_to "More Top Stories &raquo;", listing_route_opts %></span>
+      <div class="categories">
+      	<%= link_to "Recent News",     listing_route_opts.merge!({:story_type => :news}) %> |
+      	<%= link_to "Recent Opinion",  listing_route_opts.merge!({:story_type => :opinion}) %> |
+      	<%= link_to "Trusted News",    listing_route_opts.merge!({:story_type => :news, :listing_type => :most_trusted}) %> |
+      	<%= link_to "Trusted Opinion", listing_route_opts.merge!({:story_type => :opinion}) %>
+      </div>
+    </div>
+    </div>
+    
+    <div class="bottom"></div>
+  </div>
+
+  <%- @subj_listings.each do |sl| -%>
+  <div class="flat span-16">
+    <div class="top"></div>
+    <div class="wrapper span-16">
+      <div class="header"><h2><%= link_to sl[:slug].capitalize, sl[:slug] == "opinion" ? "stories/most_recent/opinion" : sl[:slug] %></h2></div>
+      <div class="article">
+        <%- stories = sl[:stories] -%>
+        <ul>
+        <%- stories.each do |story| -%>
+          <%= render :partial => "stories/story", :object => story, :locals => {
+            :last => story == stories.last,
+            :hide_flags => { :reviews => true},
+            :show_flags => { :gray_trustometer => true, :reviews_btn => true }} %>
+        <% end -%>
+        </ul>
+        
+      </div>
+      <div class="bottom_nav">
+      <%#- TODO: Adam - can we fix this up so we don't need to check whether it's a subject or not? Feels too hard-coded now %>
+      <%- unless sl[:slug] == "opinion" -%>
+				<span class="read_more"><%= link_to "More #{humanize_token_direct("topic_subjects",sl[:slug])} stories &raquo;", "/#{sl[:slug]}" %></span>
+				<div class="categories">
+					<%= link_to "RSS", "/subjects/#{sl[:slug]}/most_recent.xml", :class => "rss" %> | 
+					<%= link_to "Get Widget", "/widgets?url=/subjects/#{sl[:slug]}/most_recent/" %>
+				</div>
+			<%- else -%>
+      	<span class="read_more"><%= link_to "More #{sl[:slug].capitalize} &raquo;", "/stories/most_recent/opinion" %></span>
+				<div class="categories">
+					<%= link_to "RSS", "/stories/most_recent/opinion.xml", :class => "rss" %> | 
+					<%= link_to "Get Widget", "/widgets?url=/stories/most_recent/opinion" %>
+      	</div>
+			<%- end -%>
+    </div>
+    
+    </div>
+
+    <div class="bottom"></div>
+  </div>
+  <%- end -%>
+
+  <div class="flat span-16">
+    <div class="top"></div>
+    <div class="wrapper span-16">
+      <div class="header todays_feeds" onclick="location.href='<%=todays_feeds_feeds_path%>';return true;"><h2>Today's Feeds</h2></div>
+      <div class="article article_todays_feeds">
+        <ul>
+        <%- @todays_feeds_stories.each do |s| -%>
+          <%= render :partial => "stories/story", 
+                     :object => s, 
+                     :locals => {:last       => s == @todays_feeds_stories.last, 
+                                 :show_flags => { :abbreviated_feed_attribution => true, :popularity_stats => true },
+                                 :hide_flags => { :quote => true, :authors => true, :story_date => true, :rating => true, :status => true, :reviews => true, :submitted_by => true }} %>
+        <%- end -%>
+        </ul>
+      </div>
+      <div class="bottom_nav">
+      <span class="read_more"><%= link_to "More Stories from Today's Feeds &raquo;", todays_feeds_feeds_path %></span>
+      </div>
+
+    </div>
+    <div class="bottom"></div>
+  </div>
+</div>
+<%- end -%>
+</div>	
+
+<%- if @cbsnews_id -%>
+<div class="stage_right right_column_box span-8 last">
+  <div class="top"></div>
+    <script src="/feeds/<%=@cbsnews_id%>.json" type="text/javascript"></script>
+    <script src="/javascripts/widgets/formats/cbs_news.json" type="text/javascript"></script>
+    <script src="/javascripts/render_widget.js" type="text/javascript"></script>
+  <div class="bottom"></div>
+</div>
+<%- end -%>
+
+<%- cache @cached_right_column do -%>
+  <%#-- SSS FIXME: Bad hack to pass @featured_topic as page_obj! --%>
+  <%= render :partial => "shared/sidebar_editorial_boxes", :locals => {:is_home_page => true, :page_obj => @featured_topic, :show_nc_box => @nc_show } %>
+<%- end -%>

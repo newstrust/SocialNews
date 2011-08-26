@@ -1,0 +1,7 @@
+<div class="flash_error">
+<%- if @message.blank? -%>
+  This <%= @model_class_name %> is not available.
+<%- else -%>
+  <%= @message %>.
+<%- end -%>
+</div>

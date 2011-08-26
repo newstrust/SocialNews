@@ -1,0 +1,95 @@
+# topic-like tags
+
+environment:
+  id: 1
+  name: Environment
+  slug: environment
+  tag_type: Topic
+
+election_reform:
+  id: 2
+  name: Election Reform
+  slug: election_reform
+  tag_type: Topic
+  
+john_mccain:
+  id: 3
+  name: John Mccain
+  slug: john_mccain
+  tag_type: Topic
+
+# tag-like tags
+
+whales:
+  id: 4
+  name: whales
+  taggings_count: 1
+car:
+  id: 5
+  name: car
+  taggings_count: 0
+red_cross:
+  id: 6
+  name: red cross
+  taggings_count: 1
+paypal:
+  id: 7
+  name: paypal
+  taggings_count: 0
+draft:
+  id: 8
+  name: draft
+  taggings_count: 0
+hiv_aids:
+  id: 9
+  name: HIV/AIDS
+  taggings_count: 0
+
+# subjects
+local:
+  id: 50
+  name: Local
+  slug: local
+  tag_type: Subject
+
+health:
+  id: 10
+  name: Health
+  slug: health
+  tag_type: Subject
+
+politics:
+  id: 11 
+  name: Politics
+  slug: politics
+  tag_type: Subject
+
+us:
+  id: 12
+  name: U.S.
+  slug: us
+  tag_type: Subject
+
+world:
+  id: 13
+  name: World
+  slug: world
+  tag_type: Subject
+
+human_rights:
+  id: 14
+  name: Human Rights
+  slug: human_rights
+  tag_type: Topic
+
+presidential_election:
+  id: 15
+  name: Presidential Election 2008
+  slug: presidential_election
+  tag_type: Topic
+
+us_economy:
+  id: 16
+  name: U.S. Economy
+  slug: economy
+  tag_type: Topic

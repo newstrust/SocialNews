@@ -1,0 +1,40 @@
+<div class="use16columns">
+  <div class="use16columns inner_left inner_right">
+    <h1 class="use8columns inner_left">Partners</h1>
+
+    <div class="use8columns inner_right">
+      <%= will_paginate(@partners) %>
+    </div>
+  </div>
+
+  <div class="use8columns inner_right">
+    <table cellpadding="0" cellspacing="0">
+      
+      <caption>Partners</caption>
+      
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Members</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <%- @partners.each do |partner| -%>
+        <tr>
+          <td><%= h(link_to(partner.name, admin_partner_path(partner))) %></td>
+          <td><%= h(partner.members.size) %></td>
+          <td><%= edit_button(edit_admin_partner_path(partner)) %>
+              <%= delete_button(admin_partner_path(partner)) %></td>
+        </tr>
+        <%- end -%>
+        <%= %{<tr>
+                <td colspan='2'>No Partners Available.</td>
+              </tr>
+        } if @partners.empty? %>
+      </tbody>
+    </table>
+    <p><%= link_to "Create Partner", new_admin_partner_path %></p>
+  </div>
+</div>

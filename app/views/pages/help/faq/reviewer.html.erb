@@ -1,0 +1,480 @@
+<% @title = "Reviewer FAQ" %>
+<%= "<a name=\"top\"></a>" unless params[:popup] %>
+
+<div class="help_page">
+<div class="listing">
+<div class="top"></div>
+<div class="wrapper">
+<div class="interior">
+
+<%= content_tag(:h1, @title + " <span class=\"small\">(Frequently Asked Questions)</span>") unless params[:popup] %>
+
+<p>Here are some frequently asked questions about our review and posting forms. If you still have questions, <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+
+<ul>
+<li><a href="#about_faq" class="subhead_plain_bold">About this FAQ</a></li>
+<li><a href="#review_form" class="subhead_plain_bold">Reviewing a Story</a></li>
+<li><a href="#submit_story" class="subhead_plain_bold">Posting a Story</a></li>
+<li><a href="#review_source" class="subhead_plain_bold">Reviewing a Source</a></li>
+<li><a href="#adding_comments" class="subhead_plain_bold">Adding Comments</a></li>
+</ul>
+
+<hr size="1">
+
+<h2 style="margin-bottom:8px;"><a name="about_faq"></a>About this FAQ</h2>
+
+<p><a name="review_forms"></a><span class="subhead_plain_bold">Who is this FAQ for?</span>
+This FAQ is for <%=app_name%> reviewers. Anyone can review stories on <%=app_name%>, as long as they are a member. To become a member, simply <%= link_to 'sign up', "/members/new/" + (params[:popup] ? '" target="_blank' : "") %>  (if you already are a member, be sure to 
+<%= link_to 'log in', "/sessions/new/" + (params[:popup] ? '" target="_blank' : "") %>). This FAQ contains helpful tips about reviewing and posting stories. 
+For more info, check our other help FAQs:<br><br>
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about <em>joining <%=app_name%></em> and <em>getting started</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to mynews_colors() +' FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about your <em>MyNews</em> and <em>My Network</em> pages</td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr></table>
+</p>
+
+<p><a name="suggestions_problems"></a><span class="subhead_plain_bold">How can I make a suggestion or report a problem?</span>
+To help us improve our service, please click &quot;Suggestions&quot; on the left sidebar of our site, or at the bottom of any of our forms. To email us about issues that need to be fixed right away email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>. Thanks for your patience during this beta phase.</p>
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="review_form"></a><a name="review_story"></a>Reviewing a Story</h2>
+
+<p><a name="how_to_review_story"></a><span class="subhead_plain_bold">How do I review a story on <%=app_name%>?</span>
+To review a story, click on the "Review" link next to any story title on our site. This will open the story on the news site, along with our toolbar and review form. (In some cases, the story and our review form will show in separate windows, for news sites that do not support our toolbar.)</p>
+
+<p><a name="how_review_works_story"></a><span class="subhead_plain_bold">How does the review form work?</span>
+The <%=app_name%> review form is like an online score pad, with a series of questions or labels about the news story you are reviewing. Answer as many questions as you like, to make your review count more. You can also expand your review with a note or link , then click the yellow "Save" button when you're finished.</p>
+
+<p>We now offer two different kinds of review forms:</p>
+<ul style="margin-bottom:8px">
+<li>the <%=open_popup("rating form", "http://media.newstrust.net/images/help/short_rating_form.jpg", 461, 394) %> (which uses a scale from 1 to 5)</li>
+<li>the <%=open_popup("button form", "http://media.newstrust.net/images/help/short_review_form.jpg", 461, 394) %> (which uses big buttons with simple positive and negative answers)</li>
+</ul>
+
+<p>Our review forms ask different questions for <em>news</em> stories (e.g., news reports, news analysis and special reports), and for <em>opinion</em> pieces (e.g., editorials, commentary and interviews). For either of these types of journalism, you can choose to fill out one of these versions of the review forms: Short, Quick, Full or Advanced.</p>
+<ul style="margin-bottom:8px">
+<li><em>Short Review Form</em> (3 questions)</li>
+<li><em>Quick Review Form</em> (5 questions)</li>
+<li><em>Full Review Form</em> (10 questions) </li>
+<li><em>Advanced Review Form</em> (18 questions)</li>
+</ul>
+<p>To select another version of the review form, simply click the <%=open_popup("drop-down menu", "http://media.newstrust.net/images/help/ReviewDropDownMenuLarge.jpg", 380, 193) %> below the "Review" tab. After you click the "Save" button, <%=app_name%> will save your settings for the next time you review.</p>
+
+<p><a name="steps_to_review"></a><span class="subhead_plain_bold">What are the steps to review a story?</span>
+To review a story, follow these simple steps:</p>
+<div class="sect_indent">
+  <p><a name="read_story"></a><span class="subhead_italic_med">1. Read this story</span>
+  Carefully read, watch or listen to the entire story before starting your review. Focus on the quality of the journalism, rather than whether you agree or disagree with the perspectives presented in the story.</p>
+  <p>To see reviews from other members for this story, click on the 'Reviews' link next to the story rating.</p>
+  
+  <p><a name="story_rating_questions"></a><a name="rate_story"></a><span class="subhead_italic_med">2. Review this story</span>
+  Next, answer a few questions about the quality of this story. These review questions ask you to label (or rate) the story based on core principles of journalism, such as facts, fairness and sourcing.</p>
+  
+  <p>The format of these questions will vary depending on which version of the review form you choose to fill out. Click on the question marks next to any question for help tips.</p>
+  
+  <p>At the end of your review, you can explain your answers in the notes section, or add a comment about your personal views on the topic. You can also include your favorite quotes from the story, or add a related link.</p>
+  
+  <p><a name="post_review"></a><span class="subhead_italic_med">3. Save your review</span>
+  When you're finished, click the yellow "Save" button at the bottom of the review form.</p>
+  
+  <p>You will then be able to edit or share your review, see other members' reviews of the story, or go back to the <%=app_name%> home page.</p>
+  
+  <p>You can edit your own reviews anytime, by simply clicking on the yellow "Edit your Review" button on any story page.</p>
+  
+  <p>To learn more about reviewing stories, check this guide on <%=app_name%>: "<%= link_to 'How to review a story', "http://newstrust.net/guides/how-to-review" + (params[:popup] ? '" target="_blank' : "") %>".</p>
+</div>
+
+<p><a name="why_popup"></a><span class="subhead_plain_bold">Why does the review form sometimes appear in a popup window?</span>
+A few news sites do not support the <%=open_popup("toolbar", "http://media.newstrust.net/images/help/NewReviewFormToolbarShortCompactCloseUp.jpg", 1024, 385) %> and its frameset. For these sites, we display the review form in a <%=open_popup("popup window", "http://media.newstrust.net/images/help/NewReviewFormPopupQuickCompact.jpg", 1016, 694) %> instead. The review form works about the same way in this popup window, except that window may get resized when you click on buttons that take you back to our main site.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="rating_tips"></a>Review Tips</h2>
+<p>Here are detailed explanations of each of the rating questions on the different <%=app_name%> review forms. For a short version of these review tips, check our guide: "<%= link_to 'How to review a story', "http://newstrust.net/guides/how-to-review" + (params[:popup] ? '" target="_blank' : "") %>".</p>
+
+<p><a name="short_review_news"></a><span class="subhead_italic_mlg">Short Review &ndash; News</span></p>
+<p><a name="story_evidence"></a><a name="factual_evidence"></a><span class="subhead_plain_bold">Facts</span>
+<em>Q. Is this story factual?</em><br>
+Is it based on verifiable evidence? or opinions?<br>
+Does this story provide factual information to support what it says? Or does this sound like someone’s personal views? Presenting reliable facts is the most important and the most basic aspect of good journalism. Everything in a news story revolves around the facts it contains. News that is based on accurate, verifiable facts helps give us well-informed citizens and a strong democracy. News that is based largely on opinions can be polarizing and takes away from healthy public debate.</p>
+
+<p><a name="story_fairness"></a><a name="fair_story"></a><span class="subhead_plain_bold">Fairness</span>
+<em>Q. Is this story fair?</em><br>
+Is it impartial? or biased?<br>
+Is the reporter presenting all sides of the story? Or does he or she take sides? It is a journalist’s responsibility to seek out all angles of a controversy. This doesn’t mean that every side must be given the same amount of space in a story. But it should be clear that the reporter offered all the key players in the story a chance to make their core arguments, or choose not to comment. If it is not, then the story’s fairness will suffer. It is not a journalist’s job to decide who is "right" or "wrong," but present all sides fairly so we can come to our own conclusions.</p>
+
+<p><a name="story_overall_rating"></a><a name="overall_quality"></a><span class="subhead_plain_bold">Recommendation</span>
+<em>Q. Do you recommend this story?</em><br>
+Is this quality journalism?<br>
+Would you recommend this story to a friend or colleague? Is this information you think they should know, based on the questions you just answered? Was it good enough for you to read it through the end? This question is similar to the up and down arrows of popular social news sites like Digg and Reddit, but with a focus on quality journalism.</p>
+
+<p><a name="my_average_rating"></a><span class="subhead_plain_bold">My Overall Rating</span>
+As you answer review questions, your average rating for this story is dynamically updated at the bottom of the form. Note that you can change your overall rating at any time by changing your answers. See below to find out how this weighted average is calculated.</p>
+
+<p><a name="story_note"></a><span class="subhead_plain_bold">Notes</span>
+<em>Q. Is this quality journalism? Why?</em><br>
+How well does this story inform the public on this issue? What does this story do well? How could it be improved? Focus on the journalism and the quality of the information. If you have personal views on this subject, you may write them in the comments section below.</p>
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="short_review_opinion"></a><span class="subhead_italic_mlg">Short Review &ndash; Opinion</a></span></p>
+
+<p><a name="story_insight"></a><span class="subhead_plain_bold">Insight</span>
+<em>Q. Is it insightful?</em><br>
+Is it well reasoned? thoughtful?<br>
+Does this story give an intelligent perspective on the subject? Are the author's arguments well-supported and logical? An insightful story "connects the dots" to explain things that aren't immediately obvious. In doing so, it draws reasonable conclusions that may include effective solutions to a given problem.</p>
+
+<p><a name="story_information"></a><a name="original_coverage"></a><span class="subhead_plain_bold">Information</span>
+<em>Q. Is this story informative?</em><br>
+Did you learn something new?<br>
+Do the facts in this story help you better understand the subject? Good journalism takes information that isn’t readily available to us, and may be hard to interpret, and makes it quicker and easier to understand. This question asks how well a news story does that. To answer it thoroughly, you may want to compare this story to other stories on the same topic (see "Links" in our Story Reviews page).</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="quick_review_news"></a><span class="subhead_italic_mlg">Quick Review &ndash; News</span></p>
+
+<p><a name="story_sources"></a><a name="identified_sources"></a><span class="subhead_plain_bold">Sourcing</span>
+<em>Q. Is this story well sourced?</em><br>
+Is it confirmed by multiple sources?<br>
+Does this story provide enough sources to validate its key information? Are the sources clearly identified? Count the number of sources cited: a good news story usually includes several sources with independent perspectives, both official and unofficial. The author should establish why each source is cited &ndash; and if they're anonymous, explain why. Many news stories would not have the same impact without anonymous sources, but they must be used carefully.</p>
+
+<p><a name="story_trust"></a><a name="credible_sources"></a><a name="trust_source"></a><span class="subhead_plain_bold">Credibility</span>
+<em>Q. Is this publication credible?</em><br>
+Do you trust this news source?<br>
+Does this publication usually offer reliable information? Is it trustworthy, based on the stories you've reviewed and what you know about the publisher? Credibility tracks a publication's reputation for journalistic quality, which helps it maintain a good dialogue with its audience. Note that your rating for that question will be automatically filled-in next time you review a story from this publication.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="quick_review_opinion"></a><span class="subhead_italic_mlg">Quick Review &ndash; Opinion</a></span></p>
+
+<p><a name="story_style"></a><a name="clear_story"></a><span class="subhead_plain_bold">Style</span>
+<em>Q. Is it well written?</em><br>
+Is this story clear? concise? compelling?<br>
+Does it present useful information in an interesting way? Does it make complex issues easier to understand? Is the style appropriate for the topic? Is it grammatical? The way a story is written and presented impacts how many people it reaches.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="full_review_news"></a><span class="subhead_italic_mlg">Full Review &ndash; News</span></p>
+
+<p><a name="story_depth"></a><span class="subhead_plain_bold">Depth</span>
+<em>Q. Is it in-depth?</em><br>
+Is it well researched?<br>
+How much research went into this story? How thoroughly is the information explained? How detailed is the reporting? Depth looks at the overall amount of reporting that went into a story, and how much of that reporting was published. This often varies for different story types. For example, we should expect a good investigative report on a city's homicide rate to be more in-depth than a breaking news story on a shooting.
+</p>				
+
+<p><a name="story_enterprise"></a><span class="subhead_plain_bold">Enterprise</span>
+<em>Q. Is it enterprising?</em><br>
+Does this story show initiative? courage?<br>
+Did the author or publication take risks gathering and publishing this story? Were significant resources involved? Enterprise journalism (also called investigative reporting) uncovers major information through extensive research &ndash; not based on a mere press release or public statement. Enterprise journalism is gutsy, proactive and represents a substantial investment on the part of the author and/or the publication.</p>
+
+<p><a name="story_relevance"></a><span class="subhead_plain_bold">Relevance</span>
+<em>Q. Is it relevant?</em><br>
+Is this story newsworthy? meaningful?<br>
+Does the author focus on important aspects of this topic? Does the public benefit by reading this story? News organizations and journalists must always ask what information is most valuable for the public interest. Relevant news and opinion help citizens participate more informed decisions. Sensationalism, exaggeration and false importance in journalism distract us from these goals.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="full_review_opinion"></a><span class="subhead_italic_mlg">Full Review &ndash; Opinion</span></p>
+
+<p><a name="story_expertise"></a><span class="subhead_plain_bold">Expertise</span>
+<em>Q. Are experts cited?</em><br>
+Are the sources qualified? knowledgeable?<br>
+Does this story cite credible experts with unique knowledge of the facts? A good news story, or a well argued opinion, usually seeks out authoritative sources confirm or explain key information. Independent sources whose view might not be influenced by a stake in the story are particularly valuable.</p>
+
+<p><a name="story_originality" id="story_originality"></a><span class="subhead_plain_bold">Originality</span>
+<em>Q. Is it original?</em><br>
+Does this story offer a new perspective?<br>
+Does the author break new ground that hasn't been covered elsewhere? Originality applies to both news and opinion in this sense. An original news article gives us information we wouldn't have been able to learn on our own. It can also tell a familiar story in a new way. An original opinion piece brings up valuable perspectives and arguments about an issue that aren't already in the public discussion. Since this is a comparative question, it's helpful to know what other publications have said about the issue.</p>
+
+<p><a name="story_responsibility"></a></a><span class="subhead_plain_bold">Responsibility</span>
+<em>Q. Is it responsible?</em><br>
+Are claims valid, ethical, unbiased?<br>
+Is the author acting responsibly, respectfully and with integrity? Or is this story based on rumors, errors or falsehoods that jeopardize the public interest? If journalists are to be guardians of democracy and good government, they must lead by example &ndash; requiring greater ethical standards than other types of communication, such as propaganda or entertainment.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="advanced_review_story"></a><span class="subhead_italic_mlg">Advanced Review Form</span></p>
+
+<p><a name="story_accuracy"></a><a name="accurate_story"></a><span class="subhead_plain_bold">Accuracy</span>
+<em>Q. Is it accurate?</em><br>
+Can you confirm that it is true?<br>
+Have you yourself verified some of the facts and observations in this story? If so, did you find that information to be correct? If not, are you confident that the information has been verified? To answer this question, you may want to do some of your own research, and look at how other publications covered this story. If you do not know anything about this topic and do not have time to research it, please do not answer this question.</p>
+
+<p><a name="story_balance"></a><a name="important_viewpoints"></a><span class="subhead_plain_bold">Balance</span>
+<em>Q. Is it balanced?</em><br>
+Does this story represent diverse viewpoints?<br>
+Are the key parties affected by this story cited by the author? Balance involves presenting different perspectives on an issue, with the same care and respect for all sides. But it has its limits. A good news story does not include misinformation from one side in the name of balance. It looks at all sides of an issue, without abandoning its focus on verified facts and information.</p>
+
+<p><a name="story_transparency"></a></a><span class="subhead_plain_bold">Transparency</span>
+<em>Q. Is it transparent?</em><br>
+Are there enough links and references?<br>
+Can you tell how the story was gathered? How well does the author inform readers about how the information in the story was collected? As a rule, all sources should be named; links to factual evidence should be provided; third-party studies and reports should be cited; and reporting methods should be documented.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<p><a name="learn_more_journalism"></a><span class="subhead_plain_bold">
+Q. How can I learn more about quality journalism?</span>
+To create our review form and this FAQ, we worked with many advisors, which include experienced journalists from reputable organizations such as the Associated Press, Journalism.org and the Poynter Institute. We also analyzed the principles and values of top news organizations, from the BBC to Gannett and the Society of Professional Journalists. Here are links to some of their editorial guidelines and codes of ethics:</p>
+<ul>
+<li><a href="http://www.journalism.org/resources/principles" target="_blank">Journalism.org</a></li>
+<li><a href="http://citmedia.org/principles" target="_blank">Center for Citizen Media</a></li>
+<li><a href="http://www.nytco.com/press/ethics.html" target="_blank">The New York Times</a></li>
+<li><a href="http://www.poynter.org/content/content_view.asp?id=58937" target="_blank">The Poynter Institute</a></li>
+<li><a href="http://www.journalism.columbia.edu/cs/ContentServer/jrn/1165270051346/page/1175295297393/JRNHomePage.htm" target="_blank">Columbia School of Journalism</a></li>
+<li><a href="http://www.rtnda.org/pages/media_items/code-of-ethics-and-professional-conduct48.php?g=36" target="_blank">Radio-Television News Directors Association</a></li>
+<li><a href="http://www.ajr.org/Article.asp?id=1596" target="_blank">American Journalism Review</a></li>
+<li><a href="http://www.csmonitor.com/2004/0812/p03s01-usju.html" target="_blank">The Christian Science Monitor</a></li>
+<li><a href="http://www.asne.org/index.cfm?id=387" target="_blank">American Society of Newspaper Editors</a></li>
+<li><a href="http://www.bjr.org.uk/data/2004/no3_sambrook" target="_blank">British Journalism Review</a></li>
+<li><a href="http://www.spj.org/ethicscode.asp" target="_blank">Society of Professional Journalists</a></li>
+</ul>
+<p><a name="more_review_questions"></a><span class="subhead_plain_bold">Expand your review</span>
+At the end of the review form, you can click "Expand your review" to show four more tabs: Notes, Comments, Quotes, and Links, as well as a Disclosure checkbox. These sections are optional, but the more questions you answer, the more your ratings count.</p>
+
+<p><a name="story_notes"></a><span class="subhead_plain_bold">Notes</span>
+<em>Q. Is this <strong>good journalism</strong>? Why??</em><br>
+The Notes tab lets you describe the story's journalistic quality in your own words. In this section, focus on the qualities of good journalism considered on the review form, and be specific about how this story displayed or lacked those qualities. Save your personal views on the topic for the Comments tab. This section is a key part of sharing your review with the community, and the <%=app_name%> editors value your notes highly when validating your work (for more information about member validation, see our <%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>).</p>
+
+<p><a name="story_comment"></a><span class="subhead_plain_bold">Comments</span>
+<em>Q. What are your personal views on this topic?</em><br>
+What did you learn from this story? What new information and insights did you come away with? This question is available for you to expand on your notes from the previous section, which focuses only on the quality of the journalism. Here, you are free to include your own perspectives on the issues raised in this story &ndash; which keeps your personal opinions separate from your notes about the journalism. Please be civil and keep your comments under 250 words.</p>
+
+<p><a name="story_links"></a><span class="subhead_plain_bold">Links</span>
+<em>Connect the dots with related information</em><br>
+This section lets you add links to related stories or factual evidence, either supporting or refuting this story's main points. If you know of a good article, study, website, or other information that relates to this story, please cut and paste their web address in the URL box. <%=app_name%> will examine that URL and try to extract its title, publication name and date, then post it as a pending story on our site. Your link will automatically be added in the Links section of this story's reviews page. After you complete your review, you may edit the title or the story info by going to that Links section. These links help us compare the information in the story to facts from other sources. They can also be used to help support key points in your review.</p>
+
+<p><a name="story_quotes" id="story_quotes"></a><span class="subhead_plain_bold">Quotes</span>
+<em>Pick your favorite excerpts</em><br>
+If there were any short quotes in the story that you found particularly interesting, insightful or revealing, include them here. This could be a statement made by the author &ndash; or a comment from a newsmaker quoted in the story. Simply cut and paste your selected excerpt from the story, then add a comment below it. You might like to let us know why you selected that quote: do you find it informative? inspiring? misleading? inaccurate? Please keep all excerpts and comments under 250 words. This will help you share with other members parts of the story you find most important.</p>
+
+<p><a name="story_disclosure"></a><span class="subhead_plain_bold">Disclosure</span>
+<em>Q. Are you the author of this story? or involved in it?</em><br>
+If you are the author, publisher or subject of a story (or otherwise personally involved in that story), please check the disclosure field of our review form to indicate any conflict of interest you might have as reviewer for this story. Use the drop down menu at the bottom of the review form to indicate the type of involvement you had in this story. Also clarify that involvment in your review notes, for transparency reasons. We ask that you rate these stories fairly, and refrain from manipulating our ratings for personal, ideological or commercial purposes. If you disclose that you are the author, editor or publisher, your rating will not be included in our overall rating for that story.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<p><a name="other_review_tips"></a><span class="subhead_italic">Other Review Tips</span></p>
+
+<p><span class="subhead_plain_bold">Focus on the journalism</span>
+We aim to rate articles based on their journalistic quality, not whether we agree with the views presented in these articles. It's not always easy to separate the two, but it's worth a try: we often get the best information when we go past our pre-conceived ideas about an article, to look at how it was created.</p>
+
+<p><span class="subhead_plain_bold">Be civil</span>
+When writing your comments, be civil, thoughtful, concise, and respectful of others. From time to time, you'll see a review you disagree with; try to respond in a way that is not offensive to other members. Please treat people with the same respect you would like them to show you, and adhere to our <%= link_to 'terms of service', "/about/terms/" + (params[:popup] ? "?popup=true" : "") %>. Deceptive, manipulative or offensive reviews may be removed at <%=app_name%>'s discretion and can lead to termination of your membership. Thank you for your understanding.</p>
+
+<p><a name="rating_weights"></a><span class="subhead_plain_bold">Rating Weights</span>
+<%=app_name%> story ratings are weighted in three successive steps, to insure their reliability.</p>
+<p>
+We first weigh your answers based on the significance of each rating question for evaluating journalistic quality, based on findings from our <%= link_to 'research studies', "/survey/report" + (params[:popup] ? '" target="_blank' : "") %>. At this time, we use these weights for all stories:</p>
+<ul>
+<% Rating.each_criterion_by_type("quality") do |criterion_key, criterion, form_level| %>
+<li><strong><%= criterion["name"] %></strong>: <%= criterion["weight"]["news"] %> (News), <%= criterion["weight"]["news"] %> (Opinion)</li>
+<% end %>
+</ul>
+
+<p>That first weighted average is then weighted again, based on these individual reviewer criteria:</p>
+<ul>
+<li>Your Rating: <%= SocialNewsConfig["review_weighting_component_weights"]["member_rating"] %>%
+<li>Number of Answers: <%= SocialNewsConfig["review_weighting_component_weights"]["quality_ratings_completeness"] %>%
+<li>Member Ratings for your Review: <%= SocialNewsConfig["review_weighting_component_weights"]["meta_review_rating"] %>%
+</ul>
+<p>In short, your ratings will count more if you answer more questions about this story, if you know more about its topic, and if your review received high ratings from other members.</p>
+<p>
+Lastly, we factor in your own member level, in order to determine a final, triple-weighted rating for each reviewed story.  To find out more about how member levels are calculated, check our <%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>.
+</p>
+
+<p><a name="how_to_see_story"></a><span class="subhead_plain_bold">What if I can't see the story?</span>
+If you do not see a story on the right, click on &quot;Full Story&quot; next to its title on our review form. This will open a new window, showing the story from its original website. If the wrong story appears in that window, please email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>. One of the reasons we show stories in a separate window is to protect the copyrights of their owners.</p>
+
+<p><a name="change_story_review_forms"></a><span class="subhead_plain_bold">How can I switch review forms?</span>
+To choose which version of the review form you would like to use, simply click the <%=open_popup("drop-down menu", "http://media.newstrust.net/images/help/ReviewDropDownMenuLarge.jpg", 380, 193) %> menu below the "Review" tab. 
+After you click the "Save" button, <%=app_name%> will save your settings for the next time you review.</p>
+
+<p><a name="how_to_stop_story_review"></a><span class="subhead_plain_bold">How can I close a review form?</span>
+To close and save your review form, click on "Save" at the bottom of the review form at any time. If you don't want to save your review, simply click the "X" button at the top of the review form &ndash; or click "Close this form" at the bottom of the form.</p>
+
+<p><a name="facebook_already_shared"></a><span class="subhead_plain_bold">How can I share stories or reviews on Facebook?</span>
+You can share stories or reviews on Facebook in three different ways:</p>
+
+<ul>
+<li>Like a story (click on the "Like" button)</li>
+<li>Share a story (click on the <%= image_tag("/images/ui/mynews/facebook_favicon.png", :size=>"12x12") %> icon)</li>
+<li>Share your review (in "Expand your review")</li>
+</ul>
+
+<p>To share your reviews, you first need to link your Facebook and <%=app_name%> accounts through <%= link_to 'Facebook Connect', "/help/faq/" + (params[:popup] ? '?popup=true#facebook_log_in_member' : "#facebook_log_in_member") %>, a one-time setting. Then click "Expand your review" at the bottom of the story review form, and check the Facebook box next to "Share your review." When you click "Save" on your review, you'll be asked on the following screen whether you want to publish your review to Facebook &ndash; if you want your story review to appear on your Facebook wall and on your friends' news feeds, click "Publish." If you don't, click "Skip."</p>
+
+<p>Checking the box that says "Always do this for <%=app_name%>" will publish all your story reviews to Facebook without asking your permission each time (but only if you have checked the Facebook box next to "Share your review" on the review form).</p>
+
+<p>Note that only your first review of a story will be published. If you edit it later, a message will warn you that you may have already posted this review on Facebook. You're free to share again if you like.</p>
+
+<p><a name="twitter_share"></a><span class="subhead_plain_bold">How can I share stories or reviews on Twitter?</span>
+You can share stories or reviews on Twitter in two different ways:</p>
+<ul>
+<li>Share a story (click on the <%= image_tag("/images/ui/mynews/twitter_favicon.png", :size=>"12x12") %> icon)</li>
+<li>Share your review (in "Expand your review")</li>
+</ul>
+
+<p>To share your reviews, you first need to <%= link_to "link your Twitter and #{app_name} accounts", "/help/faq/" + (params[:popup] ? '?popup=true#twitter_link_accounts' : "#twitter_link_accounts") %>, a one-time setting. Then click "Expand your review" at the bottom of the story review form, and check the Twitter box next to "Share your review." This will reveal a small text box with a default tweet and short URL, which you can edit before saving. When you click "Save" on your review, your update will be posted to Twitter</p>
+
+<p>Note that only your first review of a story will be published. If you edit it later, a message will warn you that you may have already posted this review on Twitter. You're free to share again if you like.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<h2><a name="submit_story"></a><a name="post_story"></a>Posting a Story</h2>
+
+<p>
+<span class="subhead_plain_bold">How do I post a new story?</span>
+To post a story for review on <%=app_name%>, click on the yellow "Post a Story" button in our navigation bar. Copy the web address of the story you want to post and paste it into the URL box. Once you do this, the <%=app_name%> Toolbar and Edit form will automatically appear over the story's original page. Some of the information for that story will automatically be filled in by our Smart Feeds service, but we encourage you to double check them, to make sure they're correct, and fill in the other fields (story title, quote, authors, story type, topics, etc). After you Save the information, you can review the story by clicking on the Review tab.</p>
+<p>To quickly post a story from anywhere on the web, get our <%= link_to 'Bookmarklet', "/tools/bookmarklet" + (params[:popup] ? '" target="_blank' : "") %>.</p>
+
+<p><a name="story_kinds"></a><span class="subhead_plain_bold">What kinds of stories can I post?</span>
+You can post any English-language news item that is available online and that concerns the public interest. Check our topics page for a list of subjects that we are most interested in covering. We welcome posts from a wide range of publications (e.g., blogs, newspapers, radio and TV) and story types (e.g., news reports, opinions). We discourage posts that are primarily of an entertainment or sensational nature, such as celebrity coverage, or tabloid news. Please don't post stories that are exact duplicates of items already reviewed on <%=app_name%>. You can post as many stories as you like, as long as they fit the guidelines above.</p>
+
+<p><a name="delete_story"></a><span class="subhead_plain_bold">How do I delete a story I posted?</span>
+To delete a story that was posted in error, please email us at <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>.</p>
+
+<p><a name="submit_story_url_main" id="submit_story_url_main"></a><span class="subhead_plain_bold">URL</span>
+Cut and paste the web address (or URL) of the story you are posting. If a print page or printer-friendly address is available for this story, enter it instead of the main address. The less cluttered the page, the easier it will be to review. Some fields in the posting form are automatically filled in after you enter the URL. Please make sure they're correct.</p>
+
+<p><a name="submit_story_title" class="subhead_plain_bold" id="submit_story_title"></a><span class="subhead_plain_bold">Story Title</span>
+Enter the title or headline of your story. If the story does not have a title, please cut and paste the first sentence of the story (without the date, place or author name). Story titles that exceed 80 characters may be truncated. If there is a subtitle, you may enter it below.</p>
+
+<p><a name="submit_story_quote" class="subhead_plain_bold" id="submit_story_quote"></a><span class="subhead_plain_bold">Quote</span>
+Copy and paste a quote or description for this story. Select a quote that summarizes the main point of the story, if possible. If you're not sure, select the first paragraph of the story, omitting the source byline, date or location. Quotes that exceed 100 words will be automatically truncated.</p>
+
+<p><a name="submit_story_journalist_names"></a><a name="submit_story_authors"></a><span class="subhead_plain_bold">Authors</span>
+Copy and paste the names of the journalists that originally authored this story, if available. If more than one author, separate each of their full names with a comma (First name and Last name, then comma). Please use Initial Caps for names rather than all UPPER CASE or all lower case (Example: Edward R. Murrow).</p>
+
+<p><a name="submit_story_type" class="subhead_plain_bold" id="submit_story_type"></a><span class="subhead_plain_bold">Story Type</span>
+Select a story type from the drop-down menu in our Edit form. Options include: news report, special report, opinion, editorial, etc. If the story does not fit any of these options, select "Other" from the drop-down menu.</p>
+
+<p><a name="submit_story_type_short" class="subhead_plain_bold" id="submit_story_type"></a><span class="subhead_plain_bold">Story Type (quick and short edit forms)</span>
+Select a story type from by clickong on one of the three radio buttons in our Edit form. Options include: News, Opinion, and Other.</p>
+
+<p><a name="submit_publication_name" class="subhead_plain_bold" id="submit_publication_name"></a><span class="subhead_plain_bold">Source</span>
+Type in the original publication name for this story, in our publication text box. Once you select a media type for your source, this drop-down menu will change to only show publication names for your selected media type. If your publication name does not appear in our drop-down menu, select "Other" to type it in yourself in a special text box.</p>
+
+<p><a name="submit_story_topics"></a><a name="submit_story_subject"></a><span class="subhead_plain_bold">Topic</span>
+Type in the main topic for the story you are posting, in our topic text box.</p>
+
+<p><a name="submit_story_date" id="submit_story_date"></a><span class="subhead_plain_bold">Date</span>
+Select the story's original publication date from our drop-down menu, which goes back 90 days. If the correct date is not available, select the earliest available date. We will soon offer a more sophisticated date selection method.</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="review_source"></a>Reviewing a Source</h2>
+
+<p>
+<span class="subhead_plain_bold"> How can I review a source?</span>
+You can now review news sources on <%=app_name%>.  Source reviews are a quick way
+for you to rate the credibility of a source, even if you don't have time to review its stories. 
+It's a bit like reviewing restaurants on Google, Yahoo or Yelp -- but for news providers instead.
+</p>
+<p>
+To review a source, click on its name to go to that source’s profile page. 
+Then fill in the "Review this source" form in the middle of that page.
+</p>
+<p>
+That source review form has three parts:
+</p>
+<ul>
+<li> <strong>Rate it</strong>: Do you <em>trust</em> this publication? <br/><br/> (rate it on a scale from 1 to 5) </li>
+<li> <strong>Add a note</strong>: What are this source’s strengths and weaknesses?<br/><br/> (write an open-ended comment) </li>
+<li> <strong>Expertise</strong>: Which topics is this source an expert on? <br/><br/> (click all that apply -- or add more topics in the box below)</li>
+</ul>
+<p>
+Once you've completed your review, click the yellow 'Save' button.
+Your review will be added to the source profile page, at the top of the 'Source Reviews' section.
+</p>
+<p>
+You can also rate a source in other ways:
+</p>
+<ul>
+<li> when you review a story, our quick review form ends with the same rating question about the credibility of its source: "Do you <em>trust</em> this publication?"</li> 
+<li> a special '<%=link_to "Rate your sources", rate_sources_sources_path%>' page lets you rate our most popular news sources, all in one place.</li>
+</ul>
+</p>
+
+<p>
+Whichever option you choose, your answer is added to the source's profile page, and your rating is factored into the source's overall rating.
+</p>
+<p>
+You can edit your review at any time, by clicking 'Edit your review.'
+</p>
+
+<p>
+<span class="subhead_plain_bold">How can I read other people's reviews of a source?</span>
+Click the source's name anywhere on <%=app_name%> to go to its profile page. The top reviews for that source are listed under the 'Source Reviews' tab. You can read other source reviews by clicking 'More.'
+</p>
+
+<p>
+<span class="subhead_plain_bold">How can I see overall ratings for a source?</span>
+Click the source's name anywhere on <%=app_name%> to go to its profile page. Our overall source ratings are shown at the top-right corner of that profile, and labeled 'Overall Rating'. They are an average of all story ratings for that source (for more info on how our source ratings are calculated, see our <%=help_link "General FAQ", "source_ratings", ""%>).
+You can see a detailed breakdown of a source's quality and popularity ratings in the top-right corner of that source's profile page. 
+(Note that on some national source pages, these detailed ratings are based in part on national story reviews. )
+</p>
+<p>
+We also display a separate quick rating of source credibility, based on source reviews (instead of story reviews). 
+This 'Quick Rating' appears in the Source Reviews tab, in the main column on the left of each source profile. 
+Source reviews are intended as a quick way for our members to rate the credibility of a source, even if they don't have
+time to review its stories.
+When you review a source, as described above, your quick rating is added to this average, and weighted based on your member level.
+(Note that this quick rating is related to the 'Credibility' rating which also appears in the popularity column
+of the Ratings panel at the top of each source page.)
+</p>
+<p>
+<span class="subhead_plain_bold">How can I see a source's expertise?</span>
+Click the source's name anywhere on <%=app_name%> to go to its profile page. Look for an 'Expertise' box in the right column, below the source's overall ratings. This box shows topics which this source is an expert on, according to our reviewers. Topics are listed in order of popularity, with number of votes shown in parentheses.
+</p>
+<p>
+<span class="subhead_plain_bold">How is a source's expertise determined?</span>
+Using the source review form, members can suggest topics which they think a source covers particularly well. They can click on frequent topics covered by that source, or add more topics by typing them into a text box. These topics are listed by popularity in the Expertise box on the right side of the source's profile page.
+</p>
+<p>
+<span class="subhead_plain_bold">Is there a way to rate sources more quickly?</span>
+Visit our <%=link_to "Rate your sources", rate_sources_sources_path%> page, where you can quickly add ratings for sources you know. Our most popular sources are listed by medium on that page, and other sources can be rated by clicking the 'More' links. For a more in-depth review, click the yellow 'Review' button to go to the source review form.
+</p>
+<p>
+<span class="subhead_plain_bold">Where can I see the most trusted sources?</span>
+Visit our <%=link_to "Sources", sources_path%> by clicking on 'Sources' below the main navigation bar at the top of any <%=app_name%> page. This page displays the most trusted sources and their ratings, organized by medium.
+</p>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+<h2><a name="adding_comments"></a>Adding Comments</h2>
+
+<p><a name="comments_how_to_add"></a><span class="subhead_plain_bold">How do I add a comment?</span>
+Some <%=app_name%> members can add comments on any story page or individual review &ndash; and in select topic pages. To add your comments to these pages, click the "Comments" link below the page description or simply scroll to the bottom of the page. Type your comment in the "Add a Comment" box (you have up to 2,000 characters per comment) and click "Save" when you're done. Your comment will appear above. You can also add a reply to an existing comment by clicking "Reply". You are free to edit you comment or reply for <%= pluralize(Comment.minutes_before_locked, 'minute')%> after posting it, after which editing will be disabled. (For more info about which topic pages are open for comments and who can comment, check the next questions on this FAQ).</p>
+
+<p><a name="comments_page_open"></a><span class="subhead_plain_bold">How can I tell if a page is open for comments?</span>
+All pages that are open for comments have a "Comments" link below their page description. Click on that link to jump to the comments section of that page. All story pages are open for comments, but only a few topic pages are open for comments in this beta phase. In the future we will open up more topic and subject pages for comments, as well as source pages.</p>
+
+<p><a name="comments_who_can"></a><span class="subhead_plain_bold">Who can comment</span>
+Commenting is open to all members with a <%= link_to 'level', "/help/faq/member/" + (params[:popup] ? '?popup=true#member_rating_calculation' : "#member_rating_calculation") %> of <%= SocialNewsConfig["min_member_level_for_comments"] %> or more. To learn more about member levels, see our <%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? '?popup=true#member_levels' : "#member_levels") %>.</p>
+
+<p><a name="comments_flagging"></a><span class="subhead_plain_bold">How do I flag a comment?</span>
+If you find a comment abusive, offensive or in breach of our <%= link_to 'terms of service', "/about/terms/" + (params[:popup] ? "?popup=true" : "") %>, please alert our staff by flagging it. Simply click "Flag" next to the comment in question. <%=app_name%> staff will receive immediate notification (as will the topic host if the comment appears on a topic page). <%=app_name%> staff will review the flagged comment and may remove it if they find it inappropriate.</p>
+
+<p>Do not flag a comment simply because you disagree with its author. In order to qualify for removal, a comment must explicitly violate our <%= link_to 'terms of service', "/about/terms/" + (params[:popup] ? "?popup=true" : "") %>. If you feel your comment has been unfairly removed, contact <%=app_name%> staff at <%= mail_to email_addr("editors"), email_addr("editors"), :subject => "#{app_name} comments help", :encode => "javascript" %>.</p>
+
+<p><a name="comments_notification"></a><span class="subhead_plain_bold">How do I turn off email notifications for comments?</span>
+There are several different types of email notifications we send out pertaining to comments. For example, when someone replies to a comment you made. For more information about these notifications and how to turn them off, see our <%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? '?popup=true#member_email_notifications' : "#member_email_notifications") %>.</p>
+
+<p><a name="question_not_answered"></a><span class="subhead_plain_bold">You didn't answer my question in this FAQ! What now?</span>
+Please send your additional questions, ideas and thoughts to <%= mail_to email_addr("help"), email_addr("help"), :subject => "#{app_name} help request", :encode => "javascript" %>. We appreciate your interest in <%=app_name%> and your patience during this beta phase. 
+<p> For more information about using <%=app_name%>, check our other help FAQs:<br>
+<table width="100%">
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'General FAQ', "/help/faq/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about <em>joining <%=app_name%></em> and <em>getting started</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Member FAQ', "/help/faq/member/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about viewing and editing our <em>member profiles</em></td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to mynews_colors() +' FAQ', "/help/faq/mynews/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about your <em>MyNews</em> and <em>My Network</em> pages</td></tr>
+<tr>
+<td nowrap style="vertical-align:top"><li style="padding-top:2px"><%= link_to 'Host FAQ', "/help/faq/host/" + (params[:popup] ? "?popup=true" : "") %>: </li></td><td style="vertical-align:top">for questions about our story and source <em>edit forms</em></td></tr></table>
+
+<span class="back_top"><hr><a href="#top" class="subhead_plain">Back to Top</a></span>
+
+<br />
+
+</div>
+
+</div>
+<div class="bottom"></div>
+</div>
+
+</div>

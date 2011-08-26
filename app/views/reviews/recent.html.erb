@@ -1,0 +1,22 @@
+<% @title = "Recent Reviews" %>
+
+<div class="span-16">
+	<div class="main_column_box">
+
+    <%= will_paginate(@reviews) %><br/><br/>
+
+	  <div class="recent_reviews"> 
+      <h2> <%= @title %> </h2>
+      <div class="story_listing_reviews flat">
+        <div class="top"></div>
+        <div class="wrapper">
+          <%= @reviews.collect{|review| render(:partial => 'reviews/recent_reviews',
+                                               :locals => {:review => review,
+                                                           :show_flags => { :see_all_reviews => false }})} %>
+        </div>
+        <div class="bottom"></div>
+      </div>
+    </div>
+	</div>
+</div>
+<br/>

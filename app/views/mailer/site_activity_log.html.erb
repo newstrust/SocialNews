@@ -1,0 +1,83 @@
+---------------------------------------------------------------------
+<%- if @new_members.blank? -%>
+No new members have signed up since <%=@last_sent_time%>.
+<%- else -%>
+Here is a list of members who signed up since <%=@last_sent_time%>.
+---------------------------------------------------------------------
+
+<%- @new_members.each do |m| -%>
+  <%- last_post = Story.find(:last, :conditions => {:submitted_by_id => m.id}) -%>
+  <%- last_review = Review.find(:last, :conditions => {:member_id => m.id}) -%>
+ID, etc.    : <%=m.id%>; <%=m.name%>; (<%=m.status.upcase%>); <%=m.email%>; <%= member_url(m) %>;
+Invite code : <%= m.invitation_code || ""%>;
+  <%- if last_post -%>
+Last post   : <%= "#{last_post.title}; #{story_url(last_post)}" %>
+  <%- end -%>
+  <%- if last_review -%>
+Last review : <%= "#{last_review.story.title}; #{story_url(last_review.story)}" %>
+  <%- end -%>
+  <%- if !m.terminated? -%>
+Terminate   : <%= spammer_termination_form_admin_members_url(:ids => m.id) %>
+  <%- end -%>
+
+
+<%- end -%>
+---------------------------------------------------------------------
+<%- end -%>
+<%- if @posted_stories.blank? -%>
+No stories have been posted to the site since <%=@last_sent_time%>.
+<%- else -%>
+Here is a list of (listed/featured) stories that were posted to the site since <%=@last_sent_time%>.
+---------------------------------------------------------------------
+
+<%- @posted_stories.each do |ps| -%>
+<%- poster = ps.submitted_by_member -%>
+* <%=story_url(ps)%>, <%=ps.title%>, <%=ps.authorships.first.source.name if !ps.authorships.blank?%>
+  SUBMITTER: <%=poster.name%>, TIME: <%=ps.created_at%>
+  <%- if !poster.terminated? -%>
+  Terminate: <%= spammer_termination_form_admin_members_url(:ids => poster.id) %>
+  <%- end -%>
+
+<%- end -%>
+---------------------------------------------------------------------
+<%- end -%>
+<%- if !@incomplete_stories.blank? -%>
+Here is a list of stories that have been reviewed since <%=@last_sent_time%>, but are either in pending / queued status OR are incomplete
+---------------------------------------------------------------------
+
+<%- @incomplete_stories.each do |ps| -%>
+* <%=story_url(ps)%>, <%=ps.title%>, <%=ps.authorships.first.source.name if !ps.authorships.blank?%>
+  STATUS: <%=SiteConstants::ordered_hash("story_status")[ps.status]["passive_name"]%>, REVIEWS: <%=ps.reviews_count%> 
+  SUBMITTER: <%=ps.submitted_by_member.name%>, TIME: <%=ps.created_at%>
+
+<%- end -%>
+---------------------------------------------------------------------
+<%- end -%>
+<%- if !@new_reviews.blank? -%>
+Here is a list of all reviews since <%=@last_sent_time%>.
+---------------------------------------------------------------------
+
+<%- @new_reviews.each do |r| -%>
+* <%=r.member.name%> gave a <%=((r.rating||0)*100).round.to_f/100%> rating to '<%=r.story.title%>' .
+  URL: <%=review_url(r.story, r)%>
+  <%if !r.comment.blank?%>NOTE: <%=r.comment%> <%-end%>
+
+<%- end -%>
+<%- else -%>
+No new reviews since <%=@last_sent_time%>.
+<%- end -%>
+---------------------------------------------------------------------
+<%- if !@new_comments.blank? -%>
+Here is a list of all comments since <%=@last_sent_time%>.
+---------------------------------------------------------------------
+
+<%- @new_comments.each do |c| -%>
+<%- c_url = c.commentable_type == 'Review' ? review_url(c.commentable.story, c.commentable) : send("#{c.commentable_type.downcase}_url", c.commentable) -%>
+* New comment on <%=c.commentable_type%> <%=c.commentable_id%> by <%=c.member.name%>; URL: <%= c_url %>
+  BODY: <%= c.body %>
+
+<%- end -%>
+<%- else -%>
+No new comments since <%=@last_sent_time%>.
+<%- end -%>
+---------------------------------------------------------------------

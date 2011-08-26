@@ -1,0 +1,113 @@
+<%- if record.allow_comments? %>
+  <%= javascript_include_tag('/javascripts/comments.js') %>
+  <%- if logged_in? -%>
+    <%- add_comment_msg = current_member.can_comment? ? "<a id=\"add_comments_header\" href=\"#add_comment\" style=\"display:none;\">Add a Comment</a>" : "" -%>
+  <%- else -%>
+    <% add_comment_msg = link_to_function "Login to Comment", "show_login_dialog()", :title => "Log into #{app_name}", :class => "login_add_comment" %>
+  <%- end -%>
+
+  <div class="comments_header" style="clear:both;">
+    <div class="comment_tools">
+      <span class="addacomment">
+        <%= add_comment_msg %>
+      </span>
+      <span class="threadMenu">
+        <span id="comment_filter" class="sorter" >Sort by:
+          <a id="sort_oldest" class="selected disabled_link" href="#">Oldest</a> | <a id="sort_newest" class="disabled_link" href="#">Newest</a>
+        </span>
+        <span class="comment_showreplies">
+          <a class="toggle_all_replies disabled_link" href="#">Hide All Replies</a>
+        </span>
+      </span>
+      <span class="permalinkMenu" style="display:none;"><a href="#" class="viewAllComments" style="font-size:130%">Show More Comments</a></span>
+    </div>
+  </div>
+
+  <div class="retrieving_comments" style="display:none">
+    <%= image_tag('/images/ui/indicator.gif') %> Retrieving Comments
+  </div>
+  <div class="retrieving_permalink" style="display:none">
+    <%= image_tag('/images/ui/indicator.gif') %> Retrieving Permalink
+  </div>
+
+  <div id="comment_thread"></div>
+
+  <div id="comment_thread_pagination_container" style="padding-left:10px;">
+    <%= image_tag('/images/ui/indicator.gif', :class => "retrieving_paginated_comments", :style => "display:none;float:left;") %>
+    <div id="comment_thread_pagination" style="float:left;"></div>
+  </div>
+
+  <div id="created_comments"></div>
+
+  <div id="new_comment_form" style="clear:both;display:none;">
+    <%-
+      # I need to use the klass param for STI classes because rails expect the base class for some reason not the derived class. 
+      # Therefore pass klass as a local in the instances you want to add comments to a STI class
+    -%>
+    <a id="add_comment" name="add_comment"></a>
+    <%- comment_form_wrapper do -%>
+      <%- form_for(current_member.comments.build(:commentable_type => (local_variables.include?('commentable_klass') ? commentable_klass : record.class.to_s), :commentable_id => record.id), :url => discussions_comments_path, :html => { :class => 'comment_form' }) do |f| -%>
+        <%- character_counter_id = "character_counter_#{(f.object.initial_ancestor_id.blank? ? 0 : f.object.initial_ancestor_id)}" -%>
+        <%= render :partial => 'discussions/comments/form', :locals => { :character_counter_id => character_counter_id, :form_title => 'Add a Comment', :f => f } %>
+        <div align="left" id="comment_submit_container_<%= character_counter_id %>" style="margin-top:5px;">
+          <%= image_tag('/images/ui/indicator.gif', :class => "creating_comment", :style => "display:none;float:left;") %>
+          <%= link_to('', '', :class => 'submit_btn', :id => 'comment_create', :style => 'float:left;') %>
+          <span class="civil_note">Please be civil (see our <%= pop_up_link('guidelines', tos_path + "#community_guidelines") %>). Comments can be edited for <%= pluralize(Comment.minutes_before_locked, 'minute')%> <%= help_icon("adding_comments", "reviewer") %></span>
+        </div>
+      <%- end -%>
+    <%- end -%>
+  </div>
+
+  <%#-- Login overlay for the logged out situation --%>
+  <%= render :partial => "shared/login_overlay" %>
+
+<script type="text/javascript" charset="utf-8">
+
+    // A list of comment threads presently opened
+    NT.open_threads = [];
+
+    // A hash of comment configuration settings.
+    NT.comment_options.klass = '<%= record.class %>';
+    NT.comment_options.id = '<%= record.id %>';
+    NT.last_sort_options = {};
+    NT.sort_options = {
+        last_sort: 'oldest',
+        page: '<%= !params[:page].to_i.zero? ? params[:page] : 1  %>',
+        per_page: '<%= !params[:per_page].to_i.zero? ? params[:per_page] : 25  %>'
+    };
+
+    $(document).ready(function() {
+        $(".new_discussion").bind('click',
+        function(event){
+            event.preventDefault();
+            $('html,body').animate({
+                scrollTop: $("a[name='comments']").offset().top
+            },
+            'fast');
+      });
+        buildSorter();
+
+        // Get the inital batch of comments;
+        var index = document.location.href.indexOf("#p");
+
+        if (index >= 0) {
+          var comment_id = document.location.href.substring(index).indexOf("-");
+          comment_id = document.location.href.substring(index).substring(comment_id).split('-')[1];
+          getPermalink(comment_id);
+        } else {
+          getComments('oldest', NT.sort_options);
+          $('.retrieving_comments').show();
+        }
+        
+        $('.viewAllComments').bind('click',function(event){
+          getComments('oldest', NT.sort_options);
+          $('.retrieving_comments').show();
+          $('.threadMenu').show();
+          $('.permalinkMenu').hide();
+          event.preventDefault();
+        });
+    });
+</script>
+<%- else -%>
+  <h3>Comments Are Closed</h3>
+<%- end -%>

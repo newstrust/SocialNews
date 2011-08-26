@@ -1,0 +1,52 @@
+<%#-- SSS: On the question, input, and rating_labels divs below, I have set a fixed height style.
+      This eliminates flicker on rollver in IE6, and also for some questions in FF. -%>
+
+<div class="rating_input <%= form_level %> <%= "hide" unless form_level.blank? %> clearfix" <%= "style=\"#{style}\"" if style %>>
+  <a class="dummy hide"></a>
+  <%- fields_for "#{param_array_prefix}[#{criterion_key}]" do |rf| -%>
+    <%= rf.hidden_field :criterion, :value => criterion_key, :class => "rating_criterion" %>
+    <div class="clearfix">
+      <%-# question info (see also more info at bottom) --%>
+      <%- if criterion -%>
+        <div class="question" style="height:27px;">
+          <%-# also update rollover text for help icon in review.js: toggle_rating_description() --%>
+          <%= rf.label :value, criterion["question"].gsub(/^(.*)\*(.*)\*(.*)$/, '\1<b>\2</b>\3') + " " +
+            link_to(image_tag("/images/ui/spacer.gif", :size=>"11x11", :alt => "Help", :title => "Click for more info"), '#', :class => "toggle_rating_description help") %>
+          <div class="subquestion">
+            <span class="quiet hide"><%= criterion["subquestion"] %></span>
+          </div>
+        </div>
+      <%- end -%>
+
+      <%-# the UI input --%>
+      <%- unless menu %> <%# use rollover rating bars -%>
+        <%=rf.hidden_field :value, :value => review.component_rating(criterion_key), :class => "rating_value" %>
+        <div class="input" style="height:17px;">
+          <div class="starselect <%= star_class %>">
+            <%= link_to_function("&nbsp;", "", :class => "star") * 5 %>
+            <%- unless hide_clear_button -%>
+              <%= link_to_function "&nbsp;", "", :class => "clear_stars" %>
+            <%- end -%>
+          </div>
+          <%- if criterion -%>
+            <div class="rating_labels" style="height:10px;">
+              <%= criterion["rating_labels"].collect{|rl| content_tag('span', rl)}.join(" ") %>
+            </div>
+          <%- end -%>
+        </div>
+      <%- else %> <%# use pull-down menu (rare) -%>
+        <% rating_label_options = [["Select:", ""]] -%>
+        <% criterion["rating_labels"].each_with_index{|rl, rli| rating_label_options << [rl, (rli+1).to_s]} -%>
+        <%= select_tag "review[rating_attributes][knowledge][value]", options_for_select(rating_label_options, review.component_rating(criterion_key).to_s) %>
+      <%- end -%>
+    </div>
+
+    <%-# more question info (goes with the above) -%>
+    <%- if criterion -%>
+      <div class="description">
+        <%= criterion["description"] %>
+        <%= link_to_function '(hide)', "return toggle_rating_description($(this).parent('.description'));", :style => "font-weight: normal" %>
+      </div>
+    <%- end -%>
+  <%- end -%>
+</div>

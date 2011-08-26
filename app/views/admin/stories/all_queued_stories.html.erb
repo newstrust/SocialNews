@@ -1,0 +1,163 @@
+<script type="text/javascript">
+$(document).ready(function() {
+  $('a.info_toggle').click(function() { 
+	  $(this).parent().toggleClass("hide").toggleClass("show"); 
+	  return false;
+  })
+});
+</script>
+
+<style>
+div.stats_box { border:1px dotted #888; margin-top: 10px; padding: 10px 0 }
+div.stats_box div.stats_header { font-size:14px; padding:10px; margin-bottom: 25px; }
+div.stats_box div.stats_row { float: left; padding: 0 10px; }
+div.stats_box div.col { float: left; padding:0; width:240px; margin-right:5px;}
+div.stats_box div.col table { width:100%; margin:0; padding:0; }
+div.stats_box div.col table thead { font-weight: bold; }
+
+div.content { border : 0px; }
+div.subject_section { margin-top: 10px; }
+div.full_width_column { width: 750px; margin-right: 15px; }
+div.full_width_column ul.stories { margin-top: 10px; border-bottom: 1px solid black; }
+div.full_width_column ul.stories li { width: 730px; padding-bottom: 10px; }
+div.full_width_column ul.stories li div.story_info { width: 500px; float: left; margin-right: 10px; padding:5px; }
+div.full_width_column ul.stories li div.score_info { width: 150px; float: right; text-align: right; }
+div.full_width_column ul.stories li div.api_info   { width: 600px; float: left; color:#444; font-size: 11px; }
+div.info_header { clear:both; }
+div.info_header a.info_toggle { padding-left: 12px; font-weight:bold; }
+.hide { background: url('/images/ui/disclosuretri-shut.gif') no-repeat left top; }
+.show { background: url('/images/ui/disclosuretri-open.gif') no-repeat left top; }
+.hide div.api_info { display: none; }
+.show div.api_info { display: block; padding: 5px; border:1px dotted #888; }
+a.editorial { color: #a00; }
+</style>
+
+<% @title="All queued stories from the last #{pluralize(params[:timespan] || 1, "day")}" -%>
+
+<h1>
+<%=@title%>
+<span style="color:#888;font-size:11px;font-weight:bold;">(Add ?timespan=N to the url if you want queued stories from the last N days)</span>
+</h1>
+
+<% stats_config = [ {:name => "Subject",     :data => @subject_stats, :model => Subject, :num_cols => 1, :end_row => false},
+                    {:name => "Source Type", :data => @src_stats,     :model => nil,     :num_cols => 1, :end_row => false},
+                    {:name => "Story Type",  :data => @stype_stats,   :model => nil,     :num_cols => 1, :end_row => true},
+                    {:name => "Topic",       :data => @topic_stats,   :model => Topic,   :num_cols => 3, :end_row => true},
+                    {:name => "Feed",        :data => @feed_stats,    :model => Feed,    :num_cols => 3, :end_row => false} ] -%>
+
+<div class="stats_box">
+  <div class="stats_header">
+  In the stats tables below, the links will take you to the mass story edit form with queued stories that topic/subject/feed.<br/>
+  Or <%= link_to "click here to mass edit queued stories across all subjects/topics/feeds", mass_edit_queued_stories_admin_stories_url %></span> 
+  </div>
+<% stats_config.each do |stat| -%>
+  <% pname = stat[:model] ? (stat[:model].to_s.downcase + "_id").to_sym : nil -%>
+  <div class="stats_row" style="width:<%=750/stat[:num_cols]%>;">
+    <h2><%=stat[:name]%> Stats</h2>
+    <br/>
+  <% keys = stat[:model] ? stat[:data].keys.sort { |a,b| stat[:model].send(:find, a).name <=> stat[:model].send(:find, b).name } \
+                         : stat[:data].keys.sort -%>
+  <% n = keys.length/stat[:num_cols]; n = 1 if n == 0 -%>
+  <% first = 0 %>
+  <% (1..stat[:num_cols]).each do |col| %>
+    <div class="col">
+      <table>
+        <thead> <tr> <td> <%=stat[:name]%> </td> <td style="width:60px;text-align:center;"> Count </td> </tr> </thead>
+        <tbody>
+    <% keys[first..first+n-1].each do |s| -%>
+      <% obj = stat[:model] ? stat[:model].send(:find, s) : nil %>
+        <tr> 
+        <td>
+        <%= obj ? link_to(obj.name, mass_edit_queued_stories_admin_stories_path(:timespan => params[:timespan], pname => s)) : (s.blank? ? "--None--" : s) %>
+        </td> 
+        <td style="text-align:center"> <%= stat[:data][s] %> </td>
+        </tr>
+    <% end -%>
+        </tbody>
+      </table>
+    </div>
+    <% first += n -%>
+  <% end -%>
+  </div>
+
+  <% if stat[:end_row] %> <br clear="both" /><hr/><br/> <% end %>
+<% end -%>
+<br clear="both" />
+</div>
+
+<br/> <%= will_paginate(@all_stories) %> <br/> <br/>
+
+<% main_column_tabless_box :box_class => "full_width_column", :box_id => "xyz" do -%>
+<% @subj_stories.keys.sort.each do |subject_id| -%>
+<div class="subject_section">
+  <% subj = Subject.find(subject_id) %>
+  <h1> <%=link_to "#{subj.name} Stories", mass_edit_queued_stories_admin_stories_path(:s_slug => subj.slug, :timespan => params[:timespan]) %> </h1>
+  <div> (Click on the name to open up the mass-edit story form with stories from this subject) </div>
+
+  <ul class="stories">
+  <% @subj_stories[subject_id].each do |story| -%>
+    <li>
+    <%#--------- Display main story info ------------%>
+    <div class="story_info">
+      <%= link_to(h(story.title), story.url) %> <br/>
+      <%= link_to_sources(story.sources) %>
+      <span>
+        <%= "- by #{h(story.journalist_names)}" unless story.journalist_names.blank? %>
+        <%= "- #{story.story_date.strftime('%b. %e, %Y')}" if story.story_date %>
+        <%= story_type_and_online_access(story) %>
+        <% if !story.is_public? %> <span class="error">(<%= display_status(story.status) %>)</span> <% end %>
+      </span>
+      <%="<span><b>(No Story Type Yet)</b>" if story.story_type.blank? %><br/>
+      <%= h StringHelpers.truncate_on_word_boundary(story.excerpt, 0, 120) %> <br/>
+      <% if story.submitted_by_member %> <%= begin; show_autolist_submitted_by(story); rescue Exception => e; "<b>Exception #{e.to_s} display posted by info</b>"; end %> <br/> <% end %>
+      <%= link_to "Edit this story", edit_story_url(story), :class => "editorial", :title => "Edit this story" %>
+      <br/>
+
+      <div>
+	      <% story_subject_links = story.subjects(@local_site).collect{ |s| link_to(h(s.name), s)}.join(", ") %>
+	      <% story_topic_links = story.topics(@local_site).collect{ |t| (['list', 'feature'].include?(t.status)) ? link_to(h(t.name), t) : t.name }.join(", ") %>
+	      <%= profile_line_direct :humanized_key => "Topics",
+	        :value => [story_subject_links.blank? ? nil : story_subject_links, story_topic_links.blank? ? nil : story_topic_links].compact.join(" | ") %>
+	      <%= profile_line_direct :humanized_key => "Member Tags", :value => story.member_tags.collect{|t| h(t.name)}.join(", ") %>
+      </div>
+    </div>
+  <%#--------- Display autolist info ------------%>
+    <div class="score_info"> 
+      <b>Score Info</b><br/>
+      <% FeedFetcher::Score::SCORE_COEFFICIENTS.keys.each do |k| -%>
+        <%=k.to_s%> = <%=story.send("autolist_" + k.to_s)%> <br/>
+      <% end -%>
+      TOTAL SCORE: <%=story.autolist_score%>
+    </div>
+  <%#--------- Display API info ------------%>
+    <div class="info_header hide"> 
+    <a class="info_toggle" href="#">Toggle API Metadata</a>
+    <div class="api_info">
+    <% MetadataFetcher::APIS.keys.each do |api| -%>
+      <% api_info = story.api_metadata(api) -%>
+      <% if api_info.blank? -%>
+      <b>--- No metadata from <%=api%> ---</b><br/>
+      <% else -%>
+      <div>
+        <% begin -%>
+        <div style="text-decoration:underline;font-weight:bold;">API INFO from <%=api.to_s%> </div>
+        <% api_info.each do |k,v| -%> <b><%=k%></b> = <%=v.class==Array ? v.join(",") : v%> <br/> <% end %>
+        <% rescue Exception => e -%>
+        <b>Exception loading info from the db and displaying it!</b>
+        <% end -%>
+      </div>
+      <br/>
+      <% end -%>
+    <% end -%>
+    </div>
+    </div>
+
+    <br clear="left" />
+
+    </li>
+  <% end -%>
+  </ul>
+</div>
+<% end -%>
+<br/> <%= will_paginate(@all_stories) %> <br/> <br/>
+<% end -%>

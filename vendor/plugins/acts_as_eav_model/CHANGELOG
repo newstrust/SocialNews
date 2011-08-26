@@ -1,0 +1,9 @@
+* Simplified tests so they don't require a rails project [Arni Einarsson]
+
+* Added multiparameter assignment [Arni Einarsson]
+
+* Added meta_column functionality [Arni Einarsson]
+
+* First version with base functionality to handle Entity-attribute-value model (EAV) pattern.
+
+* CHANGELOG started [Marcus Wyatt]

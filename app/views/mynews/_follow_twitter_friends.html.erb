@@ -1,0 +1,35 @@
+<a name="twitter_friends_panel"></a>
+<div style="margin:0px 0 4px 0"><a href="#" id="twitter_follow_friends_link" class="twitter_friends" title="Find your Twitter friends that are also <%=app_name%> members"></a></div>
+
+<div id="twitter_friends_box" class="friends_box">
+  <div class="twitter_error_msg" id="twitter_unconnected">
+    <%=link_to(image_tag("/images/ui/twitter_connect.png", :title => "Click to connect your #{app_name} and Twitter accounts", :style => "float:left;padding-right:5px;"), "#", :onclick => "open_popup('#{twitter_authenticate_url}','', {height:400, width:780}); return false", :html => {"target" => "_blank"})%> Your <%=app_name%> and Twitter accounts are not yet connected. Click on the Twitter connect button and retry after that.
+    <%= link_to_function "Cancel", "return twitter_close_follow_friends_form()", :class => "cancel" %>
+  </div>
+  <div class="twitter_error_msg" id="twitter_no_friends">
+    None of your Twitter friends have connected to <%=app_name%>.
+    <%= link_to_function "Cancel", "return twitter_close_follow_friends_form()", :style => "float:right;margin-left:20px;font-weight:normal" %>
+     <br />
+     <br />
+  </div>
+  <div class="twitter_error_msg" id="twitter_no_more_friends">
+     You are already following all your <%=app_name%>-connected Twitter friends.
+     <%= link_to_function "Cancel", "return twitter_close_follow_friends_form()", :style => "float:right;margin-left:20px;font-weight:normal" %>
+     <br />
+     <br />
+  </div>
+  <div class="mynews_adding_msg" id="twitter_friends_notice"></div>
+  <% form_for @member, :url => "#", :html => {:method => :post, :id => "twitter_friends_form", :style => "padding: 2px 5px; display:none;"} do |f| -%>
+    <h3>Find your friends on Twitter</h3>
+    <span class="mynews_prompt">Pick the friends you want to follow on <%=app_name%>:</span><br/>
+    <input type="hidden" name="follow_type" value="member">
+    <div id="twitter_followable_friends"></div>
+    <div class="explanation">(these Twitter friends are also <%=app_name%> members.)</div>
+    <div style="margin:5px 2px 50px 2px;">
+      <%= submit_tag "", :class => "follow_friends_btn", :onclick => "return twitter_follow_friends()" %>
+
+    <%#= submit_button "Follow these Friends", nil, :class => 'save', :onclick => "return twitter_follow_friends()" %>
+    <%= link_to_function "Cancel", "return twitter_close_follow_friends_form()", :class => "cancel" %>
+    </div>
+  <% end -%>
+</div>

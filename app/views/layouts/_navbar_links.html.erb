@@ -1,0 +1,24 @@
+<%- @primary_navbar_links = [
+    {:name => "Home",     :class => "mn_home",      :route => home_path},
+    {:name => "World",    :class => "mn_world",     :route => subject_path("world")},
+    {:name => "U.S.",     :class => "mn_us",        :route => subject_path("us")},
+    {:name => "Politics", :class => "mn_politics",  :route => subject_path("politics")},
+    {:name => "Business", :class => "mn_business",  :route => subject_path("business")},
+    {:name => "Sci/Tech", :class => "mn_scitech",   :route => subject_path("scitech"),    :title => "Science & Technology"},
+    {:name => "More",     :class => "mn_more",      :route => topics_path,               :title => "More Topics"}
+] -%>
+
+<%- @secondary_navbar_links = [
+    {:name => "About",      :route => page_path(:section => "about")},
+    {:name => "Blog",       :route => page_path(:section => "blog")},
+    {:name => "Emails",     :route => "/email"},
+    {:name => "Groups",     :route => groups_path},
+    {:name => "Guides",     :route => page_path(:section => "guides")},
+    {:name => "Members",    :route => members_path},
+    {:name => "MyNews",     :route => logged_in? ? mynews_url(current_member) : "/about/mynews" },
+    {:name => "News Hunts", :route => "/newshunts"},
+    {:name => "Partners",   :route => page_path(:section => "partners")},
+    {:name => "Sources",    :route => sources_path},
+    {:name => "Tools",      :route => page_path(:section => "tools")},
+    {:name => "Widgets",    :route => page_path(:section => "widgets")}
+] -%>

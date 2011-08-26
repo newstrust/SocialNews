@@ -1,0 +1,50 @@
+<%- local = "" -%>
+<%- if @local_site -%>
+  <%- local = @local_site.name + " " -%>
+<%- end -%>
+<% @title = local + "Members" %>
+
+<div class="span-16 white_box" style="margin-top:0px;">
+	<div class="top"></div>
+	<div class="wrapper">
+		<div class="interior_content">
+		<h2 class="bottom"><%= local %>Members</h2>
+		<p>
+			Meet some of the members of the <%=app_name%> community. Our social news network is devoted to quality journalism,
+			and includes participants with a wide range of backgrounds.
+			To meet our members, click on any name on this site.
+			
+			For other questions about your membership, please check our <%= help_link "Member FAQ", "", "member" %>.
+		</p>
+		
+		<h3>Featured Members <%= help_icon "how_we_pick_members", "member" %></h3>
+		
+		<% @featured_members.each_with_index do |member, i| %>
+			<% odd = (i % 2) == 1 %>
+			<div style="width: 170px; height: 40px; padding: 5px; margin:0; float: left; <% if odd %>background-color: #eef<% end %>">
+					<%= link_to_member_photo(member, {}, {:style => "margin-right: 5px; float: left"}) %>
+					<%#= link_to(image_tag(member.image ? member.image.public_filename(:thumb) : "/images/ui/silhouette_sml.jpg", :size => "40x40", :style=> "margin-right: 5px; float: left"), member) %>
+				<div>
+					<%= link_to_member(member) %>
+					<br style="clear: none"/>
+					<small>since <%= member.created_at.strftime('%B %Y') %></small>
+				</div>
+			</div>
+		<% end %>
+		<br clear="all"/>
+	  </div>
+	</div>
+	<div class="bottom"></div>
+</div>
+
+<div class="span-8 last">
+	<% right_column_box :header => 'Recent ' + local + 'Reviewers' do %>
+    <div class="member_photos">
+      <%- for member in @recent_reviewers_photo %><%= link_to image_tag(member.image.public_filename(:thumb), :size => "40x40", :alt => member.name, :title => member.name), member -%><%- end -%>
+    </div>
+    <div style="margin-bottom:8px;color:#999"><br>
+      <div style="font-size: 9px; color: #999;"><strong>MORE RECENT REVIEWERS:</strong></div>
+      <%= @recent_reviewers.collect{|member| link_to_member(member)}.join(" | ") %>
+    </div>
+	<% end %>
+</div>

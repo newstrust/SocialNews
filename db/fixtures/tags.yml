@@ -1,0 +1,103 @@
+world:
+  id: 1
+  name: World
+  slug: world
+  type: Subject
+  topic_volume: 7
+  status: list
+
+us:
+  id: 2
+  name: U.S.
+  slug: us
+  type: Subject
+  topic_volume: 7
+  status: list
+
+politics:
+  id: 3
+  name: Politics
+  slug: politics
+  type: Subject
+  topic_volume: 7
+  status: list
+
+business:
+  id: 4
+  name: Business
+  slug: business
+  type: Subject
+  topic_volume: 7
+  status: list
+
+scitech:
+  id: 5
+  name: Sci/Tech
+  slug: scitech
+  type: Subject
+  topic_volume: 30
+  status: list
+
+living:
+  id: 6
+  name: Living
+  slug: living
+  type: Subject
+  topic_volume: 30
+  status: list
+
+media:
+  id: 7
+  name: Media
+  slug: media
+  type: Subject
+  topic_volume: 30
+  status: list
+
+health:
+  id: 8
+  name: Health
+  slug: health
+  type: Subject
+  topic_volume: 30
+  status: list
+
+sports:
+  id: 9
+  name: Sports
+  slug: sports
+  type: Subject
+  topic_volume: 30
+  status: list
+
+entertainment:
+  id: 10
+  name: Entertainment
+  slug: entertainment
+  type: Subject
+  topic_volume: 30
+  status: list
+
+education:
+  id: 11
+  name: Education
+  slug: education
+  type: Subject
+  topic_volume: 30
+  status: list
+
+religion:
+  id: 12
+  name: Religion
+  slug: religion
+  type: Subject
+  topic_volume: 30
+  status: list
+
+other:
+  id: 13
+  name: Other
+  slug: other
+  type: Subject
+  topic_volume: 60
+  status: list

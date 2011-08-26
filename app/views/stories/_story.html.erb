@@ -1,0 +1,90 @@
+<%- group ||= nil -%>
+<%- hide_flags ||= { :no_rating => true } -%>
+<%- show_flags ||= { :starred => true, :gray_trustometer => true } -%> <%#-- By default, titles will have stars -%>
+<%- no_li_wrapper ||= false -%>
+<%- see_reviews_msg ||= "See Reviews &raquo;" -%>
+<%- hide_favicons = true if hide_flags[:favicons] -%>
+<%- last ||= false -%>
+<%- label ||= "" -%>
+<%- byline_max_length ||= 150 -%>
+<%- title_max_length ||= 150 -%>
+<%- followed ||= {} -%>
+<%- @url_tracking_key ||= nil -%>
+
+<%- unless no_li_wrapper -%> <li<% if last %> style="border-right: none;"<% end %>>
+<%- end -%>
+<%- if !label.blank? -%>
+  <span class="most_trusted"><%=label%></span>
+<%- end -%>
+  <h4 class="bottom">
+    <%= link_to_star(story,{:cached => @will_be_cached, :ref => @url_tracking_key}) if show_flags[:starred] %>
+    <%- unless hide_flags[:title_link] -%>
+      <%= link_to_toolbar(story, h(StringHelpers.truncate_on_word_boundary(story.title, 0, title_max_length)), :ref => @url_tracking_key, :class => "title") %>
+    <%- else -%>
+      <%= content_tag(:span, h(StringHelpers.truncate_on_word_boundary(story.title, 0, title_max_length)), :class => "title") %>
+    <%- end -%>
+    <%- if !story.story_type.blank? and story.type_category == Story::OPINION and !hide_flags[:opinion] -%>
+      <span class="opinion"><img src="/images/ui/story_listings/opinion_badge.png"></span>
+    <%- end -%>
+    <%- if !story.status.blank? && story.status == "feature" && !hide_flags[:featured] -%>
+      <%= display_status_badge(story.status) %>
+    <%- end -%>
+    <%- unless story.is_public? || hide_flags[:status] -%> 
+      <%= display_status_badge(story.status) %>
+    <%- end -%>
+  </h4>
+
+  <div class="byline">
+    <% opts = { :ref => @url_tracking_key }; opts[:mynews_info_hidden] = true if @mynews_opts && !@mynews_opts.show_details -%>
+    <%= link_to_sources(story.sources, opts, hide_favicons, followed) %>
+    <%- author_max_length = byline_max_length - sources_length(story.sources) -%>
+		<%- unless hide_flags[:authors] -%>
+			<%- unless story.journalist_names.blank? -%>
+				<%- journalists = h(StringHelpers.truncate_on_word_boundary(story.journalist_names, 0, author_max_length)) -%>
+	    	<%= "by " + content_tag(:span, journalists, :class => "author") unless journalists.blank? %>
+	    <%- end -%>
+	   <%- end -%>
+		<%- unless story.story_date.nil? || hide_flags[:story_date] %>
+			| <span class="date"> <%= show_flags[:days_ago] ? story_time_ago(story.story_date) : story.story_date.strftime('%b. %e, %Y') %></span>
+		<%- end %>
+		<%= story_type_and_online_access(story) unless hide_flags[:type] %>
+  </div>
+
+  <%- if show_flags[:feed_attribution] -%>
+    <span class="feed_attribution"> <%= show_feed_attribution(story) %> </span>
+  <%- elsif show_flags[:abbreviated_feed_attribution] -%>
+    <span class="feed_attribution"> <%= show_abbreviated_feed_attribution(story) %> </span>
+  <%- end -%>
+
+  <%#-- Popularity stats --%>
+  <%- if show_flags[:popularity_stats] -%>
+    <%- nd = story.num_diggs; nt = story.num_tweets; update_time = story.metadata_update_time(:digg) || story.metadata_update_time(:tweets) -%>
+    <span class="popularity_stats">
+      <%- buf = "" -%>
+      <%- if nt && (nt > 0) %><%buf += pluralize(nt, "tweet")%><% end -%>
+      <%- if nd && (nd > 0) %><%buf += "; " if nt && (nt > 0)%><%buf += pluralize(nd, "digg")%><% end -%>
+      <%=" - #{buf}" if !buf.blank? -%>
+      <%- if ((nt && (nt > 0)) || (nd && (nd > 0))) && update_time %>(<%=time_ago_in_words(update_time)%> ago)<% end %>
+    </span>
+  <%- end -%>
+
+  <%- quote_max_len ||= 180 -%>
+  <%- unless hide_flags[:quote] or quote_max_len < 20 or (hide_flags[:pending_quote] && story.is_unpublished?) -%>
+    <div class="excerpt">
+      <%= content_tag(:span, "(#{humanize_token(story, :content_type)})", :class => "content_type") if (story.content_type || "").downcase != "article" && !show_flags[:toolbar_dateline] %>
+      <%= h StringHelpers.truncate_on_word_boundary(story.excerpt, 0, quote_max_len) %>
+    </div>
+  <%- end -%>
+  <%- if show_flags[:toolbar_dateline] -%>
+    <div class="date_type"><%= story_time_ago(story.story_date) + (story.story_type.blank? ? "" : " | #{humanize_token(story, :story_type)}") + " (#{humanize_token(story, :content_type)})" %></div>
+  <%- end -%>
+  <%= render :partial => 'stories/rating_and_links', 
+             :locals  => { :story           => story, 
+                           :group           => group, 
+                           :hide_flags      => hide_flags, 
+                           :show_flags      => show_flags, 
+                           :see_reviews_msg => see_reviews_msg, 
+                           :followed        => followed } %>
+<%- unless no_li_wrapper -%>
+</li>
+<%- end -%>

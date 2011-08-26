@@ -1,0 +1,22 @@
+<% @title = @story.title %>
+
+<%- content_for(:page_scripts) do -%>
+  <%# should match toolbar.html.erb or nearly so -%>
+  <%= stylesheet_link_tag "toolbar", :media => "screen" %>
+  <%= javascript_include_tag 'review' %>
+  <%= javascript_include_tag 'submit' %>
+	<%= javascript_include_tag 'story_edit' %>
+  <%= javascript_include_tag "fbc" %>
+  <%= javascript_include_tag "toolbar" %>
+  <%= javascript_include_tag 'twitter' %>
+  
+  <style type="text/css" media="screen">
+    body {
+      padding: 0;
+    }
+  </style>
+
+  <% @hide_nav = true %> <%# for popup.html.erb layout -%>
+<%- end -%>
+
+<%= render :partial => "toolbar_nav" %>

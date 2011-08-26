@@ -1,0 +1,35 @@
+one_review:
+  id: 1
+  member_id: 11
+  story_id: 1
+
+second_review:
+  id: 2
+  member_id: 13
+  story_id: 1
+
+story_2_review:
+  id: 3
+  member_id: 11
+  story_id: 2
+
+middle_of_the_road_review:
+  id: 4
+  member_id: 11
+  story_id: 6
+
+thoughtful_review:
+  id: 5
+  member_id: 16
+  story_id: 6
+
+pissy_review:
+  id: 6
+  member_id: 17
+  story_id: 6
+
+unactivated_member_review:
+  id: 7
+  member_id: 13
+  story_id: 5
+  status: hide

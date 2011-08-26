@@ -1,0 +1,21 @@
+<%- group ||= nil -%>
+<%- my_page ||= false -%>
+<%- followed_members ||= [] -%>
+<%- hide_follows ||= false -%>
+
+<%#-- Pass along the id of the last network activity entry --%>
+<script type='text/javascript'> 
+last_activity_entry_id=<%=activities.blank? ? -1 : activities.last.id%>
+hide_pagination = <%=activities && activities.length < SiteConstants::NUM_ACTIVITY_ENTRIES_PER_FETCH ? "true" : "false"%>
+</script>
+
+<%- unless activities.blank? -%>
+  <%- activities.each do |ae| -%>
+    <%= render :partial => 'members/activity_entry', :locals => { :group => group, :obj => activity_hash[ae.activity_type][ae.activity_id], :netfriend => ae.member, :updated_at => ae.updated_at, :my_page => my_page, :hide_follows => hide_follows } %>
+  <% end -%>
+<%- else -%>
+  <h3>There is no (more) network activity to display. <%= "You'll need to follow some members first." if my_page && followed_members.empty? %></h3>
+<%- end -%>
+
+<%#--- We need this placeholder li just once - dont render it each time we fetch new activity entries ---%>
+<% if params[:last_activity_entry_id].blank? -%> <li style="display:none;" id="activity_paging_placeholder"></li> <% end -%>

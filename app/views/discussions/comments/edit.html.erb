@@ -1,0 +1,20 @@
+<h1>Edit Comment</h1>
+
+<%= error_messages_for :comment %>
+
+<%- form_for(@comment, :url => discussions_comment_path(@comment), :html => { :class => 'comment_form', :method => :put }) do |f| -%>
+  <%= render :partial => 'form', :locals => { :f => f, :comment => @comment } %>
+<div align="left">
+	<%= cancel_button "Cancel", discussions_comment_path(@comment) , :style => "float: left; margin-right: 10px" %>
+	<%= submit_button "Update", nil, :style => "float: left"  %>
+	<br/>
+</div>
+<%- end -%>
+
+<h3 style="margin-top:15px">You can also simply delete this comment:</h3>
+<% form_for(@comment, :url => confirm_delete_discussions_comment_path(@comment), :html => { :method => :get, :class => 'comment_form', :id => 'delete_comment'}) do |f| -%>
+	<%= submit_button "Delete", nil, :style => "float: left"  %>
+	<br/>
+	<br/>
+	<br/>
+<%- end -%>

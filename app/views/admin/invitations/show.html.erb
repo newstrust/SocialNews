@@ -1,0 +1,95 @@
+<%= h(link_to("Edit Invitation", edit_admin_partner_invitation_path(@partner, @invitation))) %>
+<h2 style="margin-top:1.0em;">1. Invitation Details</h2>
+<p>Invitation Name: <%= h @invitation.name %></p>
+<p>Invitation Url: <%= link_to "#{home_url}partners/#{@partner.to_param}/#{@invitation.to_param}", "#{home_url}partners/#{@partner.to_param}/#{@invitation.to_param}" %><p>
+<p>Validation Level: <%= h @invitation.validation_level %></p>
+
+<h6>Additional Signup Questions</h6>
+<p>When a member attempts to signup they will be asked these additional questions</p>
+<ol>
+  <%- @invitation.additional_signup_fields.each do |key| -%>
+    <li><%= h key.to_s.humanize %></li>
+  <%- end -%>
+</ol>
+
+<h2 style="margin-top:1.0em;">2. Welcome Page &mdash; Users see this page first.</h2>
+<p>Preview Url: <%= link_to "#{home_url}partners/#{@partner.to_param}/#{@invitation.to_param}", "#{home_url}partners/#{@partner.to_param}/#{@invitation.to_param}" %><p>
+<div class="preview_source">
+  <% if @invitation.welcome_page_template.blank? %>
+    Members will be automatically redirected here:
+    <%= @invitation.welcome_page_link %>
+  <%- else -%>
+    <%= h attr_with_erb_to_html(@invitation, :welcome_page_template) %>
+  <%- end -%>
+</div>
+
+<h2 style="margin-top:1.0em;">3. Signup Page &mdash; Wraps the existing signup form.</h2>
+<p>Preview Url: <%= link_to "#{home_url}partners/#{@partner.to_param}/#{@invitation.to_param}/members/new", "#{home_url}partners/#{@partner.to_param}/#{@invitation.to_param}/members/new" %><p>
+<div class="preview_source">
+  <% if @invitation.landing_page_template.blank? %>
+    Members will be automatically redirected here:
+    <%= @invitation.landing_page_link %>
+  <%- else -%>
+    <%= h @invitation.landing_page_template %>
+  <%- end -%>
+</div>
+
+<h2 style="margin-top:1.0em;">4. Activation Email &mdash; Users receive this email once they sign-up.</h2>
+<div class="preview_source">
+  <%= h @invitation.invite_message %>
+</div>
+
+<h2 style="margin-top:1.0em;">5. Success Page &mdash; Users see this page when they activate their account.</h2>
+<div class="preview_source">
+  <% if @invitation.success_page_template.blank? %>
+    Members will be automatically redirected here:
+    <%= @invitation.success_page_link %>
+  <%- else -%>
+    <%= h @invitation.success_page_template %>
+  <%- end -%>
+</div>
+<br />
+<%= cancel_tag "/admin/partners/#{@partner.to_param}" %>
+
+<h3 style="margin-top:1.0em;">6. Sample NewsHunt widget </h2>
+<% if   !@invitation.widget_newshunt_topic.blank? \
+     && !@invitation.widget_newshunt_url.blank? \
+     && !@invitation.widget_newshunt_title.blank? -%> <%# Description is not mandatory -%>
+<p>This is the widget that will be displayed based on the newshunt widget parameters you've set up.  The widget code for this is below.</p>
+<br/>
+<textarea rows="15" cols="120">
+&lt;script type="text/javascript"&gt;
+_NTW_newshunt = new Array(); 
+_NTW_newshunt['title'] = <%=@invitation.widget_newshunt_title.to_json%>; 
+_NTW_newshunt['description'] = <%=@invitation.widget_newshunt_desc.to_json%>;
+_NTW_newshunt['url'] = <%=@invitation.widget_newshunt_url.to_json%>;
+_NTW_hideElts = new Array(); 
+_NTW_hideElts['date'] = true; 
+_NTW_hideElts['authors'] = true; 
+_NTW_hideElts['num_reviews'] = true; 
+_NTW_hideElts['like_it'] = true; 
+&lt;/script&gt;
+&lt;script src="<%=home_url%>topics/<%=@invitation.widget_newshunt_topic%>/most_trusted_14.json" type="text/javascript"&gt;&lt;/script&gt;
+&lt;script src="<%=home_url%>javascripts/widgets/formats/newshunt.json" type="text/javascript"&gt;&lt;/script&gt;
+&lt;script src="<%=home_url%>javascripts/render_widget.js" type="text/javascript"&gt;&lt;/script&gt;
+</textarea>
+<br/>
+<div style="width:350px;border:1px solid black;padding:5px;">
+<script type="text/javascript"> 
+_NTW_newshunt = new Array(); 
+_NTW_newshunt['title'] = <%=@invitation.widget_newshunt_title.to_json%>; 
+_NTW_newshunt['description'] = <%=@invitation.widget_newshunt_desc.to_json%>;
+_NTW_newshunt['url'] = <%=@invitation.widget_newshunt_url.to_json%>;
+_NTW_hideElts = new Array(); 
+_NTW_hideElts['date'] = true; 
+_NTW_hideElts['authors'] = true; 
+_NTW_hideElts['num_reviews'] = true; 
+_NTW_hideElts['like_it'] = true; </script> 
+<script src="/topics/<%=@invitation.widget_newshunt_topic%>/most_trusted_14.json" type="text/javascript"></script>
+<script src="/javascripts/widgets/formats/newshunt.json" type="text/javascript"></script>
+<script src="/javascripts/render_widget.js" type="text/javascript"></script>
+</div>
+<% else -%>
+<b> You have not configured the news hunt widget parameters for this invitation.  If you want this widget, please edit the invitation and fill out all the parameters at the bottom of the form!
+<% end -%>
+<br/> <br/> <br/>

@@ -1,0 +1,18 @@
+whales:
+  id: 1
+  name: whales
+car:
+  id: 2
+  name: car
+red cross:
+  id: 3
+  name: red cross
+paypal:
+  id: 4
+  name: paypal
+draft:
+  id: 5
+  name: draft
+hiv_aids:
+  id: 6
+  name: HIV/AIDS

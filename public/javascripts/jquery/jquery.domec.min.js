@@ -1,0 +1,1 @@
+(function($){$.extend({create:function(element,attributes,children){var elem=$(document.createElement(element));if(typeof(attributes)=='object'){for(key in attributes){elem.attr(key,attributes[key]);}}if(typeof(children)=='string'){elem.text(children);}else if(typeof(children)=='object'){for(i=0;i<children.length;i++){elem.append(children[i]);}}return elem;}});})(jQuery);

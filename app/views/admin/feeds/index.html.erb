@@ -1,0 +1,98 @@
+<% @title = "Feeds admin page" %>
+
+<style>
+.active { color: #0a0; }
+.inactive { color: #f00; }
+table.feed_table { margin: 20px 0; }
+table.feed_table * { font-size: 11px; }
+table.feed_table { border-left: 1px solid black; border-top: 1px solid black; }
+table.feed_table th { text-align: center; font-size:12px; font-weight: bold; }
+table.feed_table th, table.feed_table td { border-right: 1px solid black; border-bottom: 1px solid black; }
+table.feed_table span.label { font-size:11px; color:#888; }
+table.feed_table a { text-decoration: none; }
+table.feed_table a.fetch_now { font-size:12px; font-weight: bold; }
+table.feed_table span.highlight { font-size:11px; font-weight: bold; color: #a00; }
+table.feed_table .emphasize { font-size:11px; color:#a00; font-weight: bold; }
+table.feed_table .deemphasize { font-size:9px; color: #668; }
+</style>
+
+<div class="use16columns">
+
+<% if logged_in? and current_member.has_role_or_above?(:editor) # only editors and above should have access to the queued stories %>
+<ul>
+  <li> <%= link_to "Add New Feed", new_admin_feed_path %> </li>
+	<li> <%=link_to "Mass edit all queued stories (last 24 hours)", mass_edit_queued_stories_admin_stories_path %> </li>
+	<%#-- <li> <=link_to "Summary of auto-fetched feeds (last 24 hours)", autofetch_summary_admin_stories_path > </li> --%>
+</ul>
+<% end %>
+
+  <h2 class="use16columns inner_left inner_right">Existing feeds</h1>
+
+  <%= will_paginate @feeds %>
+
+  <br/>
+
+  <table class="feed_table" cellpadding="0" cellspacing="0" style="width:100%">
+  <thead>
+  <tr>
+    <th style="width:15px"> ID </th>
+    <th style="width:150px"> Name (and actions)</th>
+    <th style="width:175px"> Description </th>
+    <th style="width:75px"> URLs </th>
+    <th style="width:100px"> Settings </th>
+    <th style="width:200px"> Feed fetch stats </th>
+  </tr>
+  </thead>
+
+  <tbody>
+    <% @feeds.each do |f| %>
+    <tr>
+    <td> <%= f.id %> </td>
+    <td>
+    <%= link_to f.name, f %> <%= "<br/>(#{f.subtitle})" if !f.subtitle.blank? %> <br/><br/>
+    <%= edit_button(edit_admin_feed_path(f.id)) %> &nbsp;
+    <%= delete_button(admin_feed_path(f.id))%>
+    <br/> <br/>
+    <%= link_to "Fetch now", fetch_now_admin_feed_path(f), :class => "fetch_now" %> <br/>
+    <%= link_to "Process stories", edit_stories_admin_feed_path(f) %> (from last 24 hours) <br/>
+    <%= link_to "Test RSS Feed", test_admin_feed_path(f), :class => "deemphasize" %>
+    </td>
+    <td> <%= f.description.blank? ? "-- No description --" : f.description %> </td>
+    <td> 
+      <a href="<%= f.url %>">RSS Feed</a> <br/>
+      <%= f.home_page.blank? ? "No home page url" : "<a href='#{f.home_page}'>Home Page</a>" %>
+    </td>
+    <% score = f.feed_level.to_i || 0 -%>
+    <td> 
+      <span class="label">Auto Fetch:</span> <span class="<%=f.auto_fetch ? "active" : "inactive"%>"><%= f.auto_fetch.to_s.upcase %></span> <br/>
+      <span class="label">Feed Level:</span> <span class="<%= score > 0 ? 'emphasize': 'deemphasize'%>"><%=score%></span> <br/>
+      <span class="label">Default Story Type:</span> <span><%= f.default_stype %></span> <br/>
+      <span class="label">Default Topics:</span> <span><%= f.default_topics %></span> <br/>
+      <span class="label">Feed Type:</span> <span><%= f.feed_type %></span> <br/>
+      <span class="label">Feed Group:</span> <span><%= f.feed_group %></span> <br/>
+      <span class="label">Member Profile:</span> <span><%= f.member_profile_id ? Member.find(f.member_profile_id).name : "-None-"%></span> 
+      <span class="label">Source Profile:</span> <span><%= f.source_profile_id ? Source.find(f.source_profile_id).name : "-None-"%></span> 
+    </td>
+    <td> 
+      <span class="label">Last Fetched:</span> <%= f.last_fetched_at || "--" %> <br/>
+      <span class="label">Last Fetched by:</span> <%= f.last_fetched_by ? Member.find(f.last_fetched_by).name : "--" %> <br/>
+      <span class="label">total fetches = </span> <%= f.success_count || 0 %><br/>
+      <span class="label">failed fetches =</span> <%= f.failure_count || 0 %><br/>
+<%-
+#     <span class="label">stories per fetch = </span> = f.success_count && f.success_count > 0 ? sprintf("%0.1f", f.feed_stories.count*1.0/f.success_count) : 0<br/>
+#
+#      <span class="highlight">stories in db = <= f.feed_stories_count > </span> <br/>
+#      <span class="highlight">stories queued = <= f.feed_stories_count(:queued) > (<= f.percentage_queued_stories >% of feed stories)</span><br/>
+#      <span class="highlight">stories listed = <= f.feed_stories_count(:listed) > (<= f.percentage_listed_stories >% of feed stories)</span><br/>
+-%>
+    </td>
+    </tr>
+   <% end %>
+  </tbody>
+  </table>
+
+  <%= will_paginate @feeds %>
+
+  <br />
+
+</div>

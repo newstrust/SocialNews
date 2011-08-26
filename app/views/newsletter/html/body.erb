@@ -1,0 +1,45 @@
+<% @newsletter.main_sections.each do |listing_type| -%>
+<%# --- Top Stories / Top Rated sub-header --- %>
+<tr valign="top">
+  <td colspan="3">
+  <div class="level1_header">
+    <%= link_to (listing_type == "most_recent") ? "MOST RECENT" : "MOST TRUSTED", url_for(@link_params.merge(:controller => :stories, :action => :index, :listing_type => listing_type.to_sym, :only_path => false)) %>
+  </div>
+  Here are <%=((listing_type == "most_recent") ? " today's top stories" : " this week's top-rated stories")%>, based on ratings from members like you.<br/><br/>
+  </td>
+</tr>
+
+  <% [Story::NEWS, Story::OPINION].each do |story_type| -%>
+    <% more_stories_url = url_for(@link_params.merge(:controller => :stories, :action => :index, :listing_type => listing_type, :story_type => story_type, :only_path => false)) %>
+
+<%# --- News/Opinion Header --- %>
+<tr valign="top" class="header"> <td colspan="3"> 
+  <div class="level2_header"> 
+  <%= link_to landing_page_subsection_title(listing_type, story_type, 7), more_stories_url %> 
+  </div> 
+</td> </tr>
+
+    <% [Source::MSM, Source::IND].each do |source_ownership| -%>
+      <% so = Source::OWNERSHIP[source_ownership] -%>
+<%# --- Mainstream/Independent sub-sub-header --- %>
+<tr valign="top" class="header">
+  <td colspan="3">
+  <div class="level3_header">
+    <%= link_to "#{so.upcase} MEDIA", url_for(@link_params.merge(:controller => :stories, :action => :index, :listing_type => listing_type, :story_type => story_type, :source_ownership => so.downcase, :only_path => false)) %>
+  </div>
+  </td>
+</tr>
+      <%= render :partial => "newsletter/html/listing", :locals => {
+            :stories => @newsletter.stories(listing_type, story_type, source_ownership),
+            :link_params => @link_params} %>
+    <% end %>
+
+<%# --- Footer --- %>
+<tr valign="top">
+  <td class="body_black"><%= link_to 'More&nbsp;&raquo;', more_stories_url %>&nbsp;&nbsp;
+  <%= link_to "How we pick these stories", faq_url(@link_params.merge(:anchor => listing_type)), :class => "editorial_gray" %> </td>
+  <td align="right"><%= link_to "Post a Story", submit_story_url(@link_params), :class => "rate_it" %></td>
+</tr>
+<tr valign="top"> <td colspan="3"> <div class="separator">&nbsp;</div> </td> </tr>
+  <% end %>
+<% end %>

@@ -1,0 +1,253 @@
+# Ratings Processor constants
+#
+
+
+# REVIEW PROCESSOR
+#
+
+rating_labels: [bad, poor, average, good, very good]
+
+
+# The master list of rating criteria is used for processing reviews (and some story popularity stuff)
+# as well as _displaying_ ratings on review/story/source overviews.
+#
+# The 'popularity' section has a few which are used for display only (hence no weights); in these cases,
+# the processing-specific constants are in other hashes below.
+# (Ratings::StoryProcessor.process_story_popularity and Ratings::ReviewProcessor.review_popularity only use
+# the criteria they know to look for, so no harm in adding extra stuff.)
+#
+# 'Monitoring' criteria are used only in the weighting of a review (see Ratings::StoryProcessor.review_weighting).
+#
+rating_criteria:
+  quality:
+    facts:
+      name: Facts
+      question: Is this story *factual*?
+      subquestion: Is it based on facts or opinions?
+      description: "Does this story provide factual information to support what it says? Or does this sound like someone's personal views? Presenting reliable facts is the most important and the most basic aspect of good journalism. Everything in a news story revolves around the facts it contains. News that is based on accurate, verifiable facts helps keep us well-informed as citizens and preserves a strong democracy. News that is based largely on opinions can be polarizing and takes away from healthy public debate."
+      rating_labels: [not factual at all, not very factual, somewhat factual, factual, very factual]
+      weight: {news: 8, opinion: 4, other: 8}
+    fairness:
+      name: Fairness
+      question: Is it *fair*?
+      subquestion: Is it impartial or biased?
+      description: "Is the reporter presenting all sides or viewpoints for this story? Or does he or she take sides? It is a journalist's responsibility to seek out all angles of a controversy or issue. This doesn't mean that every side must be given the same amount of space in a story. But it should be clear that the reporter offered all the key players in the story a chance to make their core arguments, or choose not to comment. Otherwise, the story's fairness will suffer. It is not a journalist's job to decide who is \"right\" or \"wrong,\" but present all sides fairly so we can come to our own conclusions."
+      rating_labels: [not fair at all, not very fair, somewhat fair, fair, very fair]
+      weight: {news: 6, opinion: 2, other: 6}
+    information:
+      name: Information
+      question: Is it *informative*?
+      subquestion: Did you learn something new?
+      description: "Do the facts in this story help you better understand the subject? Good journalism takes information that isn't readily available to us, and may be hard to interpret, and makes it quicker and easier to understand. This question asks how well a news story does that. To answer it thoroughly, you may want to compare this story to other stories on the same topic (see \"Links\" in our Story Reviews page)."
+      rating_labels: [not at all, not much, somewhat, informative, very informative]
+      weight: {news: 10, opinion: 6, other: 10}
+    context:
+      name: Context
+      question: Does it show *context*?
+      subquestion: Does this story give the "big picture"?
+      description: "Is there enough background to explain how this story relates to other important world events? Or does the story merely describe what happened? \"Big picture\" reporting looks below the surface. Quality journalism, whether news or opinion, is made meaningful by its context -- it's much more than just a list of reliable facts; those facts must complete a mosaic, and when they do, the big picture emerges."
+      rating_labels: [not at all, not much, somewhat, quite a bit, very much]
+      weight: {news: 10, opinion: 11, other: 10}
+    depth:
+      name: Depth
+      question: Is it *in-depth*?
+      subquestion: Is it well-researched?
+      description: "How much research went into this story? How thoroughly is the information explained? How detailed is the reporting? Depth looks at the overall amount of reporting that went into a story, and how much of that reporting was published. This often varies for different story types. For example, we should expect a good investigative report on a city's homicide rate to be more in-depth than a breaking news story on a shooting."
+      rating_labels: [not deep at all, not very deep, somewhat deep, deep, very deep]
+      form_level: {news: full, opinion: full}
+      weight: {news: 4, opinion: 1, other: 4}
+    originality:
+      name: Originality
+      question: Is it *original*?
+      subquestion: Does it offer a new perspective or fact?
+      description: "Does the author break new ground that hasn't been covered elsewhere? Originality applies to both news and opinion in this sense. An original news article gives us information we wouldn't have been able to learn on our own. It can also tell a familiar story in a new way. An original opinion piece brings up valuable perspectives and arguments about an issue that aren't already in the public discussion. Since this is a comparative question, it's helpful to know what other publications have said about the issue."
+      rating_labels: [not original at all, not very original, somewhat original, original, very original]
+      weight: {news: 3, opinion: 7, other: 3}
+    balance:
+      name: Balance
+      question: Is it *balanced*?
+      subquestion: Does it present diverse viewpoints?
+      description: "Are the key parties affected by this story cited by the author? Balance involves presenting different perspectives on an issue, with the same care and respect for all sides. But it has its limits. A good news story does not include misinformation from one side in the name of balance. Balance looks at all sides of an issue, without abandoning its focus on verified facts and information."
+      rating_labels: [not at all, not very balanced, somewhat, balanced, very balanced]
+      weight: {news: 4, opinion: 1, other: 4}
+    enterprise:
+      name: Enterprise
+      question: Is it *enterprising*?
+      subquestion: Does it show initiative? courage?
+      description: "Did the author or publication take risks gathering and publishing this story? Were significant resources involved? Enterprise journalism involves ingenuity and resourcefulness, an indication that the author analyzed a topic or observed an event that others seemed to miss. This includes investigative reporting, which uncovers major information through extensive research. Enterprise journalism is gutsy, proactive and represents a substantial investment on the part of the author and/or the publication."
+      rating_labels: [not at all, not much, somewhat, quite a bit, very much]
+      weight: {news: 4, opinion: 4, other: 4}
+    insight:
+      name: Insight
+      question: Is it *insightful*?
+      subquestion: Is well-reasoned? thoughtful?
+      description: "Does this story give an intelligent perspective on the subject? Are the author's arguments well-supported and logical? An insightful story \"connects the dots\" to explain things that aren't immediately obvious. In doing so, it draws reasonable conclusions that may include effective solutions to a given problem."
+      rating_labels: [not insightful at all, not very insightful, somewhat, insightful, very insightful]
+      weight: {news: 5, opinion: 14, other: 5}
+    sourcing:
+      name: Sourcing
+      question: Is it *well-sourced*?
+      subquestion: Is it confirmed by multiple sources?
+      description: "Does this story provide enough sources to validate its key information? Are the sources clearly identified? Count the number of sources cited: a good news story usually includes several sources with independent perspectives, both official and unofficial. The author should establish why each source is cited -- and if they're anonymous, explain why. Many news stories would not have the same impact without anonymous sources, but they must be used carefully and be identified in some way as to allow the viewer to understand why the source is being cited in the first place."
+      rating_labels: [not well at all, not very well, somewhat well, well-sourced, very well-sourced]
+      weight: {news: 5, opinion: 1, other: 5}
+    expertise:
+      name: Expertise
+      question: Are *experts* cited?
+      subquestion: Are the sources qualified? knowledgeable?
+      description: "Does this story cite credible experts with unique knowledge of the facts? A good news story, or a well-argued opinion, usually seeks out authoritative sources confirm or explain key information. Independent sources whose view might not be influenced by a stake in the story are particularly valuable."
+      rating_labels: [not at all, not much, somewhat, quite a bit, a lot]
+      weight: {news: 4, opinion: 6, other: 4}
+    style:
+      name: Style
+      question: Is it *well-written*?
+      subquestion: Is it clear? concise? compelling?
+      description: "Does it present useful information in an interesting way? Does it make complex issues easier to understand? Is the style appropriate for the topic? Is it grammatical? Good writing shows a respect for language, clarity and conciseness, compelling the viewer to stay with the topic, profile or narrative from beginning to end. When it does, a story is well-written and impacts the people it reaches."
+      rating_labels: [not well at all, not very well, somewhat, well-written, very well-written]
+      weight: {news: 4, opinion: 9, other: 4}
+    relevance:
+      name: Relevance
+      question: Is it *relevant*?
+      subquestion: Is this story newsworthy? meaningful?
+      description: "Does the author focus on important aspects of this topic? Does the public benefit by reading this story? News organizations and journalists must always ask what information is most valuable for the public interest. Relevant news and opinion help citizens participate more informed decisions. Sensationalism, exaggeration and false importance in journalism distract us from these goals."
+      rating_labels: [not at all, not much, somewhat, relevant, very relevant]
+      weight: {news: 3, opinion: 10, other: 3}
+    transparency:
+      name: Transparency
+      question: Is it *transparent*?
+      subquestion: Are there enough links and references?
+      description: "Can you tell how the story was gathered? How well does the author inform readers about how the information in the story was collected? As a rule, all sources should be named; links to factual evidence should be provided; third-party studies and reports should be cited; and reporting methods should be documented."
+      rating_labels: [not at all, not much, somewhat, transparent, very transparent]
+      weight: {news: 3, opinion: 1, other: 3}
+    responsibility:
+      name: Responsibility
+      question: Is it *responsible*?
+      subquestion: Are claims valid and ethical?
+      description: "Is the author acting with integrity and respect for others? Or is this story based on rumors, errors or falsehoods that jeopardize the public interest? Responsibility also includes effort; did the author take the words of others and cast them as her or his own? If journalists are to be guardians of democracy and good government, they must lead by example -- requiring greater ethical standards than other types of communication, such as propaganda or entertainment."
+      rating_labels: [not at all, not much, somewhat, quite a bit, a lot]
+      weight: {news: 1, opinion: 1, other: 1}
+    accuracy:
+      name: Accuracy
+      question: Is it *accurate*?
+      subquestion: Can you confirm that it is true?
+      description: "Have you yourself verified some of the facts and observations in this story? If so, did you find that information to be correct? If not, are you confident that the information has been verified? To answer this question, you may want to do some of your own research, and look at how other publications covered this story. If you do not know anything about this topic and do not have time to research it, please do not answer this question."
+      rating_labels: [not at all, not much, somewhat, accurate, very accurate]
+      weight: {news: 6, opinion: 2, other: 6}
+  popularity:
+    recommendation: # the one true review popularity rating
+      name: Recommendation
+      question: Do you *recommend* this story?
+      subquestion: Is this quality journalism?
+      description: "Would you recommend this story to a friend or colleague? Is this information you think they should know, based on the questions you just answered? Was it good enough for you to read it through the end? This question is similar to the up and down arrows of popular social news sites like Digg and Reddit, but with a focus on quality journalism."
+      rating_labels: [not at all, not much, somewhat, quite a bit, very much]
+      weight: 8
+    trust: # lumped in from SourceReview. See source_rating_criteria below
+      name: Credibility
+      question: Do you *trust* this publication?
+      subquestion: Is this news provider credible?
+      description: "Does this publication usually offer reliable information? Is it trustworthy, based on the stories you've reviewed and what you know about the publisher? Credibility tracks a publication's reputation for journalistic quality, which helps it maintain a good dialogue with its audience. Note that your rating for this question will be automatically filled-in next time you review a story from this publication."
+      rating_labels: [not at all, not much, somewhat, quite a bit, very much]
+      weight: 8
+    story_review_count:
+      name: "# Reviews"
+    story_view_count:
+      name: "# Views"
+    story_save_count:
+      name: "# Likes"
+    story_emails_count:
+      name: "# Emails"
+  monitoring:
+    knowledge: 
+      name: Knowledge
+      question: How much do you *know* about this?
+      subquestion: Are you informed on this topic?
+      description: "How much did you personally know about this topic, before reviewing this story? How much information did you already have on this subject? Your knowledge could be specific to the event or issue, or more general (e.g., familiarity with similar topics)."
+      rating_labels: [nothing, not much, something, quite a bit, a lot]
+
+# NOTE: this is used for SourceReview, whereas the above is for plain old Review
+source_rating_criteria:
+  trust:
+    name: Credibility
+    question: Do you *trust* this publication?
+    subquestion: Is this news provider credible?
+    description: "Does this publication usually offer reliable information? Is it trustworthy, based on the stories you've reviewed and what you know about the publisher? Credibility tracks a publication's reputation for journalistic quality, which helps it maintain a good dialogue with its audience. Note that your rating for this question will be automatically filled-in next time you review a story from this publication."
+    rating_labels: [not at all, not much, somewhat, quite a bit, very much]
+
+# determines the order these are displayed on forms and overview pages
+# n.b. order for source rating input is hard-coded into review form
+# each of these tokens refers to a key in the above 'rating_criteria' hash
+criteria_order:
+  quality:
+    form_news:
+      - mini: [facts, fairness]
+      - quick: [sourcing]
+      - full: [context, depth, enterprise, relevance, style] # alphabetical
+      - advanced: [accuracy, balance, expertise, information, insight, originality, responsibility, transparency] # alphabetical
+    form_opinion:
+      - mini: [insight, information]
+      - quick: [style]
+      - full: [context, expertise, originality, relevance, responsibility] # alphabetical
+      - advanced: [accuracy, balance, depth, enterprise, facts, fairness, transparency] # alphabetical
+    form_other:
+      - mini: [information, insight]
+      - quick: [expertise]
+      - full: [context, depth, originality, relevance, style] # alphabetical
+      - advanced: [accuracy, balance, enterprise, facts, fairness, responsibility, transparency] # alphabetical
+    display:
+      - all: [facts, fairness, information, insight, sourcing, style, accuracy, balance, context, depth, enterprise, expertise, originality, relevance, transparency, responsibility]
+  popularity:
+    form:
+      - mini: [recommendation]
+    display:
+      - all: [recommendation, trust, story_review_count, story_view_count, story_save_count, story_emails_count]
+  monitoring:
+    form:
+      - mini: [knowledge]
+    display:
+      - all: []
+
+
+# STORY PROCESSOR
+#
+
+story_rating_components:
+  quality: {name: Quality, weight: 80}
+  popularity: {name: Popularity, weight: 20}
+
+story_rating_popularity_components:
+  review_popularity:  {type: rating, weight: 50}
+  story_review_count: {type: auto, attribute: reviews_count, scale: 10, weight: 1}
+  story_view_count:   {type: auto, attribute: page_views_count, scale: 25, weight: 1}
+  story_save_count:   {type: auto, attribute: saves_count, scale: 5, weight: 1}
+  story_emails_count: {type: auto, attribute: emails_count, scale: 5, weight: 1}
+
+review_weighting_component_weights:
+  member_rating: 60
+  quality_ratings_completeness: 20
+  monitoring_rating: 4
+  meta_review_rating: 16
+
+# If a story has fewer reviews than this value, its rating confidence will be scaled down accordingly.
+num_reviews_for_full_confidence: 5
+
+
+# MEMBER PROCESSOR
+#
+
+member_level_components:
+  activity:     {name: Activity, weight: 15}
+  meta_reviews: {name: Ratings, weight: 15}
+  transparency: {name: Transparency, weight: 15}
+  experience:   {name: Experience, weight: 5}
+  validation:   {name: Validation, weight: 50}
+
+member_level_experience_components:
+  education:    {name: Education, weight: 4}
+  journalism:   {name: Journalism, weight: 5}
+  news:         {name: News, weight: 2}
+  internet:     {name: Internet, weight: 1}
+
+member_level_weight_exponent: 2
+
+# members with this number of 'answers' (i.e. numeric ratings in reviews) will get an activity level of 5/5
+member_level_activity_max_num_answers: 1000

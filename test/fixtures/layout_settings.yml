@@ -1,0 +1,7 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+feature_topic:
+  id: 1
+  name: "featured_topic"
+  value: "john_mccain"
+  last_edited_by_id: 1

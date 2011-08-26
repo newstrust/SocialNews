@@ -1,0 +1,49 @@
+<% if (!@member.has_public_profile? || (@member.rating < 2 && @member.validation_level < 2 )) && !logged_in? -%>
+	<% @no_bots = true -%>
+	<% if @member.profile_visible_to_all_nt_members? %>
+		<% flash[:error] = "Please #{link_to "Log In", "/sessions/new"} to see this member's comments." -%>
+	<% else %>
+		<% flash[:error] = "This page is unavailable." -%>
+	<% end %>
+<% else -%>
+  <%- if @member.can_comment? -%>
+    <div style="padding-bottom:1.0em;">
+    <h2 style="margin-bottom:5px"><%= link_to(@member.display_name + "'s", @member) %> Comments</h2>
+  
+    <%- form_tag comments_member_url(@member), :id => 'sort_form', :method => :get do -%>
+      <span id="comment_filter" class="sorter"><span>Filter:</span>
+        <%- options = [['Oldest','oldest'], ['Newest', 'newest'] ] -%>
+        <%= select_tag :filter_by, options_for_select(options, params[:filter_by]), :id => 'comment_sort' %>
+      </span>
+    <%- end -%>
+    
+      <%= will_paginate(@comments) %>
+      <br/>
+    </div>
+    <%- for comment in @comments do -%>
+      <%= render :partial => '/discussions/comments/profile_comments.html.erb', :locals => { :comment => comment } %>
+    <%- end -%>
+    <div style="padding-bottom:1.0em;">
+      <%= will_paginate(@comments) %>
+      <br/>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function() {
+        assignFlags("<%= flags_url(:format => 'json') %>");
+      });
+    </script>
+  
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function() {
+        // Sort Comment Thread
+        $("#comment_sort").change(function(){
+          $('#sort_form').submit();
+         });
+      });
+    </script>
+  <%- else -%>
+    <div style="margin-bottom:50px;">
+      <h2>Comments Unavailable</h2>
+    </div>
+  <%- end -%>
+<%- end -%>

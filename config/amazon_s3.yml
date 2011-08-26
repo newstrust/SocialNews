@@ -1,0 +1,19 @@
+development:
+  bucket_name: sn_dev
+  access_key_id: 
+  secret_access_key: 
+
+test:
+  bucket_name: sn_test
+  access_key_id: 
+  secret_access_key: 
+
+staging:
+  bucket_name: sn_staging
+  access_key_id: 
+  secret_access_key: 
+
+production:
+  bucket_name: socialnews
+  access_key_id: 
+  secret_access_key: 

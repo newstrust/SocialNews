@@ -1,0 +1,13 @@
+# Development accounts are useful to autopopulate the development DB
+# with administrators and the like so that you don't need to recreate them
+# each time you branch.
+# Usage rake socialnews:dev_members
+# Add your users below.
+heavysixer:
+  name: Dummy User
+  login: dummyuser@dummydomain.com
+  email: dummyuser@dummydomain.com
+  crypted_password: 8af5de4d69a34bf4a02852f3f9d8a300 # "atari2600" MD5'd without salt
+  created_at: <%= Date.today :db %>  
+  newsletter_format : text
+  bulk_email        : true

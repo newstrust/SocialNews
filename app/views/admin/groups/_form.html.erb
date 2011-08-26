@@ -1,0 +1,25 @@
+<div class="fieldset">
+  <%= form_field(f, :attr => "name") %>
+  <%= form_field(f, :attr => "slug") %>
+  <%= form_field(f, :attr => "description", :type => "text_area") %>
+
+  <dl>
+    <dt>Group Type</dt>
+    <dd>
+      <%= f.radio_button("context", "role") %>
+      This group is a role, which is used to grant or restrict access to portions of the site.
+    </dd>
+    <dd>
+      <%= f.radio_button("context", "social") %>
+      This is a social (or statistical) group of <%=app_name%> members.
+    </dd>
+    <dd>
+      <%= f.radio_button("context", "internal") %>
+      This is just a private group of <%=app_name%> members used for internal purposes.
+    </dd>
+    
+    <dt>Protection Options</dt>
+    <dd><%= f.radio_button("is_protected", false) %> This record can be deleted.</dd>
+    <dd><%= f.radio_button("is_protected", true) %> This record cannot be deleted.</dd>
+  </dl>
+</div>

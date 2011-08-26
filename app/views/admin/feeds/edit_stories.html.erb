@@ -1,0 +1,22 @@
+<% @title = "Fetched #{@feed.name} stories from the last #{pluralize(params[:timespan] || 1, "day")}" %>
+
+<h1><%=@title%></h1>
+
+<% if @stories.blank? %>
+<span style="font-size:16px">
+Sorry!  There are no fetched stories for this feed within the last <%=pluralize(params[:timespan] || 1, "day")%>.  Try increasing the timespan or tell the feed fetching dog to go fetch some more!
+</span>
+<% else %>
+
+<p>
+<ul>
+<li>The following fields are required: <strong>URL, Title, Date, Source, Story Quote</strong>.  If any of them are empty, the story will continue to remain in pending status.
+</ul>
+<br/>
+</p>
+
+<% form_for @feed, :method => :post, :url => {:controller => :feeds, :action => "update_stories", :id => @feed.id }, :html => {:class => "stories"} do |f| %>
+<%= render :partial => "/admin/stories/mass_edit_stories_form", :locals => { :stories => @stories } %>
+<%end %>
+
+<% end %>

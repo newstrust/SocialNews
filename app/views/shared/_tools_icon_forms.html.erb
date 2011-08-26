@@ -1,0 +1,30 @@
+<%#-- This partial can be called multiple times on the same page. Ensure that it is rendered just once! --%>
+<% @rendered_icons_forms ||= false -%>
+<% if !@rendered_icons_forms -%>
+  <%- @rendered_icons_forms = true -%>
+  <%- page_type ||= "story" -%>
+
+  <%#-- Email form --%>
+  <div id="email_dialog_container" style="display:none;margin:0;padding:0">
+    <%= render :partial => "shared/email_form", :locals => {:page_type => page_type} %>
+  </div>
+
+  <%#-- Twitter form --%>
+  <div id="tweet_dialog_container" style="display:none;">
+    <%- if logged_in? -%>
+      <%- if !current_member.twitter_connected? -%>
+        <p> You have to link your <%=app_name%> and Twitter accounts to be able to tweet </p>
+        <%= render :partial => "twitter/connect_button" %>
+      <%- else -%>
+        <div id="tweet_status" style="display:none;"></div>
+        <% form_remote_tag(:url => tweet_member_path(current_member), :success => "tweet_status(request)", :datatype => :json) do |f| %>
+          <%= render :partial => "twitter/tweet_box", :locals => { :member => current_member, :show_checkbox => false, :tweetable_type => page_type } %>
+          <%= submit_tag "Tweet!", :class => "save_button" %>
+          <%= link_to_function "Cancel", "close_tweet_dialog()" %>
+        <%- end -%>
+      <%- end -%>
+    <%- else -%>
+      <%= link_to "Please login first to be able to tweet.", new_sessions_path %>
+    <%- end -%>
+  </div>
+<% end -%>

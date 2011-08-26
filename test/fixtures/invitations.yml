@@ -1,0 +1,26 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+pledgie_save_the_rainforests_invitation:
+  validation_level: 40
+  partner_id: 1
+  id: 1
+  name: "Save The Rainforests"
+  landing_page_template: MyText
+  invite_message: "Please save _ the _  __whales__"
+  code: trees
+  email_from: foo@bar.com
+  email_subject: "please think about the trees!"
+  welcome_page_template: MyText
+  success_page_template: Success!
+
+pledgie_save_the_whales_invitation:
+  validation_level: 10
+  partner_id: 1
+  id: 2
+  name: "Save The Whales"
+  code: whales
+  email_from: bar@baz.com
+  email_subject: What about the whales?
+  landing_page_template: MyText
+  invite_message: "Help us report on stories about the whales!"
+  welcome_page_template: MyText
