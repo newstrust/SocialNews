@@ -1,4 +1,10 @@
 # A parser for SGML, using the derived class as static DTD.
+#
+# Taken from http://raa.ruby-lang.org/list.rhtml?name=html-parser-2
+# 
+# ==  License
+#
+# Ruby License
 
 class SGMLParser
 
