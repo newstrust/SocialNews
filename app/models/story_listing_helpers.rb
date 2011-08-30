@@ -280,9 +280,7 @@ module StoryListingHelpers
         conds << ["stories.activity_score < ?", options[:listing_type_opts][:max_activity_score]] if options[:listing_type_opts][:max_activity_score]
         if requested_srcs.blank? && (filters[:mynews].blank? || filters[:mynews][:source_ids].blank?)
           joins += ["members ON members.id=stories.submitted_by_id"]
-          # FIXME: Hardcoded to not show oped news stories because it has been taken over by spammers.  Fix the source instead!
-          # There is a pending email thread with Fabrice & co on this.
-          conds << ["story_sources.id != 428 AND (story_sources.status IN (?) OR members.validation_level >= 3)", [Source::LIST, Source::FEATURE]] 
+          conds << ["(story_sources.status IN (?) OR members.validation_level >= 3)", [Source::LIST, Source::FEATURE]] 
         end
         order_by = options[:listing_type_opts][:order_by] || "stories.activity_score DESC, stories.sort_date DESC, #{sort_table}.sort_rating DESC"
 
@@ -407,7 +405,7 @@ module StoryListingHelpers
       when :activity_listing:
         joins += ["members ON members.id=stories.submitted_by_id"]
         order_by = "activity_score DESC, sort_date DESC, sort_rating DESC"
-        conds << ["story_sources.id != 428 AND (story_sources.status IN (?) OR members.validation_level >= 3)", [Source::LIST, Source::FEATURE]] 
+        conds << ["(story_sources.status IN (?) OR members.validation_level >= 3)", [Source::LIST, Source::FEATURE]] 
 
       when :new_stories:
         order_by = "stories.sort_date DESC, stories.sort_rating DESC"
