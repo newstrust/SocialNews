@@ -48,7 +48,7 @@ class Discussions::CommentsController < ApplicationController
   # GET /discussions/comments/new
   def new
     unless current_member.can_comment?
-      # flash[:notice] = "Commenting is open to all members with a level of #{SocialNewsConfig["min_member_level_for_comments"]} or more.<br/>Read our #{help_link('FAQ', "member_levels", "member")} for more info."
+      # flash[:notice] = "Commenting is open to all members with a level of #{SocialNewsConfig["min_member_rating_for_comments"]} or more.<br/>Read our #{help_link('FAQ', "member_levels", "member")} for more info."
       flash[:notice] = current_member.muzzled? ? "Your commenting privileges have been revoked. Please #{validation_email_url} to re-enable commenting privileges." : "Your account must be validated before you can post a comment. To have your account validated, please review two stories on our site, then #{validation_email_url}.  <a href='/help/faq/member/#member_profile_why_validation'>Click here</a> to learn about account validation and member levels."
       redirect_to member_path(current_member) and return false
     end
@@ -121,7 +121,7 @@ class Discussions::CommentsController < ApplicationController
   # GET /discussions/comments/1/reply
   def reply
     unless current_member.can_comment?
-      # flash[:notice] = "Commenting is open to all members with a level of #{SocialNewsConfig["min_member_level_for_comments"]} or more.<br/>Read our #{help_link('FAQ', "member_levels", "member")} for more info."
+      # flash[:notice] = "Commenting is open to all members with a level of #{SocialNewsConfig["min_member_rating_for_comments"]} or more.<br/>Read our #{help_link('FAQ', "member_levels", "member")} for more info."
       flash[:notice] = current_member.muzzled? ? "Your commenting privileges have been revoked. Please #{validation_email_url} to re-enable commenting privileges." : "Your account must be validated before you can post a comment. To have your account validated, please review two stories on our site, then #{validation_email_url}.  <a href='/help/faq/member/#member_profile_why_validation'>Click here</a> to learn about account validation and member levels."
       redirect_to member_path(current_member) and return false
     end

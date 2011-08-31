@@ -455,7 +455,7 @@ class Member < ActiveRecord::Base
   end
 
   def can_post?
-#    !([nil] + @@hide_status_choices).include?(status) && rating && (rating >= SocialNewsConfig["min_member_level_for_posts"])
+#    !([nil] + @@hide_status_choices).include?(status) && rating && (rating >= SocialNewsConfig["min_member_rating_for_posts"])
     !([nil] + @@hide_status_choices).include?(status) && validation_level >= SocialNewsConfig["min_validation_level_for_posts"]
   end
 
@@ -851,14 +851,16 @@ class Member < ActiveRecord::Base
         #  If photo requested, only fetch members with photo
         conditions_reviews += " AND images.id IS NOT NULL"
 
-        # only show photos if member level >= 2
-        conditions_members += " AND members.rating >= 2"
+        # ---- Temporarily disabled ----
+        # # only show photos if member level >= 2
+        # conditions_members += " AND members.rating >= 2"
       else
         # If no photo flag set, then we want those without photos
         conditions_reviews += " AND images.id IS NULL"
 
-        # If home page flag set, we want only those with a member rating >= 2
-        conditions_members += " AND members.rating >= 2" if opts[:home_page_name_list]
+        # ---- Temporarily disabled ----
+        # # If home page flag set, we want only those with a member rating >= 2
+        # conditions_members += " AND members.rating >= 2" if opts[:home_page_name_list]
       end
 
       local_site = opts[:local_site]

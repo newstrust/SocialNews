@@ -2,8 +2,8 @@
 #
 
 # Commenting and Posting privileges
-min_member_level_for_comments: 2
-min_member_level_for_posts: 2
+min_member_rating_for_comments: 2   # Currently unused
+min_member_rating_for_posts: 2      # Currently unused
 min_validation_level_for_comments: 2
 min_validation_level_for_posts: 2
 max_posts_per_day: 5

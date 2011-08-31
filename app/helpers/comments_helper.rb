@@ -48,7 +48,7 @@ module CommentsHelper
       if current_member.can_comment?
         capture(&block)
       else
-#        "<p class='comments_disabled'>Commenting is open to all members with a level of #{SocialNewsConfig["min_member_level_for_comments"]} or more. Read our #{help_link('FAQ', "member_levels", "member")} for more info.</p>"
+#        "<p class='comments_disabled'>Commenting is open to all members with a level of #{SocialNewsConfig["min_member_rating_for_comments"]} or more. Read our #{help_link('FAQ', "member_levels", "member")} for more info.</p>"
         "Before you can post a comment, your account must be validated by our staff. To request a validation, please <a href='mailto:#{SocialNewsConfig["email_addrs"]["community"]}?subject=Validation request from #{current_member.name}&body=Hello #{SocialNewsConfig["app"]["name"]},&body=&body=Please validate my account, so I can post stories and comments on #{SocialNewsConfig["app"]["name"]}.&body=&body=Here is my member profile url: #{member_url(current_member)}&body=&body=Thank you,&body=#{current_member.name}'>email us</a>. You first need to #{link_to('fill your profile', my_account_members_url)} and review at least two stories. To learn about account validation and member levels, #{help_link('click here', "member_levels", "member")}."
       end
     else

@@ -1,0 +1,39 @@
+Controlling member privileges
+-----------------------------
+Member validation levels are used in many places in the code to control what
+members can do and also as a way to limit damage from spammers and other
+low-credibility accounts.  
+
+Whenever a member registers on the site, they start with a validation level
+of 1.  Since validation level is controlled by editors, editors can easily
+control problem accounts.  
+
+But, if you want to use other non-strict and community-based control for
+problem accounts, use member ratings that can change through activity on the
+site and through ratings by other members.
+
+* Check can_post? and can_comment? methods in app/models/member.rb to see how
+  validation levels are used.
+
+* The minimum validation levels for different activities are controlled by
+  settings in config/social_news_constants/member_constants.yml.  The default
+  settings are:
+  - posting requires validation level of 2
+  - commenting requires validation level of 2
+
+* CURRENTLY DISABLED: For a member with a photo to me displayed in the recent
+  reviewers panel, we used to have a requirement for the member rating
+  (not validation level) to be at least 2.  Additionally, for members
+  without photos to be displayed in the recent reviewers panel on the homepage
+  (not on other pages), we had a requirement for the member rating to be
+  at least 2.  Check find_recent_reviewers in app/models/member.rb
+
+Controlling story listings
+--------------------------
+Member validation levels and member rating values are also used to control the
+quality of story listings on the site.  Check app/models/story_listing_helpers.rb
+
+* mynews listing uses member validation level 
+* activity listing (for editors/staff) uses member validation level
+* trusted_reviews listing uses both member validation level and member ratings
+* recent reviews listing uses member validation level

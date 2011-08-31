@@ -329,6 +329,9 @@ Various doc files in this directory
 * story.listings
   --> notes about story listings
 
+* validation.levels
+  --> notes about how member validation levels are used on the site
+
 * story_volume.setting
   --> how story_volume setting is used in the code which can guide how this field
       should be set for topics and subjects
