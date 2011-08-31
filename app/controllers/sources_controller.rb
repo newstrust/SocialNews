@@ -6,19 +6,24 @@ class SourcesController < ApplicationController
   include ApplicationHelper
   include StoriesHelper
 
+  @@sources_index_page_refresh_time = SocialNewsConfig["caching"]["refresh_times"]["sources_index_page"]
   @@source_landing_page_refresh_time = SocialNewsConfig["caching"]["refresh_times"]["source_landing_page"]
   @@trusted_sources_refresh_time = SocialNewsConfig["caching"]["refresh_times"]["trusted_sources"]
 
   def index
     respond_to do |format|
-      format.html {
-        fetch_sources_for_index
-      }
-      format.json {
+      format.html do
+        @cached_fragment_name = get_cached_fragment_name("sources_index", nil)
+        when_fragment_expired(@cached_fragment_name, @@sources_index_page_refresh_time.seconds.from_now) do
+          fetch_sources_for_index
+        end
+      end
+
+      format.json do
         find_opts = {:conditions => {:status => ["hide", "list", "feature"]}}
         @sources = @local_site.nil? ? Source.find(:all, find_opts) : @local_site.sources.find(:all, find_opts)
         render :json => @sources.map{|s| {:name => s.name, :id => s.id}} 
-      }
+      end
     end
   end
 

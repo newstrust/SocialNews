@@ -13,6 +13,8 @@
 </script>
 <%- end -%>
 
+<%-#----------- cache it! ----------------%>
+<%- cache @cached_fragment_name do -%>
 <div class="overview_page span-24">
   <div class="overview_page_info">
     <h2><%=@title%></h2>
@@ -104,3 +106,4 @@
   </div>
 <%- end -%>
 </div>
+<%- end -%>

@@ -17,6 +17,7 @@ caching:
       least_trusted  : 120
       todays_feeds   : 600
     story_listings            : 60
+    sources_index_page        : 600  # 10 minutes
     source_landing_page       : 60
     feed_pages                : 150
     todays_feeds_body         : 90
