@@ -247,10 +247,12 @@ class SourcesController < ApplicationController
   def fetch_sources_for_index(limit_per_cat=15)
     @sources = {}
     Source.each_source_medium { |key, medium|
-      @sources[key] = @local_site.nil? ? Source.top_rated_by_medium(key, :limit => limit_per_cat).sort{|x, y| x["name"] <=> y["name"]} \
-                                       : Source.list_by_medium(key,
-                                                               :joins => "JOIN local_sites_sources ON local_sites_sources.source_id = sources.id",
-                                                               :conditions => ["local_sites_sources.local_site_id = ? AND sources.rating >= ?", @local_site.id, SocialNewsConfig["min_trusted_source_rating"]])
+      if @local_site.nil?
+        @sources[key] = Source.top_rated_by_medium(key, :no_local_scope => true, :limit => limit_per_cat).sort{|x, y| x["name"] <=> y["name"]}
+      else
+        @sources[key] = Source.list_by_medium(key, :joins => "JOIN local_sites_sources ON local_sites_sources.source_id = sources.id",
+                                                   :conditions => ["local_sites_sources.local_site_id = ? AND sources.rating >= ?", @local_site.id, SocialNewsConfig["min_source_rating"]])
+      end
     }
   end
 end

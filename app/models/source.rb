@@ -440,6 +440,14 @@ class Source < ActiveRecord::Base
       conditions[0] += " AND sources.id NOT IN(?)"
       conditions << sources_to_ignore
 
+      # Ignore local scope sources if we have been asked to
+      no_local_scope = find_options.delete(:no_local_scope)
+      if no_local_scope
+        find_options[:joins] ||= ""
+        find_options[:joins] += " LEFT JOIN source_attributes ON source_attributes.source_id=sources.id AND source_attributes.name='source_scope'"
+        conditions[0] += " AND (source_attributes.value IS NULL OR source_attributes.value NOT IN ('local', 'state', 'regional'))"
+      end
+
       # We want sources with at least X rated stories from last 365 days OR at least Y reviews from last 365 days
       cutoff_date = Time.now - 365.days
       listing_constants = source_medium_info(key)["listing_options"]
