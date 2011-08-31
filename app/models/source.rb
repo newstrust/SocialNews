@@ -462,6 +462,7 @@ class Source < ActiveRecord::Base
       conditions[0] += " AND ((SELECT COUNT(*) FROM authorships JOIN stories ON authorships.story_id=stories.id WHERE authorships.source_id=sources.id AND stories.status IN ('list','feature') AND stories.created_at >= ?) > 1)"
       conditions += [cutoff_date]
 
+      find_options[:from] = "sources USE INDEX(index_sources_on_rating_and_status)" 
       find_options[:conditions] = conditions
       list_by_medium(key, find_options)
     end
