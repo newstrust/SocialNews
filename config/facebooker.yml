@@ -51,9 +51,9 @@ production:
     local_port: 3000
 
 test:
-  app_id: "73616968934"
-  api_key: "dd320777329ceed5337901b1a05ef177"
-  secret_key: "11a0ca80a572199f3c6a90d984a38e38"
+  app_id: "app-id-here"
+  api_key: "api-key-here"
+  secret_key: "secret-key-here"
   canvas_page_name: 
   callback_url: "http://localhost:3000"
   set_asset_host_to_callback_url: true
