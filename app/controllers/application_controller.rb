@@ -131,8 +131,6 @@ class ApplicationController < ActionController::Base
     logger.error "Exception '#{e}' creating a facebook session; #{e.backtrace.inspect}"
     cookies.delete :auth_token
     reset_session
-    flash[:error] = "We encountered an error creating a user session for you.  Please reload this page to try again!  If this error persists, please clear all your #{APP_NAME} cookies (and if you use facebook login, facebook cookies) and try again."
-    flash.discard
   end
 
   def password_protected
