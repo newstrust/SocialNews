@@ -691,7 +691,7 @@ module StoriesHelper
             if r.nil?
               r = Review.new(:story => s,
                              :member => current_member,
-                             :status => :list,
+                             :status => Status::LIST,
                              :rating_attributes => review_attrs[:rating_attributes],
                              :comment => review_attrs[:comment])
               r.save_and_process_with_propagation
