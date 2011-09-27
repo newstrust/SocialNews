@@ -37,7 +37,7 @@
 <%- @title = @member.name -%>
 <%- widget_url = "/widgets?url=/members/#{@member.friendly_id}/" -%>
 <%- rss_listing_url = "/members/#{@member.friendly_id}/" -%>
-<%- show_content = @member.rating >=2 || @member.validation_level >=2 || (logged_in? and current_member.has_role_or_above?(:host)) -%>
+<%- show_content = @member.rating >=2 || @member.validation_level >=2 || (logged_in? && current_member.has_role_or_above?(:host)) -%>
 <%- mphoto_size = (!@member.about.blank? && s(@member.about).length >= 600) ? "large" : "medium" -%>
 <%- member_name = first_name(@member) + "'s" -%>
 <%- member_network = "Network" -%>
@@ -152,7 +152,7 @@
 		<%- profile_section "Contact Info",
 		 	:help_icon => help_icon("member_profile_contact_info", "member") do -%>
 			<%- if show_content -%>
-				<%= profile_line @member, "email", :formatter => :format_email if @member.show_email || (logged_in? and current_member.has_role_or_above?(:sysop)) %>
+				<%= profile_line @member, "email", :formatter => :format_email if @member.show_email || (logged_in? && current_member.has_role_or_above?(:sysop)) %>
 				<%= profile_line @member, "home_page", :humanized_key => "Web Page", :formatter => :format_url %>
 				<%= profile_line @member, "fb_uid", :humanized_key => "Facebook", :formatter => :format_fb_profile_url if @member.fbc_linked? && @member.show_fb_profile_url %>
 				<%= profile_line @member, ["street_address", "street_address2", "city", "state", "zip_code", "country"],
@@ -172,7 +172,7 @@
 				:if_empty_say => "Never" %>
 		<%- end -%>
 
-		<%- if logged_in? and current_member.has_role_or_above?(:admin) -%>
+		<%- if logged_in? && current_member.has_role_or_above?(:admin) -%>
 			<%- profile_section "Admin Info" do -%>
 				<%= profile_line @member, "id" %>
 				<%= profile_line @member, "rating", :humanized_key => "Member Level" %>
@@ -231,10 +231,10 @@
         <%= link_to "", mynews_url(@member), :title => "Visit " + member_name + " MyNews page", :class => "mynews", "rel" => "nofollow" %> | 
       <%- end -%>
       <%= link_to member_network, mynetwork_member_url(@member), :title => "Visit " + member_name + " Network page", :class => "network", "rel" => "nofollow" %>
-      <%- if @member.visible_attribute("home_page") && !@member.home_page.blank? && (show_content || (logged_in? and current_member.has_role_or_above?(:sysop))) -%>
+      <%- if @member.visible_attribute("home_page") && !@member.home_page.blank? && (show_content || (logged_in? && current_member.has_role_or_above?(:sysop))) -%>
         | <%= link_to "Web Page", add_http(@member.home_page), :class => "view", :target => '_blank', :title => "Open " + member_name + " Web page in a new window" %>
       <%- end -%>
-      <%- if @member.show_email && show_content || (logged_in? and current_member.has_role_or_above?(:sysop)) -%>
+      <%- if @member.show_email && show_content || (logged_in? && current_member.has_role_or_above?(:sysop)) -%>
         | <%= mail_to(@member.email, "Contact", :encode => "javascript", :class => "contact",
                 :title => my_page ? "Send myself an email" : "Send an email to " + first_name(@member) ) %>
       <%- end -%>
@@ -380,7 +380,7 @@
       </div>
       <%- end -%>
 
-    <%- if (@member.can_comment? || (current_member && current_member.has_role_or_above?(:editor))) && @member.comments.count>0 -%>
+    <%- if (@member.can_comment? || (logged_in? && current_member.has_role_or_above?(:editor))) && @member.comments.count>0 -%>
       <%#- Comments links -%>
       <div class="clearfix">
         <span class="read_more"><%=link_to "See all #{number_format(@member.comments.count)} comments", comments_member_path(@member), :class => "small_bold" %></span>
@@ -493,8 +493,8 @@
 			<%- if @meta_reviews_given.total_entries.zero? -%>
 				<div class="empty_list">No ratings given yet.</div>
 			<%- end -%>
-			<%- if my_page && current_member.rating < 3.0 -%>
-				To rate other member reviews, you need a Member Level of 3.0 or higher.
+			<%- if my_page && !current_member.is_trusted_member? -%>
+        To rate other member reviews, you need a <%= help_link('member level', 'member_levels', 'member') %> of <%=SocialNewsConfig["min_trusted_member_level"]%> or higher.<br/>
 				For more info, check our <%= help_link "FAQ", "rate_this_review", "report" %>.<br/>
 			<%- end -%>
 			<%- if !@meta_reviews_given.total_entries.zero? -%>

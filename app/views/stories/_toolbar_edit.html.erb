@@ -65,8 +65,8 @@
     <p class="notice">
     <%- if @story.edit_lock -%>
       Editing has been disabled for this story.
-    <%- elsif current_member.rating < 3 # not submitter, and member level < 3 -%>
-      To edit this story info, your <%= help_link('member level', 'member_levels', 'member') %> must be 3 or more.<br/>
+    <%- elsif !current_member.is_trusted_member?  # not submitter, and not trusted -%>
+      To edit this story info, your <%= help_link('member level', 'member_levels', 'member') %> must be <%=SocialNewsConfig["min_trusted_member_level"]%> or more.<br/>
     <%- end -%>
     </p>
     <p>If you think you have received this message in error, <%= mail_to email_addr("help"), "email us", :subject => "#{app_name} help request", :encode => "javascript" %>.</p>

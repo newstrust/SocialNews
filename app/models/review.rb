@@ -156,7 +156,7 @@ class Review < ActiveRecord::Base
     conditions = []
     conditions << ["stories.status IN (?)", [Story::LIST, Story::FEATURE]]
     conditions << ["members.status = ?", Member::MEMBER]
-    conditions << ["members.rating >= ?", 3]
+    conditions << ["members.rating >= ?", SocialNewsConfig["min_trusted_member_level"]]
     conditions << ["members.validation_level >= ?", 3]
     conditions << ["length(reviews.comment) >= ?", local_site ? 50 : 100]
     # SSS: Starting July 2011, we dont have this constraint anymore since staff activity is going to be reduced

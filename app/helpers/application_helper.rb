@@ -545,7 +545,6 @@ module ApplicationHelper
 
   # Lists all groups a member belongs to, in order by group_list.
   def list_member_groups(member, options = {})
-    mr = member.rating || 0 # Sigh! why aren't member ratings initialized to zero?
     list = ""
     sep = ""
     if options[:group_list]
@@ -563,7 +562,7 @@ module ApplicationHelper
         end
         sep = ", "
       end
-      if mr >= 3
+      if member.is_trusted_member?
         list += options[:badges] ? '<span class="trusted_member_badge"></span>' : sep + "Trusted Member"
         sep = ", "
       end

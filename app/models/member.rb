@@ -294,12 +294,12 @@ class Member < ActiveRecord::Base
 
   # Don't let ppl edit story metadata if someone who outranks them already has!
   # And if no one of note has edited the story, let them through.
-  # (Alternate algorithm: just check if member level > 3. But this seems more fair.)
+  # (Alternate algorithm: just check if member is trusted. But this seems more fair.)
   # original code: !!story.edited_by_group ? has_role_or_above?(story.edited_by_group.name.downcase.to_sym) : true
-  # Changed so unless the story has been locked it's now open to any member with member level >=3, or members who posted the story or for stories that were submitted by the bot or by a guest submitter
+  # Changed so unless the story has been locked it's now open to any trusted member, or members who posted the story or for stories that were submitted by the bot or by a guest submitter
   # DF - 7/31/09
   def has_story_edit_privileges?(story)
-    has_role_or_above?(:host) || (!story.edit_lock && (self.rating >= 3 || [self, Member.nt_bot, Member.nt_anonymous].include?(story.submitted_by_member)))
+    has_role_or_above?(:host) || (!story.edit_lock && (is_trusted_member? || [self, Member.nt_bot, Member.nt_anonymous].include?(story.submitted_by_member)))
   end
 
   def has_invite?
@@ -448,6 +448,10 @@ class Member < ActiveRecord::Base
   def follows_twitter_newsfeed?
     f = twitter_newsfeed
     f && FollowedItem.exists?(:follower_id => self.id, :followable_type => 'Feed', :followable_id => f.id)
+  end
+
+  def is_trusted_member?
+    (self.rating || 0) >= SocialNewsConfig["min_trusted_member_level"].to_f
   end
 
   def can_comment?
@@ -1039,7 +1043,7 @@ class Member < ActiveRecord::Base
             :joins => :reviews,
             :include => :image,
             :group => "members.name",
-            :conditions => ["members.rating >= ? AND reviews.created_at >= ? AND profile_status IN (?) AND show_in_member_list = true", 3, Time.now - 180.days, ProfileStatus::VISIBLE], 
+            :conditions => ["members.rating >= ? AND reviews.created_at >= ? AND profile_status IN (?) AND show_in_member_list = true", SocialNewsConfig["min_trusted_member_level"], Time.now - 180.days, ProfileStatus::VISIBLE], 
             :order => "members.name")
     end
     
