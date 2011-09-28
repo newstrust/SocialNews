@@ -908,7 +908,7 @@ class StoriesController < ApplicationController
       m = current_member
       attrs = {
           # For stories submitted by new members, set low validation level! If guest submission, set to 1
-        :editorial_priority  => (m ? (m.validation_level < 3 ? m.validation_level : 3) : 1),
+        :editorial_priority  => (m ? (m.validation_level < SocialNewsConfig["min_trusted_member_validation_level"].to_i ? m.validation_level : 3) : 1),
         :submitted_by_member => (m ? m : Member.nt_anonymous),
         :content_type        => params[:content_type] || "article",
         :status              => params[:status] || Story::PENDING,

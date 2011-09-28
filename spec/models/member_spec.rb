@@ -597,8 +597,16 @@ describe Member do
       members(:untrustworthy_member).has_role_or_above?("admin").should be_false
     end
     
-    it "should let member edit metadata if member level >= 3" do
-      members(:heavysixer).has_story_edit_privileges?(stories(:legacy_story)).should be_true
+    it "should let member edit metadata if member level >= 3 and validation level >= 3" do
+      m = members(:heavysixer)
+      m.update_attribute(:validation_level, 3)
+      m.has_story_edit_privileges?(stories(:legacy_story)).should be_true
+    end
+    
+    it "should not let member edit metadata if member level >= 3 and validation level < 3" do
+      m = members(:heavysixer)
+      m.update_attribute(:validation_level, 2)
+      m.has_story_edit_privileges?(stories(:legacy_story)).should be_false
     end
     
     it "should not let member edit metadata if member level < 3" do

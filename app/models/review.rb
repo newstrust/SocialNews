@@ -157,7 +157,7 @@ class Review < ActiveRecord::Base
     conditions << ["stories.status IN (?)", [Story::LIST, Story::FEATURE]]
     conditions << ["members.status = ?", Member::MEMBER]
     conditions << ["members.rating >= ?", SocialNewsConfig["min_trusted_member_level"]]
-    conditions << ["members.validation_level >= ?", 3]
+    conditions << ["members.validation_level >= ?", SocialNewsConfig["min_trusted_member_validation_level"].to_i]
     conditions << ["length(reviews.comment) >= ?", local_site ? 50 : 100]
     # SSS: Starting July 2011, we dont have this constraint anymore since staff activity is going to be reduced
     # conditions << ["reviews.member_id NOT IN (?)", Member::ACTIVE_STAFF_IDS] unless show_staff_reviews?(local_site, page_obj)
@@ -238,7 +238,7 @@ class Review < ActiveRecord::Base
         # Skip this candidate if:
         # 1. the reviewer doesn't have the required validation level
         # IMPORTANT: Add these members to the hash -- otherwise you can wont make forward progress and can get stuck in an infinite loop!
-        if (r.member.nil? || r.member.validation_level < 3)
+        if r.member.nil? || (r.member.validation_level < SocialNewsConfig["min_trusted_member_validation_level"].to_i)
           member_id_hash[r.member_id] = max_per_member+1
           next
         end

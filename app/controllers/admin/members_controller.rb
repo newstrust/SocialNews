@@ -53,7 +53,7 @@ class Admin::MembersController < Admin::AdminController
     @other_spammers = []
     @rejected_terminations = []
     @spammers.each { |m|
-      if m.validation_level >= 3
+      if m.validation_level >= SocialNewsConfig["min_trusted_member_validation_level"].to_i
         @rejected_terminations << m
         next
       end

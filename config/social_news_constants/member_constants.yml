@@ -3,6 +3,7 @@
 
 # Commenting and Posting privileges
 min_trusted_member_level: 3
+min_trusted_member_validation_level: 3
 min_member_rating_for_comments: 2   # Currently unused
 min_member_rating_for_posts: 2      # Currently unused
 min_validation_level_for_comments: 2

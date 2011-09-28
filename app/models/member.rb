@@ -451,7 +451,8 @@ class Member < ActiveRecord::Base
   end
 
   def is_trusted_member?
-    (self.rating || 0) >= SocialNewsConfig["min_trusted_member_level"].to_f
+       ((self.rating || 0) >= SocialNewsConfig["min_trusted_member_level"].to_f) \
+    && ((self.validation_level || 0) >= SocialNewsConfig["min_trusted_member_validation_level"].to_i)
   end
 
   def can_comment?
@@ -1043,7 +1044,7 @@ class Member < ActiveRecord::Base
             :joins => :reviews,
             :include => :image,
             :group => "members.name",
-            :conditions => ["members.rating >= ? AND reviews.created_at >= ? AND profile_status IN (?) AND show_in_member_list = true", SocialNewsConfig["min_trusted_member_level"], Time.now - 180.days, ProfileStatus::VISIBLE], 
+            :conditions => ["members.rating >= ? AND reviews.created_at >= ? AND profile_status IN (?) AND show_in_member_list = true", SocialNewsConfig["min_trusted_member_level"].to_f, Time.now - 180.days, ProfileStatus::VISIBLE], 
             :order => "members.name")
     end
     

@@ -280,7 +280,7 @@ module StoryListingHelpers
         conds << ["stories.activity_score < ?", options[:listing_type_opts][:max_activity_score]] if options[:listing_type_opts][:max_activity_score]
         if requested_srcs.blank? && (filters[:mynews].blank? || filters[:mynews][:source_ids].blank?)
           joins += ["members ON members.id=stories.submitted_by_id"]
-          conds << ["(story_sources.status IN (?) OR members.validation_level >= 3)", [Source::LIST, Source::FEATURE]] 
+          conds << ["(story_sources.status IN (?) OR members.validation_level >= ?)", [Source::LIST, Source::FEATURE], SocialNewsConfig["min_trusted_member_validation_level"].to_i] 
         end
         order_by = options[:listing_type_opts][:order_by] || "stories.activity_score DESC, stories.sort_date DESC, #{sort_table}.sort_rating DESC"
 
@@ -395,7 +395,7 @@ module StoryListingHelpers
       when :trusted_reviews:
         [Story::RATED, Story::TRUSTED].each { |rc| conds << [ Story.get_rating_check_clause(rc), nil ] }
         joins += ["reviews ON stories.id=reviews.story_id"]
-        joins += ["members ON members.id=reviews.member_id AND members.validation_level >= 2 AND members.rating >= 3"]
+        joins += ["members ON members.id=reviews.member_id AND members.validation_level >= 2 AND members.rating >= #{SocialNewsConfig["min_trusted_member_level"]}"]
         order_by = "reviews.created_at DESC"
 
       when :all_rated_stories:
@@ -405,7 +405,7 @@ module StoryListingHelpers
       when :activity_listing:
         joins += ["members ON members.id=stories.submitted_by_id"]
         order_by = "activity_score DESC, sort_date DESC, sort_rating DESC"
-        conds << ["(story_sources.status IN (?) OR members.validation_level >= 3)", [Source::LIST, Source::FEATURE]] 
+        conds << ["(story_sources.status IN (?) OR members.validation_level >= ?)", [Source::LIST, Source::FEATURE], SocialNewsConfig["min_trusted_member_validation_level"].to_i] 
 
       when :new_stories:
         order_by = "stories.sort_date DESC, stories.sort_rating DESC"
