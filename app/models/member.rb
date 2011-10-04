@@ -101,10 +101,7 @@ class Member < ActiveRecord::Base
   has_one  :twitter_settings
   has_many :facebook_invitations
   has_many :fb_shared_reviews, :through => :sharables, :source => :review, :conditions => "sharables.sharable_type = 'Review' AND sharables.sharable_target = '#{Sharable::FACEBOOK}'"
-  has_many :hostings
-  has_many :hosted_topics,  :through => :hostings, :source => :topic,  :conditions => "hostings.hostable_type = 'Topic'"
-  has_many :hosted_sources, :through => :hostings, :source => :source, :conditions => "hostings.hostable_type = 'Source'"
-  has_many :hosted_groups,  :through => :hostings, :source => :group,  :conditions => "hostings.hostable_type = 'Group'"
+  has_many :page_hosts
 
   # my followers associations
   has_many :follower_items, :class_name => "FollowedItem", :as => :followable
@@ -221,6 +218,22 @@ class Member < ActiveRecord::Base
 
   def social_groups
     groups.find(:all, :conditions => {:context => Group::GroupType::SOCIAL})
+  end
+
+  def hostings(local_site=nil)
+    self.page_hosts.reject { |ph| ph.local_site != local_site }.map(&:hosting)
+  end
+
+  def hosted_topics(local_site=nil)
+    self.page_hosts.reject { |ph| ph.local_site != local_site || ph.hosting.hostable_type != "Topic" }.map(&:hosting).map(&:hostable)
+  end
+
+  def hosted_sources(local_site=nil)
+    self.page_hosts.reject { |ph| ph.local_site != local_site || ph.hosting.hostable_type != "Source" }.map(&:hosting).map(&:hostable)
+  end
+
+  def hosted_groups(local_site=nil)
+    self.page_hosts.reject { |ph| ph.local_site != local_site || ph.hosting.hostable_type != "Group" }.map(&:hosting).map(&:hostable)
   end
 
   # Likes this member has given

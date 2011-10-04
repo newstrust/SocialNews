@@ -65,13 +65,15 @@
   	<%= list_member_groups(@member, :group_list => Role.all_slugs, :badges => true) %>
   	<%= help_icon("member_profile_roles", "member") %><br style="clear:left" />
 
-  	<%- if !@member.hosted_topics.empty? || !@member.hosted_sources.empty? -%>
+    <%- hosted_topics = @member.hosted_topics -%>
+    <%- hosted_sources = @member.hosted_sources -%>
+  	<%- if !hosted_topics.empty? || !hosted_sources.empty? -%>
   		<div style="margin:4px 0 4px 0;"><strong>Hosting</strong>
-  		<%- unless @member.hosted_topics.empty? -%>
-  			<%= @member.hosted_topics.collect{|ht| link_to(ht.name, ht)}.join(", ") -%>
+  		<%- unless hosted_topics.empty? -%>
+  			<%= hosted_topics.collect{|ht| link_to(ht.name, ht)}.join(", ") -%>
   		<%- end -%>
-  		<%- unless @member.hosted_sources.empty? -%>
-  			<%= " | " unless @member.hosted_topics.empty? -%><%= @member.hosted_sources.collect{|hs| link_to(hs.name, hs)}.join(", ") -%>
+  		<%- unless hosted_sources.empty? -%>
+  			<%= " | " unless hosted_topics.empty? -%><%= hosted_sources.collect{|hs| link_to(hs.name, hs)}.join(", ") -%>
   		<%- end -%>
   		<%= help_icon("what_is_a_host", "host") -%>
   		</div>
