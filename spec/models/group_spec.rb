@@ -52,7 +52,7 @@ describe Group do
 
     # A non protected group can be deletd though
     lambda do
-     group = groups(:group_one)
+     group = groups(:group_13)
      group.destroy
     end.should change(Group, :count).by(-1)
   end

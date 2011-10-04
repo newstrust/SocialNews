@@ -1,10 +1,11 @@
 class Role < Group
   set_table_name 'groups'
   has_many :memberships, :as => :membershipable, :foreign_key => :group_id
-  
+
   # this is in the db, but good to have a correctly-ordered copy here.
-  @@names = %w(host newshound editor staff sysop admin)
-  cattr_reader :names
+  def self.all_slugs
+    @@all_slugs ||= Role.find(:all).map(&:slug)
+  end
   
   class << self
     def find(*args)

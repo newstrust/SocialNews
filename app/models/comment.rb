@@ -48,7 +48,7 @@ class Comment < ActiveRecord::Base
   end
 
   def can_be_hidden_by?(m = nil)
-    !m.nil? && %w(admin sysop editor staff).find { |role| m.has_role?(role) }
+    !m.nil? && %w(admin editor staff).find { |role| m.has_role?(role) }
   end
 
   def visible?

@@ -133,15 +133,17 @@ class MockMember
   def initialize(opts)
     @roles = opts[:roles] if opts[:roles]
   end
-
-  def has_role?(role) 
-    @roles.map{ |g| g.name.downcase.to_sym }.include?(role) 
-  end
   
+  def has_role?(role)
+    roles.map(&:slug).include?(role.to_s)
+  end
+
   def has_role_or_above?(role)
-    member_roles = roles.map{ |g| g.name.downcase.to_sym }
-    required_roles = Role.names[Role.names.index(role.to_s), Role.names.length].map{|g| g.to_sym}
-    return !(member_roles & required_roles).empty?
+    role_index = Role.all_slugs.index(role.to_s)
+    return false if role_index.nil?
+
+    required_roles = Role.all_slugs[0, role_index+1]
+    return !(roles.map(&:slug) & required_roles).empty?
   end
 
   def has_host_privilege?(hostable, override_role, local_site=nil)

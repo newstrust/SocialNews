@@ -23,16 +23,14 @@ member_groups:
  - newshound:   {name: Newshound}
  - editor:      {name: Editor}
  - staff:       {name: Staff}
- - sysop:       {name: Sysop}
  - admin:       {name: Admin}
- - advisors:    {name: Advisor}
- - advisors:    {name: Advisor}
- - donors:      {name: Donor}
- - directors:   {name: Director}
+ - advisor:     {name: Advisor}
+ - donor:       {name: Donor}
+ - director:    {name: Director}
  - founding:    {name: Founding Member}
- - partners:    {name: Partner}
- - vips:        {name: VIP}
- - volunteers:  {name: Volunteer}
+ - partner:     {name: Partner}
+ - vip:         {name: VIP}
+ - volunteer:   {name: Volunteer}
 
 member_status:
  - guest:       {name: Guest}             # (previously called "Provisional")

@@ -241,13 +241,13 @@ class MembersController < ApplicationController
   
   # evil admin-only method to edit people who aren't you
   def edit_account
-    redirect_to access_denied_url and return unless logged_in? and current_member.has_role_or_above?(:sysop)
+    redirect_to access_denied_url and return unless logged_in? and current_member.has_role_or_above?(:admin)
     @member = Member.find(params[:id])
     render :action => 'edit'
   end
 
   def publish_reviews_and_posts
-    redirect_to access_denied_url and return unless logged_in? and current_member.has_role_or_above?(:sysop)
+    redirect_to access_denied_url and return unless logged_in? and current_member.has_role_or_above?(:admin)
     @member = Member.find(params[:id])
     @member.publish_reviews_and_posts
     flash[:notice] = "All of #{@member.name}'s posts and reviews have been published!"
@@ -309,7 +309,7 @@ class MembersController < ApplicationController
   # only allow edits to current_member
   def update
     @member = Member.find(params[:id])
-    redirect_to access_denied_url and return unless member_is_owner_or_has_role?(:sysop)
+    redirect_to access_denied_url and return unless member_is_owner_or_has_role?(:admin)
     
     # We need to flip this attribute around to do the opposite of how it's set.
     # this is because it makes more sense to say something like "comments enabled" 
@@ -645,7 +645,7 @@ class MembersController < ApplicationController
   end
 
   def find_member_and_verify_profile_access
-    @member = (logged_in? && current_member.has_role_or_above?(:sysop)) ? Member.find(params[:id]) : Member.active.find(params[:id])
+    @member = (logged_in? && current_member.has_role_or_above?(:admin)) ? Member.find(params[:id]) : Member.active.find(params[:id])
     render_403(Member, "You do not have access to this member's profile page.") unless @member.is_visible? || member_is_owner_or_has_role?(:editor)
   rescue ActiveRecord::RecordNotFound
     flash[:error] = "No Member Found with id #{params[:id]}."

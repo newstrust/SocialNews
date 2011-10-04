@@ -8,7 +8,7 @@
 
 sg_attrs:
   id: 1
-  group_id: 5
+  group_id: 14
   activated: false
   num_init_story_days: 7
   status: list

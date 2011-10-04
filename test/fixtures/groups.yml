@@ -1,7 +1,106 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-group_one:
+admins:
   id: 1
+  name: Admin
+  slug: 'admin'
+  description: This group contains admins of the site.
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+staff:
+  id: 3
+  name: Staff
+  slug: 'staff'
+  description: Paid staff member. Staff members generally have the same access as Editors.
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+editors:
+  id: 4
+  name: Editor
+  slug: 'editor'
+  description: Editors are mostly volunteer positions. They have access to edit story data and topic descriptions.
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+host:
+  id: 5
+  name: Host
+  slug: 'host'
+  description: A host is an active and trusted member of our community who has been selected by staff to help edit our site and/or moderate topics. Hosts are responsible for leading new members by example, reviewing frequently and submitting stories for their topics, as well as checking the information in story reviews and editing it as needed. Hosts can also moderate online discussions about their topics, in collaboration with our staff.
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+directors:
+  id: 6
+  name: Directors
+  slug: director
+  description: Our management.
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+advisors:
+  id: 7
+  name: Advisors
+  slug: advisor
+  description: Our advisors are all volunteers, and experts in their fields.
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+founding:
+  id: 8
+  name: Founding
+  slug: founding
+  description: Early members.
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+partners:
+  id: 9
+  name: Partners
+  slug: partner
+  description: Individuals from companies we are partnering with.
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+vips:
+  id: 10
+  name: VIPs
+  slug: vip
+  description: Important visitors/members.
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+donors:
+  id: 11
+  name: Donors
+  slug: donor
+  description: Members who made a donation to our cause.
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+newshounds:
+  id: 12
+  name: Newshounds
+  slug: newshound
+  description: Members who are active on the site
+  memberships_count: 0
+  is_protected: true
+  context: 'role'
+
+group_13:
+  id: 13
   name: Group One
   slug: g_one
   description: "Only Group One's Allowed"
@@ -9,35 +108,8 @@ group_one:
   is_protected: 0
   context: 'role'
 
-admins:
-  id: 2
-  name: Admin
-  slug: admin
-  description: This group contains admins of the site.
-  memberships_count: 0
-  is_protected: 1
-  context: 'role'
-
-editors:
-  id: 3
-  name: Editor
-  slug: editors
-  description: This group contains editors of the site.
-  memberships_count: 0
-  is_protected: 1
-  context: 'role'
-
-hosts:
-  id: 4
-  name: Host
-  slug: hosts
-  description: This group contains hosts of the site.
-  memberships_count: 0
-  is_protected: 1
-  context: 'role'
-
 social_group:
-  id: 5
+  id: 14
   name: NT Editors
   slug: social
   description: This group contains editors of the site.

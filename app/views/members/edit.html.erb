@@ -165,7 +165,7 @@
               </p>
               <p>
                 <div class="floatleft">Roles: <%= help_icon("member_roles", "member") %></div>
-                <%= list_member_groups(@member, :group_list => "founding,host,newshound,editor,partners,advisors,staff,sysop,admin,directors,donors") %>
+                <%= list_member_groups(@member, :group_list => Role.all_slugs) %>
               </p>
               <p>
                 <div class="floatleft">Signed up on: <%= help_icon("member_start_date", "member") %></div>

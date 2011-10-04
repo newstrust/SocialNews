@@ -39,7 +39,7 @@ describe Member do
       @member.errors_on(:status).first.should == "This is not an available choice."
     end
     
-    # This test is not needed. Now allowing admin/sysops to change member.status
+    # This test is not needed. Now allowing admin to change member.status
     # via the member profile edit form.
     # it 'should not allow status to be updated through mass assignment' do
     #   proc {

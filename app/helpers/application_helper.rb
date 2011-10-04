@@ -548,11 +548,8 @@ module ApplicationHelper
     list = ""
     sep = ""
     if options[:group_list]
-      
       group_list = options[:group_list]      
-      group_list_array = group_list.split(',')
-      
-      cnt = group_list_array.length
+      cnt = group_list.length
   
       if member.total_reviews > 0 && member.status == 'member'
         if !member.awards.blank? && member.awards.split(",").map(&:strip).find { |a| a =~ /certified_student_reviewer/}
@@ -575,11 +572,11 @@ module ApplicationHelper
         sep = ", "
       end
       0.upto(cnt-1) do |i|
-        if member.in_group?(group_list_array[i])
+        if member.in_group?(group_list[i])
           if options[:badges]
-            list += '<span class="' + humanize_token_direct("member_groups", group_list_array[i]).downcase + '_badge"></span>'          
+            list += '<span class="' + humanize_token_direct("member_groups", group_list[i]).downcase + '_badge"></span>'          
           else
-            list += sep + humanize_token_direct("member_groups", group_list_array[i])
+            list += sep + humanize_token_direct("member_groups", group_list[i])
             sep = ", "
           end
         end

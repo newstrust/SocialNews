@@ -10,7 +10,7 @@
 
   <strong><%= display_member_status(@member) %></strong>
   <span class="body_black_small">(since <%= @member.created_at.strftime('%B %Y') %>)</span><br/>
-  <%= list_member_groups(@member, :group_list => "host,newshound,editor,partners,advisors,staff,directors,donors", :badges => true) %>
+  <%= list_member_groups(@member, :group_list => Role.all_slugs", :badges => true) %>
   <%= help_icon("member_profile_roles", "member") %><br style="clear:left" />
 
   <%- my_page = false -%>

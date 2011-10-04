@@ -3,17 +3,17 @@
 one:
   member_id: 11
   membershipable_type: 'Group'
-  membershipable_id: 1
+  membershipable_id: 13
   public: true
 
 two:
   member_id: 11
   membershipable_type: 'Group'
-  membershipable_id: 2
+  membershipable_id: 1
   public: false
 
 trusted_member_is_editor:
   member_id: 16
   membershipable_type: 'Group'
-  membershipable_id: 3
+  membershipable_id: 4
   public: false

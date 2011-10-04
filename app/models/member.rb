@@ -269,23 +269,25 @@ class Member < ActiveRecord::Base
     end
     @likings_count
   end
-  
+
   def has_role?(role)
-    roles.map{ |g| g.name.downcase.to_s.to_sym }.include?(role.to_s.to_sym)
+    roles.map(&:slug).include?(role.to_s)
   end
 
   def has_role_or_above?(role)
-    member_roles = roles.map{ |g| g.name.downcase.to_sym }
-    required_roles = Role.names[Role.names.index(role.to_s), Role.names.length].map{|g| g.to_sym}
-    return !(member_roles & required_roles).empty?
+    role_index = Role.all_slugs.index(role.to_s)
+    return false if role_index.nil?
+
+    required_roles = Role.all_slugs[0, role_index+1]
+    return !(roles.map(&:slug) & required_roles).empty?
   end
 
   def has_host_privilege?(hostable, override_role, local_site=nil)
     self.has_role_or_above?(override_role) || (hostable && hostable.hosts(local_site).include?(self))
   end
 
-  def in_group?(group_name)
-    groups.map{ |g| g.name.downcase.to_sym }.include?(group_name.to_sym)
+  def in_group?(group_slug)
+    groups.map(&:slug).include?(group_slug.to_s)
   end
 
   def belongs_to_group?(group)
@@ -295,7 +297,6 @@ class Member < ActiveRecord::Base
   # Don't let ppl edit story metadata if someone who outranks them already has!
   # And if no one of note has edited the story, let them through.
   # (Alternate algorithm: just check if member is trusted. But this seems more fair.)
-  # original code: !!story.edited_by_group ? has_role_or_above?(story.edited_by_group.name.downcase.to_sym) : true
   # Changed so unless the story has been locked it's now open to any trusted member, or members who posted the story or for stories that were submitted by the bot or by a guest submitter
   # DF - 7/31/09
   def has_story_edit_privileges?(story)
@@ -758,7 +759,7 @@ class Member < ActiveRecord::Base
       has_public_profile?
     else
          # - 'm' is the profile owner
-         # - 'm' has the required override role (editor, host, admin, sysop, etc.)
+         # - 'm' has the required override role (editor, host, admin, etc.)
          # - 'm' is visible && either the profile is public or m is not nil & profile is visible to members or m is not nil & m shares groups membership
          (m == self) \
       || (!m.nil? && m.has_role_or_above?(opts[:override_role])) \

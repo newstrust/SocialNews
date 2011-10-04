@@ -6,7 +6,7 @@ __________________________________________
 
 <%= @record.display_name %>
 <%= display_member_status(@record) %> (since <%= @record.created_at.strftime('%B %Y') %>)
-<%= list_member_groups(@record, :group_list => "host,newshound,editor,partners,advisors,staff,directors,donors") %>
+<%= list_member_groups(@record, :group_list => Role.all_slugs) %>
 
 <%= h(strip_tags(StringHelpers.linewrap_text(StringHelpers.truncate_on_word_boundary(@record.about,300,400,true),72))) unless @record.about.blank? %>
 

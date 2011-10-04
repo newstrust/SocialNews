@@ -53,7 +53,7 @@ module MembersHelper
   
   # checks viewing member status as well as target member's settings. Don't use this for RSS feed.
   def is_visible_mynews?(member)
-    member.is_visible? && (member.public_mynews == 'public' || (logged_in? && (!member.public_mynews || member.public_mynews == 'members'))) || session_member_is_owner_or_has_role_or_above?(member,'sysop')
+    member.is_visible? && (member.public_mynews == 'public' || (logged_in? && (!member.public_mynews || member.public_mynews == 'members'))) || session_member_is_owner_or_has_role_or_above?(member,:admin)
   end
 
   def process_email_template(template, recipient, freq = Newsletter::BULK, local_site = nil)

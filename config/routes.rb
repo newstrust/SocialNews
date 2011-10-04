@@ -248,7 +248,7 @@ ActionController::Routing::Routes.draw do |map|
   map.manage_subscriptions "/subscriptions/email/",           :controller => "members", :action => "manage_subscriptions"
   map.manage_subscription  "/subscriptions/newsletter/:freq", :controller => "members", :action => "manage_subscription", :requirements => { :freq => /#{nl_types * '|'}/ }
   
-  # For staff and sysops
+  # For staff and admins
   map.namespace :admin do |admin|
     # host editing for hostables (topics, subjects, sources) re-using group join/leave tools
     hostable_url_prefix = "members/hosts/:hostable_type/:hostable_id"
