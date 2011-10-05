@@ -11,6 +11,6 @@ class FollowedItemObserver < ActiveRecord::Observer
       end
     end
   rescue Exception => e
-    RAILS_DEFAULT_LOGGER.error "Exception #{e} sending out notification for #{followed_item.id}; #{e.backtrace.inspect}"
+    RAILS_DEFAULT_LOGGER.error "Exception delivering notification for #{followed_item.id}; #{e}; #{e.backtrace.inspect}"
   end
 end

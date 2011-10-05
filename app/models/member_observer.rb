@@ -22,6 +22,8 @@ class MemberObserver < ActiveRecord::Observer
         Mailer.deliver_signup_notification(member)
       end
     end
+  rescue Exception => e
+    RAILS_DEFAULT_LOGGER.error "Exception delivering signup notification to #{member.id}:#{member.name}; #{e}; #{e.backtrace.inspect}"
   end
 
     # Send fb or regular activation email, depending on how the activation was done
