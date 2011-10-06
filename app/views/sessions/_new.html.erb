@@ -1,11 +1,12 @@
-<% popup_param = params[:popup] ? "?popup=true" : "" -%>
 <%- if facebook_enabled? -%>
 <div class="other_login_option">
   <div class="question">
     <strong>Got Facebook?</strong> Log In or Sign Up with your Facebook account. <%= help_icon("facebook", "") %>
   </div>
   <div style="padding-top: 5px">
-    <%= fb_login_button("fbc_init_activation('', '#{popup_param}')", :v => 2, :size => "short") %>
+    <%- popup_param = params[:popup] ? "?popup=true" : "" -%>
+    <%- url_prefix = @invitation ? "/partners/#{@partner.to_param}/#{@invitation.to_param}" : "" -%>
+    <%= fb_login_button("fbc_activate('#{url_prefix}', '#{popup_param}')") %>
   </div>
 </div>
 <%- end -%>
@@ -22,9 +23,7 @@
 <h3>Or log in with your <%=app_name%> account here:</h3>
 <br/>
 
-<%- reload ||= false -%>
 <%- args = params[:popup] ? {:popup => true} : {} -%>
-<%- args.merge!({:reload => true}) if reload -%>
 <%- form_tag sessions_path(args), :class => 'entry_form' do -%>
   <%= render :partial => "sessions/log_in" %>
 <%- end -%>

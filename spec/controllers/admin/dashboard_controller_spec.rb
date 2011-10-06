@@ -20,6 +20,6 @@ describe Admin::DashboardController do
     
     @member.memberships.delete_all
     do_get
-    response.should redirect_to(new_member_path)
+    response.should redirect_to(new_sessions_path)
   end
 end

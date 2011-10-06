@@ -13,7 +13,8 @@
 
   <%= fb_like_iframe(curr_url, :layout => "button_count") %>
   <div style="float:left; margin-top:4px;display:inline;">
-    <%= fb_share_link(curr_url) %> 
+    <%-#----- No Facebook Share anymore since FB has deprecated that in favour of FB like ----%>
+    <%-#= fb_share_link(curr_url) -%> 
     <%- if page_type == :story -%>
       <%= tweet_story(object) %>
       <%= email_page(object, :type => "#{page_type.to_s.humanize.downcase}") %>

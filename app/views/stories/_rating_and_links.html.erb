@@ -6,8 +6,8 @@
 <% @will_be_cached ||= false -%>
 <% hide_flags[:tw_share] = true if visitor_is_bot? -%>
 
-<%#-- SSS: Disable this for now --%>
-<%#-- hide_flags[:fb_share] = true ---%>
+<%-#----- No Facebook Share anymore since FB has deprecated that in favour of FB like ----%>
+<%- hide_flags[:fb_share] = true -%>
 
 <% unless story.submitted_by_member.blank? || hide_flags[:submitted_by] -%>
   <div class="posted_by">
@@ -57,7 +57,8 @@
 
       <div class="icons">
         <%- if show_flags[:row2_starred] %><%= link_to_star(story, {:cached => @will_be_cached, :ref => @url_tracking_key}) %><% end %>
-        <%- unless hide_flags[:fb_share] %><%= fb_share_link(story_url(story)) %><% end %>
+        <%-#----- No Facebook Share anymore since FB has deprecated that in favour of FB like ----%>
+        <%#- unless hide_flags[:fb_share] %><%#= fb_share_link(story_url(story)) %><%# end %>
         <%- unless hide_flags[:tw_share] %><%= tweet_story(story) %><% end %>
         <%- unless hide_flags[:email]    %><%= email_story(story) %><% end %>
         <%- unless hide_flags[:share]    %><%= share_link(story, "share_icon", "") %><% end %>
@@ -162,7 +163,8 @@
       <%- unless hide_flags[:share_icons] -%>
         <div class="icons">
           <%- if show_flags[:row2_starred] %><%= link_to_star(story, {:cached => @will_be_cached, :ref => @url_tracking_key}) %><% end %>
-          <%- unless hide_flags[:fb_share] %><%= fb_share_link(story_url(story)) %><% end %>
+          <%-#----- No Facebook Share anymore since FB has deprecated that in favour of FB like ----%>
+          <%#- unless hide_flags[:fb_share] %><%#= fb_share_link(story_url(story)) %><%# end %>
           <%- unless hide_flags[:tw_share] %><%= tweet_story(story) %><% end %>
           <%- unless hide_flags[:email]    %><%= email_story(story) %><% end %>
           <%- unless hide_flags[:share]    %><%= share_link(story, "share_icon", "") %><% end %>

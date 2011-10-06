@@ -110,8 +110,7 @@ class MembersController < ApplicationController
   end
   
   def last_active_at
-    # Skip facebook lookup (and hence a db call)
-    m = current_member_from_session
+    m = current_member
     if m.nil?
       access_denied
     else
@@ -230,8 +229,13 @@ class MembersController < ApplicationController
   # render new.rhtml
   def new
     store_referer_location
-    @member = Member.new
-    render :layout => "popup" if params[:popup]
+    if logged_in?
+      flash[:notice] = "You are logged into an existing #{APP_NAME} account. Please logout if you wish to create a new account."
+      redirect_to_back_or_default(@invitation && !@invitation.success_page_link.blank? ? @invitation.success_page_link : nil, home_url)
+    else
+      @member = Member.new
+      render :layout => "popup" if params[:popup]
+    end
   end
   
   def my_account
@@ -366,27 +370,9 @@ class MembersController < ApplicationController
       @partner.members << @member if @partner
       @invitation.group.process_join_request(@member) if @invitation && @invitation.group
       @local_site.process_signup(@member) if @local_site
-
-      fbc_member = member_from_fb_session
-      if fbc_member.nil?
-        self.current_member = @member
-        flash[:notice] = "Thanks for signing up! To activate your account, check your email."
-        redirect_to_back_or_default(@invitation && !@invitation.success_page_link.blank? ? @invitation.success_page_link : nil, "/start")
-      else
-          # If there is another NT member logged in via fb-connect, log them out and log me in!
-          # This is a 3-step process
-          # 1. delete nt session
-          # 2. set current member to the signed up member
-          # 3. force a facebook logout
-        delete_session
-        self.current_member = @member
-        @fb_logout_redirect_url = @invitation && !@invitation.success_page_link.blank? ? @invitation.success_page_link : "/start"
-
-          # Clear out flash. Output a more meaningful message!
-        flash[:notice] = "Thanks for signing up! To activate your account, check your email."
-        @logout_message = "Some other member was previously logged in via Facebook Connect.  We logged them out so your account could be created."
-        render :template => "facebook_connect/logout", :layout => "fb_minimal"
-      end
+      self.current_member = @member
+      flash[:notice] = "Thanks for signing up! To activate your account, check your email."
+      redirect_to_back_or_default(@invitation && !@invitation.success_page_link.blank? ? @invitation.success_page_link : nil, "/start")
     else
       if @member.errors.on(:email)
         @existing_member = Member.find_by_email(@member.email)

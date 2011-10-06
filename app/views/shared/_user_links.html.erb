@@ -5,7 +5,7 @@
 		<%-# photo -%>
 		<div class="photo">
 			<%- if fb_connected_and_linked -%>
-		  	<fb:profile-pic uid="<%=facebook_session.user.uid%>" facebook-logo="true" linked="false" size="square" width="40" height="40"> </fb:profile-pic>
+		  	<fb:profile-pic uid="<%=current_member.fb_uid%>" facebook-logo="true" linked="false" size="square" width="40" height="40"> </fb:profile-pic>
 			<%- else -%>
 				<%= link_to(image_tag(member.image ? member.image.public_filename(:thumb) : "/images/ui/silhouette_sml.jpg", :size => "40x40"), member, :title => "Visit your Profile Page") %>
 			<% end -%>
@@ -17,8 +17,6 @@
 			  Hello, <%= link_to_member member, :override_hidden => true, :class => "username", :title => "Visit your Profile Page" %> |
 			<%- end -%>
 			<%- if fb_connected_and_linked -%>
-			  <%-#- Facebook cannot issue a "DELETE" http request after logging you out of facebook.  Hence a "regular" GET url for deleting the session --%>
-			  <%-#-= fb_logout_link("Log Out", fb_session_delete_url) --%>
 		    <span class="logout"><%= link_to "Log Out", fb_logout_url + "?return_to=#{CGI.escape(request.url)}", :title => "Log Out from #{app_name} and Facebook" %></span>
 			<%- else -%>
 			  <span class="logout"><%= link_to "Log Out", sessions_path, :method => :delete, :title => "Log Out from #{app_name}" %></span>
@@ -47,9 +45,7 @@
 	  </div>
 	<%- else -%> <%-# not logged in -%>
 	  <div class="signed_out">
-      <%- if facebook_enabled? -%>
-        <%= fb_login_button("fbc_init_activation('', '')", :size=>"small", :v => "2") %> |
-      <%- end -%>
+      <%= fb_login_button("", :size => "small") %> |
 	    <%= link_to "Sign Up", new_member_path, :title => "Create a new #{app_name} account" %> |
 	    <%= link_to "Log In", new_sessions_path, :title => "Log into #{app_name}" %>
 	  </div>

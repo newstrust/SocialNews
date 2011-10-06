@@ -9,13 +9,14 @@ module FacebookConnect
 
   class MissingPermissions < StandardError; end
 
-  facebook_config = "#{RAILS_ROOT}/config/facebooker.yml"
+  facebook_config = "#{RAILS_ROOT}/config/facebook.yml"
   if File.exists?(facebook_config)
     fbc_config = YAML.load(File.read(facebook_config))[RAILS_ENV]
     FBC_APP_ID     = fbc_config["app_id"]
     FBC_SECRET_KEY = fbc_config["secret_key"]
   end
 
+  # SSS FIXME: This no longer works!  Dont use this
   def self.fb_activity_stream_url(dummy_url)
     fb_uid, sess_key = $1, $2 if dummy_url =~ %r|dummy_newsfeed_url/(.*)/(.*)|
     query_params = { "app_id" => FBC_APP_ID, "session_key" => sess_key, "source_id" => fb_uid }
@@ -26,6 +27,7 @@ module FacebookConnect
 
   private
 
+  # SSS FIXME: Old code. Not sure this is necessary anymore or used anywhere else
   require 'digest/md5'
   def self.fb_get_request_sig(args)
       # Sort argument array alphabetically by key, then append everything as "k=v", except the signature itself (obviously)

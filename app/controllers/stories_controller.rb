@@ -757,7 +757,7 @@ class StoriesController < ApplicationController
   def save
     story = Story.find(params[:id])
     starred = true
-    m = current_member_from_session
+    m = current_member
     save = Save.find_by_member_id_and_story_id(m.id, params[:id])
     if save.nil?
       save = Save.new(:story_id => params[:id])

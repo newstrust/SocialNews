@@ -1,23 +1,19 @@
-<%- @fb_no_auto_reload = true -%>
-<%- @auto_login = session[:fb_activated] || false -%>
+<%- @title = "Sign Up" -%>
 <script type="text/javascript"> 
-  hide_fixup_notice = false;
   invitation_id = <%=@invitation ? @invitation.id : 'null' %>;
   partner_id = <%=@partner ? @partner.id : 'null' %>;
 </script>
 
 <div class="span-16 white_box">
-<div class="top"></div> 
-<div class="wrapper">
-<div class="interior_content">
-<%- @title = "Sign Up" -%>
+  <div class="top"></div> 
+  <div class="wrapper">
+    <div class="interior_content">
+      <%= content_tag(:h2, @title) unless params[:popup] %>
 
-<%= content_tag(:h2, @title) unless params[:popup] %>
-
-<%- wrap_inside_landing_page_template do -%>
-<%= render :partial => 'new' %>
-<%- end -%>
-</div>
-</div>
-<div class="bottom"></div>
+      <%- wrap_inside_landing_page_template do -%>
+        <%= render :partial => 'new' %>
+      <%- end -%>
+    </div>
+  </div>
+  <div class="bottom"></div>
 </div>

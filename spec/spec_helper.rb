@@ -161,6 +161,7 @@ class MockMember
   def status; "member"; end
   def is_public?; true; end
   def is_visible?; true; end
+  def fbc_linked?; false; end
   def terminated?; false; end
   def name; "Legacy Member"; end
   def preferred_review_form_version; ""; end

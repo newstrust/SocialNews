@@ -19,20 +19,16 @@ Rails::Initializer.run do |config|
   # Specify gems that this application depends on. 
   # They can then be installed with "rake gems:install" on new installations.
   # TODO: explicitly list ALL gems, as the below is very incomplete!
-  # config.gem "hpricot"
-  # config.gem "unicode"
-  # config.gem "twitter"
-  # config.gem "twitter_oauth"
-  # config.gem "newrelic_rpm"
-  # config.gem "will_paginate", :version => '~> 2.3.11', :source => 'http://gemcutter.org'
-  # config.gem "bleak_house" if ENV['BLEAK_HOUSE']
+  config.gem "rack", :version => "~> 1.1.0"
+  config.gem "hpricot"
+  config.gem "unicode"
+  config.gem "twitter", :version => "0.8.4"
+  config.gem "twitter_oauth", :version => "0.3.2"
+  config.gem "newrelic_rpm"
+  config.gem "will_paginate", :version => '~> 2.3.11', :source => 'http://gemcutter.org'
+  config.gem "koala", :version => "1.2.0"
   # config.gem "rspec", :version => "~> 1.2.0"
   # config.gem "rspec-rails", :version => "~> 1.2.0"
-  # config.gem "bj" # using the plugin version, not the gem!
-  # config.gem "acts_as_versioned"
-  # config.gem "feed-normalizer"
-  # config.gem "friendly_id", :version => "= 2.0.3"
-  # config.gem "simple-rss"
   # config.gem "SystemTimer"
   
   # Only load the plugins named here, in the order given. By default, all plugins 

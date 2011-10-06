@@ -25,7 +25,7 @@ class MynewsController < ApplicationController
   end
 
   def refresh_fb_newsfeed
-    @member = current_member_from_session
+    @member = current_member
     f = @member.fbc_newsfeed
     f.fetch if f
     render :json => { :success => true }.to_json
@@ -131,7 +131,7 @@ class MynewsController < ApplicationController
 
   def update_settings
     @member = Member.find(params[:member_id])
-    redirect_to access_denied_url if (@member != current_member_from_session)
+    redirect_to access_denied_url if (@member != current_member)
     @member.bypass_save_callbacks = true
     @member.update_attributes(params[:mynews_settings].merge(params[:member] || {}))
     flash[:notice] = 'Your settings were successfully updated.'
@@ -139,7 +139,7 @@ class MynewsController < ApplicationController
   end
 
   def last_visit_at
-    m1 = current_member_from_session
+    m1 = current_member
     m2 = Member.find(params[:member_id])
     if m1.nil?
       access_denied

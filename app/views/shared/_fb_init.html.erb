@@ -1,0 +1,29 @@
+<%- @post_init_fbjs ||= nil -%>
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId  : '<%=FacebookConnectSettings.app_id%>',
+      status : true, // check login status
+      cookie : true, // enable cookies to allow the server to access the session
+      xfbml  : true, // parse XFBML
+      channelUrl  : '<%=home_url%>/channel.html', // Custom Channel URL
+      oauth : true
+    });
+
+    FB.Event.subscribe('auth.login', function(response) {
+      <%- if !logged_in? -%>
+        window.setTimeout("window.location.reload(true)",0);
+      <%- end -%>
+    });
+
+    <%= @post_init_fbjs %>
+  };
+
+  (function() {
+    var e = document.createElement('script');
+    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+    e.async = true;
+    document.getElementById('fb-root').appendChild(e);
+  }());
+</script>

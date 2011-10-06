@@ -30,6 +30,10 @@ module ApplicationHelper
     link_to((tag :input, { "type" => "button", "value" => "Cancel"}.update(options.stringify_keys)), url, :style => "text-decoration: none;")
   end
 
+  def external_link(text, url, options={})
+    link_to(text, url, options.merge(:target => "_blank"))
+  end
+
   def layout_partial(local_site, template)
     if local_site
       template_dir = "layouts/local_sites/#{local_site.slug}/"
@@ -50,12 +54,37 @@ module ApplicationHelper
   end
 
   def fb_connected_and_linked
-    !facebook_session.nil? && current_member.fbc_linked?
+    current_member.fbc_linked? && facebook_session
   end
 
   def publishable_via_fb_connect
     # SSS: Now, Facebook lets us invoke the stream publishing call even without being connected, or even without having a valid fb session!
-    facebook_enabled? #!facebook_session.nil? && current_member.fbc_linked?
+    facebook_enabled?
+  end
+
+  def fb_login_button(onlogin_action="fbc_login()", opts={})
+    opts["show-faces"] ||= false
+    opts["onlogin"]    ||= onlogin_action
+
+    "<fb:login-button #{opts.collect { |k,v| "#{k}=\"#{v}\"" }.join(" ")}></fb:login-button>"
+  end
+
+  def facebook_session
+    @fb_info ||= FacebookConnectSettings.get_user_info_from_cookies(cookies)
+  end
+
+  def current_facebook_user
+    if !@curr_fb_user
+      at = FacebookConnectSettings.get_access_token(cookies)
+      if at
+        client = Koala::Facebook::API.new(at)
+        @curr_fb_user = client.get_object("me")
+      end
+      @curr_fb_user ||= {}
+    end
+    @curr_fb_user.blank? ? nil : @curr_fb_user
+  rescue Exception => e
+    nil
   end
 
   # see session call in ApplicationController
@@ -80,8 +109,12 @@ module ApplicationHelper
   end
 
   # http://developers.facebook.com/docs/reference/plugins/like
-  def fb_like_link(url, show_faces="false", width="20")
-    "<fb:like href='#{url}' layout='button_count' show_faces='#{show_faces}' width='#{width}'></fb:like>"
+  def fb_like_link(url, opts={})
+    opts[:show_faces] ||= false
+    opts[:width] ||= 20
+    opts[:layout] ||= "standard"
+    opts[:data_send] ||= false
+    "<fb:like href='#{url}' data-send='#{opts[:data_send] ? 'true' : 'false'}' layout='#{opts[:layout]}' show_faces='#{opts[:show_faces]}' width='#{opts[:width]}'></fb:like>"
   end
 
   # http://developers.facebook.com/docs/reference/plugins/like
@@ -212,8 +245,9 @@ module ApplicationHelper
     opts[:class] ||= "share_page_tools"
 		display = "<div class=\"#{opts[:class]}\">"
 		display += "#{fb_like_iframe(url_or_story_obj, :type => opts[:page_type], :layout => opts[:fb_like_layout], :show_faces => opts[:fb_like_show_faces], :width => opts[:fb_like_width], :height => opts[:fb_like_height])}" unless opts[:fb_like_below]
-		display += fb_share_link(url_or_story_obj, :type => opts[:fb_share_type]) + 
-  		tweet_page(url_or_story_obj, :tweet_text => opts[:tweet_text], :link_text => opts[:twitter_link_text], :type => opts[:page_type], :toolbar => opts[:toolbar]) + 
+    #---- No Facebook Share anymore since FB has deprecated that in favour of FB like ---
+		#display += fb_share_link(url_or_story_obj, :type => opts[:fb_share_type]) + 
+		display += tweet_page(url_or_story_obj, :tweet_text => opts[:tweet_text], :link_text => opts[:twitter_link_text], :type => opts[:page_type], :toolbar => opts[:toolbar]) + 
   		email_page(url_or_story_obj, :link_text => opts[:email_link_text], :class => opts[:email_class], :title => opts[:email_title], :type => opts[:page_type], :toolbar => opts[:toolbar]) +
   		addthis_page(url_or_story_obj, :link_text => opts[:addthis_link_text], :type => opts[:page_type])
   		display += "<div style=\"clear:both; padding-top:14px\">#{fb_like_iframe(url_or_story_obj, :layout => opts[:fb_like_layout], :show_faces => opts[:fb_like_show_faces], :width => opts[:fb_like_width], :height => opts[:fb_like_height])}</div>" if opts[:fb_like_below]
@@ -239,7 +273,11 @@ module ApplicationHelper
 	end
 
   def photo_credit(photo)
-    content_tag('div', "Photo: #{link_to(photo.credit.capitalize, photo.credit_url)}", :class => "photo_caption")
+    if photo.credit_url.blank?
+      content_tag('div', "Photo: #{photo.credit.capitalize}", :class => "photo_caption")
+    else
+      content_tag('div', "Photo: #{link_to(photo.credit.capitalize, photo.credit_url)}", :class => "photo_caption")
+    end
   end
 
   def tooltipped_help_icon(body, opts={})
@@ -984,7 +1022,7 @@ module ApplicationHelper
 
   def process_template_macros(content, body=nil)
     content.gsub!('&lt;={page}=&gt;', body || "")
-    content.gsub!(/&lt;=\{fb_login_button\((.*?),\s*(.*?)\)\}=&gt;/, "<fb:login-button onlogin=\"fbc_init_activation('\\1', '')\" length=\"\\2\" v=\"2\"></fb:login-button>")
+    content.gsub!(/&lt;=\{fb_login_button\((.*?),\s*(.*?)\)\}=&gt;/, "<fb:login-button onlogin=\"fbc_activate('\\1', '')\" length=\"\\2\" v=\"2\"></fb:login-button>")
     content.gsub!(/&lt;=\{share_icons_box\}=&gt;/) { |m| share_icons_box }
     content
   end

@@ -72,7 +72,7 @@ class FollowedItemsController < ApplicationController
   end
 
   def get_follower
-    m = current_member_from_session
+    m = current_member
 
     if params[:follower_id] && (params[:follower_id].to_i != m.id)
       # member M1 (m) is trying to update follower list of member M2 (params[:follower_id]) where M1 and M2 are not the same

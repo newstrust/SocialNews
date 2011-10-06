@@ -1,0 +1,34 @@
+# The api key and secret key, are required to get started
+#
+# If SSL certificates are stored on a different directory add that here,
+# or try removing it to see if the defaults work for you.  It doesn't
+# work on Ubuntu systems.
+
+development:
+  app_id: "--app-id-here--"
+  secret: "--secret-here--"
+  callback_url: "http://localhost:3000"
+  ssl_cert_path: "/etc/ssl/certs"
+  sandbox_mode: true
+
+test:
+  app_id: "--app-id-here--"
+  secret: "--secret-here--"
+  callback_url: "http://localhost:3000"
+  ssl_cert_path: "/etc/ssl/certs"
+  sandbox_mode: true
+
+# Same as development
+staging:
+  app_id: "--app-id-here--"
+  secret: "--secret-here--"
+  callback_url: "http://staging.newstrust.net"
+  ssl_cert_path: "/etc/ssl/certs"
+  sandbox_mode: true
+
+production:
+  app_id: "--app-id-here--"
+  secret: "--secret-here--"
+  callback_url: "http//newstrust.net"
+  ssl_cert_path: "/etc/ssl/certs"
+  sandbox_mode: false

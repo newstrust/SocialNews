@@ -49,8 +49,8 @@ members, and any other seed data that you might find useful to start.
       ruby-debug 0.10.4
       RubyInline 3.9.0
       SystemTimer 1.2.3
-      twitter 0.9.12
-      twitter_oauth 0.4.3
+      twitter 0.8.4
+      twitter_oauth 0.3.2
       unicode 0.4.0
       will_paginate 2.3.15
       xml-simple 1.0.15
@@ -279,8 +279,8 @@ D. Production deployment steps
       ruby-debug 0.10.4
       RubyInline 3.9.0
       SystemTimer 1.2.3
-      twitter 0.9.12
-      twitter_oauth 0.4.3
+      twitter 0.8.4
+      twitter_oauth 0.3.2
       unicode 0.4.0
       will_paginate 2.3.15
       xml-simple 1.0.15

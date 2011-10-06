@@ -1,50 +1,42 @@
-  <div class="popup_form">
-<% if @auto_login && facebook_enabled? -%>
-  <div style="font-size:16px">
-  We are signing you up via Facebook Connect.  If you are still on this page after 5 seconds,
-  <%- path_opts = @partner && @invitation ? {:partner_id => @partner.id, :invitation_id => @invitation.id} : {} -%>
-  <%=link_to "please click here", "#{fb_activate_path(path_opts)}#{params[:popup] ? '?popup=true' : ''}" %>
-  </div>
-<% else -%>
+<div class="popup_form">
   <%- if facebook_enabled? -%>
-    <%- popup_param = params[:popup] ? "?popup=true" : "" -%>
-    <%- url_prefix = @invitation ? "/partners/#{@partner.to_param}/#{@invitation.to_param}" : "" -%>
-
-  	<div class="other_login_option">
-      <div class="question">
-        <strong>Got Facebook?</strong> Sign up or Log In with your Facebook account. <%=help_icon("facebook", "")%>
-      </div>
-      <div style="padding-top: 5px">
-        <%= fb_login_button("fbc_init_activation('#{url_prefix}', '#{popup_param}')") %>
-  	  </div>
+  <div class="other_login_option">
+    <div class="question">
+      <strong>Got Facebook?</strong> Sign up or Log In with your Facebook account. <%=help_icon("facebook", "")%>
     </div>
-   <%- end -%>
-
-  	<div class="other_login_option">
-  	  <div class="question">
-        Already have a <%=app_name%> account?<%= help_icon("sign_in", "") %>
-      </div>
-      <%= link_to 'Log In', new_sessions_url(params.slice(:popup)), :style => "font-size:125%" %>
+    <div style="padding-top: 5px">
+      <%- popup_param = params[:popup] ? "?popup=true" : "" -%>
+      <%- url_prefix = @invitation ? "/partners/#{@partner.to_param}/#{@invitation.to_param}" : "" -%>
+      <%= fb_login_button("fbc_activate('#{url_prefix}', '#{popup_param}')") %>
     </div>
+  </div>
+  <%- end -%>
 
-  	<br/>
-	  
-    <h3>Or sign up for a <%=app_name%> account here:</h3>
-    <%= error_messages_for :member, :header_message => nil, :message => nil %>
-    <br/>
+  <div class="other_login_option">
+    <div class="question">
+      Already have a <%=app_name%> account?<%= help_icon("sign_in", "") %>
+    </div>
+    <%= link_to 'Log In', new_sessions_url(params.slice(:popup)), :style => "font-size:125%" %>
+  </div>
 
-    <% form_for :member, @member, :url => @invitation ? "#{url_prefix}/members/create" : members_url(params.slice(:popup)),
-        :html => { :class => 'entry_form  new_member', :autocomplete => "off" }  do |f| -%>
-      <%= render :partial => 'members/new_members_form', :locals => { :f => f } %>
-      <hr/>
-      <%= submit_button "Sign Up" %>
-    <% end -%>
-    
-    <br/>
-    <div class="editorial_gray">
-  		After you click "Sign Up" above, you will receive an email confirmation with a one-time activation link.
-  		For help, check our <%= help_link "FAQ", "activate" %>. We will not share your contact info with anyone
-  		(see our <%= link_to "Privacy Policy", "/about/privacy", :class => "popup_link" %>).
-  	</div>
+  <br/>
+  
+  <h3>Or sign up for a <%=app_name%> account here:</h3>
+  <%= error_messages_for :member, :header_message => nil, :message => nil %>
+  <br/>
+
+  <%- form_for :member, @member, :url => @invitation ? "#{url_prefix}/members/create" : members_url(params.slice(:popup)),
+      :html => { :class => 'entry_form  new_member', :autocomplete => "off" }  do |f| -%>
+    <%= render :partial => 'members/new_members_form', :locals => { :f => f } %>
+    <hr/>
+    <%= submit_button "Sign Up" %>
+  <%- end -%>
+  
+  <br/>
+  <div class="editorial_gray">
+    After you click "Sign Up" above, you will receive an email confirmation with a one-time activation link.
+    For help, check our <%= help_link "FAQ", "activate" %>. We will not share your contact info with anyone
+    (see our <%= link_to "Privacy Policy", "/about/privacy", :class => "popup_link" %>).
+  </div>
 <% end -%>
-	</div>
+</div>

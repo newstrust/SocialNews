@@ -57,12 +57,13 @@ class Feed < ActiveRecord::Base
 
   def can_read_fb_newsfeed?
     if is_fb_user_newsfeed?
-      if self.url =~ %r|dummy_newsfeed_url/(.*)/(.*)|
-        fb_uid, sess_key = $1, $2
-        session = Facebooker::Session.create
-        session.secure_with!(sess_key, fb_uid)
-        ["offline_access", "read_access"].all? { |ep| session.post('facebook.users.hasAppPermission', {:ext_perm => ep, :uid => fb_uid }, false) == "1" }
-      end
+      # SSS FIXME: not upgraded yet. This technique of reading via an ATOM feed no longer works.
+      #
+      # fb_uid, sess_key = $1, $2 if self.url =~ %r|dummy_newsfeed_url/(.*)/(.*)|
+      # session = Facebooker::Session.create
+      # session.secure_with!(sess_key, fb_uid)
+      # ["offline_access", "read_access"].all? { |ep| session.post('facebook.users.hasAppPermission', {:ext_perm => ep, :uid => fb_uid }, false) == "1" }
+      false
     else
       false
     end

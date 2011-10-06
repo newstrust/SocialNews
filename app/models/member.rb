@@ -325,13 +325,13 @@ class Member < ActiveRecord::Base
   end
 
   def fbc_link(fb_session)
-    fb_uid   = fb_session.user.uid
-    sess_key = fb_session.session_key
+    fb_uid = fb_session["user_id"]
+    access_token = fb_session["access_token"]
     if facebook_connect_settings.nil?
-      FacebookConnectSettings.create(:member_id => self.id, :fb_uid => fb_uid, :offline_session_key => sess_key)
+      FacebookConnectSettings.create(:member_id => self.id, :fb_uid => fb_uid, :offline_session_key => access_token, :access_token => access_token)
       self.reload  # so that the newly created facebook_connect_settings attribute is visible
     else
-      facebook_connect_settings.update_attributes({:fb_uid => fb_uid, :offline_session_key => sess_key})
+      facebook_connect_settings.update_attributes(:fb_uid => fb_uid, :offline_session_key => access_token, :access_token => access_token)
     end
 
     # cache friendship info!
@@ -350,8 +350,12 @@ class Member < ActiveRecord::Base
     SocialNetworkFriendship.clear_friendships(SocialNetworkFriendship::FACEBOOK, self.id)
 
     if facebook_connect_settings
-      facebook_connect_settings.update_attributes({:fb_uid => nil, :ep_offline_access => 0, :ep_read_stream => 0, :friendships_cached => false})
+      facebook_connect_settings.update_attributes(:fb_uid => nil, :access_token => nil, :ep_offline_access => 0, :ep_read_stream => 0, :friendships_cached => false)
     end
+  end
+
+  def fb_app_friends(access_token)
+    facebook_connect_settings.rest_api_call(access_token, "friends.getAppUsers")
   end
 
   def fbc_linked?
@@ -1161,9 +1165,6 @@ class Member < ActiveRecord::Base
 
   def strip_blanks
     [self.email, self.name, self.pseudonym, self.activation_code].compact.each(&:strip!)
-
-      # Update email hash!
-    self.email_hash = Facebooker::User.hash_email(self.email) if self.email
   end
 
   private
@@ -1207,7 +1208,7 @@ class Member < ActiveRecord::Base
   def cache_facebook_friendship_info(fb_session)
     return if fb_session.nil?
 
-    app_friends = fb_session.user.friends_with_this_app
+    app_friends = fb_app_friends(fb_session["access_token"])
     friends_on_nt = Member.find(:all, :joins => :facebook_connect_settings, :conditions => ["facebook_connect_settings.fb_uid IN (?)", app_friends.map(&:to_s)])
     SocialNetworkFriendship.add_friendships(SocialNetworkFriendship::FACEBOOK, self, friends_on_nt)
     facebook_connect_settings.update_attribute(:friendships_cached, true)

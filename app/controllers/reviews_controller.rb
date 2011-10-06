@@ -177,18 +177,11 @@ class ReviewsController < ApplicationController
   private
 
     # Get the facebook feed story to publish via the toolbar.
-    #
     def toolbar_facebook_stream_story(review)
       if (params[:post_on_facebook] == "1") && publishable_via_fb_connect
-        FbConnectPublisher.stream_story_for_review(@local_site, review, :home_url => home_url, :story_url => story_url(review.story), :review_url => review_url(review.story, review), :toolbar_url => toolbar_story_url(review.story))
-      end
-    end
+        FbConnectPublisher.stream_story_for_review(review, :home_url => home_url, :story_url => story_url(review.story), :review_url => review_url(review.story, review), :toolbar_url => toolbar_story_url(review.story))
 
-    # Feed story to publish -- but, since I am redirecting after submit, store it in the
-    # flash hash -- the before_filter 'load_actions_to_publish' will retrieve it from this hash
-    #
-    def publish_to_facebook(review)
-      flash[:fb_user_action] = toolbar_facebook_stream_story(review)
+      end
     end
 
     def tweet_if_requested(review, short_url)

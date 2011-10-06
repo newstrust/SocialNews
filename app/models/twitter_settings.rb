@@ -5,8 +5,12 @@ class TwitterSettings < ActiveRecord::Base
   
   twitter_config = "#{RAILS_ROOT}/config/twitter.yml"
   if File.exists?(twitter_config)
-    @@oauth_config = YAML.load(ERB.new(File.read(twitter_config)).result)[RAILS_ENV] 
-    @@oauth_client = TwitterOAuth::Client.new(:consumer_key => @@oauth_config['consumer_key'], :consumer_secret => @@oauth_config['consumer_secret']) if @@oauth_config
+    begin
+      @@oauth_config = YAML.load(ERB.new(File.read(twitter_config)).result)[RAILS_ENV] 
+      @@oauth_client = TwitterOAuth::Client.new(:consumer_key => @@oauth_config['consumer_key'], :consumer_secret => @@oauth_config['consumer_secret']) if @@oauth_config
+    rescue Exception => e
+      logger.error "Error initializing Twitter support: #{e}; #{e.backtrace.inspect}"
+    end
   end
 
   def self.oauth_client; @@oauth_client; end

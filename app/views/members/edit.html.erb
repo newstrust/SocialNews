@@ -30,10 +30,10 @@
       </div>
 
       <!-- Tabbed box -->
-      <% main_column_tabbed_box :tabs => ["Account", "Profile", "Emails", "Background", "Picture", "Contact Info"] do %>
+      <%- main_column_tabbed_box :tabs => ["Account", "Profile", "Emails", "Background", "Picture", "Contact Info"] do -%>
 
         <!-- Account tab -->
-        <% main_column_tab :anchor_class => "account membership", :first_tab => true do %>
+        <%- main_column_tab :anchor_class => "account membership", :first_tab => true do -%>
 
           <div class="edit_profile">
             <p class="body_black_small">
@@ -44,11 +44,11 @@
 
             <%#-- FACEBOOK CONNECT (either present option to connect or un-connect) --%>
             <div class="other_login_option" style="width: 500px; margin-bottom:10px;">
-              <% if @member.fb_uid -%>
+              <%- if @member.fb_uid -%>
                 <div style="float:left; margin-right:10px;">
-                  <% if facebook_session -%>
-                    <fb:profile-pic size="square" uid="<%=facebook_session.user.uid%>" facebook-logo="true"> </fb:profile-pic>
-                  <% else %>
+                  <%- if facebook_session -%>
+                    <fb:profile-pic size="square" uid="<%=facebook_session["user_id"]%>" facebook-logo="true"> </fb:profile-pic>
+                  <%- else -%>
                     <b>(You are signed out of Facebook)</b>
                   <%- end -%>
                 </div>
@@ -64,7 +64,7 @@
                 </div>
                 <div style="text-align: right">
                   <% popup_param = params[:popup] ? "?popup=true" : "" %>
-                  <%= fb_login_button('window.location = "/fb_connect/activate' + popup_param + '";', :title => "Click to connect your #{app_name} and Facebook accounts" )%>
+                  <%= fb_login_button("fbc_activate('', '#{popup_param}')") %>
                 </div>
               <%- end -%>
             </div>
@@ -109,8 +109,8 @@
               <%= f.text_field :email, :class => "text", :size => 45 %>
             </div>
 
-            <% profile_section "Password", :force_display => true,
-               :help_icon => help_icon("member_change_password", "member") do end %>
+            <%- profile_section "Password", :force_display => true,
+               :help_icon => help_icon("member_change_password", "member") do end -%>
             <div class="fields">
               Change your password by typing your <em>new</em> password in both boxes:
               <p>
@@ -183,8 +183,8 @@
               <table style="width: 100%; background: #F3F6FD">
                 <tr>
                   <td colspan="2">
-                    <% profile_section "Account Management <span class=\"editorial_gray\">(#{app_name} administrators only)</span>",
-                       :force_display => true do %>
+                    <%- profile_section "Account Management <span class=\"editorial_gray\">(#{app_name} administrators only)</span>",
+                       :force_display => true do -%>
                     <%- end -%>
                   </td>
                 </tr>
@@ -237,7 +237,7 @@
                   <td valign="baseline" class="subhead_small_plain" nowrap>
                     <%- fields_for "member_attributes[educational_status]", @member.raw_flex_attribute("educational_status") do |faf| -%>
                       <%= faf.select :value, pull_down_menu("member_educational_status"), :include_blank => "Select One:"%>
-                    <% end -%>
+                    <%- end -%>
                   </td>
                 </tr>
 
@@ -779,9 +779,9 @@
         <%- end -%>
 
         <!-- Picture tab -->
-        <% main_column_tab :anchor_class => "picture" do %>
+        <%- main_column_tab :anchor_class => "picture" do -%>
 
-          <% if fb_connected_and_linked -%>
+          <%- if fb_connected_and_linked -%>
             <div style="padding-bottom: 10px; margin: 10px 0; border-bottom: 1px solid #aaa">
             <%= link_to "Import my Facebook profile picture", fb_import_picture_path %> 
               <span class="body_black_small"> (this will replace your existing profile picture) </span> <%=help_icon("facebook_import_picture", "") %>
@@ -820,7 +820,7 @@
         <%- end -%>
 
         <!-- Contact Info tab -->
-        <% main_column_tab :anchor_class => "contact" do %>
+        <%- main_column_tab :anchor_class => "contact" do -%>
 
           <div class="body_black_small" style="margin-bottom:10px;">
             Please let us know where you are from and how to contact you.

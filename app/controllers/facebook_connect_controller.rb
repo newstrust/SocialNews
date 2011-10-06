@@ -12,28 +12,37 @@ class FacebookConnectController < ApplicationController
   before_filter :login_required, :only => [:link_member, :unlink, :import_picture, :invite_friends, :record_invitations, :unfollow_newsfeed ]
   before_filter { |controller| controller.send(:use_partner_layout) if controller.params['partner_id'] }
 
-  def init_activation
-    session[:fb_activated] = true
-    url_prefix = @invitation ? "/partners/#{@partner.to_param}/#{@invitation.to_param}" : ""
-    redirect_to "#{url_prefix}#{fb_activate_path}#{params[:popup] ? '?popup=true' : ''}"
+  def logout
+    delete_session
+    target_url = params[:return_to]
+    target_url = home_url if target_url.blank?
+    # Get the active access token and delete the oauth cookie
+    # NOTE: Since this hits FB, this could potentially lock up the server
+    # Could think of protecting this with a SystemTimer::timeout(5)
+    access_token = FacebookConnectSettings.get_access_token(cookies)
+    cookies.delete "fbsr_#{FacebookConnectSettings.app_id}"
+    if access_token.nil?
+      flash[:notice] = "You have been logged out."
+      redirect_to target_url
+    else
+      flash[:notice] = "You have been logged out of #{APP_NAME} as well as Facebook."
+      redirect_to "https://www.facebook.com/logout.php?next=#{CGI.escape(target_url)}&access_token=#{access_token}"
+    end
   end
 
   def activate
     # To avoid leaking FB credentials, eliminate all 3rd party content
     @no_third_party_content = true
 
-    # SSS: This either finds the member by existing app session id, facebook uid, or by email hash
-    # NOTE: Find by email hash only succeeds if we've previously registered accounts with Facebook
-    # We are not doing this right now.  So, it is not really very useful.  But, there in anticipation of the
-    # time when we decide to do that.
-
-    if facebook_session.nil?
-      flash[:error] = "Have you logged out of Facebook?  Please login into Facebook and try again"
-      redirect_to new_sessions_path and return
+    # In case the cancel button on the facebook dialog gets us here (as it does on staging & development sandboxed FB apps)
+    fb_user = current_facebook_user
+    if fb_user.nil?
+      flash[:notice] = "Facebook login cancelled."
+      redirect_to new_sessions_path
+      return
     end
 
-    fb_user = facebook_session.user
-    m = current_member || Member.find_by_email_hash(fb_user.email_hashes)
+    m = current_member || Member.find_by_email(fb_user["email"])
     if m
         # We have a story id if we come from the story toolbar!
       if params[:story_id] && (s = Story.find(params[:story_id]))
@@ -59,16 +68,12 @@ class FacebookConnectController < ApplicationController
       end
     else
       flash[:notice] = "<div id='fixup_notice'><a style='color:#4a4' href='/fb_connect/activate'>Please click here to proceed with signup.</a></div>"
-      name = fb_user.name
+      name = fb_user["name"]
       dup = Member.find_by_name(name)
       @name_conflict = !dup.nil?
       @member = Member.new(:name => name, :status => "guest", :email => nil) # Guest status
       render({:template => 'facebook_connect/signup'}.merge(params[:popup] ? {:layout => "popup"} : {}))
     end
-  rescue Facebooker::Session::SessionExpired => e
-    logger.error "Expired session?!?"
-    flash[:error] = "Have you logged out of Facebook?  Please login into Facebook and try again."
-    redirect_to new_sessions_path
   rescue Exception => e
     logger.error "Exception #{e} trying to activate! #{e.backtrace.inspect}"
     flash[:error] = "We encountered an error and will take a look at this as soon as possible.  Please ensure that you are logged into Facebook and try again.  If this error persists, please email us at #{SocialNewsConfig["email_addrs"]["feedback"]} and we will take a look."
@@ -76,7 +81,7 @@ class FacebookConnectController < ApplicationController
   end
 
   def new_account
-    cookies.delete :auth_token # SSS: Why is this being done?
+    cookies.delete :auth_token # SSS: Delete the remember_me cookie
     @member = Member.find_by_email(params[:member][:email])
     if @member
       flash[:notice] = "You already have a #{APP_NAME} account registered to #{@member.email}!  Enter your password below to link that account to your Facebook account."
@@ -90,7 +95,6 @@ class FacebookConnectController < ApplicationController
 
       link_fb_and_nt(@member, FB_NEW_INVITE_CODE, true)
 
-      # Yes, it is self.current_member=, not current_member=
       self.current_member = @member
       flash[:notice] = "Thanks for signing up!  You are now a #{APP_NAME} member -- and linked to Facebook."
       @partner.members << @member if @partner
@@ -99,21 +103,21 @@ class FacebookConnectController < ApplicationController
   rescue ActiveRecord::RecordInvalid
     @name_conflict = true
     render({:template => 'facebook_connect/signup'}.merge(params[:popup] ? {:layout => "popup"} : {}))
-  rescue Facebooker::Session::SessionExpired => e
+  rescue Exception => e
     flash[:error] = "Have you logged out of Facebook? Login to Facebook and try again."
     redirect_to new_sessions_path
   end
 
   def link_accounts
-    if facebook_session
-      fb_user = facebook_session.user
-      @member = Member.new(:name => fb_user.name, :email => params[:email])
+    fb_user = current_facebook_user
+    if fb_user
+      @member = Member.new(:name => fb_user["name"], :email => params[:email])
       render :layout => "popup" if params[:popup]
     else
       flash[:error] = "Have you logged out of Facebook? Login to Facebook and try again."
       redirect_back_or_default(new_sessions_path)
     end
-  rescue Facebooker::Session::SessionExpired => e
+  rescue Exception => e
     flash[:error] = "Have you logged out of Facebook? Login to Facebook and try again."
     redirect_to new_sessions_path
   end
@@ -132,21 +136,10 @@ class FacebookConnectController < ApplicationController
       flash[:error] = 'Invalid login or password'
       redirect_to fb_link_accounts_url + (params[:popup] ? "?popup=true" : "")
     end
-  rescue Facebooker::Session::SessionExpired => e
-    flash[:error] = "Have you logged out of Facebook? Login to Facebook and try again."
-    redirect_back_or_default(new_sessions_path)
   rescue Exception => e
     logger.error "Exception: #{e}; #{e.backtrace.inspect}"
     flash[:error] = "Have you logged out of Facebook? Login to Facebook and try again. If that doesn't do the trick, please email #{SocialNewsConfig["email_addrs"]["help"]} and we'll take a look!"
     redirect_to fb_link_accounts_url + (params[:popup] ? "?popup=true" : "")
-  end
-
-  def logout
-    delete_session
-    @fb_logout_redirect_url = params[:return_to]
-    @fb_logout_redirect_url = home_url if @fb_logout_redirect_url.blank?
-    session[:return_to] = nil
-    render :layout => "fb_minimal"
   end
 
   def link_member
@@ -157,9 +150,6 @@ class FacebookConnectController < ApplicationController
     else
       redirect_to_back_or_default(@invitation && !@invitation.success_page_link.blank? ? @invitation.success_page_link : nil, home_url)
     end
-  rescue Facebooker::Session::SessionExpired => e
-    flash[:error] = "Have you logged out of Facebook? Login to Facebook and try again."
-    redirect_back_or_default(new_sessions_path)
   rescue Exception => e
     logger.error "Exception: #{e}; #{e.backtrace.inspect}"
     flash[:error] = "Have you logged out of #{APP_NAME}?  Please login and try again!"
@@ -168,14 +158,22 @@ class FacebookConnectController < ApplicationController
 
   def import_picture
     m = current_member
-    pic_url = fb_profile_pic_url
+    pic_url = fb_profile_pic_url(m)
+      # Since this is a public profile picture, there is no need to jump through security hoops.
+      # So, just fetch the picture on a regular HTTP connection.
+      # With HTTPS, we need to make sure we have valid security certificates.
     if pic_url
+      pic_url.gsub!(/https/, "http") 
       m.image = Image.download_from_url(pic_url)
       m.save(false)
+      flash[:notice] = "Your Facebook profile picture has been imported."
     else
       flash[:notice] = "We could not find a Facebook profile picture to download."
     end
     redirect_to my_account_members_path + "#picture"
+  rescue Exception => e
+    logger.error "Exception importing picture from Facebook for #{m.id}:#{m.name}; #{e}; #{e.backtrace.inspect}"
+    flash[:error] = "We ran into an error importing your picture from Facebook.  Please try again and let us know if this problem persists."
   end
 
   def cancel
@@ -187,12 +185,12 @@ class FacebookConnectController < ApplicationController
     session[:fb_activated] = false
     m = current_member
     m.fbc_unlink
-    flash[:notice] = "Successfully unlinked your Facebook and #{APP_NAME} accounts.<br/>If you originally signed up via Facebook, change your password below to login to #{APP_NAME} in the future."
+    flash[:notice] = "Successfully unlinked your Facebook and #{APP_NAME} accounts.<br/>If you originally signed up via Facebook, change your password below if you wish to login to #{APP_NAME} in the future."
     redirect_to my_account_members_path + "#account"
   end
 
   def invite_friends
-    eids = facebook_session ? facebook_session.user.friends_with_this_app.map(&:id) + current_member.facebook_invitations.map(&:fb_uid) : []
+    eids = facebook_session ? current_member.fb_app_friends(facebook_session).map(&:id) + current_member.facebook_invitations.map(&:fb_uid) : []
     @exclude_ids = eids * ", "
     render({:template => 'facebook_connect/invite_friends'}.merge(params[:popup] ? {:layout => "popup"} : {}))
   end
@@ -265,7 +263,7 @@ class FacebookConnectController < ApplicationController
 
         if p == "offline_access"
           fbc_settings.update_attribute(:ep_offline_access, 1)
-          fbc_settings.update_attribute(:offline_session_key, facebook_session.session_key)
+          fbc_settings.update_attribute(:offline_session_key, facebook_session["access_token"])
         end
       }
     end
@@ -293,12 +291,16 @@ class FacebookConnectController < ApplicationController
       :password_confirmation => pass }
   end
 
-  def fb_profile_pic_url
-      # HACK to get a bigger picture
-      # Change http://profile.ak.facebook.com/profile5/687/114/s592675411_3902.jpg to
-      #        http://profile.ak.facebook.com/profile5/687/114/n592675411_3902.jpg     <-- Bigger picture 
-    pic = facebook_session.user.pic
-    pic.blank? ? nil : pic.sub(%r|/s(\d+_\d+\.\w+)$|, '/n\1')
+  def fb_profile_pic_url(m)
+    count = 0
+    begin
+      m.facebook_connect_settings.api_client(facebook_session["access_token"]).get_picture("me", :type => :large)
+    rescue Koala::Facebook::APIError => e
+      logger.error "ERROR: Could not import FB profile picture for #{m.id}.  Exception:#{e};  BT: #{e.backtrace.inspect}"
+      count += 1
+      retry if count < 2
+      flash[:error] = "We are sorry! We could not import your profile picture at this time. We have logged the error and will look into it.  But, please try again later."
+    end
   end
 
   def link_fb_and_nt(m, default_invite_code, activate_member)
@@ -320,9 +322,11 @@ class FacebookConnectController < ApplicationController
     # Link
     m.fbc_link(facebook_session)
 
+    access_token = facebook_session["access_token"]
+
       # Import photo if required
     if params[:import_fb_photo]
-      pic_url = fb_profile_pic_url
+      pic_url = fb_profile_pic_url(m)
       m.image = Image.download_from_url(pic_url) if pic_url
     end
 
@@ -332,7 +336,7 @@ class FacebookConnectController < ApplicationController
 
     if params[:offline_access]
       m.facebook_connect_settings.update_attribute(:ep_offline_access, 1)
-      m.facebook_connect_settings.update_attribute(:offline_session_key, facebook_session.session_key)
+      m.facebook_connect_settings.update_attribute(:offline_session_key, access_token)
     end
 
     # Add a follow of the Facebook user stream of the current user
@@ -341,7 +345,7 @@ class FacebookConnectController < ApplicationController
       # Process autofollows!
     m.fbc_autofollow_friends = 1 if params[:autofollow_friends]
     af = m.fbc_autofollow_friends?
-    fb_friends_on_nt.each { |f| # clearly, if we have linked with fbc, m is same as the member with the active facebook session
+    m.fb_app_friends(access_token).each { |f| # clearly, if we have linked with fbc, m is same as the member with the active facebook session
       m.follow_member(f) if af
       f.follow_member(m) if f.fbc_autofollow_friends?  # On facebook, friendship is a symmetric/reciprocal relationship
     }

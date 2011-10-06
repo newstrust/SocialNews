@@ -6,25 +6,36 @@ function fb_publish_to_user_stream(s) {
   curr_stream_story = s
 
   // convert the array of key-value pairs into a js hash
-  var props = s.attachment.properties
+  var props = s.properties
   var new_props = {}
   for (i = 0; i < props.length; i++) {
     var elt = props[i]
     new_props[elt[0]] = elt[1]
   }
-  s.attachment.properties = new_props
+
+  // build the feed obj
+  var feed_obj = {
+    method: 'feed',
+    name: s.name,
+    link: s.link,
+    caption: s.caption,
+    description: s.description,
+    properties: new_props,
+    actions: s.actions,
+    message: s.message,
+  }
 
   // publish!
-  FB.Connect.streamPublish(s.user_message.message, s.attachment, s.action_links, '', s.user_message.message_prompt, fb_review_posted)
+  FB.ui(feed_obj, fb_review_posted)
 }
 
-function fb_review_posted(post_id, exception_id) {
-  if ((post_id != null) && (post_id != "null")) {
+function fb_review_posted(response) {
+  if ((response != null) && (response.post_id != null) && (response.post_id != "null")) {
     $.ajax({
       url      : '/members/record_fb_stream_post',
       type     : 'post',
       dataType : 'json',
-      data     : {authenticity_token: encodeURIComponent(AUTH_TOKEN), post_type: 'review', review_id: curr_stream_story.attachment.comments_xid }
+      data     : {authenticity_token: encodeURIComponent(AUTH_TOKEN), post_type: 'review', review_id: curr_stream_story.comments_xid }
     })
   }
 }
@@ -124,16 +135,15 @@ function fb_close_follow_friends_form() {
 
 function fb_request_extended_permission(check_box, ep) {
   var cb = $(check_box)
-  FB.Connect.showPermissionDialog(ep, function(perms) {
-     if (!perms.match(new RegExp(ep))) {
-       cb.attr("checked", "")
-     } else {
+  FB.login(function(response) {
+     if (response.authResponse) {
        cb.attr("checked", "checked")
        $("#ep_" + ep).children().hide()
        $("#ep_" + ep).find("#granted").show()
+     } else {
+       cb.attr("checked", "")
      }
-  });
-//  setTimeout('fb_permissions_dialog_fixup_hack()', 200)
+  }, {scope: ep});
 }
 
 function fb_permissions_dialog_fixup_hack() {
@@ -142,17 +152,12 @@ function fb_permissions_dialog_fixup_hack() {
 
 function request_extended_perms_common(button, post_update_function) {
   needed_eps = "read_stream,offline_access"
-  FB.Connect.showPermissionDialog(needed_eps, function(granted_perms) {
-     var eps = needed_eps.split(",")
-     var missing = ""
-     for (var i = 0; i < eps.length; i++) {
-       if (!granted_perms.match(new RegExp(eps[i]))) missing += (eps[i] + ",")
-     }
-     if (missing == "") {
+  FB.login(function(response) {
+    if (response.authResponse) {
        $.ajax({
          url      : '/fb_connect/update_extended_perms.js',
          type     : 'post',
-         data     : { authenticity_token: encodeURIComponent(AUTH_TOKEN), granted_perms: granted_perms },
+         data     : { authenticity_token: encodeURIComponent(AUTH_TOKEN), granted_perms: needed_eps },
          dataType : 'json',
          success  : post_update_function
        })
@@ -161,8 +166,7 @@ function request_extended_perms_common(button, post_update_function) {
        if (button) $(button).pulse(false)
        alert("We are sorry!  You cannot follow your Facebook network feed without granting all necessary permissions!  We only extract news links from your stream and do not store anything else in our database!  If you change your mind, click on the button again.");
      }
-  })
-//  setTimeout('fb_permissions_dialog_fixup_hack()', 200)
+  }, {scope: needed_eps});
 
   return false;
 }
@@ -236,5 +240,11 @@ function refresh_facebook_stream_feed(button) {
     }
   })
 
+  return false;
+}
+
+function invite_friends() {
+  FB.ui({method: 'apprequests', message: 'Join NewsTrust',}, requestCallback);
+  function requestCallback(response) { }
   return false;
 }

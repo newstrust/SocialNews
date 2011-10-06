@@ -2,6 +2,9 @@
 <html>
   <head>
     <title><%= @title || "Your Guide to Good Journalism" %> - #{app_name}</title>
+    <script type="text/javascript" charset="utf-8"> 
+      var fb_sandbox_mode = <%= FacebookConnectSettings.in_sandbox_mode? ? "true" : "false" %>;
+    </script>
     <%= render :partial => 'shared/jquery_includes' %>
     <%= render :partial => 'shared/story_listing_js_includes' %>
     <%= yield :page_scripts -%>

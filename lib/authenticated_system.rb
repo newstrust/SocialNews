@@ -14,18 +14,8 @@ module AuthenticatedSystem
     # Accesses the current member from the session. 
     # Future calls avoid the database because nil is not equal to false.
     def current_member
-        # IMPORTANT: Order important.
-        # Consider this scenario:
-        #   (1) User is signed into facebook.
-        #   (2) User had previously been signed in using a different account.
-        # We are always going to privilege facebook (unless we get other input)
-      @current_member ||= (login_from_fb || login_from_session || login_from_basic_auth || login_from_cookie) unless @current_member == false
+      @current_member ||= (login_from_session || login_from_basic_auth || login_from_cookie || login_from_fb) unless @current_member == false
       (@current_member && !@current_member.terminated?) ? @current_member : nil
-    end
-
-    # SSS: Quick login -- from session! No fbc network traffic (useful for ajax requests for when session has been set previously)
-    def current_member_from_session
-      login_from_session
     end
 
     # Store the given member id in the session.
@@ -94,7 +84,7 @@ module AuthenticatedSystem
       respond_to do |format|
         format.html do
           store_referer_location
-          redirect_to new_member_path
+          redirect_to(logged_in? ? home_path : new_sessions_path)
         end
         format.any do
           request_http_basic_authentication 'Web Password'
@@ -110,7 +100,6 @@ module AuthenticatedSystem
     # see http://rubyglasses.blogspot.com/2008/04/redirectto-post.html
     def store_location
       session[:return_to] = request.get? ? request.request_uri : request.env["HTTP_REFERER"]
-#      logger.info "------------- FIXME: return_to: #{session[:return_to]} -----------"
     end
 
     # A bit like the above, but only called from login & signup pages, _not_ from 'access denied' pages.
@@ -119,7 +108,6 @@ module AuthenticatedSystem
       dont_return_to_paths = [fb_logout_path, new_member_path, new_sessions_path] # a constant of sorts
       referer_uri = URI.parse(request.env["HTTP_REFERER"])
       ref_path = referer_uri.path.gsub(/\?.*/, '')
-#      logger.info "------------- FIXME: referer_uri: #{ref_path}; flag: #{dont_return_to_paths.include?(ref_path)}; logout_paths: #{dont_return_to_paths.inspect} ---------"
       if referer_uri.host == request.server_name and !dont_return_to_paths.include?(ref_path)
         session[:return_to] ||= referer_uri.to_s
       end
@@ -131,14 +119,12 @@ module AuthenticatedSystem
     # to the passed default.
     def redirect_back_or_default(default)
       target = session[:return_to] || default
-#      logger.info "---------- FIXME: target: #{target}; default #{default} ------------"
       redirect_to(target)
       session[:return_to] = nil
     end
 
     def redirect_to_back_or_default(to_url, default)
       target = to_url || session[:return_to] || default
-#      logger.info "---------- FIXME: target: #{target}; default #{default} ------------"
       redirect_to(target)
       session[:return_to] = nil
     end
@@ -171,14 +157,27 @@ module AuthenticatedSystem
     end
 
     def member_from_fb_session
-      return nil if facebook_session.nil?
-      fb_user = facebook_session.user
-      Member.find(:first, :joins => :facebook_connect_settings, :conditions => ["facebook_connect_settings.fb_uid = ?", fb_user.uid], :readonly => false)
+      if session[:fb_uid]
+        fb_uid = session[:fb_uid]
+      else
+        fb_user_info = FacebookConnectSettings.get_user_info_from_cookies(cookies)
+        return nil if fb_user_info.nil?
+     
+        fb_uid       = fb_user_info["user_id"]
+        session[:fb_uid] = fb_uid
+        return nil if fb_uid.nil?
+      end
+     
+      if fb_uid
+        Member.find(:first, :joins => :facebook_connect_settings, 
+                            :conditions => ["facebook_connect_settings.fb_uid = ?", fb_uid], 
+                            :readonly => false)
+      end
     end
 
     # Login from facebook
     def login_from_fb
-      member = member_from_fb_session if facebook_session
+      member = member_from_fb_session
       if (member && session[:member_id] && member.id != session[:member_id])
         app_name = SocialNewsConfig["app"]["name"]
         flash[:warning] = "You have been logged out of your #{Member.find_by_id(session[:member_id], :select => "email").email} #{app_name} account, and then logged into your #{member.email} #{app_name} account which is already connected to Facebook.<br/>"
@@ -188,7 +187,8 @@ module AuthenticatedSystem
         session[:fb_activated] = true
       end
       member
-    rescue Facebooker::Session::SessionExpired => e
-      clear_facebook_session_information
+    rescue Exception => e
+      RAILS_DEFAULT_LOGGER.error " --------> #{e}; #{e.backtrace.inspect} <----------"
+      nil
     end
 end

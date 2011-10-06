@@ -24,6 +24,10 @@
       <%- end -%>
     <%- end -%>
 
+    <script type="text/javascript" charset="utf-8"> 
+      var fb_sandbox_mode = <%= FacebookConnectSettings.in_sandbox_mode? ? "true" : "false" %>;
+    </script>
+
     <%= render :partial => 'shared/css_includes' %>
     <%= render :partial => 'shared/jquery_includes' %>
     <%= render :partial => 'shared/story_listing_js_includes' %>
@@ -45,6 +49,9 @@
   </head>
 
   <body>
+  	<%#-- Facebook Connect initialization --%>
+    <%= render :partial => "shared/fb_init" %>
+
     <div id="wrap"<%=" class='#{@local_site.slug}'" if @local_site%>>
       <div id="main" class="container clearfix">
         <div id="nav">
@@ -166,11 +173,5 @@
 	  <%- end -%>
 
     <%= render :partial => "layouts/ga" if !@no_third_party_content %> <%#-- Google Analytics (but only if we dont want 3rd party content) --%>
-
-  	<%#-- Facebook Connect --%>
-  	<%= fb_connect_javascript_tag %>
-    <%- @fb_no_auto_reload ||= nil -%>
-    <%- @auto_login ||= false -%>
-  	<%= init_fb_connect_FIXED_UP(@fb_no_auto_reload, @auto_login) %>
   </body>
 </html>

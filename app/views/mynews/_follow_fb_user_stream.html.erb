@@ -15,12 +15,13 @@
 
     <div id="fb_user_stream_box">
       <div class="fb_error_msg" id="fb_logged_out">
-        <fb:login-button html="target_blank" length="short" v="2" onlogin="open_popup('/fb_connect/activate','', {height: 340, width: 675})">Login</fb:login-button> Please login to Facebook so you can follow news from Facebook feed.
+        <%=fb_login_button("open_popup('/fb_connect/activate','', {height: 340, width: 675})", :v=>"2", :length=>"short", "target"=>"_blank")%>
+        Please login to Facebook so you can follow news from Facebook feed.
         <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
       </div>
       <div class="fb_error_msg" id="fb_unconnected">
         One final step! Your <%=app_name%> and Facebook accounts are not yet connected.<br/>
-        Please <%=fb_login_button "open_popup('/fb_connect/activate?popup=true&follow_user_stream=true','', {height: 340, width: 675})", :v => "2", :length=>"long", :html => {"target" => "_blank"}%> to follow your facebook user stream.
+        Please <%=fb_login_button("open_popup('/fb_connect/activate?popup=true&follow_user_stream=true','', {height: 340, width: 675})", :v => "2", :length=>"long", "target"=>"_blank")%> to follow your facebook user stream.
       </div>
     </div>
   <%- end -%>

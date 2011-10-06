@@ -126,7 +126,7 @@ describe Discussions::CommentsController do
 
     it "should deny access to anyone who doesn't have the required role." do
       do_get
-      response.should redirect_to(new_member_path)
+      response.should redirect_to(new_sessions_path)
     end
   end
 

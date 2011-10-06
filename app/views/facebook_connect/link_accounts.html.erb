@@ -6,7 +6,7 @@
 <b> Have you logged out of Facebook?  Please log into Facebook and try again! </b>
 <% else -%>
 <div style="float:left; margin-right:20px;">
-<fb:profile-pic uid="<%=facebook_session.user.uid%>" facebook-logo="true"> </fb:profile-pic>
+<fb:profile-pic uid="<%=facebook_session["user_id"]%>" facebook-logo="true"> </fb:profile-pic>
 </div>
 
 <div style="float:left; margin-top: 20px;">

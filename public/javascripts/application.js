@@ -453,11 +453,23 @@ var hide_fixup_notice = true;
 var invitation_id = null;
 var partner_id = null;
 function fbc_login() {
-  window.location.href = ((partner_id && invitation_id) ? "/partners/" + partner_id + "/" + invitation_id : "") + "/fb_connect/activate"
+  fbc_activate((partner_id && invitation_id) ? "/partners/" + partner_id + "/" + invitation_id : "", "")
 }
 
-function fbc_init_activation(url_prefix, url_suffix) {
-  window.location.href = url_prefix + "/fb_connect/init_activation" + url_suffix
+function fbc_activate(url_prefix, url_suffix) {
+  if (fb_sandbox_mode) {
+    // In sandbox mode, getLoginStatus won't work properly because FB cannot always
+    // determine if the visitor has authorization to the sandboxed app or not.
+    window.location.href = url_prefix + "/fb_connect/activate" + url_suffix;
+  }
+  else {
+    FB.getLoginStatus(function(resp) {
+      if (resp.status == "unknown") { // User clicked cancel
+        ;
+      } else {
+        window.location.href = url_prefix + "/fb_connect/activate" + url_suffix;
+      }
+    });
 }
 
 $(document).ready(function() {
@@ -554,16 +566,4 @@ function show_login_dialog() {
     loginDialog = $('#login_dialog_container').dialog({autoOpen:false, modal:true, title:"Please login to continue", height: 'auto', width:375})
 
   loginDialog.dialog("open");
-}
-
-function filter_answers(type, button) {
-  $(button).siblings().removeClass("sel");
-  $(button).addClass("sel");
-  if (type == null) {
-    $(button).parents(".answers").find("li.answer").show();
-  }
-  else {
-    $(button).parents(".answers").find("li.answer").hide();
-    $(button).parents(".answers").find("li." + type).show();
-  }
 }

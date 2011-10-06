@@ -3,7 +3,8 @@
 
 <div id="fb_friends_box" class="friends_box">
   <div class="fb_error_msg" id="fb_logged_out">
-    <fb:login-button html="target_blank" length="short" v="2" onlogin="open_popup('/fb_connect/activate','', {height: 340, width: 675})">Login</fb:login-button> Please login to Facebook so you can follow your friends.
+    <%=fb_login_button "open_popup('/fb_connect/activate','', {height: 340, width: 675})", :length => "short", :v => "2"%>
+    Please login to Facebook so you can follow your friends.
     <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
   </div>
   <div class="fb_error_msg" id="fb_unconnected">
@@ -11,11 +12,13 @@
     <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
   </div>
   <div class="fb_error_msg" id="fb_no_friends">
-    None of your Facebook friends have connected to <%=app_name%>. Do you want to <a target="_blank" href="<%=fb_invite_friends_path%>">invite any of them to <%=app_name%>?</a>
+    None of your Facebook friends have connected to <%=app_name%>.
+    <%-#- Do you want to <link_to_function "invite any of them to NewsTrust?", "invite_friends()"> -%>
     <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
   </div>
   <div class="fb_error_msg" id="fb_no_more_friends">
-     You are already following all your <%=app_name%>-connected Facebook friends. Do you want to <a target="_blank" href="<%=fb_invite_friends_path%>">invite any of your other friends to <%=app_name%>?</a>
+     You are already following all your <%=app_name%>-connected Facebook friends. 
+     <%-#- Do you want to <a target="_blank" href="<=fb_invite_friends_path>">invite any of your other friends to <=app_name>?</a> -%>
     <%= link_to_function "Cancel", "return fb_close_follow_friends_form()", :class => "cancel" %>
   </div>
   <div class="mynews_adding_msg" id="fb_friends_notice"></div>

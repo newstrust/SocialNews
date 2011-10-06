@@ -1,17 +1,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<%#-- Namespace required for Facebook Connect --%>
+<%-#- Namespace required for Facebook Connect --%>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="ROBOTS" content="NOINDEX,NOARCHIVE"> <%#-- Prevent crawlers from indexing and archiving the content %>
     <link rel="canonical" href="<%=@story.url%>" />  <%#-- Tell search engines that this toolbar is basically pointing to the target story url %>
 		<title><%= @story.title %> - <%=app_name%></title>
-		
-		<%# includes should match toolbar_popup.html.erb or nearly so -%>
-		
+
+		<%-# includes should match toolbar_popup.html.erb or nearly so -%>
+
 		<%= render :partial => 'shared/css_includes' %>
     <%= stylesheet_link_tag "toolbar", :media => "screen" %>
-    
+
+    <script type="text/javascript" charset="utf-8"> 
+      var fb_sandbox_mode = <%= FacebookConnectSettings.in_sandbox_mode? ? "true" : "false" %>;
+    </script>
+
 		<%= render :partial => 'shared/jquery_includes' %>
 		<%= javascript_include_tag 'review' %>
 		<%= javascript_include_tag 'submit' %>
@@ -31,20 +35,16 @@
 		</script>
 	</head>
 	<body>
-<%#-- SSS: Hide all ajax forms from bots -- they fill up the logs with errors! ! --%>
-<% if !visitor_is_bot? -%>
-    <%= render :partial => "toolbar_nav" %>
-<% end -%>
-		
+  	<%-#- Facebook Connect initialization --%>
+    <%= render :partial => "shared/fb_init" %>
+
+    <%-#- SSS: Hide all ajax forms from bots -- they fill up the logs with errors! ! --%>
+    <%- if !visitor_is_bot? -%>
+      <%= render :partial => "toolbar_nav" %>
+    <%- end -%>
+
 		<iframe id="story_frame" name="story_frame" noresize="noresize" frameborder="0" scrolling="auto" src="<%= @story.url %>"></iframe>
 
     <%= render :partial => "layouts/ga" %> <%#-- Google Analytics --%>
- 
-  	<%#-- FACEBOOK CONNECT 
-          But, do not reload the page if there is a change in fb session status.
-          This is necessary so that we can transfer the user from the toolbar to the NT site
-          after the member logs into FB to connect with NT.  With auto-reload, we get stuck on the toolbar! --%>
-  	<%= fb_connect_javascript_tag %>
-  	<%= init_fb_connect_FIXED_UP(true) %>
 	</body>
 </html>

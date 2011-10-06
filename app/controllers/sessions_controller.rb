@@ -11,7 +11,12 @@ class SessionsController < ApplicationController
   # render new.rhtml
   def new
     store_referer_location
-    render :layout => "popup" if params[:popup]
+    if logged_in?
+      flash[:notice] = "You are logged into #{APP_NAME}."
+      redirect_back_or_default(home_url)
+    else
+      render :layout => "popup" if params[:popup]
+    end
   end
   
   # GET /sessions
@@ -26,7 +31,10 @@ class SessionsController < ApplicationController
 
   def destroy
     delete_session
-    redirect_back_or_default(params[:return_to] || "/")
+    target_url = params[:return_to]
+    target_url = home_url if target_url.blank?
+    flash[:notice] = "You have been logged out."
+    redirect_back_or_default(target_url)
   end
   
   def forgot_password

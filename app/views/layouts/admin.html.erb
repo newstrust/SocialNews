@@ -4,12 +4,18 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><%= @title || app_name %></title>
+    <script type="text/javascript" charset="utf-8"> 
+      var fb_sandbox_mode = <%= FacebookConnectSettings.in_sandbox_mode? ? "true" : "false" %>;
+    </script>
     <%= render :partial => 'shared/jquery_includes' %>
     <%= yield :page_scripts %>
     <%= @inline_js || "" %>
     <%= stylesheet_link_tag ['admin/admin'] + (@additional_css_includes || []) %>
   </head>
   <body>
+  	<%#-- Facebook Connect initialization --%>
+    <%= render :partial => "shared/fb_init" %>
+
     <div id="wrap">
       <div class="use16columns inner_left" style="height:64px;">
         <div class="use10columns inner_left">
@@ -61,10 +67,5 @@
 
       <%= yield %>
     </div>
-
-    <%#-- FACEBOOK CONNECT --%>
-    <%= fb_connect_javascript_tag %>
-    <%- @fb_no_auto_reload ||= nil -%>
-    <%= init_fb_connect_FIXED_UP(@fb_no_auto_reload) %>
   </body>
 </html>

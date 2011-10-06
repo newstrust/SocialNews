@@ -157,15 +157,19 @@ fp = FeedParser.new({:rails_env => '#{RAILS_ENV}', :server_url => 'http://#{serv
       feeds.each { |f_id|
         f = Feed.find(f_id)
 
-        # Check if fb permissions have expired
-        if f.is_fb_user_newsfeed?
-          m = Member.find(f.member_profile_id)
-          if m.follows_fb_newsfeed? && !m.can_follow_fb_newsfeed?
-            puts "Ignoring #{m.name}'s facebook feed #{f_id} since permissions have expired!"
-            num_ignored += 1
-            next
-          end
-        end
+        next if f.is_fb_user_newsfeed?
+
+# FB feed fetcher code is old and needs upgrading.
+#
+#        # Check if fb permissions have expired
+#        if f.is_fb_user_newsfeed?
+#          m = Member.find(f.member_profile_id)
+#          if m.follows_fb_newsfeed? && !m.can_follow_fb_newsfeed?
+#            puts "Ignoring #{m.name}'s facebook feed #{f_id} since permissions have expired!"
+#            num_ignored += 1
+#            next
+#          end
+#        end
 
         fh.write "fp.fetch_and_parse({:id => #{f.id}, :url => '#{f.url}'})\n"
         i += 1

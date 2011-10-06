@@ -79,7 +79,9 @@
         </div>
         <%- if !hide_share_buttons -%>
           <div class="row2">
-            <%= fb_share_link(story_url(story)) + tweet_story(story) + email_story(story) + share_link(story, :editorial, "") %>
+            <%-#----- No Facebook Share anymore since FB has deprecated that in favour of FB like ----%>
+            <%-#= fb_share_link(story_url(story)) + tweet_story(story) + email_story(story) + share_link(story, :editorial, "") %>
+            <%= tweet_story(story) + email_story(story) + share_link(story, :editorial, "") %>
             <span class="edit_link" style="display: none">
               <%= link_to "", edit_story_url(story), :class => "editorial" %>
             </span>

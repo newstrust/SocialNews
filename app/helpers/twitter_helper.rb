@@ -14,16 +14,19 @@ module TwitterHelper
     if member.twitter_settings
       url  = $1 if tweet =~ %r|(http://[^\s]*)|
       resp = member.twitter_settings.authed_twitter_client.update(tweet)
-      success_test = url || tweet
-      if (resp["text"] =~ %r|#{success_test}|)
-        tweet_id = resp["id"]
-        tweet_url = "http://twitter.com/#{member.twitter_settings.tw_uid}/statuses/#{tweet_id}"
-        notice = "Your tweet is posted @ <a href='#{tweet_url}'>#{tweet_url}</a>"
-      else
-        tweet_id = nil
-        error = "We are sorry! Your tweet didn't go through.  Please try again, or email us so we can take a look at this!"
-        logger.error "Tweet #{tweet} with #{url} failed to go through for #{member.id}"
-      end
+      tweet_id = resp["id"]
+      tweet_url = "http://twitter.com/#{member.twitter_settings.tw_uid}/statuses/#{tweet_id}"
+      notice = "Your tweet is posted @ <a href='#{tweet_url}'>#{tweet_url}</a>.  Please try again in a bit if didn't show up there."
+#      success_test = url || tweet
+#      if (resp["text"] =~ %r|#{success_test}|)
+#        tweet_id = resp["id"]
+#        tweet_url = "http://twitter.com/#{member.twitter_settings.tw_uid}/statuses/#{tweet_id}"
+#        notice = "Your tweet is posted @ <a href='#{tweet_url}'>#{tweet_url}</a>"
+#      else
+#        tweet_id = nil
+#        error = "We are sorry! Your tweet didn't go through.  Please try again, or email us so we can take a look at this!"
+#        logger.error "Tweet #{tweet} with #{url} failed to go through for #{member.id}"
+#      end
     else
       # SSS: We should never ever get here because the tweet option should never have been shown to the user in the first place!
       # But, just a safeguard!

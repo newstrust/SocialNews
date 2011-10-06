@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110808222613) do
+ActiveRecord::Schema.define(:version => 20110929172511) do
 
   create_table "activity_entries", :force => true do |t|
     t.integer  "member_id"
@@ -195,6 +195,7 @@ ActiveRecord::Schema.define(:version => 20110808222613) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "friendships_cached",                :default => false
+    t.string   "access_token"
   end
 
   add_index "facebook_connect_settings", ["member_id"], :name => "index_facebook_connect_settings_on_member_id"

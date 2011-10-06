@@ -1,12 +1,12 @@
 <%- @title, @meta_keywords, @meta_description = topic_title_and_meta_info(@topic, @primary_subject) -%>
 <%- @login_overlay_header = "<p>Please login or #{link_to "<strong>sign up</strong>", new_member_path} to add your comment.</p>" -%>
-<%#-- Specify a facebook OG meta-tag to let FB know what image to pick when someone likes the page %>
+<%-#- Specify a facebook OG meta-tag to let FB know what image to pick when someone likes the page -%>
 <%- @og_meta_tags = { "og:image" => @topic.image.public_filename(:thumb) } if @topic.image -%> 
 
-<% content_for(:page_scripts) do -%>
+<%- content_for(:page_scripts) do -%>
   <%= javascript_include_tag 'listings' %>
   <%= javascript_include_tag 'follows' %>
-<% end -%>
+<%- end -%>
 
 <script type="text/javascript">
   $('#page_intro').truncate({max_length: 800});
@@ -18,7 +18,7 @@
     button.click(function() {return toggle_follow(button, {type: 'topic', id: <%=@topic.id%>})});
     button.show();
   });
-<% end -%>
+<%- end -%>
 </script>
 
 <div class="story_listing_detail span-16">
@@ -31,12 +31,12 @@
 
 <%- cache @right_column_cached_fragment_name do -%>
 <div class="span-8 last">
-  <% topic_name = (@topic.name.length > 18) ? "This Topic's" : @topic.name -%>
-  <% topic_name2 = (@topic.name.length > 29) ? "This Topic's" : @topic.name -%>
+  <%- topic_name = (@topic.name.length > 18) ? "This Topic's" : @topic.name -%>
+  <%- topic_name2 = (@topic.name.length > 29) ? "This Topic's" : @topic.name -%>
   <%#= render :partial => 'subjects/smart_feeds_widget', :locals => {:name => topic_name, :slug => @topic.slug} -%>
 
-  <%#-- SSS: No top sources widget for the bad journalism topic as per Fab's request --%>
-  <%#-- SSS: No top sources widget for topic & subject pages on local sites -%>
+  <%-#- SSS: No top sources widget for the bad journalism topic as per Fab's request --%>
+  <%-#- SSS: No top sources widget for topic & subject pages on local sites -%>
   <%- if @local_site.nil? && @topic.slug != "bad_journalism" && @right_column_settings["show_top_sources?"].is_true? -%>
     <%= render :partial => 'subjects/top_sources', :locals => {:name => topic_name2, :slug => @topic.slug} %>
   <%- end -%>
@@ -45,17 +45,15 @@
     <%- right_column_box :header => "Sign Up" do -%>
       <p>Help find good local journalism. Sign up to review stories -- and get our free newsletters.</p>
       <div class="fb_button">
-        <fb:login-button onlogin="fbc_init_activation('/partners/<%=@local_site.slug%>/public', '')" length="long" v="2"></fb:login-button>
+        <%= fb_login_button("fbc_activate('/partners/#{@local_site.slug}/public', '')", :length => "long", :v => "2") %>
       </div>
       <div style="margin-top:10px;font-size:12px"> or 
-        <strong>
-          <a href="/partners/<%=@local_site.slug%>/">sign up with <span style="color:#385ac8">News</span><span style="color:#399800">Trust</span>&nbsp;&nbsp;&raquo;</a>
-        </strong>
+        <strong><%= link_to "sign up with SocialNews&nbsp;&nbsp;&raquo;", "/partners/#{@local_site.slug}/" %></strong>
       </div>
     <%- end -%>
   <%- end -%>
 
-  <%#-- Some topics do not have any subjects set --%>
+  <%-#- Some topics do not have any subjects set --%>
   <%- if @primary_subject && @right_column_settings["show_other_topics?"].is_true? -%>
     <%= render :partial => 'subjects/topics_column', :locals => {:subject => @primary_subject} %>
   <%- end -%>

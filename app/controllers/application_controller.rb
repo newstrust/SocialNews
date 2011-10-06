@@ -12,14 +12,10 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_active_local_site
   before_filter :password_protected # this filter should run after the previous filter sets the active local site
-  before_filter :create_fb_session
-  before_filter :load_actions_to_publish
   
   # Used by the RoleSystem to find the current member (if any)
   # This before filter needs to be called BEFORE any role checking.
   before_filter { |controller| controller.role_player = :current_member }
-
-  helper_method :facebook_session
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
@@ -125,14 +121,6 @@ class ApplicationController < ActionController::Base
   @@exceptions_not_logged = (RAILS_ENV == 'production') ? ['ActionController::UnknownAction', 'ActionController::RoutingError'] : []
   protected
 
-  def create_fb_session
-    create_facebook_session
-  rescue Exception => e
-    logger.error "Exception '#{e}' creating a facebook session; #{e.backtrace.inspect}"
-    cookies.delete :auth_token
-    reset_session
-  end
-
   def password_protected
     if RAILS_ENV == "staging" || (@local_site && !@local_site.is_active?)
       authenticate_or_request_with_http_basic do |username, password|
@@ -143,13 +131,6 @@ class ApplicationController < ActionController::Base
 
   def log_error(exc)
     super unless @@exceptions_not_logged.include?(exc.class.name)
-  end
-
-  # SSS FIXME: Not used anymore?
-  # Load the user-action to publish -- this technique is used by methods that redirect
-  def load_actions_to_publish
-    @fb_user_action        = flash[:fb_user_action] 
-    flash[:fb_user_action] = nil
   end
 
   def set_active_local_site

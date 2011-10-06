@@ -86,7 +86,7 @@ describe MembersController do
           
       # No session so they get redirected
       get :invite
-      response.should redirect_to(new_member_path)
+      response.should redirect_to(new_sessions_path)
   
       @member = spec_login_as(members(:heavysixer))
       get :invite
