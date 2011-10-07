@@ -16,8 +16,8 @@ describe Admin::TopicsController do
       get :index, opts
     end
     
-    it "should require admin access to view this action" do
-      should_be_admin_only do
+    it "should require host access to view this action" do
+      check_access_restriction("newshound", "host") do
         do_get @params
       end
       response.should be_success
@@ -94,15 +94,10 @@ describe Admin::TopicsController do
       get :edit, opts
     end
     
-    it "should require admin access to view this action" do
-      # note: can't use should_be_admin_only as it makes certain assumptions about unauthorized responses.
-      login_as 'editor'
-      do_get @params
-      response.response_code.should_not == 200
-      response.body =~ /denied/
-      
-      login_as 'admin'
-      do_get @params
+    it "should require host access to view this action" do
+      check_access_restriction("newshound", "host") do
+        do_get @params
+      end
       response.should be_success
     end
 

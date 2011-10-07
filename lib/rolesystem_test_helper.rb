@@ -1,9 +1,13 @@
 module RolesystemTestHelper
+  def self.all_mock_roles
+    ["admin", "staff", "editor", "host", "newshound", "content_editor"]
+  end
+
   def add_roles
+    RolesystemTestHelper.all_mock_roles.each do |rs|
+      instance_variable_set("@#{rs}_role".to_sym, mock_model(Group, :name => rs.to_s.humanize, :context => 'role', :slug => rs, :add_member => true))
+    end
     @group = mock_model(Group, :name => 'Watchdogs', :add_member => true)
-    @editor_role = mock_model(Group, :name => 'editor', :context => 'role', :slug => "editor", :add_member => true)
-    @admin_role = mock_model(Group, :name => 'admin', :context => 'role', :slug => "admin", :add_member => true)
-    @content_editor_role = mock_model(Group, :name => 'content_editor', :context => 'role', :slug => "content_editor", :add_member => true)
   end
 
   def login_as(role)
@@ -11,10 +15,9 @@ module RolesystemTestHelper
     @controller.stub!(:current_member).and_return(instance_variable_get("@#{role}"))
   end  
 
-  def should_be_admin_only(*args)
-    access_level = args[0].blank? ? 'editor' : args[0]
+  def check_access_restriction(failure_role, success_role)
     if block_given?
-      login_as(access_level)
+      login_as(failure_role)
       yield
       
       if request.format.to_sym == :js
@@ -22,8 +25,13 @@ module RolesystemTestHelper
       else
         response.should redirect_to(access_denied_path)
       end
-      login_as 'admin'
+
+      login_as success_role
       yield
     end
+  end
+
+  def should_be_admin_only(*args)
+    check_access_restriction(args[0].blank? ? "editor" : args[0], "admin") { yield }
   end
 end

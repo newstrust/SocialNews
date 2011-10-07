@@ -3,9 +3,9 @@ class Admin::InvitationsController < Admin::AdminController
   # * Some actions require staff access
   grant_access_to :host
   before_filter :check_staff_access, :except => [:edit, :update, :index]
-
   before_filter :find_partner
   before_filter :find_invitation, :only => [:show, :edit, :update, :destroy, :make_primary]
+  before_filter(:only => [:edit, :update]) { |controller| controller.send(:check_edit_access, :staff) }
   layout 'admin'
 
   APP_NAME = SocialNewsConfig["app"]["name"]
@@ -41,12 +41,10 @@ class Admin::InvitationsController < Admin::AdminController
   end
 
   def edit
-    redirect_to access_denied_url if !current_member.has_host_privilege?(@invitation.group, :staff, @local_site)
     @optional_fields = @invitation.additional_signup_fields_to_struct
   end
 
   def update
-    redirect_to access_denied_url if !current_member.has_host_privilege?(@invitation.group, :staff, @local_site)
     respond_to do |format|
       if @invitation.update_attributes(params[:invitation])
         @invitation.update_additional_signup_fields(params[:optional_fields]) if params[:optional_fields]

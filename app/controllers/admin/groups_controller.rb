@@ -7,6 +7,7 @@ class Admin::GroupsController < Admin::LandingPageController
   grant_access_to :host
   before_filter :check_staff_access, :only => [:new, :create, :create_from_template, :destroy]
   before_filter :find_group, :except => [:index, :new, :create, :create_from_template]  # find_group BEFORE check_edit_access
+  # Only editors and group hosts get edit & update access to the subject
   before_filter :check_edit_access,  :only => [:edit, :update, :config_group_mynews, :update_group_mynews_settings, :destroy_image]
   layout 'admin'
 
@@ -174,10 +175,4 @@ class Admin::GroupsController < Admin::LandingPageController
     end
   end
 
-  protected
-
-  def check_edit_access
-    # Only editors and quote hosts get edit access to an individual quote
-    redirect_to access_denied_url and return unless logged_in? && current_member.has_host_privilege?(@group, :editor, @local_site)
-  end
 end

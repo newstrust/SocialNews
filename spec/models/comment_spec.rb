@@ -160,15 +160,15 @@ describe Comment do
     @comment.can_be_edited_by?.should be_false
 
     # Normal members cannot edit.
-    @new_member.stub!(:has_role?).and_return(false)
+    @new_member.stub!(:has_role_or_above?).and_return(false)
     @comment.can_be_edited_by?(@new_member).should be_false
 
     # Some admin can edit
-    @new_member.stub!(:has_role?).and_return(true)
+    @new_member.stub!(:has_role_or_above?).and_return(true)
     @comment.can_be_hidden_by?(@new_member).should be_true
 
     # The comment author can edit the comment.
-    @new_member.stub!(:has_role?).and_return(false)
+    @new_member.stub!(:has_role_or_above?).and_return(false)
     @new_member.stub!(:id).and_return(@comment.member_id)
     @comment.can_be_edited_by?(@new_member).should be_true
   end

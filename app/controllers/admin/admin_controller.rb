@@ -26,6 +26,11 @@ class Admin::AdminController < ApplicationController
   def check_staff_access
     redirect_to access_denied_url and return unless logged_in? && current_member.has_role_or_above?(:staff)
   end
+
+  def check_edit_access(override_role=:editor)
+    # Only editors and quote hosts get edit access to an individual quote
+    redirect_to access_denied_url and return unless logged_in? && current_member.has_host_privilege?(@group, override_role, @local_site)
+  end
   
   def find_group(the_id = nil)
     the_id = params[:id] if the_id.nil?

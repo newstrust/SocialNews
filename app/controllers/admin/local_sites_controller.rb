@@ -7,7 +7,8 @@ class Admin::LocalSitesController < Admin::AdminController
   grant_access_to :host
   before_filter :find_local_site,   :only => [:edit, :update]
   before_filter :check_access,      :only => [:new, :create]
-  before_filter :check_edit_access, :only => [:edit, :update]
+  # Only staff and local_site hosts get edit & update access to an individual local_site
+  before_filter(:only => [:edit, :update]) { |controller| controller.send(:check_edit_access, :staff) }
 
   layout 'admin'
 
@@ -70,10 +71,6 @@ class Admin::LocalSitesController < Admin::AdminController
     redirect_to access_denied_url and return unless logged_in? && current_member.has_role_or_above?(:staff)
   end
 
-  def check_edit_access
-    # Only staff and local_site hosts get edit access to an individual local_site
-    redirect_to access_denied_url and return unless logged_in? && current_member.has_host_privilege?(@lsite, :staff, :local_site)
-  end
 
   def find_local_site
     @lsite = LocalSite.find(params[:id])

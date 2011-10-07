@@ -133,16 +133,20 @@ class MockMember
   def initialize(opts)
     @roles = opts[:roles] if opts[:roles]
   end
-  
-  def has_role?(role)
+
+  def has_specific_role?(role)
     roles.map(&:slug).include?(role.to_s)
   end
 
+  def has_role?(role)
+    has_role_or_above?(role)
+  end
+
   def has_role_or_above?(role)
-    role_index = Role.all_slugs.index(role.to_s)
+    role_index = RolesystemTestHelper.all_mock_roles.index(role.to_s)
     return false if role_index.nil?
 
-    required_roles = Role.all_slugs[0, role_index+1]
+    required_roles = RolesystemTestHelper.all_mock_roles[0, role_index+1]
     return !(roles.map(&:slug) & required_roles).empty?
   end
 
@@ -150,15 +154,14 @@ class MockMember
     has_role_or_above?(override_role)
   end
 
-### Ugh... Really, MockMember should respond to all attributes. But really should just use real members.
-
-    # This is the id of member 11 (legacy_member)!
-    # IMPORTANT: Some spec tests seem to rely on there being a fixture for the member whose id this is!
+  # This is the id of member 11 (legacy_member)!
+  # IMPORTANT: Some spec tests seem to rely on there being a fixture for the member whose id this is!
   def id; 11; end
   def display_name; "Mock Member"; end
   def image; nil; end
   def can_comment?; true; end
   def status; "member"; end
+  def fbc_linked?; false; end
   def is_public?; true; end
   def is_visible?; true; end
   def fbc_linked?; false; end

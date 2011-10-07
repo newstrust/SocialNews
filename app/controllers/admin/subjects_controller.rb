@@ -2,9 +2,11 @@ class Admin::SubjectsController < Admin::LandingPageController
   include Admin::LayoutHelper
 
   grant_access_to :host
-  before_filter :check_admin_access, :except => [:index, :search, :layout, :update_layout]
+  before_filter :check_admin_access, :except => [:edit, :update, :index, :search, :layout, :update_layout]
   before_filter :not_supported, :only => [:new, :create, :destroy]
   before_filter :find_subject, :except => [:index]
+  # Only admin and subject hosts get edit & update access to the subject
+  before_filter(:only => [:edit, :update]) { |controller| controller.send(:check_edit_access, :admin) }
   layout 'admin'
 
   # GET /admin/subjects.html
@@ -14,13 +16,11 @@ class Admin::SubjectsController < Admin::LandingPageController
 
   # GET /admin/subjects/some-subject/edit.html
   def edit
-    render_403(Subject) and return unless current_member.has_host_privilege?(@subject, :admin, @local_site)
     @subject.intro = "How are the local news media covering #{@subject.name} in #{@local_site.name}?" if @local_site && @subject.intro.blank?
   end
 
   # PUT /admin/subjects/some-subject.html
   def update
-    render_403(Subject) and return unless current_member.has_host_privilege?(@subject, :admin, @local_site)
     respond_to do |format|
       # Process subject image parameters
       update_image(@subject, params)

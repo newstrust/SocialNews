@@ -15,12 +15,13 @@ describe Admin::GroupsController do
       get :index, opts
     end
     
-    it "should require admin access to view this action" do
-      should_be_admin_only do
+    it "should require host access to view this action" do
+      check_access_restriction("newshound", "host") do
         do_get @params
       end
       response.should be_success
     end
+
     it "should return a paginated list of groups and a list of roles" do
       Group.stub!(:paginate).and_return([@group])
       Role.stub!(:find).and_return([@admin_role])
@@ -28,7 +29,7 @@ describe Admin::GroupsController do
       do_get
       response.should be_success
       assigns['internal_groups'].length.should == 0  # no internal roles right now
-      assigns['roles'].first.name.should =~ /admin/
+      assigns['roles'].first.name.should =~ /admin/i
       assigns['roles'].first.context == 'role'
     end
   end
@@ -42,8 +43,9 @@ describe Admin::GroupsController do
     def do_get(opts = {})
       get :new, opts
     end
-    it "should require admin access to view this action" do
-      should_be_admin_only do
+
+    it "should require staff access to view this action" do
+      check_access_restriction("editor", "staff") do
         do_get @params
       end
     end
@@ -60,8 +62,8 @@ describe Admin::GroupsController do
       post :create, opts
     end
     
-    it "should require admin access to view this action" do
-      should_be_admin_only do
+    it "should require staff access to view this action" do
+      check_access_restriction("editor", "staff") do
         do_post @params
       end
     end
@@ -106,8 +108,8 @@ describe Admin::GroupsController do
       get :show, opts
     end
     
-    it "should require admin access to view this action" do
-      should_be_admin_only do
+    it "should require host access to view this action" do
+      check_access_restriction("newshound", "host") do
         do_get @params
       end
       response.should be_success
@@ -140,9 +142,9 @@ describe Admin::GroupsController do
       get :edit, opts
     end
     
-    it "should require admin access to view this action" do
+    it "should require editor access to view this action" do
       Group.stub!(:find).and_return(@group)
-      should_be_admin_only do
+      check_access_restriction("host", "editor") do
         do_get @params
       end
       response.should be_success
@@ -184,14 +186,12 @@ describe Admin::GroupsController do
       put :update, opts
     end
 
-# No longer necessary -- host access is sufficient
-#
-#    it "should require admin access to view this action" do
-#      should_be_admin_only do
-#        do_post(:new, @params)
-#      end
-#      response.should redirect_to(edit_admin_group_path(@group))
-#    end
+    it "should require editor access to view this action" do
+      check_access_restriction("host", "editor") do
+        do_put(@params)
+      end
+      response.should redirect_to(edit_admin_group_path(@group))
+    end
     
     it "should update the selected group" do
       login_as 'admin'
@@ -231,8 +231,8 @@ describe Admin::GroupsController do
       delete :destroy, opts
     end
     
-    it "should require admin access to view this action" do
-      should_be_admin_only do
+    it "should require staff access to view this action" do
+      check_access_restriction("host", "staff") do
         do_delete @params
       end
       response.should redirect_to(admin_groups_path)

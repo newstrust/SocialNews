@@ -283,8 +283,12 @@ class Member < ActiveRecord::Base
     @likings_count
   end
 
-  def has_role?(role)
+  def has_specific_role?(role)
     roles.map(&:slug).include?(role.to_s)
+  end
+
+  def has_role?(role)
+    has_role_or_above?(role)
   end
 
   def has_role_or_above?(role)

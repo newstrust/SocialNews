@@ -6,9 +6,6 @@ class Admin::TopicsController < Admin::LandingPageController
   before_filter :check_admin_access, :except => [:index, :search, :layout, :update_layout, :edit, :update]
   before_filter :find_topic, :except => [:index, :new, :create, :search]
   
-  # we enforce our own rules in edit so that hosts can get through
-  all_access_to :only => [:edit, :update]
-  
   layout 'admin'
   
   # GET /admin/topics.html
@@ -82,7 +79,6 @@ class Admin::TopicsController < Admin::LandingPageController
  
   # GET /admin/topics/some-topic/edit.html
   def edit
-    render_403(Topic) and return unless current_member.has_host_privilege?(@topic, :admin, @local_site)
     # Default new topic description
     @topic.intro = "How are the local news media covering #{@topic.name} in #{@local_site.name}?" if @local_site && @topic.intro.blank?
     @topic_subjects = @topic.subjects_to_struct
@@ -90,7 +86,6 @@ class Admin::TopicsController < Admin::LandingPageController
   
   # PUT /admin/topics/some-topic.html
   def update
-    render_403(Topic) and return unless current_member.has_host_privilege?(@topic, :admin, @local_site)
     respond_to do |format|
       # Process topic image parameters
       update_image(@topic, params)

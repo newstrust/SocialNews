@@ -14,8 +14,8 @@ describe Admin::InvitationsController do
       get :index, opts
     end
     
-    it "should require admin access to view this action" do
-      should_be_admin_only do
+    it "should require host access to view this action" do
+      check_access_restriction(:newshound, :host) do
         do_get @params
       end
       response.should be_success
@@ -125,8 +125,8 @@ describe Admin::InvitationsController do
       get :edit, opts
     end
     
-    it "should require admin access to view this action" do
-      should_be_admin_only do
+    it "should require staff access to view this action" do
+      check_access_restriction(:editor, :staff) do
         do_get @params
       end
       response.should be_success
@@ -156,8 +156,8 @@ describe Admin::InvitationsController do
       put :update, opts
     end
     
-    it "should require admin access to view this action" do
-      should_be_admin_only do
+    it "should require staff access to view this action" do
+      check_access_restriction(:editor, :staff) do
         do_put @params.merge(:invitation => { :invite_message => 'foo' })
       end
       response.flash[:notice].should_not be_empty
