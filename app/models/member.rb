@@ -1140,6 +1140,16 @@ class Member < ActiveRecord::Base
     end
   end
 
+  def cache_facebook_friendship_info(fb_session)
+    return if fb_session.nil?
+
+    friends_on_nt = fb_app_friends(fb_session["access_token"])
+    SocialNetworkFriendship.add_friendships(SocialNetworkFriendship::FACEBOOK, self, friends_on_nt)
+    facebook_connect_settings.update_attribute(:friendships_cached, true)
+  rescue Exception => e
+    RAILS_DEFAULT_LOGGER.error "Error caching Facebook friendship info for #{self.id}; Exception is #{e}; Backtrace: #{e.backtrace.inspect}"
+  end
+
   protected
   
   def make_openid_profile
@@ -1208,16 +1218,6 @@ class Member < ActiveRecord::Base
   def update_member_stats
     update_review_stats
     update_metareview_stats
-  end
-
-  def cache_facebook_friendship_info(fb_session)
-    return if fb_session.nil?
-
-    friends_on_nt = fb_app_friends(fb_session["access_token"])
-    SocialNetworkFriendship.add_friendships(SocialNetworkFriendship::FACEBOOK, self, friends_on_nt)
-    facebook_connect_settings.update_attribute(:friendships_cached, true)
-  rescue Exception => e
-    RAILS_DEFAULT_LOGGER.error "Error caching Facebook friendship info for #{self.id}; Exception is #{e}; Backtrace: #{e.backtrace.inspect}"
   end
 
   def cache_twitter_friendship_info
