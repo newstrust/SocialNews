@@ -231,7 +231,7 @@ own FB and Twitter apps on these platforms and update the credentials.  Read mor
   an app on facebook and update code as below.  In addition, you have set the enabled
   flag in config/socialnews_constants/fbc_settings.yml
 * You will have to create an app on Facebook and fill in those app credentials in
-  config/facebooker.yml.
+  config/facebook.yml.
 * You may also have to upgrade the Facebook authentication mechanism in use to work
   with OAuth.  I think FB will disable the current authentication mechanism sometime
   end of September.  This fix may be as simple as upgrading the Facebooker plugin
