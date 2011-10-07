@@ -328,18 +328,18 @@ class Member < ActiveRecord::Base
     facebook_connect_settings ? facebook_connect_settings.fb_uid : nil
   end
 
+  # This is for a new member
   def fbc_link(fb_session)
     fb_uid = fb_session["user_id"]
     access_token = fb_session["access_token"]
-    if facebook_connect_settings.nil?
+    if self.new_record?
+      self.facebook_connect_settings = FacebookConnectSettings.new(:fb_uid => fb_uid, :offline_session_key => access_token, :access_token => access_token)
+    elsif facebook_connect_settings.nil?
       FacebookConnectSettings.create(:member_id => self.id, :fb_uid => fb_uid, :offline_session_key => access_token, :access_token => access_token)
       self.reload  # so that the newly created facebook_connect_settings attribute is visible
     else
       facebook_connect_settings.update_attributes(:fb_uid => fb_uid, :offline_session_key => access_token, :access_token => access_token)
     end
-
-    # cache friendship info!
-    cache_facebook_friendship_info(fb_session)
   end
 
   def fbc_unlink
@@ -359,7 +359,8 @@ class Member < ActiveRecord::Base
   end
 
   def fb_app_friends(access_token)
-    facebook_connect_settings.rest_api_call(access_token, "friends.getAppUsers")
+    app_friend_fb_ids = facebook_connect_settings.rest_api_call(access_token, "friends.getAppUsers") || []
+    Member.find(:all, :joins => :facebook_connect_settings, :conditions => ["facebook_connect_settings.fb_uid IN (?)", app_friend_fb_ids.map(&:to_s)])
   end
 
   def fbc_linked?
@@ -1212,8 +1213,7 @@ class Member < ActiveRecord::Base
   def cache_facebook_friendship_info(fb_session)
     return if fb_session.nil?
 
-    app_friends = fb_app_friends(fb_session["access_token"])
-    friends_on_nt = Member.find(:all, :joins => :facebook_connect_settings, :conditions => ["facebook_connect_settings.fb_uid IN (?)", app_friends.map(&:to_s)])
+    friends_on_nt = fb_app_friends(fb_session["access_token"])
     SocialNetworkFriendship.add_friendships(SocialNetworkFriendship::FACEBOOK, self, friends_on_nt)
     facebook_connect_settings.update_attribute(:friendships_cached, true)
   rescue Exception => e

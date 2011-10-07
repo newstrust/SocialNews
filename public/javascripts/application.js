@@ -470,6 +470,7 @@ function fbc_activate(url_prefix, url_suffix) {
         window.location.href = url_prefix + "/fb_connect/activate" + url_suffix;
       }
     });
+  }
 }
 
 $(document).ready(function() {

@@ -163,7 +163,6 @@ class FacebookConnectController < ApplicationController
       # So, just fetch the picture on a regular HTTP connection.
       # With HTTPS, we need to make sure we have valid security certificates.
     if pic_url
-      pic_url.gsub!(/https/, "http") 
       m.image = Image.download_from_url(pic_url)
       m.save(false)
       flash[:notice] = "Your Facebook profile picture has been imported."
@@ -294,7 +293,9 @@ class FacebookConnectController < ApplicationController
   def fb_profile_pic_url(m)
     count = 0
     begin
-      m.facebook_connect_settings.api_client(facebook_session["access_token"]).get_picture("me", :type => :large)
+      pic_url = m.facebook_connect_settings.api_client(facebook_session["access_token"]).get_picture("me", :type => :large)
+      pic_url.gsub!(/https/, "http") if pic_url
+      pic_url
     rescue Koala::Facebook::APIError => e
       logger.error "ERROR: Could not import FB profile picture for #{m.id}.  Exception:#{e};  BT: #{e.backtrace.inspect}"
       count += 1
@@ -310,6 +311,8 @@ class FacebookConnectController < ApplicationController
       # FB account-creation/linking members get their validation bumped up to FB_MIN_VALIDATION_LEVEL if they are less than that
     m.validation_level = FB_MIN_VALIDATION_LEVEL if m.validation_level < FB_MIN_VALIDATION_LEVEL
 
+    # Link before save so that the member observer knows that the member is fbc linked!
+    m.fbc_link(facebook_session)
     if m.id.nil?
       m.save!  # We want validations to run!
     else
@@ -319,8 +322,8 @@ class FacebookConnectController < ApplicationController
       # Activate the member -- no need to wait for them to use the email to activate
     m.activate_without_save if activate_member
 
-    # Link
-    m.fbc_link(facebook_session)
+    # cache friendship info!
+    m.cache_facebook_friendship_info(facebook_session)
 
     access_token = facebook_session["access_token"]
 

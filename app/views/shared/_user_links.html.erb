@@ -45,7 +45,7 @@
 	  </div>
 	<%- else -%> <%-# not logged in -%>
 	  <div class="signed_out">
-      <%= fb_login_button("", :size => "small") %> |
+      <%= fb_login_button("fbc_login()", :size => "small") %> |
 	    <%= link_to "Sign Up", new_member_path, :title => "Create a new #{app_name} account" %> |
 	    <%= link_to "Log In", new_sessions_path, :title => "Log into #{app_name}" %>
 	  </div>
